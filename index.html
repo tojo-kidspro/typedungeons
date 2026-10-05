@@ -588,6 +588,8 @@ img{image-rendering:pixelated}
 .diffsel button.on::before{content:"▶ "}
 .diffdesc{min-height:2.6em;margin-bottom:10px;line-height:1.4}
 .dtag{display:inline-block;margin-right:8px;padding:0 6px;font-size:12px;color:#000;background:var(--dc)}
+.cnt{margin-left:4px;color:var(--sel);font-size:10px}
+button.chip.dis{opacity:.3;text-decoration:line-through}
 </style>
 </head>
 <body>
@@ -621,7 +623,7 @@ img{image-rendering:pixelated}
       <div class="armbtns"><button class="big" data-arm="equip">装備</button><button class="big" data-arm="enh">強化</button><button class="big" data-arm="syn">合成</button></div>
     </div>
     <div class="card">
-      <div class="diffsel" id="diffSel"><button data-diff="easy" style="--dc:#3fa9ff">イージー</button><button data-diff="normal" style="--dc:#22c55e">ノーマル</button><button data-diff="hard" style="--dc:#ff3b3b">ハード</button></div><div class="small diffdesc" id="diffDesc"></div>
+      <div class="diffsel" id="diffSel"><button data-diff="easy" style="--dc:#3fa9ff">イージー</button><button data-diff="normal" style="--dc:#22c55e">ノーマル</button><button data-diff="hard" style="--dc:#ff3b3b">ハード</button></div>
       <div class="fhead"><span>階層を選ぶ</span><span class="small">最高到達 <span id="hMax">0</span>層</span></div>
       <div class="fgrid" id="fgrid"></div>
       <div class="finfo" id="fInfo"></div>
@@ -951,6 +953,8 @@ const UNAME={crab:'甲殻の大盾',mgolem:'機神の大盾',snail:'螺旋の大
   const boss=i>=NORMALS.length,ak=isDefT(d.ut)?defA[di++%3]:offA[oi++%offA.length],a=UARCH[ak],k='x_'+d.id,mul=boss?1.3:1;
   SK[k]={n:USKN[d.id],uq:true,tr:a.tr,ct:a.ct,fx:a.fx.map(f=>Object.assign({},f,f.t==='multi'?{n:Math.round(f.n*mul)}:f.t==='delay'||f.t==='ctcut'?{}:{v:f.v*mul}))};d.us=k})}
 function migrateW(w){
+  {const best={};w.aff.forEach(a=>{if(!best[a.k]||a.v>best[a.k].v)best[a.k]=a});w.aff=Object.values(best);
+   const ns=RAR[w.r].slots;if(w.aff.length>ns)w.aff=w.aff.slice(0,ns);else if(w.aff.length<ns)w.aff=w.aff.concat(genAff(ns-w.aff.length,isDefT(w.t),w.aff.map(a=>a.k)))}
   if(w.u){const d=NORMALS.concat(BOSSES).find(x=>x.id===w.u);if(d)w.sk=d.us;return}
   if(w.c&&CATI[w.c])return;
   const e=CAT.find(x=>x.t===w.t&&x.r===w.r&&x.c.endsWith('_'+(w.id%2)))||CAT.find(x=>x.t===w.t&&x.r===w.r)||CAT.find(x=>x.r===w.r);
@@ -999,6 +1003,10 @@ function se(k,a){
     case'clear':arp([72,76,79,84,79,84,88],.09,'pulse',.14,.2);arp([48,55,60,64],.15,'triangle',.25,.3);break;
     case'lose':arp([67,63,60,55,48],.18,'triangle',.25,.3);break;
     case'ui':tone('pulse',980,t,.04,.07);break;
+    case'enhance':{tone('square',220,t,.38,.07,null,880);nz(t,.35,.05,3000);[72,76,79,84,88].forEach((m,i)=>tone('pulse',mtof(m),t+.36+i*.06,.14,.12));
+      tone('triangle',mtof(96),t+.7,.6,.2);if(a>0)for(let i=0;i<Math.min(a,6);i++)tone('pulse',mtof(91+(i%3)*2),t+.75+i*.07,.08,.07);break}
+    case'synth':{tone('sine',330,t,.6,.16,null,660);tone('sine',336,t,.6,.16,null,672);nz(t,.6,.06,6000);
+      [60,64,67,72,76].forEach(m=>tone('triangle',mtof(m),t+.6,.9,.12));tone('pulse',mtof(84),t+.62,.5,.08);tone('pulse',mtof(88),t+.74,.5,.07);break}
     case'cd':tone('pulse',523,t,.18,.16);break;
     case'go':tone('pulse',1047,t,.35,.18);tone('pulse',1319,t+.06,.3,.12);break;
   }
@@ -1032,7 +1040,7 @@ function setSnd(k,v){AU.opt[k]=v;try{localStorage.setItem('td_sound',JSON.string
   if(AU.ctx){(k==='bgm'?AU.bgm:AU.se).gain.value=v?(k==='bgm'?.28:.5):0;if(k==='bgm'&&v)AU.next=AU.ctx.currentTime+.05}renderSnd()}
 function renderSnd(){document.querySelectorAll('[data-snd]').forEach(b=>{const k=b.dataset.snd;b.classList.toggle('off',!AU.opt[k]);b.textContent=(k==='bgm'?'♪BGM ':'SE ')+(AU.opt[k]?'ON':'OFF')})}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-snd]');if(b){setSnd(b.dataset.snd,!AU.opt[b.dataset.snd]);return}
-  const bt=e.target.closest('button');if(bt&&!bt.classList.contains('k'))se('ui')});
+  const bt=e.target.closest('button');if(bt&&!bt.classList.contains('k')&&bt.dataset.a!=='enh'&&bt.dataset.a!=='syn')se('ui')});
 
 /* ===== romaji engine ===== */
 const KT=`あ:a い:i う:u|wu え:e お:o か:ka|ca き:ki く:ku|cu|qu け:ke こ:ko|co さ:sa し:shi|si|ci す:su せ:se|ce そ:so た:ta ち:chi|ti つ:tsu|tu て:te と:to な:na に:ni ぬ:nu ね:ne の:no は:ha ひ:hi ふ:fu|hu へ:he ほ:ho ま:ma み:mi む:mu め:me も:mo や:ya ゆ:yu よ:yo ら:ra り:ri る:ru れ:re ろ:ro わ:wa を:wo ん:nn が:ga ぎ:gi ぐ:gu げ:ge ご:go ざ:za じ:ji|zi ず:zu ぜ:ze ぞ:zo だ:da ぢ:di づ:du で:de ど:do ば:ba び:bi ぶ:bu べ:be ぼ:bo ぱ:pa ぴ:pi ぷ:pu ぺ:pe ぽ:po ゔ:vu ぁ:xa|la ぃ:xi|li ぅ:xu|lu ぇ:xe|le ぉ:xo|lo ゃ:xya|lya ゅ:xyu|lyu ょ:xyo|lyo っ:xtu|ltu ー:- きゃ:kya きゅ:kyu きょ:kyo しゃ:sha|sya しゅ:shu|syu しょ:sho|syo しぇ:she|sye ちゃ:cha|tya|cya ちゅ:chu|tyu|cyu ちょ:cho|tyo|cyo ちぇ:che|tye にゃ:nya にゅ:nyu にょ:nyo ひゃ:hya ひゅ:hyu ひょ:hyo みゃ:mya みゅ:myu みょ:myo りゃ:rya りゅ:ryu りょ:ryo ぎゃ:gya ぎゅ:gyu ぎょ:gyo じゃ:ja|zya|jya じゅ:ju|zyu|jyu じょ:jo|zyo|jyo じぇ:je|zye びゃ:bya びゅ:byu びょ:byo ぴゃ:pya ぴゅ:pyu ぴょ:pyo ふぁ:fa ふぃ:fi ふぇ:fe ふぉ:fo てぃ:thi でぃ:dhi うぃ:wi うぇ:we`;
@@ -1086,7 +1094,9 @@ function load(){
 function save(){S._t=Date.now();try{localStorage.setItem(curKey(),JSON.stringify(S))}catch(e){}queueCloud()}
 
 /* ===== weapons ===== */
-function genAff(n,def){const P=def?AFF.concat(AFF.filter(x=>x.k==='hp'||x.k==='def'),AFF.filter(x=>x.k==='hp'||x.k==='def')):AFF;const a=[];for(let i=0;i<n;i++){const d=P[rand(P.length)];a.push({k:d.k,v:r1(d.min+Math.random()*(d.max-d.min))});}return a}
+function genAff(n,def,excl){const used=new Set(excl||[]),a=[];
+  for(let i=0;i<n;i++){const P0=AFF.filter(x=>!used.has(x.k));if(!P0.length)break;const P=def?P0.concat(P0.filter(x=>x.k==='hp'||x.k==='def'),P0.filter(x=>x.k==='hp'||x.k==='def')):P0;
+    const d=P[rand(P.length)];used.add(d.k);a.push({k:d.k,v:r1(d.min+Math.random()*(d.max-d.min))})}return a}
 function makeW(o){return{id:S.nid++,t:o.t,r:o.r,f:o.f,lv:1,xp:0,tx:0,name:o.name,sk:o.sk,u:o.u||null,c:o.c||null,el:o.el??5,aff:genAff(RAR[o.r].slots,isDefT(o.t))}}
 function rarW(f,boss,dif){dif=dif||'normal';const t=Math.min(1,Math.max(0,(f-1)/99)),L=(a,b)=>a+(b-a)*t;let u=boss?L(.6,1):L(.3,.9),w=[L(60,10),L(28,25),L(9,30),L(2.5,22),L(.5,12)];
   if(dif==='easy')u=0;if(dif==='hard'){u=3;w=[w[0]*.7,w[1],w[2]*1.3,w[3]*1.7,w[4]*2.2]}
@@ -1181,7 +1191,7 @@ function renderHome(){
   $('hRec').innerHTML=[['撃破数',fmtBig(R.kills)+'体'],['総ヒット',fmtBig(R.hits)],['総ダメージ',fmtBig(R.dmg)],['最大コンボ',R.maxCombo],
     ['最高速度',R.bestKps.toFixed(2)+'打/秒'],['総打鍵',fmtBig(R.keys)],['層クリア',R.clears+'回'],['プレイ時間',fmtTime(R.time)]]
     .map(([a,b])=>`<div><span class="small">${a}</span><b>${b}</b></div>`).join('');
-  $('diffSel').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.diff===S.diff));$('diffDesc').textContent=DIFF[S.diff].desc;$('hProgT').dataset.d=DIFF[S.diff].n;
+  $('diffSel').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.diff===S.diff));$('hProgT').dataset.d=DIFF[S.diff].n;
   $('hMax').textContent=PG().maxF;const mx=maxSel();selF=Math.max(1,Math.min(mx,PG().lastF||1));
   $('fgrid').innerHTML=Array.from({length:100},(_,i)=>{const f=i+1,c=f<=PG().maxF?'clr':f===PG().maxF+1?'next':'';
     return `<button class="fc ${c}${f===selF?' sel':''}" data-f="${f}" ${f>mx?'disabled':''} aria-label="${f}層">${f}</button>`}).join('');
@@ -1255,9 +1265,9 @@ function wordBand(){
   else if(dif==='normal'){
     if(f<=10){[lo,hi]=boss?[4,6]:[1,3]}else if(f<=30){[lo,hi]=boss?[7,9]:[4,6]}else if(f<50){[lo,hi]=boss?[7,9]:(rr<.3?[4,6]:[7,9])}else{[lo,hi]=boss?[8,10]:(rr<.3?[4,6]:[7,10])}
     if(!boss&&rr>.85&&lo>1){lo=Math.max(1,lo-3);hi=Math.max(lo,hi-3)}}
-  else{if(f<=10){[lo,hi]=boss?[6,9]:[2,6]}else if(f<=30){[lo,hi]=boss?[9,13]:[4,9]}else if(f<50){[lo,hi]=boss?[10,99]:[7,12]}else{[lo,hi]=boss?[12,99]:(rr<.3?[7,10]:[10,99])}}
+  else{if(f<=10){[lo,hi]=boss?[6,9]:[5,7]}else if(f<=30){[lo,hi]=boss?[9,13]:[5,9]}else if(f<50){[lo,hi]=boss?[10,99]:[7,12]}else{[lo,hi]=boss?[12,99]:(rr<.3?[7,10]:[10,99])}}
   const all=getWords().flat();let L=all.filter(w=>{const n=[...w.k].length;return n>=lo&&n<=hi});
-  if(L.length<5)L=all.filter(w=>[...w.k].length<=Math.max(hi,3));return L}
+  if(L.length<5)L=all.filter(w=>{const n=[...w.k].length;return n<=Math.max(hi,3)&&(dif!=='hard'||n>=5)});return L}
 function nextWord(){
   const WL=wordBand();let w;do{w=WL[rand(WL.length)]}while(w===B.lastWord&&WL.length>1);B.lastWord=w;
   W={d:w.d,kana:w.k,toks:tokenize(w.k),idx:0,buf:'',done:[]};renderWord();
@@ -1631,8 +1641,10 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='1.0.5-alpha';
+const VERSION='1.0.7-alpha';
 const CHANGELOG=[
+ ['1.0.7-alpha',['同じ種類の追加能力は1つの武器に1つまでに（所持中の武器で重複していたものは、高いほうを残して別の能力に置き換え）','合成でも同じ種類の追加能力は1つまでしか選べないように','合成画面の素材の追加能力を、ベースのレベルに換算した値で表示']],
+ ['1.0.6-alpha',['追加能力の数をレア2・エピック3・レジェンダリー4・ユニーク5に統一（所持中の武器も自動で調整）','ハードでは4文字以下の言葉が出ないように','難易度の説明文を削除','強化と合成に専用の効果音を追加']],
  ['1.0.5-alpha',['難易度「イージー（青）」「ノーマル（緑）」「ハード（赤）」を追加。拠点の階層選択の上でいつでも切り替え可能','階層の進み具合は難易度ごとに別々に記録（ランク・武器・図鑑は共通）','イージー：敵の攻撃がゆっくり＆ダメージ半分、言葉は2〜3文字中心で最大6文字、ユニークは出ない','ノーマル：これまでの難易度で、言葉は最大10文字まで','ハード：文字数制限なし、敵のHP1.5倍・攻撃1.4倍・攻撃速め、高レアリティが出やすくユニークは3%、経験値1.5倍','これまでの進み具合はノーマルに引き継ぎ']],
  ['1.0.4-alpha',['強化・合成画面で、強化後／合成後の数値を「現在の値 → 結果」で表示（上がる値は緑、下がる値は赤）','防御系の装備「大盾」「護符」と、攻防バランス型の「籠手」を追加','盾・大盾・護符には防御系スキル（シールド・回復など）が付き、追加能力もHP・防御が付きやすく','武器ごとにスキルを固定。通常武器を88種に増やし、図鑑は全148種に（所持中の通常武器も対応する武器に変換されます）','ユニーク武器60種すべてに、それぞれ専用の強力な固有スキルを追加','防御系スキル「堅守」「茨の守り」「聖域」「不動」を追加','出題ワードを約530語に拡張（食べ物・持ち物・場所・動作・あいさつなど日常の言葉を追加）','10文字以上のワードは50層以降のみ出題','図鑑に「防御系」の絞り込みを追加']],
  ['1.0.3-alpha',['出題ワードを実用的な言葉中心に一新し、約400語に増量','ランクが上がると基礎ステータス（HP・攻撃・防御・クリ率・クリダメ）が上昇','武器の基礎値をレアリティごとに固定（入手した階層で差が出なくなりました。所持中の武器も新しい基準になります）','深い階層ほど高レアリティの武器が出やすく','クリ率・クリダメの伸びを強化（追加能力の幅とレベルごとの成長量アップ）','拠点の武器ボタンを「装備・強化・合成」の3つに分割','アイテム図鑑を追加（通常武器40種＋ユニーク60種）','バージョン表示と更新情報を追加']],
@@ -1713,7 +1725,7 @@ function paneHTML(w,tag,cmp,extra,aft){
     return `<span>${n}</span><b class="${c}">${v?v+u:'-'}${d}</b>`};
   return `<div class="tag">${tag}</div><div class="ph" style="--rc:${R.c}"><span class="dem">${wIcon(w)}</span><div style="min-width:0"><div class="dn">${w.fav?'★':''}${w.name}</div><div class="dr">${R.n}　Lv${w.lv}${aft&&aft.lv!==w.lv?` → <span class="up">${aft.lv}</span>`:''}/${R.cap}</div></div></div>
   <div class="pbody"><div><div class="psec">ステータス</div><div class="rows">${row('攻撃',s.atk,o&&o.atk,'','atk')}${row('HP',s.hp,o&&o.hp,'','hp')}${row('防御',s.def,o&&o.def,'','def')}</div></div>
-  <div><div class="psec">追加能力 <small>${w.aff.length}/${R.slots}</small></div>${keys.length?`<div class="rows aff">${keys.map(k=>row(AFFD[k].n,s.a[k]||0,o?(o.a[k]||0):0,'%',k,'a')).join('')}</div>`:'<div class="small" style="margin-top:4px">なし</div>'}</div></div>
+  <div><div class="psec">追加能力 <small>${w.aff.length}/${R.slots}</small></div>${keys.length?`<div class="rows aff">${keys.map(k=>{const cn=w.aff.filter(x=>x.k===k).length;return row(AFFD[k].n+(cn>1?`<small class="cnt">×${cn}</small>`:''),s.a[k]||0,o?(o.a[k]||0):0,'%',k,'a')}).join('')}</div>`:'<div class="small" style="margin-top:4px">なし</div>'}</div></div>
   <div class="psec">スキル</div>
   <div class="psk" style="margin-top:2px"><b>${sk.n}</b>${sk.uq?'<span class="uqt">固有</span>':''}　CT${sk.ct}秒<br>${trText(sk.tr)}：${sk.fx.map(f=>fxText(f,R.sm)).join('、')}</div>${extra||''}`;
 }
@@ -1751,10 +1763,10 @@ function renderTop(){
     const t=byId(A.target),m=byId(A.synMat);
     const mm=byId(A.synMat),prv=(t&&mm&&A.pick.size)?Object.assign({},t,{aff:[...A.pick].map(k=>(k[0]==='b'?t.aff:mm.aff)[+k.slice(1)])}):null;
     L=t?paneHTML(t,prv?'ベース（合成後の結果）':'ベース',undefined,'',prv):'<div class="tag">ベース</div><div class="empty">アンコモン以上の武器を選んでください</div>';
-    R=m?paneHTML(m,'素材（消費）'):hov&&hov.id!==A.target?paneHTML(hov,'カーソル中の武器'):`<div class="tag">素材</div><div class="empty">${t?`同じレア度（${RAR[t.r].n}）の武器をタップ`:'—'}</div>`;
+    R=m?paneHTML(Object.assign({},m,{lv:t.lv}),`素材（消費）・追加能力はベースのLv${t.lv}に換算`):hov&&hov.id!==A.target?paneHTML(hov,'カーソル中の武器'):`<div class="tag">素材</div><div class="empty">${t?`同じレア度（${RAR[t.r].n}）の武器をタップ`:'—'}</div>`;
     if(t)mr=`<div class="mlab">素材${m?'<span class="small">（タップで外す）</span>':''}</div><div class="mats">${m?`<button class="wc mini" data-mid="${m.id}" style="--rc:${RAR[m.r].c}" title="${m.name}">${wIcon(m)}<span class="lv">Lv${m.lv}</span></button>`:`<span class="small">同じレア度（${RAR[t.r].n}）の武器を下の一覧からタップ</span>`}</div>`;
     if(t&&m){const n=RAR[t.r].slots,pool=[...t.aff.map((a,i)=>({key:'b'+i,a,src:'ベース'})),...m.aff.map((a,i)=>({key:'m'+i,a,src:'素材'}))];
-      ex=`<div class="mlab">追加能力を${n}つ選択（${A.pick.size}/${n}）</div><div class="daff">${pool.map(p=>`<button class="chip ${A.pick.has(p.key)?'on':''}" data-pick="${p.key}"><small>${p.src}</small>${AFFD[p.a.k].n}+${affVal(t,p.a)}%</button>`).join('')}</div>`;
+      ex=`<div class="mlab">追加能力を${n}つ選択（${A.pick.size}/${n}）</div><div class="daff">${pool.map(p=>`<button class="chip ${A.pick.has(p.key)?'on':[...A.pick].some(q=>pool.find(x=>x.key===q).a.k===p.a.k)?'dis':''}" data-pick="${p.key}"><small>${p.src}</small>${AFFD[p.a.k].n}+${affVal(t,p.a)}%</button>`).join('')}</div>`;
       act=`<button class="btn pri" data-a="syn" ${A.pick.size===n?'':'disabled'}>合成する</button><button class="btn" data-a="reset">ベースを選び直す</button>`;
     }else if(t)act='<button class="btn" data-a="reset">ベースを選び直す</button>';
   }
@@ -1823,21 +1835,24 @@ function tapCard(id,x,y){
 }
 $('slots').onclick=e=>{const b=e.target.closest('[data-slot]');if(!b)return;const i=+b.dataset.slot;A.slot=i;renderTop();if(S.eq[i])openCtx(S.eq[i],e.clientX,e.clientY)};
 $('matrow').onclick=e=>{const b=e.target.closest('[data-mid]');if(!b)return;const id=+b.dataset.mid;if(A.tab==='enh')A.mats.delete(id);else{A.synMat=null;A.pick.clear()}renderArmory()};
-$('extra').onclick=e=>{const b=e.target.closest('[data-pick]');if(!b)return;const k=b.dataset.pick,n=RAR[byId(A.target).r].slots;
-  if(A.pick.has(k))A.pick.delete(k);else if(A.pick.size<n)A.pick.add(k);else toast(`選べるのは${n}つまでです`);renderTop()};
+$('extra').onclick=e=>{const b=e.target.closest('[data-pick]');if(!b)return;const k=b.dataset.pick,t=byId(A.target),mm=byId(A.synMat),n=RAR[t.r].slots;
+  const aOf=key=>(key[0]==='b'?t.aff:mm.aff)[+key.slice(1)];
+  if(A.pick.has(k))A.pick.delete(k);
+  else if([...A.pick].some(q=>aOf(q).k===aOf(k).k))toast('同じ追加能力は1つまでしか付けられません');
+  else if(A.pick.size<n)A.pick.add(k);else toast(`選べるのは${n}つまでです`);renderTop()};
 $('actions').onclick=e=>{
   const b=e.target.closest('[data-a]');if(!b||b.disabled)return;const a=b.dataset.a;
   if(a==='bulk0'||a==='bulk1'){const mr=a==='bulk0'?0:1;invList().forEach(w=>{if(w.id!==A.target&&!isEq(w.id)&&!w.fav&&w.r<=mr)A.mats.add(w.id)})}
   else if(a==='enh'){
     const t=byId(A.target),mats=[...A.mats].map(byId).filter(Boolean),g=mats.reduce((s,m)=>s+matExp(m),0),from=t.lv,cap=RAR[t.r].cap;
     t.xp+=g;t.tx+=g;while(t.lv<cap&&t.xp>=needXP(t,t.lv)){t.xp-=needXP(t,t.lv);t.lv++}if(t.lv>=cap)t.xp=0;
-    S.inv=S.inv.filter(w=>!A.mats.has(w.id));A.mats.clear();save();toast(`強化しました　Lv${from} → ${t.lv}`);
+    S.inv=S.inv.filter(w=>!A.mats.has(w.id));A.mats.clear();save();se('enhance',t.lv-from);toast(`強化しました　Lv${from} → ${t.lv}`);
   }else if(a==='reset'){A.target=null;A.mats.clear();A.synMat=null;A.pick.clear()}
   else if(a==='unmat'){A.synMat=null;A.pick.clear()}
   else if(a==='syn'){
     const t=byId(A.target),m=byId(A.synMat);
     t.aff=[...A.pick].map(k=>({...(k[0]==='b'?t.aff:m.aff)[+k.slice(1)]}));
-    S.inv=S.inv.filter(w=>w.id!==m.id);A.synMat=null;A.pick.clear();save();toast('合成しました');
+    S.inv=S.inv.filter(w=>w.id!==m.id);A.synMat=null;A.pick.clear();save();se('synth');toast('合成しました');
   }
   renderArmory();
 };
