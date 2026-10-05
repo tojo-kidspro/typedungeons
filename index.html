@@ -552,6 +552,31 @@ img{image-rendering:pixelated}
 .atabs button{flex:1;padding:6px;border:2px solid var(--faint);color:var(--dim)}
 .atabs button.on{border-color:var(--sel);color:var(--sel)}
 .xcode{height:72px;font-size:12px;font-family:ui-monospace,monospace;resize:vertical;word-break:break-all}
+
+/* ---------- v1.0.3 ---------- */
+.armbtns{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.armbtns .big{margin-top:0;height:50px;font-size:18px}
+.dexlink{width:100%;text-align:left;cursor:pointer;padding:0}
+.dexlink span{color:var(--sel)!important;width:110px!important;white-space:nowrap}
+.prog span{width:110px}
+.dexlink:hover .pbar{outline:2px solid var(--sel)}
+.linkb{color:var(--sel);text-decoration:underline;font-size:12px}
+#dex{flex-direction:column}
+.dtop{padding:10px 12px;flex-shrink:0}
+.dpane{height:340px;overflow-y:auto;max-width:1100px;margin:0 auto}
+.dfilt{display:flex;gap:6px;padding:0 12px 8px;max-width:1124px;width:100%;margin:0 auto}
+.dfilt button{padding:4px 12px;border:2px solid var(--faint);color:var(--dim);font-size:13px}
+.dfilt button.on{border-color:var(--sel);color:var(--sel)}
+.dexwrap{padding:0 12px 12px;max-width:1124px;width:100%;margin:0 auto;touch-action:auto;cursor:default}
+.dxc.unk{background:repeating-linear-gradient(45deg,transparent 0 6px,color-mix(in srgb,var(--faint) 40%,transparent) 6px 8px)}
+.qm{font-size:26px;color:var(--dim)}
+.dem.qm{border-color:var(--faint)}
+.dxe{display:inline-flex;align-items:center;gap:6px}
+.dxe img{width:40px;height:40px;image-rendering:pixelated}
+.dxe .bs{color:#fff;background:var(--hpbg);padding:0 5px;font-size:10px}
+.clog{text-align:left;margin:10px 0}
+.clog ul{margin:6px 0 0 1.2em;font-size:13px;line-height:1.7}
+@media (max-width:560px){.dpane{height:250px}}
 </style>
 </head>
 <body>
@@ -579,10 +604,10 @@ img{image-rendering:pixelated}
       <div class="statgrid" id="hStats"></div>
       <div class="hsec"><div class="hlab">冒険の記録</div>
         <div class="prog"><span>踏破</span><div class="pbar"><i id="hProg"></i></div><b id="hProgT"></b></div>
-        <div class="prog"><span>ユニーク図鑑</span><div class="pbar u"><i id="hUni"></i></div><b id="hUniT"></b></div>
+        <button class="prog dexlink" id="dexLink"><span>アイテム図鑑 ▶</span><div class="pbar u"><i id="hUni"></i></div><b id="hUniT"></b></button>
         <div class="recs" id="hRec"></div>
       </div>
-      <button class="big" id="armBtn">武器（装備・強化・合成）</button>
+      <div class="armbtns"><button class="big" data-arm="equip">装備</button><button class="big" data-arm="enh">強化</button><button class="big" data-arm="syn">合成</button></div>
     </div>
     <div class="card">
       <div class="fhead"><span>階層を選ぶ</span><span class="small">最高到達 <span id="hMax">0</span>層</span></div>
@@ -590,7 +615,7 @@ img{image-rendering:pixelated}
       <div class="finfo" id="fInfo"></div>
       <button class="big go" id="goBtn">出撃</button>
     </div>
-    <p class="small hnote">PCはキーボード、スマホは画面のキーで入力。進行はこのブラウザに保存されます。</p>
+    <p class="small hnote">PCはキーボード、スマホは画面のキーで入力。進行はこのブラウザに保存されます。<br><span id="verTxt"></span>　<button class="linkb" id="clogBtn">更新情報</button></p>
   </div>
 </section>
 
@@ -614,6 +639,12 @@ img{image-rendering:pixelated}
   <nav class="cmd" id="tabs"><button data-tab="equip" class="on">装備</button><button data-tab="enh">強化</button><button data-tab="syn">合成</button></nav>
 </section>
 
+<section id="dex" class="screen">
+  <div class="abar"><button class="back" id="dexBack">◀ 拠点</button><span class="atitle">アイテム図鑑</span><span class="small" id="dexCnt"></span></div>
+  <div class="dtop"><div class="pane dpane" id="dexPane"></div></div>
+  <div class="dfilt" id="dexFilt"><button data-df="all" class="on">すべて</button><button data-df="gen">通常武器</button><button data-df="uni">ユニーク</button></div>
+  <div class="invwrap dexwrap"><div class="inv dexg" id="dexGrid"></div></div>
+</section>
 <section id="battle" class="screen">
   <div class="stage" id="stage">
     <div class="bhud"><button class="retreat" id="retreat">撤退</button><span class="fl" id="floorLbl"></span><button class="sndmini" data-snd="bgm"></button><button class="sndmini" data-snd="se"></button><span class="combo" id="comboLbl"></span></div>
@@ -665,7 +696,7 @@ const TYPES=[
 const PRE=[['古びた','木の','錆びた'],['鉄の','兵士の','鋼の'],['銀の','騎士の','蒼鋼の'],['魔鋼の','精霊の','紫電の'],['神鉄の','英雄の','黄金の']];
 const AFF=[
  {k:'atk',n:'攻撃力',min:3,max:8},{k:'hp',n:'HP',min:4,max:10},{k:'def',n:'防御力',min:4,max:10},
- {k:'cr',n:'クリ率',min:1,max:4},{k:'cd',n:'クリダメ',min:5,max:15},{k:'ctr',n:'CT軽減',min:3,max:8},{k:'mh',n:'連撃率',min:5,max:15},{k:'sp',n:'スキル威力',min:5,max:12}];
+ {k:'cr',n:'クリ率',min:2,max:6},{k:'cd',n:'クリダメ',min:10,max:25},{k:'ctr',n:'CT軽減',min:3,max:8},{k:'mh',n:'連撃率',min:5,max:15},{k:'sp',n:'スキル威力',min:5,max:12}];
 const AFFD=Object.fromEntries(AFF.map(a=>[a.k,a]));
 const SK={
  rush:{n:'連撃',tr:{type:'win',n:4,s:5},ct:8,fx:[{t:'dmg',v:1.5}]},
@@ -743,12 +774,10 @@ const SCENES=[
  'linear-gradient(180deg,#3d2a12,#170f05)','linear-gradient(180deg,#123433,#061413)','linear-gradient(180deg,#1f1d3f,#0a0918)',
  'linear-gradient(180deg,#0e2e4a,#05121f)','linear-gradient(180deg,#4a1010,#1a0505)','linear-gradient(180deg,#3d2f0c,#140f02)',
  'linear-gradient(180deg,#2b0d3d,#0b0212)'];
-const WORDS=[
-`猫:ねこ,犬:いぬ,山:やま,川:かわ,空:そら,星:ほし,月:つき,花:はな,海:うみ,風:かぜ,光:ひかり,魔法:まほう,剣:けん,盾:たて,雪:ゆき,森:もり,石:いし,水:みず,炎:ほのお,雲:くも,鳥:とり,魚:さかな,竜:りゅう,鬼:おに,街:まち,夢:ゆめ,影:かげ,鍵:かぎ,城:しろ,塔:とう,門:もん,宝:たから,金:きん,銀:ぎん,王:おう,姫:ひめ,槍:やり,斧:おの,弓:ゆみ,杖:つえ,鎧:よろい,兜:かぶと,靴:くつ,薬:くすり,毒:どく,罠:わな,骨:ほね,牙:きば,爪:つめ,羽:はね,角:つの,雷:かみなり,氷:こおり,闇:やみ,霧:きり,砂:すな,岩:いわ,火:ひ,土:つち,木:き,歌:うた,力:ちから,心:こころ,命:いのち,友:とも,敵:てき,道:みち,島:しま,谷:たに,虹:にじ,朝:あさ,夜:よる,春:はる,夏:なつ,秋:あき,冬:ふゆ,地図:ちず,鈴:すず,蛇:へび,狼:おおかみ,熊:くま,鷹:たか,翼:つばさ,玉:たま`,
-`冒険:ぼうけん,勇者:ゆうしゃ,ダンジョン:だんじょん,宝箱:たからばこ,魔法使い:まほうつかい,戦士:せんし,騎士団:きしだん,回復:かいふく,攻撃:こうげき,防御:ぼうぎょ,伝説:でんせつ,王様:おうさま,秘密:ひみつ,地下室:ちかしつ,階段:かいだん,勇気:ゆうき,勝利:しょうり,奇跡:きせき,宝石:ほうせき,暗闇:くらやみ,雷:いかずち,吹雪:ふぶき,湖:みずうみ,呪文:じゅもん,魔物:まもの,洞窟:どうくつ,迷宮:めいきゅう,鍛冶屋:かじや,宿屋:やどや,商人:しょうにん,旅人:たびびと,仲間:なかま,冒険者:ぼうけんしゃ,盗賊:とうぞく,僧侶:そうりょ,賢者:けんじゃ,弓使い:ゆみつかい,召喚:しょうかん,結界:けっかい,封印:ふういん,錬金術:れんきんじゅつ,魔導書:まどうしょ,水晶:すいしょう,黄金:おうごん,太陽:たいよう,流れ星:ながれぼし,稲妻:いなずま,竜巻:たつまき,火山:かざん,砂漠:さばく,氷河:ひょうが,森林:しんりん,神殿:しんでん,祭壇:さいだん,宝物庫:ほうもつこ,王冠:おうかん,聖剣:せいけん,魔剣:まけん,連撃:れんげき,会心:かいしん,疾風:しっぷう,烈火:れっか,氷結:ひょうけつ,雷光:らいこう,閃光:せんこう,爆発:ばくはつ,魔法陣:まほうじん,宝の山:たからのやま,隠し部屋:かくしべや,大冒険:だいぼうけん,一番星:いちばんぼし`,
-`必殺技:ひっさつわざ,魔王城:まおうじょう,挑戦者:ちょうせんしゃ,賢者の石:けんじゃのいし,炎の剣:ほのおのつるぎ,氷の魔法:こおりのまほう,漆黒の翼:しっこくのつばさ,光の盾:ひかりのたて,聖なる力:せいなるちから,不死鳥:ふしちょう,究極の剣:きゅうきょくのけん,伝説の勇者:でんせつのゆうしゃ,暗黒騎士:あんこくきし,真理の扉:しんりのとびら,星降る夜:ほしふるよる,風の精霊:かぜのせいれい,大地の怒り:だいちのいかり,時の砂時計:ときのすなどけい,竜の息吹:りゅうのいぶき,封印の書:ふういんのしょ,勇者の証:ゆうしゃのあかし,古代遺跡:こだいいせき,秘密の部屋:ひみつのへや,黄金の鍵:おうごんのかぎ,銀色の月:ぎんいろのつき,雷の神殿:かみなりのしんでん,炎の魔人:ほのおのまじん,氷の女王:こおりのじょおう,闇の王冠:やみのおうかん,光の剣士:ひかりのけんし,聖なる泉:せいなるいずみ,魔法の杖:まほうのつえ,伝説の鎧:でんせつのよろい,天空の城:てんくうのしろ,海底神殿:かいていしんでん,地獄の番犬:じごくのばんけん,竜騎士団:りゅうきしだん,時空の歪み:じくうのゆがみ,無限の迷宮:むげんのめいきゅう,運命の歯車:うんめいのはぐるま,精霊の加護:せいれいのかご,七色の宝石:なないろのほうせき,魔導の書:まどうのしょ,嵐を呼ぶ者:あらしをよぶもの,月夜の狼:つきよのおおかみ,夜明けの鐘:よあけのかね,秘伝の巻物:ひでんのまきもの,地底の王国:ちていのおうこく,白銀の騎士:はくぎんのきし,紅蓮の炎:ぐれんのほのお`,
-`絶対零度の吹雪:ぜったいれいどのふぶき,地獄の業火が燃え盛る:じごくのごうかがもえさかる,天空を切り裂く一閃:てんくうをきりさくいっせん,深淵より来たる者:しんえんよりきたるもの,滅亡の呪文を唱える:めつぼうのじゅもんをとなえる,永遠の闇に沈め:えいえんのやみにしずめ,神々の黄昏:かみがみのたそがれ,百層のダンジョン:ひゃくそうのだんじょん,魔王を打ち倒す勇者:まおうをうちたおすゆうしゃ,滅びの歌が聞こえる:ほろびのうたがきこえる,雷鳴が轟く空:らいめいがとどろくそら,心の剣を抜け:こころのつるぎをぬけ,世界の果てを目指して:せかいのはてをめざして,銀河を駆ける竜:ぎんがをかけるりゅう,希望の光を灯せ:きぼうのひかりをともせ,勇者は剣を高く掲げた:ゆうしゃはけんをたかくかかげた,伝説の竜が目を覚ます:でんせつのりゅうがめをさます,闇を切り裂く光の剣:やみをきりさくひかりのけん,星の力を解き放て:ほしのちからをときはなて,炎と氷が交わる場所:ほのおとこおりがまじわるばしょ,迷宮の最深部へ急げ:めいきゅうのさいしんぶへいそげ,千年の眠りから覚めた魔王:せんねんのねむりからさめたまおう,仲間を信じて前へ進め:なかまをしんじてまえへすすめ,封印された古代の魔法:ふういんされたこだいのまほう,天と地を揺るがす咆哮:てんとちをゆるがすほうこう,時を超えて届く祈り:ときをこえてとどくいのり,黄金に輝く王者の剣:おうごんにかがやくおうじゃのけん,嵐の夜に現れた影:あらしのよるにあらわれたかげ,最後の扉を開く鍵:さいごのとびらをひらくかぎ,運命に抗う者たち:うんめいにあらがうものたち,誰も知らない地下迷宮:だれもしらないちかめいきゅう,光と闇の最終決戦:ひかりとやみのさいしゅうけっせん,宝箱の中身はミミック:たからばこのなかみはみみっく,竜の背中に乗って空へ:りゅうのせなかにのってそらへ,百の魔物を打ち破れ:ひゃくのまものをうちやぶれ`
-].map(s=>s.split(',').map(p=>{const [d,k]=p.split(':');return{d,k}}));
+const WORD_POOL=`家:いえ,水:みず,本:ほん,靴:くつ,傘:かさ,椅子:いす,机:つくえ,窓:まど,鍵:かぎ,駅:えき,店:みせ,紙:かみ,箸:はし,皿:さら,米:こめ,卵:たまご,肉:にく,野菜:やさい,時計:とけい,服:ふく,帽子:ぼうし,鞄:かばん,犬:いぬ,猫:ねこ,鳥:とり,牛:うし,馬:うま,豚:ぶた,猿:さる,熊:くま,花:はな,木:き,草:くさ,山:やま,川:かわ,海:うみ,空:そら,雨:あめ,雪:ゆき,風:かぜ,雲:くも,月:つき,星:ほし,朝:あさ,昼:ひる,夜:よる,春:はる,夏:なつ,秋:あき,冬:ふゆ,父:ちち,母:はは,兄:あに,姉:あね,顔:かお,目:め,耳:みみ,口:くち,手:て,足:あし,頭:あたま,声:こえ,歌:うた,絵:え,色:いろ,赤:あか,青:あお,白:しろ,黒:くろ,黄色:きいろ,緑:みどり,音:おと,名前:なまえ,部屋:へや,庭:にわ,道:みち,町:まち,村:むら,島:しま,お金:おかね,切符:きっぷ,船:ふね,車:くるま,電車:でんしゃ,バス:ばす,地図:ちず,薬:くすり,箱:はこ,袋:ふくろ,糸:いと,石:いし,砂:すな,火:ひ,氷:こおり,お茶:おちゃ,今日:きょう,明日:あした,昨日:きのう,今:いま,前:まえ,後ろ:うしろ,横:よこ,上:うえ,下:した,右:みぎ,左:ひだり,外:そと,中:なか,北:きた,南:みなみ,東:ひがし,西:にし,百:ひゃく,千:せん,円:えん,体:からだ,肩:かた,首:くび,指:ゆび,汗:あせ,涙:なみだ,笑顔:えがお,話:はなし,晴れ:はれ,理科:りか,夢:ゆめ,心:こころ,力:ちから,光:ひかり,剣:けん,盾:たて,魔法:まほう,竜:りゅう,宝:たから,学校:がっこう,先生:せんせい,友達:ともだち,宿題:しゅくだい,勉強:べんきょう,教室:きょうしつ,図書館:としょかん,病院:びょういん,公園:こうえん,動物園:どうぶつえん,水族館:すいぞくかん,遊園地:ゆうえんち,買い物:かいもの,料理:りょうり,掃除:そうじ,洗濯:せんたく,散歩:さんぽ,旅行:りょこう,運動:うんどう,練習:れんしゅう,試合:しあい,誕生日:たんじょうび,お祭り:おまつり,花火:はなび,天気:てんき,台風:たいふう,地震:じしん,新聞:しんぶん,手紙:てがみ,写真:しゃしん,音楽:おんがく,映画:えいが,電話:でんわ,自転車:じてんしゃ,飛行機:ひこうき,新幹線:しんかんせん,信号:しんごう,交差点:こうさてん,冷蔵庫:れいぞうこ,台所:だいどころ,玄関:げんかん,階段:かいだん,エレベーター:えれべーたー,パソコン:ぱそこん,キーボード:きーぼーど,インターネット:いんたーねっと,歯ブラシ:はぶらし,牛乳:ぎゅうにゅう,果物:くだもの,野球:やきゅう,水泳:すいえい,サッカー:さっかー,毎日:まいにち,鉛筆:えんぴつ,消しゴム:けしごむ,教科書:きょうかしょ,時間割:じかんわり,給食:きゅうしょく,掃除機:そうじき,弟:おとうと,妹:いもうと,家族:かぞく,両親:りょうしん,おじいさん:おじいさん,おばあさん:おばあさん,赤ちゃん:あかちゃん,世界:せかい,日本:にほん,東京:とうきょう,大阪:おおさか,北海道:ほっかいどう,沖縄:おきなわ,富士山:ふじさん,太陽:たいよう,地球:ちきゅう,宇宙:うちゅう,季節:きせつ,朝ごはん:あさごはん,昼ごはん:ひるごはん,晩ごはん:ばんごはん,お弁当:おべんとう,大切:たいせつ,元気:げんき,安全:あんぜん,約束:やくそく,挨拶:あいさつ,感謝:かんしゃ,計算:けいさん,漢字:かんじ,算数:さんすう,国語:こくご,社会:しゃかい,英語:えいご,体育:たいいく,図工:ずこう,発表:はっぴょう,質問:しつもん,答え:こたえ,問題:もんだい,正解:せいかい,努力:どりょく,挑戦:ちょうせん,経験:けいけん,成長:せいちょう,自然:しぜん,環境:かんきょう,こんにちは:こんにちは,ありがとう:ありがとう,ごめんなさい:ごめんなさい,いただきます:いただきます,ごちそうさま:ごちそうさま,いってきます:いってきます,ただいま:ただいま,手を洗う:てをあらう,歯をみがく:はをみがく,本を読む:ほんをよむ,運動会:うんどうかい,遠足:えんそく,自由研究:じゆうけんきゅう,夏祭り:なつまつり,雪だるま:ゆきだるま,看護師:かんごし,消防士:しょうぼうし,警察官:けいさつかん,料理人:りょうりにん,世界地図:せかいちず,冒険:ぼうけん,勇者:ゆうしゃ,宝箱:たからばこ,迷宮:めいきゅう,回復:かいふく,伝説:でんせつ,おはようございます:おはようございます,おやすみなさい:おやすみなさい,おかえりなさい:おかえりなさい,宿題をする:しゅくだいをする,早起きする:はやおきする,部屋を片付ける:へやをかたづける,朝ごはんを食べる:あさごはんをたべる,駅で待ち合わせ:えきでまちあわせ,公園で遊ぶ:こうえんであそぶ,電車に乗る:でんしゃにのる,傘を持っていく:かさをもっていく,天気予報:てんきよほう,誕生日おめでとう:たんじょうびおめでとう,夏休みの宿題:なつやすみのしゅくだい,修学旅行:しゅうがくりょこう,読書感想文:どくしょかんそうぶん,携帯電話:けいたいでんわ,冷たい飲み物:つめたいのみもの,温かいお茶:あたたかいおちゃ,大きな声で:おおきなこえで,交通安全:こうつうあんぜん,信号を守る:しんごうをまもる,時間を守る:じかんをまもる,約束を守る:やくそくをまもる,道を渡る:みちをわたる,家族で旅行:かぞくでりょこう,友達と遊ぶ:ともだちとあそぶ,先生に質問:せんせいにしつもん,給食当番:きゅうしょくとうばん,掃除の時間:そうじのじかん,休み時間:やすみじかん,学級会:がっきゅうかい,花火大会:はなびたいかい,宇宙飛行士:うちゅうひこうし,プログラマー:ぷろぐらまー,新しい教科書:あたらしいきょうかしょ,三角定規:さんかくじょうぎ,自動販売機:じどうはんばいき,洗濯物を干す:せんたくものをほす,横断歩道:おうだんほどう,地球温暖化:ちきゅうおんだんか,図書館で勉強:としょかんでべんきょう,お風呂に入る:おふろにはいる,ご飯を炊く:ごはんをたく,買い物に行く:かいものにいく,手紙を書く:てがみをかく,写真を撮る:しゃしんをとる,絵をかく:えをかく,歌を歌う:うたをうたう,犬の散歩:いぬのさんぽ,ゲームで遊ぶ:げーむであそぶ,宿題を忘れた:しゅくだいをわすれた,雨が降ってきた:あめがふってきた,風が強い日:かぜがつよいひ,春休みの予定:はるやすみのよてい,冬休みの思い出:ふゆやすみのおもいで,お正月:おしょうがつ,お年玉:おとしだま,こどもの日:こどものひ,七夕まつり:たなばたまつり,クリスマス:くりすます,大掃除:おおそうじ,賢者の石:けんじゃのいし,炎の剣:ほのおのつるぎ,伝説の勇者:でんせつのゆうしゃ,魔王城:まおうじょう,天空の城:てんくうのしろ,よろしくおねがいします:よろしくおねがいします,今日はとても良い天気です:きょうはとてもよいてんきです,明日は学校に行きます:あしたはがっこうにいきます,図書館で本を借りました:としょかんでほんをかりました,毎朝ラジオ体操をします:まいあさらじおたいそうをします,横断歩道は手をあげて渡ろう:おうだんほどうはてをあげてわたろう,夏休みに家族で海へ行った:なつやすみにかぞくでうみへいった,宿題が終わったら遊ぼう:しゅくだいがおわったらあそぼう,雨の日は傘を忘れずに:あめのひはかさをわすれずに,好きな食べ物はカレーです:すきなたべものはかれーです,将来の夢はゲームを作ること:しょうらいのゆめはげーむをつくること,困っている人を助けよう:こまっているひとをたすけよう,早寝早起き朝ごはん:はやねはやおきあさごはん,ありがとうを伝えよう:ありがとうをつたえよう,時間を大切に使おう:じかんをたいせつにつかおう,失敗をおそれずに挑戦しよう:しっぱいをおそれずにちょうせんしよう,毎日少しずつ練習する:まいにちすこしずつれんしゅうする,タイピングが速くなった:たいぴんぐがはやくなった,キーボードを見ないで打つ:きーぼーどをみないでうつ,正しい姿勢で座ろう:ただしいしせいですわろう,電車の中では静かにしよう:でんしゃのなかではしずかにしよう,来週の日曜日に会いましょう:らいしゅうのにちようびにあいましょう,駅前のパン屋さんに行く:えきまえのぱんやさんにいく,冷蔵庫に牛乳が入っている:れいぞうこにぎゅうにゅうがはいっている,自転車に乗るときはヘルメット:じてんしゃにのるときはへるめっと,地震のときは机の下に隠れる:じしんのときはつくえのしたにかくれる,手洗いうがいを忘れずに:てあらいうがいをわすれずに,今日の夕ごはんはハンバーグ:きょうのゆうごはんははんばーぐ,友達と一緒に宿題をした:ともだちといっしょにしゅくだいをした,先生の話をよく聞こう:せんせいのはなしをよくきこう,春になると桜がさく:はるになるとさくらがさく,秋は読書の季節です:あきはどくしょのきせつです,一歩ずつ前へ進もう:いっぽずつまえへすすもう,お母さんにありがとうと言う:おかあさんにありがとうという,休みの日は公園で遊ぶ:やすみのひはこうえんであそぶ,夜は早くねるようにしよう:よるははやくねるようにしよう,食べたら歯をみがこう:たべたらはをみがこう,知らない人についていかない:しらないひとについていかない,忘れ物がないか確認しよう:わすれものがないかかくにんしよう,水をたくさん飲もう:みずをたくさんのもう,おじいちゃんの家に遊びに行く:おじいちゃんのいえにあそびにいく,新しい友達ができました:あたらしいともだちができました,伝説の竜が目を覚ます:でんせつのりゅうがめをさます,百層のダンジョンを攻略せよ:ひゃくそうのだんじょんをこうりゃくせよ,宝箱の中身はミミック:たからばこのなかみはみみっく,魔王を打ち倒す勇者:まおうをうちたおすゆうしゃ,光と闇の最終決戦:ひかりとやみのさいしゅうけっせん`;
+let WORDS=null;
+function getWords(){if(WORDS)return WORDS;WORDS=[[],[],[],[]];const seen=new Set();
+  WORD_POOL.split(',').forEach(p=>{if(!p)return;const [d,k]=p.split(':');if(!k||seen.has(k))return;seen.add(k);const n=tokenize(k).length;WORDS[n<=3?0:n<=6?1:n<=10?2:3].push({d,k})});return WORDS}
 
 /* ===== pixel sprites ===== */
 function hashS(s){let h=2166136261;for(const c of String(s)){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
@@ -966,7 +995,8 @@ function tokenize(kana){
 
 /* ===== save ===== */
 let S;
-function freshRec(){return{kills:0,hits:0,dmg:0,keys:0,maxCombo:0,bestKps:0,time:0,clears:0,uniq:[]}}
+function freshRec(){return{kills:0,hits:0,dmg:0,keys:0,maxCombo:0,bestKps:0,time:0,clears:0,uniq:[],dex:{}}}
+function dexKey(w){return w.u?'u:'+w.u:`t${w.t}r${w.r}`}
 function fresh(){return{exp:0,maxF:0,inv:[],eq:[null,null,null,null,null],nid:1,lastF:1,rec:freshRec()}}
 function load(){
   const d=readLocal(curKey())||(CL.pid?null:null);if(d){adopt(d);return}
@@ -977,10 +1007,8 @@ function save(){S._t=Date.now();try{localStorage.setItem(curKey(),JSON.stringify
 /* ===== weapons ===== */
 function genAff(n){const a=[];for(let i=0;i<n;i++){const d=AFF[rand(AFF.length)];a.push({k:d.k,v:r1(d.min+Math.random()*(d.max-d.min))});}return a}
 function makeW(o){return{id:S.nid++,t:o.t,r:o.r,f:o.f,lv:1,xp:0,tx:0,name:o.name,sk:o.sk,u:o.u||null,el:o.el??5,aff:genAff(RAR[o.r].slots)}}
-function rollRarity(f,boss){
-  const x=Math.random()*100,u=boss?0.9:0.5,L=1+Math.min(3,f*.03),E=4+Math.min(6,f*.06),R=12+Math.min(8,f*.08),U=28;
-  if(x<u)return 5;if(x<u+L)return 4;if(x<u+L+E)return 3;if(x<u+L+E+R)return 2;if(x<u+L+E+R+U)return 1;return 0;
-}
+function rarW(f,boss){const t=Math.min(1,Math.max(0,(f-1)/99)),L=(a,b)=>a+(b-a)*t,u=boss?L(.6,1):L(.3,.9),w=[L(60,10),L(28,25),L(9,30),L(2.5,22),L(.5,12)],sum=w.reduce((a,b)=>a+b,0);return w.map(x=>x/sum*(100-u)).concat(u)}
+function rollRarity(f,boss){const w=rarW(f,boss);let x=Math.random()*100;for(let i=5;i>=0;i--){if(x<w[i])return i;x-=w[i]}return 0}
 function rollWeapon(f,d,boss){
   const r=rollRarity(f,boss);
   if(r===5)return makeW({t:d.ut,r:5,f,name:d.un,sk:d.us,u:d.id});
@@ -988,11 +1016,12 @@ function rollWeapon(f,d,boss){
   const name=r===0?PRE[0][rand(3)]+TYPES[t].n:r<4?`${E.w[rand(3)]}の${TYPES[t].n}`:`${E.w[rand(3)]}${TYPES[t].n}「${KANA[rand(KANA.length)]}」`;
   return makeW({t,r,f,el,name,sk:NSK[rand(NSK.length)]});
 }
-function wBase(w){const T=TYPES[w.t],b=(6+2.2*w.f)*RAR[w.r].m*(1+.02*(w.lv-1));return{atk:Math.round(b*T.a),hp:Math.round(b*5*T.h),def:Math.round(b*.6*T.d)}}
-function affVal(w,a){return r1(a.v*(1+.015*(w.lv-1)))}
+const WBASE=[8,16,30,55,95,160];
+function wBase(w){const T=TYPES[w.t],b=WBASE[w.r]*(1+.025*(w.lv-1));return{atk:Math.round(b*T.a),hp:Math.round(b*5*T.h),def:Math.round(b*.6*T.d)}}
+function affVal(w,a){return r1(a.v*(1+(a.k==='cr'||a.k==='cd'?.025:.015)*(w.lv-1)))}
 function affTxt(w,a){return `${AFFD[a.k].n}+${affVal(w,a)}%`}
 function needXP(w,L){return Math.floor(15*L*(1+w.r*.3))}
-function matExp(w){return Math.floor(30*Math.pow(w.r+1,2)*(1+w.f/10))+Math.floor(w.tx*.5)}
+function matExp(w){return Math.floor(60*Math.pow(w.r+1,2))+Math.floor(w.tx*.5)}
 function byId(id){return S.inv.find(w=>w.id===id)}
 function isEq(id){return S.eq.includes(id)}
 function trText(tr){return{win:`${tr.s}秒以内に${tr.n}回攻撃`,every:`${tr.n}回攻撃ごと`,hit:'被ダメージ時',crit:'クリティカル時',low:'HP50%以下で被弾時'}[tr.type]}
@@ -1017,7 +1046,7 @@ const SLOT_R=[1,3,8,15,25];
 function slotsOpen(r){return SLOT_R.filter(v=>r>=v).length}
 function equipped(){const n=slotsOpen(rankInfo().r);return S.eq.slice(0,n).map(byId).filter(Boolean)}
 function calcStats(){
-  const s={hp:100,atk:10,def:5,cr:5,cd:50,ctr:0,sp:0,mh:0};let hp=0,atk=0,def=0;
+  const rk=rankInfo().r-1,s={hp:100+rk*10,atk:10+rk*2,def:5+rk*.8,cr:5+rk*.15,cd:50+rk*1.2,ctr:0,sp:0,mh:0};let hp=0,atk=0,def=0;
   equipped().forEach(w=>{const b=wBase(w);s.hp+=b.hp;s.atk+=b.atk;s.def+=b.def;
     w.aff.forEach(a=>{const v=affVal(w,a);if(a.k==='atk')atk+=v;else if(a.k==='hp')hp+=v;else if(a.k==='def')def+=v;else s[a.k]+=v;});});
   s.hp=Math.round(s.hp*(1+hp/100));s.atk=Math.round(s.atk*(1+atk/100));s.def=Math.round(s.def*(1+def/100));
@@ -1036,7 +1065,7 @@ let screen='home';
 function show(name){
   screen=name;document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===name));
   if(name!=='battle'){B=null;W=null;}if(typeof TIP!=='undefined')TIP.classList.remove('on');if(name!=='battle'){$('alert').classList.remove('on')}closeCtx&&closeCtx();
-  if(name==='home')renderHome();if(name==='armory')renderArmory();
+  if(name==='home')renderHome();if(name==='armory')renderArmory();if(name==='dex')renderDex();
   if(name!=='battle')playBgm('home');
 }
 function dropHTML(w){return `<div class="drop${w.r>=4?' big':''}" style="--rc:${RAR[w.r].c}">${w.r>=4?'<span class="gt">GET!!</span>':''}<span class="e">${wIcon(w)}</span><div><div class="n">${w.name}</div><div class="small">${RAR[w.r].n}・${SK[w.sk].n}</div></div></div>`}
@@ -1066,7 +1095,7 @@ function renderHome(){
   $('hStats').innerHTML=[['HP',st.hp],['攻撃力',st.atk],['防御力',st.def],['クリ率',st.cr+'%'],['クリダメ',st.cd+'%'],['CT軽減',st.ctr+'%'],['スキル威力',st.sp+'%'],['連撃率',st.mh+'%']]
     .map(([a,b])=>`<div><span class="small">${a}</span><b>${b}</b></div>`).join('');
   $('hProg').style.width=S.maxF+'%';$('hProgT').textContent=`${S.maxF}/100層`;
-  const un=NORMALS.length+BOSSES.length;$('hUni').style.width=(R.uniq.length/un*100)+'%';$('hUniT').textContent=`${R.uniq.length}/${un}`;
+  const dc=DEX.filter(e=>S.rec.dex[e.key]).length;$('hUni').style.width=(dc/DEX.length*100)+'%';$('hUniT').textContent=`${dc}/${DEX.length}`;
   $('hRec').innerHTML=[['撃破数',fmtBig(R.kills)+'体'],['総ヒット',fmtBig(R.hits)],['総ダメージ',fmtBig(R.dmg)],['最大コンボ',R.maxCombo],
     ['最高速度',R.bestKps.toFixed(2)+'打/秒'],['総打鍵',fmtBig(R.keys)],['層クリア',R.clears+'回'],['プレイ時間',fmtTime(R.time)]]
     .map(([a,b])=>`<div><span class="small">${a}</span><b>${b}</b></div>`).join('');
@@ -1093,7 +1122,7 @@ function renderFInfo(){const fi=floorInfo(selF);
 $('fgrid').onclick=e=>{const b=e.target.closest('[data-f]');if(!b||b.disabled)return;selF=+b.dataset.f;S.lastF=selF;
   $('fgrid').querySelectorAll('.sel').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');renderFInfo()};
 $('goBtn').onclick=()=>startFloor(selF);
-$('armBtn').onclick=()=>show('armory');
+document.querySelectorAll('[data-arm]').forEach(b=>b.onclick=()=>{setTab(b.dataset.arm);A.target=null;show('armory')});
 
 /* ===== keyboard ===== */
 const ROWS=['qwertyuiop-','asdfghjkl','zxcvbnm'];const keyEl={};
@@ -1138,7 +1167,7 @@ function spawn(){
 }
 function nextWord(){
   const f=B.floor;let t=f<=8?0:f<=25?1:f<=55?2:3;if(B.enemy.boss)t++;if(Math.random()<.3)t--;t=Math.max(0,Math.min(3,t));
-  let w;do{w=WORDS[t][rand(WORDS[t].length)]}while(w===B.lastWord&&WORDS[t].length>1);B.lastWord=w;
+  const WL=getWords()[t];let w;do{w=WL[rand(WL.length)]}while(w===B.lastWord&&WL.length>1);B.lastWord=w;
   W={d:w.d,kana:w.k,toks:tokenize(w.k),idx:0,buf:'',done:[]};renderWord();
 }
 function renderWord(){
@@ -1312,7 +1341,7 @@ function statsHTML(){
 function commitRec(){if(!B||B.committed)return;B.committed=true;const R=S.rec;R.keys+=B.keys;R.time+=B.tt;R.maxCombo=Math.max(R.maxCombo,B.maxCombo);
   if(B.keys>=30&&B.tt>0)R.bestKps=Math.max(R.bestKps,B.keys/B.tt)}
 function floorClear(){
-  commitRec();S.rec.clears++;playBgm(null);se('clear');B.drops.forEach(w=>{if(w.u&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)});
+  commitRec();S.rec.clears++;B.drops.forEach(w=>S.rec.dex[dexKey(w)]=1);playBgm(null);se('clear');B.drops.forEach(w=>{if(w.u&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)});
   const f=B.floor,first=f>S.maxF,xp=Math.floor(20*Math.pow(f,1.3)*(first?2:1)),before=rankInfo().r;
   S.exp+=xp;if(first)S.maxF=f;S.inv.push(...B.drops);S.lastF=Math.min(100,f+1);save();
   const after=rankInfo().r,so=slotsOpen(before),sn=slotsOpen(after);
@@ -1372,8 +1401,8 @@ const CL={db:null,uid:null,ready:false,pid:null,name:null,timer:null,writing:fal
 try{const ss=JSON.parse(localStorage.getItem('td_session')||'null');if(ss&&ss.pid){CL.pid=ss.pid;CL.name=ss.name}}catch(e){}
 function curKey(){return CL.pid?'td_save_'+CL.pid:SAVE_KEY}
 function pref(pid){return CL.db.doc(`data/users/${CL.uid}/p_${pid}`)}
-function adopt(d){S=Object.assign(fresh(),d);S.rec=Object.assign(freshRec(),d.rec||{});S.inv.forEach(w=>{if(w.u&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)})}
-function newGame(){S=fresh();const w=makeW({t:0,r:0,f:1,name:'旅立ちの短剣',sk:'every3'});S.inv.push(w);S.eq[0]=w.id}
+function adopt(d){S=Object.assign(fresh(),d);S.rec=Object.assign(freshRec(),d.rec||{});S.rec.dex=Object.assign({},S.rec.dex||{});S.inv.forEach(w=>{if(w.u&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u);S.rec.dex[dexKey(w)]=1});S.rec.uniq.forEach(u=>S.rec.dex['u:'+u]=1)}
+function newGame(){S=fresh();const w=makeW({t:0,r:0,f:1,name:'旅立ちの短剣',sk:'every3'});S.inv.push(w);S.eq[0]=w.id;S.rec.dex[dexKey(w)]=1}
 function readLocal(key){try{const d=JSON.parse(localStorage.getItem(key));if(d&&Array.isArray(d.inv))return d}catch(e){}return null}
 async function hashPw(pass,salt){const enc=new TextEncoder(),k=await crypto.subtle.importKey('raw',enc.encode(pass),'PBKDF2',false,['deriveBits']);
   const b=await crypto.subtle.deriveBits({name:'PBKDF2',salt:enc.encode(salt),iterations:60000,hash:'SHA-256'},k,256);return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
@@ -1508,6 +1537,52 @@ $('mbox').addEventListener('click',async e=>{
   }
 });
 
+
+/* ===== item dex ===== */
+const VERSION='1.0.3-alpha';
+const CHANGELOG=[
+ ['1.0.3-alpha',['出題ワードを実用的な言葉中心に一新し、約400語に増量','ランクが上がると基礎ステータス（HP・攻撃・防御・クリ率・クリダメ）が上昇','武器の基礎値をレアリティごとに固定（入手した階層で差が出なくなりました。所持中の武器も新しい基準になります）','深い階層ほど高レアリティの武器が出やすく','クリ率・クリダメの伸びを強化（追加能力の幅とレベルごとの成長量アップ）','拠点の武器ボタンを「装備・強化・合成」の3つに分割','アイテム図鑑を追加（通常武器40種＋ユニーク60種）','バージョン表示と更新情報を追加']],
+ ['1.0.2-alpha',['GitHub Pagesで公開','引き継ぎコード（書き出し・読み込み）とプレイヤー名を追加','フロア開始時の3秒カウントダウンを追加']]
+];
+const DEX=[];
+for(let r=0;r<5;r++)TYPES.forEach((T,t)=>DEX.push({key:`t${t}r${r}`,t,r}));
+NORMALS.concat(BOSSES).forEach((d,i)=>DEX.push({key:'u:'+d.id,t:d.ut,r:5,u:d.id,d,boss:i>=NORMALS.length}));
+DEX.forEach((e,i)=>{e.w={id:700000+i,t:e.t,r:e.r,f:1,lv:1,xp:0,tx:0,el:e.r===0?5:(e.t+e.r)%5,u:e.u||null,aff:[],sk:e.u?e.d.us:null,
+  name:e.u?e.d.un:(e.r===0?PRE[0][1]+TYPES[e.t].n:`${RAR[e.r].n}の${TYPES[e.t].n}`)}});
+const DX={sel:null,hov:null,f:'all'};
+function floorsOf(id){const fl=[];for(let f=1;f<=100;f++){const fi=floorInfo(f);if(fi.boss.id===id||fi.pool.some(d=>d.id===id))fl.push(f)}
+  const out=[];let a=null,p=null;fl.forEach(f=>{if(a===null){a=p=f}else if(f===p+1)p=f;else{out.push(a===p?`${a}層`:`${a}〜${p}層`);a=p=f}});if(a!==null)out.push(a===p?`${a}層`:`${a}〜${p}層`);return out.join('、')}
+function dexPane(e){
+  if(!e)return '<div class="tag">アイテム図鑑</div><div class="empty">アイテムにカーソルを合わせるか、タップして詳細を見る</div>';
+  if(!S.rec.dex[e.key])return `<div class="tag">No.${DEX.indexOf(e)+1}</div><div class="ph" style="--rc:var(--faint)"><span class="dem qm">？</span><div><div class="dn" style="color:var(--dim)">？？？</div><div class="dr">${RAR[e.r].n}</div></div></div><div class="empty">まだ入手していません</div>`;
+  const w=e.w,R=RAR[e.r],T=TYPES[e.t],b1=wBase(w),bm=wBase(Object.assign({},w,{lv:R.cap}));
+  const sk=e.u?SK[e.d.us]:null;
+  const rate=f=>rarW(f,false)[e.r];
+  return `<div class="tag">No.${DEX.indexOf(e)+1}</div><div class="ph" style="--rc:${R.c}"><span class="dem">${wIcon(w)}</span><div style="min-width:0"><div class="dn">${e.u?w.name:`${R.n}の${T.n}`}</div><div class="dr">${R.n}　${T.n}　最大Lv${R.cap}</div></div></div>
+  <div class="pbody"><div><div class="psec">基礎ステータス（Lv1 → Lv${R.cap}）</div><div class="rows">${[['攻撃','atk'],['HP','hp'],['防御','def']].map(([n,k])=>`<span>${n}</span><b>${b1[k]?`${b1[k]} → ${bm[k]}`:'-'}</b>`).join('')}</div>
+    <div class="psec">追加能力</div><div class="small" style="margin-top:4px">${R.slots?`${R.slots}枠（種類はランダム）`:'なし'}</div></div>
+  <div><div class="psec">ドロップする敵</div><div style="margin-top:4px">${e.u?`<span class="dxe"><img src="${eSprite(e.d)}" alt="">${e.boss?'<span class="bs">BOSS</span>':''}${e.d.n}</span>`:'すべての敵'}</div>
+    <div class="psec">入手できる階層</div><div style="margin-top:4px">${e.u?floorsOf(e.d.id):'1〜100層（深い層ほど高レアが出やすい）'}</div>
+    <div class="psec">入手率の目安</div><div class="small" style="margin-top:4px">${e.u?`撃破時 約${(rarW(1,e.boss)[5]*(e.boss?1:.35)).toFixed(2)}〜${(rarW(100,e.boss)[5]*(e.boss?1:.35)).toFixed(2)}%`:`ドロップ時 1層 ${rate(1).toFixed(1)}% → 50層 ${rate(50).toFixed(1)}% → 100層 ${rate(100).toFixed(1)}%`}</div></div></div>
+  <div class="psec">スキル</div><div class="psk" style="margin-top:2px">${sk?`<b>${sk.n}</b>　CT${sk.ct}秒<br>${trText(sk.tr)}：${sk.fx.map(f=>fxText(f,R.sm)).join('、')}`:'通常スキルからランダムで1つ'}</div>`;
+}
+function renderDex(){
+  const got=DEX.filter(e=>S.rec.dex[e.key]).length;$('dexCnt').textContent=`${got} / ${DEX.length}`;
+  const L=DEX.filter(e=>DX.f==='all'||(DX.f==='uni'?e.u:!e.u));
+  $('dexGrid').innerHTML=L.map(e=>{const g=S.rec.dex[e.key],i=DEX.indexOf(e);
+    return `<button class="wc dxc ${g?'':'unk'} ${DX.sel===e.key?'sel':''}" data-dx="${e.key}" style="--rc:${g?RAR[e.r].c:'var(--faint)'}">${g?wIcon(e.w):'<span class="qm">？</span>'}<span class="lv">${i+1}</span></button>`}).join('');
+  renderDexPane();
+}
+function renderDexPane(){const k=DX.hov||DX.sel;$('dexPane').innerHTML=dexPane(DEX.find(e=>e.key===k))}
+$('dexGrid').onclick=e=>{const b=e.target.closest('[data-dx]');if(!b)return;DX.sel=b.dataset.dx;$('dexGrid').querySelectorAll('.sel').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');renderDexPane()};
+$('dexGrid').addEventListener('pointerover',e=>{if(e.pointerType!=='mouse')return;const b=e.target.closest('[data-dx]');const k=b?b.dataset.dx:null;if(k!==DX.hov){DX.hov=k;renderDexPane()}});
+$('dexGrid').addEventListener('pointerleave',()=>{DX.hov=null;renderDexPane()});
+$('dexFilt').onclick=e=>{const b=e.target.closest('[data-df]');if(!b)return;DX.f=b.dataset.df;$('dexFilt').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));renderDex()};
+$('dexBack').onclick=()=>show('home');
+$('dexLink').onclick=()=>show('dex');
+$('verTxt').textContent='Ver.'+VERSION;
+$('clogBtn').onclick=()=>modal(`<h2>更新情報</h2>${CHANGELOG.map(([v,l])=>`<div class="clog"><b>Ver.${v}</b><ul>${l.map(x=>`<li>${x}</li>`).join('')}</ul></div>`).join('')}`,[{t:'閉じる',pri:true}]);
+
 /* ===== armory ===== */
 const A={tab:'equip',sel:null,hover:null,slot:0,target:null,mats:new Set(),synMat:null,pick:new Set(),
   sort:'id',desc:true,fr:new Set([0,1,2,3,4,5]),ft:-1,fs:'',fa:''};
@@ -1582,7 +1657,7 @@ function renderTop(){
     R=m?paneHTML(m,'素材（消費）'):hov&&hov.id!==A.target?paneHTML(hov,'カーソル中の武器'):`<div class="tag">素材</div><div class="empty">${t?`同じレア度（${RAR[t.r].n}）の武器をタップ`:'—'}</div>`;
     if(t)mr=`<div class="mlab">素材${m?'<span class="small">（タップで外す）</span>':''}</div><div class="mats">${m?`<button class="wc mini" data-mid="${m.id}" style="--rc:${RAR[m.r].c}" title="${m.name}">${wIcon(m)}<span class="lv">Lv${m.lv}</span></button>`:`<span class="small">同じレア度（${RAR[t.r].n}）の武器を下の一覧からタップ</span>`}</div>`;
     if(t&&m){const n=RAR[t.r].slots,pool=[...t.aff.map((a,i)=>({key:'b'+i,a,src:'ベース'})),...m.aff.map((a,i)=>({key:'m'+i,a,src:'素材'}))];
-      ex=`<div class="mlab">追加能力を${n}つ選択（${A.pick.size}/${n}）</div><div class="daff">${pool.map(p=>`<button class="chip ${A.pick.has(p.key)?'on':''}" data-pick="${p.key}"><small>${p.src}</small>${AFFD[p.a.k].n}+${r1(p.a.v*(1+.015*(t.lv-1)))}%</button>`).join('')}</div>`;
+      ex=`<div class="mlab">追加能力を${n}つ選択（${A.pick.size}/${n}）</div><div class="daff">${pool.map(p=>`<button class="chip ${A.pick.has(p.key)?'on':''}" data-pick="${p.key}"><small>${p.src}</small>${AFFD[p.a.k].n}+${affVal(t,p.a)}%</button>`).join('')}</div>`;
       act=`<button class="btn pri" data-a="syn" ${A.pick.size===n?'':'disabled'}>合成する</button><button class="btn" data-a="reset">ベースを選び直す</button>`;
     }else if(t)act='<button class="btn" data-a="reset">ベースを選び直す</button>';
   }
