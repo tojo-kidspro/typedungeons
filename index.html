@@ -590,6 +590,20 @@ img{image-rendering:pixelated}
 .dtag{display:inline-block;margin-right:8px;padding:0 6px;font-size:12px;color:#000;background:var(--dc)}
 .cnt{margin-left:4px;color:var(--sel);font-size:10px}
 button.chip.dis{opacity:.3;text-decoration:line-through}
+
+/* ---------- armory layout v3 ---------- */
+.abody{flex:1;min-height:0;display:flex;flex-direction:column}
+#paneR{display:none}
+.cmp{grid-template-columns:1fr}
+.tip{width:340px}
+.ctx{max-height:82vh;overflow-y:auto;max-width:min(360px,92vw)}
+.ctxd{padding:8px 10px 10px;border-bottom:2px solid var(--faint);font-size:12px}
+@media (min-width:860px){
+  .abody{display:grid;grid-template-columns:minmax(360px,460px) 1fr;width:100%;max-width:1400px;margin:0 auto}
+  .abody .atop{max-height:none!important;height:100%;min-height:0;overflow-y:auto;border-bottom:none!important;border-right:4px solid var(--fg);margin:0!important;max-width:none!important;width:auto!important}
+  .abody .abot{border-top:none!important;max-width:none!important;width:auto!important;margin:0!important;min-height:0;height:100%;padding-top:10px}
+  .abody .cmp .pane{height:auto;min-height:260px}
+}
 </style>
 </head>
 <body>
@@ -629,12 +643,13 @@ button.chip.dis{opacity:.3;text-decoration:line-through}
       <div class="finfo" id="fInfo"></div>
       <button class="big go" id="goBtn">出撃</button>
     </div>
-    <p class="small hnote">PCはキーボード、スマホは画面のキーで入力。進行はこのブラウザに保存されます。<br><span id="verTxt"></span>　<button class="linkb" id="clogBtn">更新情報</button></p>
+    <p class="small hnote"><span id="verTxt"></span>　<button class="linkb" id="clogBtn">更新情報</button></p>
   </div>
 </section>
 
 <section id="armory" class="screen">
   <div class="abar"><button class="back" id="armBack">◀ 拠点</button><span class="atitle" id="atitle">装備</span><span class="small" id="aSub"></span></div>
+  <div class="abody">
   <div class="atop">
     <div class="cmp"><div class="pane" id="paneL"></div><div class="pane" id="paneR"></div></div>
     <div class="slots" id="slots"></div>
@@ -649,6 +664,7 @@ button.chip.dis{opacity:.3;text-decoration:line-through}
       <span class="rchips" id="fRar"></span><button id="fFav" class="favf">★のみ</button><span class="small" id="invHead"></span>
     </div>
     <div class="invwrap" id="invwrap"><div class="inv" id="inv"></div></div>
+  </div>
   </div>
   <nav class="cmd" id="tabs"><button data-tab="equip" class="on">装備</button><button data-tab="enh">強化</button><button data-tab="syn">合成</button></nav>
 </section>
@@ -1156,7 +1172,7 @@ function modal(html,btns){
 let screen='home';
 function show(name){
   screen=name;document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===name));
-  if(name!=='battle'){B=null;W=null;}if(typeof TIP!=='undefined')TIP.classList.remove('on');if(name!=='battle'){$('alert').classList.remove('on')}closeCtx&&closeCtx();
+  if(name!=='battle'){B=null;W=null;}if(typeof TIP!=='undefined'){TIP.classList.remove('on');TIP._id=null}if(name!=='battle'){$('alert').classList.remove('on')}closeCtx&&closeCtx();
   if(name==='home')renderHome();if(name==='armory')renderArmory();if(name==='dex')renderDex();
   if(name!=='battle')playBgm('home');
 }
@@ -1641,8 +1657,9 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='1.0.7-alpha';
+const VERSION='1.0.8-alpha';
 const CHANGELOG=[
+ ['1.0.8-alpha',['装備・強化・合成画面のレイアウトを変更（左上に装備中／ベースの武器、左下に装備枠・素材・追加能力の選択、右側にインベントリ）','カーソルを合わせた武器の詳細を、拠点画面と同じポップアップ表示に（装備画面では選択中の枠の武器との比較付き）','スマホでは武器をタップした時のメニューに詳細も表示','拠点画面の操作説明の文を削除']],
  ['1.0.7-alpha',['同じ種類の追加能力は1つの武器に1つまでに（所持中の武器で重複していたものは、高いほうを残して別の能力に置き換え）','合成でも同じ種類の追加能力は1つまでしか選べないように','合成画面の素材の追加能力を、ベースのレベルに換算した値で表示']],
  ['1.0.6-alpha',['追加能力の数をレア2・エピック3・レジェンダリー4・ユニーク5に統一（所持中の武器も自動で調整）','ハードでは4文字以下の言葉が出ないように','難易度の説明文を削除','強化と合成に専用の効果音を追加']],
  ['1.0.5-alpha',['難易度「イージー（青）」「ノーマル（緑）」「ハード（赤）」を追加。拠点の階層選択の上でいつでも切り替え可能','階層の進み具合は難易度ごとに別々に記録（ランク・武器・図鑑は共通）','イージー：敵の攻撃がゆっくり＆ダメージ半分、言葉は2〜3文字中心で最大6文字、ユニークは出ない','ノーマル：これまでの難易度で、言葉は最大10文字まで','ハード：文字数制限なし、敵のHP1.5倍・攻撃1.4倍・攻撃速め、高レアリティが出やすくユニークは3%、経験値1.5倍','これまでの進み具合はノーマルに引き継ぎ']],
@@ -1792,7 +1809,7 @@ function renderArmory(){renderTop();renderInv()}
 function equipTo(id,i){const old=S.eq.indexOf(id);if(old>=0)S.eq[old]=null;S.eq[i]=id;A.slot=i;save();toast(`枠${i+1}に装備しました`)}
 function closeCtx(){$('ctx').classList.remove('on')}
 document.addEventListener('pointerdown',e=>{if(!e.target.closest('#ctx'))closeCtx()},true);
-function openCtx(id,x,y){
+function openCtx(id,x,y,detail){armTipOff();
   const w=byId(id),open=slotsOpen(rankInfo().r),ei=S.eq.indexOf(id),items=[];
   if(ei>=0&&ei<open)items.push([`外す（枠${ei+1}）`,()=>{S.eq[ei]=null;save();toast('外しました')}]);
   else{
@@ -1805,13 +1822,13 @@ function openCtx(id,x,y){
   if(!isEq(id)&&!w.fav)items.push(['捨てる',()=>{modal(`<h2>捨てる？</h2><p>「${w.name}」（${RAR[w.r].n} Lv${w.lv}）を捨てます。元に戻せません。</p>`,
     [{t:'やめる'},{t:'捨てる',pri:true,fn:()=>{S.inv=S.inv.filter(x=>x.id!==id);if(A.sel===id)A.sel=null;save();toast('捨てました');renderArmory()}}])}]);
   items.push(['閉じる',null]);
-  const c=$('ctx');c.innerHTML='';
+  const c=$('ctx');c.innerHTML=detail?`<div class="ctxd">${armTip(w)}</div>`:'';
   items.forEach(([t,f])=>{const b=document.createElement('button');b.textContent=t;b.onclick=()=>{closeCtx();if(f){f();renderArmory()}};c.appendChild(b)});
   c.style.left='0px';c.style.top='0px';c.classList.add('on');
   const r=c.getBoundingClientRect();c.style.left=Math.max(8,Math.min(x+6,innerWidth-r.width-8))+'px';c.style.top=Math.max(8,Math.min(y+6,innerHeight-r.height-8))+'px';
 }
-function tapCard(id,x,y){
-  if(A.tab==='equip'){A.sel=id;renderArmory();openCtx(id,x,y);return}
+function tapCard(id,x,y,pt){
+  if(A.tab==='equip'){A.sel=id;renderArmory();openCtx(id,x,y,pt&&pt!=='mouse');return}
   const w=byId(id);if(!w)return;
   if(A.tab==='enh'){
     if(!A.target||id===A.target){A.target=id;A.mats.clear()}
@@ -1833,7 +1850,7 @@ function tapCard(id,x,y){
   }
   renderArmory();
 }
-$('slots').onclick=e=>{const b=e.target.closest('[data-slot]');if(!b)return;const i=+b.dataset.slot;A.slot=i;renderTop();if(S.eq[i])openCtx(S.eq[i],e.clientX,e.clientY)};
+$('slots').onclick=e=>{const b=e.target.closest('[data-slot]');if(!b)return;const i=+b.dataset.slot;A.slot=i;renderTop();if(S.eq[i])openCtx(S.eq[i],e.clientX,e.clientY,e.pointerType&&e.pointerType!=='mouse')};
 $('matrow').onclick=e=>{const b=e.target.closest('[data-mid]');if(!b)return;const id=+b.dataset.mid;if(A.tab==='enh')A.mats.delete(id);else{A.synMat=null;A.pick.clear()}renderArmory()};
 $('extra').onclick=e=>{const b=e.target.closest('[data-pick]');if(!b)return;const k=b.dataset.pick,t=byId(A.target),mm=byId(A.synMat),n=RAR[t.r].slots;
   const aOf=key=>(key[0]==='b'?t.aff:mm.aff)[+key.slice(1)];
@@ -1859,14 +1876,25 @@ $('actions').onclick=e=>{
 
 /* hover preview (mouse) */
 const IW=$('invwrap');
-IW.addEventListener('pointerover',e=>{if(e.pointerType!=='mouse'||P)return;const c=e.target.closest('.wc');const id=c?+c.dataset.id:null;if(id!==A.hover){A.hover=id;renderTop()}});
-IW.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse'&&!P&&A.hover!=null){A.hover=null;renderTop()}});
+function armTip(w){const t=byId(A.target);
+  if(A.tab==='equip'){const cur=byId(S.eq[A.slot]);return paneHTML(w,cur&&cur.id!==w.id?`カーソル中の武器（枠${A.slot+1}の装備と比較）`:'カーソル中の武器',w.id===(cur&&cur.id)?undefined:(cur||null))}
+  if(A.tab==='enh')return paneHTML(w,'カーソル中の武器',undefined,(t&&w.id!==t.id)?`<div class="prev">素材にすると +${matExp(w)}EXP</div>`:'');
+  const cv=t&&w.r===t.r&&w.id!==t.id;return paneHTML(cv?Object.assign({},w,{lv:t.lv}):w,cv?`カーソル中の武器（追加能力はベースのLv${t.lv}に換算）`:'カーソル中の武器')}
+function armTipOn(e,w){if(!w){TIP.classList.remove('on');TIP._id=null;return}const key=[A.tab,w.id,A.slot,A.target].join(':');if(TIP._id!==key){TIP._id=key;TIP.innerHTML=armTip(w)}TIP.classList.add('on');tipPos(e.clientX,e.clientY)}
+function armTipOff(){TIP.classList.remove('on');TIP._id=null}
+IW.addEventListener('pointerover',e=>{if(e.pointerType!=='mouse'||P)return;const c=e.target.closest('.wc');armTipOn(e,c&&byId(+c.dataset.id))});
+IW.addEventListener('pointermove',e=>{if(e.pointerType==='mouse'&&!P&&TIP.classList.contains('on'))tipPos(e.clientX,e.clientY)});
+[['slots','data-slot',el=>byId(S.eq[+el.dataset.slot])],['matrow','data-mid',el=>byId(+el.dataset.mid)]].forEach(([id,at,get])=>{const box=$(id);
+  box.addEventListener('pointerover',e=>{if(e.pointerType!=='mouse')return;const el=e.target.closest('['+at+']');armTipOn(e,el&&get(el))});
+  box.addEventListener('pointermove',e=>{if(e.pointerType==='mouse'&&TIP.classList.contains('on'))tipPos(e.clientX,e.clientY)});
+  box.addEventListener('pointerleave',armTipOff)});
+IW.addEventListener('pointerleave',armTipOff);
 
 /* drag to scroll / long-press drag to equip */
 let P=null,ghost=null,inertia=0;
 IW.addEventListener('pointerdown',e=>{
   if(e.pointerType==='mouse'&&e.button!==0)return;
-  cancelAnimationFrame(inertia);
+  cancelAnimationFrame(inertia);armTipOff();
   const card=e.target.closest('.wc');
   P={x:e.clientX,y:e.clientY,st:IW.scrollTop,card,mode:'pend',ly:e.clientY,lt:performance.now(),v:0};
   try{IW.setPointerCapture(e.pointerId)}catch(_){}
@@ -1881,7 +1909,7 @@ IW.addEventListener('pointermove',e=>{
 });
 function endP(e,cancel){
   if(!P)return;clearTimeout(P.timer);const p=P;P=null;
-  if(p.mode==='pend'&&!cancel&&p.card)tapCard(+p.card.dataset.id,e.clientX,e.clientY);
+  if(p.mode==='pend'&&!cancel&&p.card)tapCard(+p.card.dataset.id,e.clientX,e.clientY,e.pointerType);
   else if(p.mode==='scroll'&&performance.now()-p.lt<80){let v=-p.v*16;const step=()=>{if(Math.abs(v)<.5)return;IW.scrollTop+=v;v*=.93;inertia=requestAnimationFrame(step)};step()}
   else if(p.mode==='drag')dropGhost(p,e.clientX,e.clientY,cancel);
 }
