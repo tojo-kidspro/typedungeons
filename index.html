@@ -577,6 +577,10 @@ img{image-rendering:pixelated}
 .clog{text-align:left;margin:10px 0}
 .clog ul{margin:6px 0 0 1.2em;font-size:13px;line-height:1.7}
 @media (max-width:560px){.dpane{height:250px}}
+
+.uqt{display:inline-block;margin-left:6px;padding:0 5px;font-size:10px;color:#fff;background:var(--r5);vertical-align:1px}
+.rows b .up{color:var(--ehp)}.rows b .down{color:var(--hpbg)}
+.dr .up{color:var(--ehp)}
 </style>
 </head>
 <body>
@@ -642,7 +646,7 @@ img{image-rendering:pixelated}
 <section id="dex" class="screen">
   <div class="abar"><button class="back" id="dexBack">◀ 拠点</button><span class="atitle">アイテム図鑑</span><span class="small" id="dexCnt"></span></div>
   <div class="dtop"><div class="pane dpane" id="dexPane"></div></div>
-  <div class="dfilt" id="dexFilt"><button data-df="all" class="on">すべて</button><button data-df="gen">通常武器</button><button data-df="uni">ユニーク</button></div>
+  <div class="dfilt" id="dexFilt"><button data-df="all" class="on">すべて</button><button data-df="gen">通常武器</button><button data-df="def">防御系</button><button data-df="uni">ユニーク</button></div>
   <div class="invwrap dexwrap"><div class="inv dexg" id="dexGrid"></div></div>
 </section>
 <section id="battle" class="screen">
@@ -692,7 +696,8 @@ const RAR=[
  {n:'ユニーク',c:'var(--r5)',slots:5,cap:100,m:2.1,sm:2.6}];
 const TYPES=[
  {n:'剣',e:'🗡️',a:1.0,h:.3,d:.3},{n:'大剣',e:'⚔️',a:1.3,h:0,d:.2},{n:'斧',e:'🪓',a:1.4,h:.2,d:0},{n:'槍',e:'🔱',a:1.1,h:.2,d:.2},
- {n:'弓',e:'🏹',a:1.15,h:.1,d:.1},{n:'杖',e:'🪄',a:.9,h:.5,d:.2},{n:'盾',e:'🛡️',a:.6,h:.8,d:1.0},{n:'鎚',e:'🔨',a:1.2,h:.3,d:.3}];
+ {n:'弓',e:'🏹',a:1.15,h:.1,d:.1},{n:'杖',e:'🪄',a:.9,h:.5,d:.2},{n:'盾',e:'🛡️',a:.6,h:.8,d:1.0},{n:'鎚',e:'🔨',a:1.2,h:.3,d:.3},
+ {n:'大盾',e:'🛡️',a:.4,h:1.0,d:1.4},{n:'籠手',e:'🥊',a:.9,h:.5,d:.6},{n:'護符',e:'📿',a:.5,h:1.3,d:.7}];
 const PRE=[['古びた','木の','錆びた'],['鉄の','兵士の','鋼の'],['銀の','騎士の','蒼鋼の'],['魔鋼の','精霊の','紫電の'],['神鉄の','英雄の','黄金の']];
 const AFF=[
  {k:'atk',n:'攻撃力',min:3,max:8},{k:'hp',n:'HP',min:4,max:10},{k:'def',n:'防御力',min:4,max:10},
@@ -729,6 +734,10 @@ const SK={
  rage:{n:'狂化',tr:{type:'low'},ct:20,fx:[{t:'atkbuf',v:40,dur:8}]},
  lifeblade:{n:'吸命剣',tr:{type:'crit'},ct:7,fx:[{t:'dmg',v:1.2},{t:'drain',v:60}]},
  haste:{n:'加速',tr:{type:'every',n:10},ct:15,fx:[{t:'ctcut',v:2}]},
+ fort:{n:'堅守',tr:{type:'every',n:4},ct:10,fx:[{t:'shield',v:12}]},
+ thorn:{n:'茨の守り',tr:{type:'hit'},ct:8,fx:[{t:'shield',v:8},{t:'dmg',v:1.5}]},
+ sanctu:{n:'聖域',tr:{type:'win',n:5,s:5},ct:12,fx:[{t:'heal',v:6},{t:'shield',v:6}]},
+ iron:{n:'不動',tr:{type:'low'},ct:18,fx:[{t:'shield',v:30}]},
  spirit:{n:'闘気',tr:{type:'hit'},ct:12,fx:[{t:'atkbuf',v:15,dur:5},{t:'critbuf',v:15,dur:5}]},
  u_thousand:{n:'千刃乱舞',tr:{type:'every',n:4},ct:9,fx:[{t:'multi',v:.3,n:25}]},
  u_immortal:{n:'不死の加護',tr:{type:'hit'},ct:18,fx:[{t:'heal',v:20},{t:'shield',v:10}]},
@@ -774,10 +783,10 @@ const SCENES=[
  'linear-gradient(180deg,#3d2a12,#170f05)','linear-gradient(180deg,#123433,#061413)','linear-gradient(180deg,#1f1d3f,#0a0918)',
  'linear-gradient(180deg,#0e2e4a,#05121f)','linear-gradient(180deg,#4a1010,#1a0505)','linear-gradient(180deg,#3d2f0c,#140f02)',
  'linear-gradient(180deg,#2b0d3d,#0b0212)'];
-const WORD_POOL=`家:いえ,水:みず,本:ほん,靴:くつ,傘:かさ,椅子:いす,机:つくえ,窓:まど,鍵:かぎ,駅:えき,店:みせ,紙:かみ,箸:はし,皿:さら,米:こめ,卵:たまご,肉:にく,野菜:やさい,時計:とけい,服:ふく,帽子:ぼうし,鞄:かばん,犬:いぬ,猫:ねこ,鳥:とり,牛:うし,馬:うま,豚:ぶた,猿:さる,熊:くま,花:はな,木:き,草:くさ,山:やま,川:かわ,海:うみ,空:そら,雨:あめ,雪:ゆき,風:かぜ,雲:くも,月:つき,星:ほし,朝:あさ,昼:ひる,夜:よる,春:はる,夏:なつ,秋:あき,冬:ふゆ,父:ちち,母:はは,兄:あに,姉:あね,顔:かお,目:め,耳:みみ,口:くち,手:て,足:あし,頭:あたま,声:こえ,歌:うた,絵:え,色:いろ,赤:あか,青:あお,白:しろ,黒:くろ,黄色:きいろ,緑:みどり,音:おと,名前:なまえ,部屋:へや,庭:にわ,道:みち,町:まち,村:むら,島:しま,お金:おかね,切符:きっぷ,船:ふね,車:くるま,電車:でんしゃ,バス:ばす,地図:ちず,薬:くすり,箱:はこ,袋:ふくろ,糸:いと,石:いし,砂:すな,火:ひ,氷:こおり,お茶:おちゃ,今日:きょう,明日:あした,昨日:きのう,今:いま,前:まえ,後ろ:うしろ,横:よこ,上:うえ,下:した,右:みぎ,左:ひだり,外:そと,中:なか,北:きた,南:みなみ,東:ひがし,西:にし,百:ひゃく,千:せん,円:えん,体:からだ,肩:かた,首:くび,指:ゆび,汗:あせ,涙:なみだ,笑顔:えがお,話:はなし,晴れ:はれ,理科:りか,夢:ゆめ,心:こころ,力:ちから,光:ひかり,剣:けん,盾:たて,魔法:まほう,竜:りゅう,宝:たから,学校:がっこう,先生:せんせい,友達:ともだち,宿題:しゅくだい,勉強:べんきょう,教室:きょうしつ,図書館:としょかん,病院:びょういん,公園:こうえん,動物園:どうぶつえん,水族館:すいぞくかん,遊園地:ゆうえんち,買い物:かいもの,料理:りょうり,掃除:そうじ,洗濯:せんたく,散歩:さんぽ,旅行:りょこう,運動:うんどう,練習:れんしゅう,試合:しあい,誕生日:たんじょうび,お祭り:おまつり,花火:はなび,天気:てんき,台風:たいふう,地震:じしん,新聞:しんぶん,手紙:てがみ,写真:しゃしん,音楽:おんがく,映画:えいが,電話:でんわ,自転車:じてんしゃ,飛行機:ひこうき,新幹線:しんかんせん,信号:しんごう,交差点:こうさてん,冷蔵庫:れいぞうこ,台所:だいどころ,玄関:げんかん,階段:かいだん,エレベーター:えれべーたー,パソコン:ぱそこん,キーボード:きーぼーど,インターネット:いんたーねっと,歯ブラシ:はぶらし,牛乳:ぎゅうにゅう,果物:くだもの,野球:やきゅう,水泳:すいえい,サッカー:さっかー,毎日:まいにち,鉛筆:えんぴつ,消しゴム:けしごむ,教科書:きょうかしょ,時間割:じかんわり,給食:きゅうしょく,掃除機:そうじき,弟:おとうと,妹:いもうと,家族:かぞく,両親:りょうしん,おじいさん:おじいさん,おばあさん:おばあさん,赤ちゃん:あかちゃん,世界:せかい,日本:にほん,東京:とうきょう,大阪:おおさか,北海道:ほっかいどう,沖縄:おきなわ,富士山:ふじさん,太陽:たいよう,地球:ちきゅう,宇宙:うちゅう,季節:きせつ,朝ごはん:あさごはん,昼ごはん:ひるごはん,晩ごはん:ばんごはん,お弁当:おべんとう,大切:たいせつ,元気:げんき,安全:あんぜん,約束:やくそく,挨拶:あいさつ,感謝:かんしゃ,計算:けいさん,漢字:かんじ,算数:さんすう,国語:こくご,社会:しゃかい,英語:えいご,体育:たいいく,図工:ずこう,発表:はっぴょう,質問:しつもん,答え:こたえ,問題:もんだい,正解:せいかい,努力:どりょく,挑戦:ちょうせん,経験:けいけん,成長:せいちょう,自然:しぜん,環境:かんきょう,こんにちは:こんにちは,ありがとう:ありがとう,ごめんなさい:ごめんなさい,いただきます:いただきます,ごちそうさま:ごちそうさま,いってきます:いってきます,ただいま:ただいま,手を洗う:てをあらう,歯をみがく:はをみがく,本を読む:ほんをよむ,運動会:うんどうかい,遠足:えんそく,自由研究:じゆうけんきゅう,夏祭り:なつまつり,雪だるま:ゆきだるま,看護師:かんごし,消防士:しょうぼうし,警察官:けいさつかん,料理人:りょうりにん,世界地図:せかいちず,冒険:ぼうけん,勇者:ゆうしゃ,宝箱:たからばこ,迷宮:めいきゅう,回復:かいふく,伝説:でんせつ,おはようございます:おはようございます,おやすみなさい:おやすみなさい,おかえりなさい:おかえりなさい,宿題をする:しゅくだいをする,早起きする:はやおきする,部屋を片付ける:へやをかたづける,朝ごはんを食べる:あさごはんをたべる,駅で待ち合わせ:えきでまちあわせ,公園で遊ぶ:こうえんであそぶ,電車に乗る:でんしゃにのる,傘を持っていく:かさをもっていく,天気予報:てんきよほう,誕生日おめでとう:たんじょうびおめでとう,夏休みの宿題:なつやすみのしゅくだい,修学旅行:しゅうがくりょこう,読書感想文:どくしょかんそうぶん,携帯電話:けいたいでんわ,冷たい飲み物:つめたいのみもの,温かいお茶:あたたかいおちゃ,大きな声で:おおきなこえで,交通安全:こうつうあんぜん,信号を守る:しんごうをまもる,時間を守る:じかんをまもる,約束を守る:やくそくをまもる,道を渡る:みちをわたる,家族で旅行:かぞくでりょこう,友達と遊ぶ:ともだちとあそぶ,先生に質問:せんせいにしつもん,給食当番:きゅうしょくとうばん,掃除の時間:そうじのじかん,休み時間:やすみじかん,学級会:がっきゅうかい,花火大会:はなびたいかい,宇宙飛行士:うちゅうひこうし,プログラマー:ぷろぐらまー,新しい教科書:あたらしいきょうかしょ,三角定規:さんかくじょうぎ,自動販売機:じどうはんばいき,洗濯物を干す:せんたくものをほす,横断歩道:おうだんほどう,地球温暖化:ちきゅうおんだんか,図書館で勉強:としょかんでべんきょう,お風呂に入る:おふろにはいる,ご飯を炊く:ごはんをたく,買い物に行く:かいものにいく,手紙を書く:てがみをかく,写真を撮る:しゃしんをとる,絵をかく:えをかく,歌を歌う:うたをうたう,犬の散歩:いぬのさんぽ,ゲームで遊ぶ:げーむであそぶ,宿題を忘れた:しゅくだいをわすれた,雨が降ってきた:あめがふってきた,風が強い日:かぜがつよいひ,春休みの予定:はるやすみのよてい,冬休みの思い出:ふゆやすみのおもいで,お正月:おしょうがつ,お年玉:おとしだま,こどもの日:こどものひ,七夕まつり:たなばたまつり,クリスマス:くりすます,大掃除:おおそうじ,賢者の石:けんじゃのいし,炎の剣:ほのおのつるぎ,伝説の勇者:でんせつのゆうしゃ,魔王城:まおうじょう,天空の城:てんくうのしろ,よろしくおねがいします:よろしくおねがいします,今日はとても良い天気です:きょうはとてもよいてんきです,明日は学校に行きます:あしたはがっこうにいきます,図書館で本を借りました:としょかんでほんをかりました,毎朝ラジオ体操をします:まいあさらじおたいそうをします,横断歩道は手をあげて渡ろう:おうだんほどうはてをあげてわたろう,夏休みに家族で海へ行った:なつやすみにかぞくでうみへいった,宿題が終わったら遊ぼう:しゅくだいがおわったらあそぼう,雨の日は傘を忘れずに:あめのひはかさをわすれずに,好きな食べ物はカレーです:すきなたべものはかれーです,将来の夢はゲームを作ること:しょうらいのゆめはげーむをつくること,困っている人を助けよう:こまっているひとをたすけよう,早寝早起き朝ごはん:はやねはやおきあさごはん,ありがとうを伝えよう:ありがとうをつたえよう,時間を大切に使おう:じかんをたいせつにつかおう,失敗をおそれずに挑戦しよう:しっぱいをおそれずにちょうせんしよう,毎日少しずつ練習する:まいにちすこしずつれんしゅうする,タイピングが速くなった:たいぴんぐがはやくなった,キーボードを見ないで打つ:きーぼーどをみないでうつ,正しい姿勢で座ろう:ただしいしせいですわろう,電車の中では静かにしよう:でんしゃのなかではしずかにしよう,来週の日曜日に会いましょう:らいしゅうのにちようびにあいましょう,駅前のパン屋さんに行く:えきまえのぱんやさんにいく,冷蔵庫に牛乳が入っている:れいぞうこにぎゅうにゅうがはいっている,自転車に乗るときはヘルメット:じてんしゃにのるときはへるめっと,地震のときは机の下に隠れる:じしんのときはつくえのしたにかくれる,手洗いうがいを忘れずに:てあらいうがいをわすれずに,今日の夕ごはんはハンバーグ:きょうのゆうごはんははんばーぐ,友達と一緒に宿題をした:ともだちといっしょにしゅくだいをした,先生の話をよく聞こう:せんせいのはなしをよくきこう,春になると桜がさく:はるになるとさくらがさく,秋は読書の季節です:あきはどくしょのきせつです,一歩ずつ前へ進もう:いっぽずつまえへすすもう,お母さんにありがとうと言う:おかあさんにありがとうという,休みの日は公園で遊ぶ:やすみのひはこうえんであそぶ,夜は早くねるようにしよう:よるははやくねるようにしよう,食べたら歯をみがこう:たべたらはをみがこう,知らない人についていかない:しらないひとについていかない,忘れ物がないか確認しよう:わすれものがないかかくにんしよう,水をたくさん飲もう:みずをたくさんのもう,おじいちゃんの家に遊びに行く:おじいちゃんのいえにあそびにいく,新しい友達ができました:あたらしいともだちができました,伝説の竜が目を覚ます:でんせつのりゅうがめをさます,百層のダンジョンを攻略せよ:ひゃくそうのだんじょんをこうりゃくせよ,宝箱の中身はミミック:たからばこのなかみはみみっく,魔王を打ち倒す勇者:まおうをうちたおすゆうしゃ,光と闇の最終決戦:ひかりとやみのさいしゅうけっせん`;
+const WORD_POOL=`家:いえ,水:みず,本:ほん,靴:くつ,傘:かさ,椅子:いす,机:つくえ,窓:まど,鍵:かぎ,駅:えき,店:みせ,紙:かみ,箸:はし,皿:さら,米:こめ,卵:たまご,肉:にく,野菜:やさい,時計:とけい,服:ふく,帽子:ぼうし,鞄:かばん,犬:いぬ,猫:ねこ,鳥:とり,牛:うし,馬:うま,豚:ぶた,猿:さる,熊:くま,花:はな,木:き,草:くさ,山:やま,川:かわ,海:うみ,空:そら,雨:あめ,雪:ゆき,風:かぜ,雲:くも,月:つき,星:ほし,朝:あさ,昼:ひる,夜:よる,春:はる,夏:なつ,秋:あき,冬:ふゆ,父:ちち,母:はは,兄:あに,姉:あね,顔:かお,目:め,耳:みみ,口:くち,手:て,足:あし,頭:あたま,声:こえ,歌:うた,絵:え,色:いろ,赤:あか,青:あお,白:しろ,黒:くろ,黄色:きいろ,緑:みどり,音:おと,名前:なまえ,部屋:へや,庭:にわ,道:みち,町:まち,村:むら,島:しま,お金:おかね,切符:きっぷ,船:ふね,車:くるま,電車:でんしゃ,バス:ばす,地図:ちず,薬:くすり,箱:はこ,袋:ふくろ,糸:いと,石:いし,砂:すな,火:ひ,氷:こおり,お茶:おちゃ,今日:きょう,明日:あした,昨日:きのう,今:いま,前:まえ,後ろ:うしろ,横:よこ,上:うえ,下:した,右:みぎ,左:ひだり,外:そと,中:なか,北:きた,南:みなみ,東:ひがし,西:にし,百:ひゃく,千:せん,円:えん,体:からだ,肩:かた,首:くび,指:ゆび,汗:あせ,涙:なみだ,笑顔:えがお,話:はなし,晴れ:はれ,理科:りか,夢:ゆめ,心:こころ,力:ちから,光:ひかり,剣:けん,盾:たて,魔法:まほう,竜:りゅう,宝:たから,学校:がっこう,先生:せんせい,友達:ともだち,宿題:しゅくだい,勉強:べんきょう,教室:きょうしつ,図書館:としょかん,病院:びょういん,公園:こうえん,動物園:どうぶつえん,水族館:すいぞくかん,遊園地:ゆうえんち,買い物:かいもの,料理:りょうり,掃除:そうじ,洗濯:せんたく,散歩:さんぽ,旅行:りょこう,運動:うんどう,練習:れんしゅう,試合:しあい,誕生日:たんじょうび,お祭り:おまつり,花火:はなび,天気:てんき,台風:たいふう,地震:じしん,新聞:しんぶん,手紙:てがみ,写真:しゃしん,音楽:おんがく,映画:えいが,電話:でんわ,自転車:じてんしゃ,飛行機:ひこうき,新幹線:しんかんせん,信号:しんごう,交差点:こうさてん,冷蔵庫:れいぞうこ,台所:だいどころ,玄関:げんかん,階段:かいだん,エレベーター:えれべーたー,パソコン:ぱそこん,キーボード:きーぼーど,インターネット:いんたーねっと,歯ブラシ:はぶらし,牛乳:ぎゅうにゅう,果物:くだもの,野球:やきゅう,水泳:すいえい,サッカー:さっかー,毎日:まいにち,鉛筆:えんぴつ,消しゴム:けしごむ,教科書:きょうかしょ,時間割:じかんわり,給食:きゅうしょく,掃除機:そうじき,弟:おとうと,妹:いもうと,家族:かぞく,両親:りょうしん,おじいさん:おじいさん,おばあさん:おばあさん,赤ちゃん:あかちゃん,世界:せかい,日本:にほん,東京:とうきょう,大阪:おおさか,北海道:ほっかいどう,沖縄:おきなわ,富士山:ふじさん,太陽:たいよう,地球:ちきゅう,宇宙:うちゅう,季節:きせつ,朝ごはん:あさごはん,昼ごはん:ひるごはん,晩ごはん:ばんごはん,お弁当:おべんとう,大切:たいせつ,元気:げんき,安全:あんぜん,約束:やくそく,挨拶:あいさつ,感謝:かんしゃ,計算:けいさん,漢字:かんじ,算数:さんすう,国語:こくご,社会:しゃかい,英語:えいご,体育:たいいく,図工:ずこう,発表:はっぴょう,質問:しつもん,答え:こたえ,問題:もんだい,正解:せいかい,努力:どりょく,挑戦:ちょうせん,経験:けいけん,成長:せいちょう,自然:しぜん,環境:かんきょう,こんにちは:こんにちは,ありがとう:ありがとう,ごめんなさい:ごめんなさい,いただきます:いただきます,ごちそうさま:ごちそうさま,いってきます:いってきます,ただいま:ただいま,手を洗う:てをあらう,歯をみがく:はをみがく,本を読む:ほんをよむ,運動会:うんどうかい,遠足:えんそく,自由研究:じゆうけんきゅう,夏祭り:なつまつり,雪だるま:ゆきだるま,看護師:かんごし,消防士:しょうぼうし,警察官:けいさつかん,料理人:りょうりにん,世界地図:せかいちず,冒険:ぼうけん,勇者:ゆうしゃ,宝箱:たからばこ,迷宮:めいきゅう,回復:かいふく,伝説:でんせつ,おはようございます:おはようございます,おやすみなさい:おやすみなさい,おかえりなさい:おかえりなさい,宿題をする:しゅくだいをする,早起きする:はやおきする,部屋を片付ける:へやをかたづける,朝ごはんを食べる:あさごはんをたべる,駅で待ち合わせ:えきでまちあわせ,公園で遊ぶ:こうえんであそぶ,電車に乗る:でんしゃにのる,傘を持っていく:かさをもっていく,天気予報:てんきよほう,誕生日おめでとう:たんじょうびおめでとう,夏休みの宿題:なつやすみのしゅくだい,修学旅行:しゅうがくりょこう,読書感想文:どくしょかんそうぶん,携帯電話:けいたいでんわ,冷たい飲み物:つめたいのみもの,温かいお茶:あたたかいおちゃ,大きな声で:おおきなこえで,交通安全:こうつうあんぜん,信号を守る:しんごうをまもる,時間を守る:じかんをまもる,約束を守る:やくそくをまもる,道を渡る:みちをわたる,家族で旅行:かぞくでりょこう,友達と遊ぶ:ともだちとあそぶ,先生に質問:せんせいにしつもん,給食当番:きゅうしょくとうばん,掃除の時間:そうじのじかん,休み時間:やすみじかん,学級会:がっきゅうかい,花火大会:はなびたいかい,宇宙飛行士:うちゅうひこうし,プログラマー:ぷろぐらまー,新しい教科書:あたらしいきょうかしょ,三角定規:さんかくじょうぎ,自動販売機:じどうはんばいき,洗濯物を干す:せんたくものをほす,横断歩道:おうだんほどう,地球温暖化:ちきゅうおんだんか,図書館で勉強:としょかんでべんきょう,お風呂に入る:おふろにはいる,ご飯を炊く:ごはんをたく,買い物に行く:かいものにいく,手紙を書く:てがみをかく,写真を撮る:しゃしんをとる,絵をかく:えをかく,歌を歌う:うたをうたう,犬の散歩:いぬのさんぽ,ゲームで遊ぶ:げーむであそぶ,宿題を忘れた:しゅくだいをわすれた,雨が降ってきた:あめがふってきた,風が強い日:かぜがつよいひ,春休みの予定:はるやすみのよてい,冬休みの思い出:ふゆやすみのおもいで,お正月:おしょうがつ,お年玉:おとしだま,こどもの日:こどものひ,七夕まつり:たなばたまつり,クリスマス:くりすます,大掃除:おおそうじ,賢者の石:けんじゃのいし,炎の剣:ほのおのつるぎ,伝説の勇者:でんせつのゆうしゃ,魔王城:まおうじょう,天空の城:てんくうのしろ,よろしくおねがいします:よろしくおねがいします,今日はとても良い天気です:きょうはとてもよいてんきです,明日は学校に行きます:あしたはがっこうにいきます,図書館で本を借りました:としょかんでほんをかりました,毎朝ラジオ体操をします:まいあさらじおたいそうをします,横断歩道は手をあげて渡ろう:おうだんほどうはてをあげてわたろう,夏休みに家族で海へ行った:なつやすみにかぞくでうみへいった,宿題が終わったら遊ぼう:しゅくだいがおわったらあそぼう,雨の日は傘を忘れずに:あめのひはかさをわすれずに,好きな食べ物はカレーです:すきなたべものはかれーです,将来の夢はゲームを作ること:しょうらいのゆめはげーむをつくること,困っている人を助けよう:こまっているひとをたすけよう,早寝早起き朝ごはん:はやねはやおきあさごはん,ありがとうを伝えよう:ありがとうをつたえよう,時間を大切に使おう:じかんをたいせつにつかおう,失敗をおそれずに挑戦しよう:しっぱいをおそれずにちょうせんしよう,毎日少しずつ練習する:まいにちすこしずつれんしゅうする,タイピングが速くなった:たいぴんぐがはやくなった,キーボードを見ないで打つ:きーぼーどをみないでうつ,正しい姿勢で座ろう:ただしいしせいですわろう,電車の中では静かにしよう:でんしゃのなかではしずかにしよう,来週の日曜日に会いましょう:らいしゅうのにちようびにあいましょう,駅前のパン屋さんに行く:えきまえのぱんやさんにいく,冷蔵庫に牛乳が入っている:れいぞうこにぎゅうにゅうがはいっている,自転車に乗るときはヘルメット:じてんしゃにのるときはへるめっと,地震のときは机の下に隠れる:じしんのときはつくえのしたにかくれる,手洗いうがいを忘れずに:てあらいうがいをわすれずに,今日の夕ごはんはハンバーグ:きょうのゆうごはんははんばーぐ,友達と一緒に宿題をした:ともだちといっしょにしゅくだいをした,先生の話をよく聞こう:せんせいのはなしをよくきこう,春になると桜がさく:はるになるとさくらがさく,秋は読書の季節です:あきはどくしょのきせつです,一歩ずつ前へ進もう:いっぽずつまえへすすもう,お母さんにありがとうと言う:おかあさんにありがとうという,休みの日は公園で遊ぶ:やすみのひはこうえんであそぶ,夜は早くねるようにしよう:よるははやくねるようにしよう,食べたら歯をみがこう:たべたらはをみがこう,知らない人についていかない:しらないひとについていかない,忘れ物がないか確認しよう:わすれものがないかかくにんしよう,水をたくさん飲もう:みずをたくさんのもう,おじいちゃんの家に遊びに行く:おじいちゃんのいえにあそびにいく,新しい友達ができました:あたらしいともだちができました,伝説の竜が目を覚ます:でんせつのりゅうがめをさます,百層のダンジョンを攻略せよ:ひゃくそうのだんじょんをこうりゃくせよ,宝箱の中身はミミック:たからばこのなかみはみみっく,魔王を打ち倒す勇者:まおうをうちたおすゆうしゃ,光と闇の最終決戦:ひかりとやみのさいしゅうけっせん,りんご:りんご,みかん:みかん,バナナ:ばなな,いちご:いちご,すいか:すいか,ぶどう:ぶどう,ごはん:ごはん,味噌汁:みそしる,おにぎり:おにぎり,ラーメン:らーめん,うどん:うどん,そば:そば,寿司:すし,天ぷら:てんぷら,カレーライス:かれーらいす,ハンバーガー:はんばーがー,サラダ:さらだ,スープ:すーぷ,ケーキ:けーき,アイス:あいす,チョコ:ちょこ,クッキー:くっきー,ジュース:じゅーす,コーヒー:こーひー,紅茶:こうちゃ,納豆:なっとう,豆腐:とうふ,焼き魚:やきざかな,目玉焼き:めだまやき,唐揚げ:からあげ,餃子:ぎょうざ,お菓子:おかし,テレビ:てれび,ソファ:そふぁ,ベッド:べっど,枕:まくら,布団:ふとん,タオル:たおる,石けん:せっけん,鏡:かがみ,はさみ:はさみ,のり:のり,ノート:のーと,筆箱:ふでばこ,定規:じょうぎ,ランドセル:らんどせる,水筒:すいとう,ハンカチ:はんかち,ティッシュ:てぃっしゅ,眼鏡:めがね,靴下:くつした,手袋:てぶくろ,マフラー:まふらー,コート:こーと,ズボン:ずぼん,スカート:すかーと,シャツ:しゃつ,郵便局:ゆうびんきょく,銀行:ぎんこう,スーパー:すーぱー,コンビニ:こんびに,美容院:びよういん,花屋:はなや,本屋:ほんや,薬局:やっきょく,交番:こうばん,市役所:しやくしょ,神社:じんじゃ,お寺:おてら,橋:はし,トンネル:とんねる,港:みなと,空港:くうこう,食べる:たべる,飲む:のむ,寝る:ねる,起きる:おきる,歩く:あるく,走る:はしる,泳ぐ:およぐ,読む:よむ,書く:かく,聞く:きく,見る:みる,話す:はなす,笑う:わらう,泣く:なく,遊ぶ:あそぶ,学ぶ:まなぶ,作る:つくる,洗う:あらう,着る:きる,開ける:あける,閉める:しめる,待つ:まつ,送る:おくる,帰る:かえる,出かける:でかける,手伝う:てつだう,がんばる:がんばる,大きい:おおきい,小さい:ちいさい,長い:ながい,短い:みじかい,新しい:あたらしい,古い:ふるい,高い:たかい,低い:ひくい,速い:はやい,遅い:おそい,暑い:あつい,寒い:さむい,暖かい:あたたかい,涼しい:すずしい,おいしい:おいしい,楽しい:たのしい,うれしい:うれしい,悲しい:かなしい,優しい:やさしい,強い:つよい,弱い:よわい,重い:おもい,軽い:かるい,明るい:あかるい,暗い:くらい,静か:しずか,にぎやか:にぎやか,きれい:きれい,月曜日:げつようび,火曜日:かようび,水曜日:すいようび,木曜日:もくようび,金曜日:きんようび,土曜日:どようび,日曜日:にちようび,午前:ごぜん,午後:ごご,夕方:ゆうがた,毎朝:まいあさ,今週:こんしゅう,来月:らいげつ,去年:きょねん,お願いします:おねがいします,どういたしまして:どういたしまして,いってらっしゃい:いってらっしゃい,お疲れさま:おつかれさま,はじめまして:はじめまして,また明日:またあした,気をつけてね:きをつけてね,大丈夫:だいじょうぶ,すごいね:すごいね,よくできました:よくできました,おめでとう:おめでとう,さようなら:さようなら,お手伝いをする:おてつだいをする,窓を開ける:まどをあける,電気を消す:でんきをけす,ドアを閉める:どあをしめる,ゴミを捨てる:ごみをすてる,靴をそろえる:くつをそろえる,天気がいい:てんきがいい,お腹がすいた:おなかがすいた,のどがかわいた:のどがかわいた,眠くなってきた:ねむくなってきた,ゆっくり休もう:ゆっくりやすもう`;
 let WORDS=null;
 function getWords(){if(WORDS)return WORDS;WORDS=[[],[],[],[]];const seen=new Set();
-  WORD_POOL.split(',').forEach(p=>{if(!p)return;const [d,k]=p.split(':');if(!k||seen.has(k))return;seen.add(k);const n=tokenize(k).length;WORDS[n<=3?0:n<=6?1:n<=10?2:3].push({d,k})});return WORDS}
+  WORD_POOL.split(',').forEach(p=>{if(!p)return;const [d,k]=p.split(':');if(!k||seen.has(k))return;seen.add(k);const n=[...k].length;WORDS[n<=3?0:n<=6?1:n<=9?2:3].push({d,k})});return WORDS}
 
 /* ===== pixel sprites ===== */
 function hashS(s){let h=2166136261;for(const c of String(s)){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
@@ -855,6 +864,20 @@ function wSprite(w){
       if(Math.abs(v)<.012)return [240,240,240];
       return null;
     }
+    if(t===8){const x=Math.abs(X-.5),ins=s=>{const top=.07+s+ (x/.34)*(x/.34)*.06;if(Y<top)return false;const lim=.34-s-Math.max(0,Y-.72)*1.1;return Y<.95-s&&x<lim};
+      if(!ins(0))return null;if(!ins(.055))return X<.5?GU[0]:GU[2];
+      if(gem&&Math.hypot(X-.5,Y-.42)<.075)return GEM;
+      if(w.r>=1&&(Math.abs(X-.5)<.03&&Y>.15&&Y<.85||Math.abs(Y-.42)<.03&&x<.26))return GU[1];
+      if(w.r>=3&&Math.hypot(x-.2,Y-.2)<.03)return GU[0];
+      return X<.5?(Y<.42?M[0]:M[1]):(Y<.42?M[1]:M[2])}
+    if(t===9){const cuff=Y>.66&&Y<.9&&Math.abs(X-.5)<.2,hand=Y>.3&&Y<=.66&&Math.abs(X-.5)<.24,fing=Y>.16&&Y<=.3&&Math.abs(X-.5)<.24&&(Math.floor((X-.26)*G/ (G*.12))%2===0);
+      const spike=w.r>=3&&Y>.06&&Y<=.16&&Math.abs(X-.5)<.24&&Math.abs(((X-.26)/.12)%1-.5)<(.16-Y)*4;
+      if(spike)return M[0];if(cuff)return Math.abs(Y-.72)<.025?GU[0]:(X<.5?GU[1]:GU[2]);
+      if(hand){if(gem&&Math.hypot(X-.5,Y-.48)<.07)return GEM;return X<.4?M[0]:X>.62?M[2]:M[1]}if(fing)return X<.5?M[1]:M[2];return null}
+    if(t===10){const dx=X-.5,cy=.66,d=Math.hypot(dx,(Y-cy)*1.05);
+      if(d<.17){if(d>.13)return GU[d>.15?2:1];if(gem||w.r>=1)return d<.06&&Y<cy?[255,255,255]:(Y<cy?GEM:GEM.map(c=>c*.7|0));return M[1]}
+      if(w.r>=3&&d>.19&&d<.23&&Math.abs(dx)>.12)return GU[1];
+      const chain=Y<cy-.15&&Y>.08&&Math.abs(Math.abs(dx)-(cy-.15-Y)*.9)<.025&&(Math.floor(Y*G)%2===0);if(chain)return GU[1];return null}
     // shield
     const ins=(s)=>{const x=Math.abs(X-.5)+s,top=.1+s,mid=.55,bot=.93-s*1.6;if(Y<top||Y>bot)return false;return Y<mid?x<.37:x<.37*Math.pow(Math.max(0,1-(Y-mid)/(bot-mid)),.7)};
     if(!ins(0))return null;
@@ -881,6 +904,51 @@ function eSprite(d){
   g.putImageData(im,0,0);return ESPR[d.id]=c.toDataURL();
 }
 NORMALS.forEach((d,i)=>d.px=Math.round(12+i*52/(NORMALS.length-1)));BOSSES.forEach((d,i)=>d.px=Math.round(32+i*96/(BOSSES.length-1)));
+/* ===== weapon catalog (fixed skill per weapon) & unique skills ===== */
+const DEF_T=[6,8,10];const isDefT=t=>DEF_T.includes(t);
+const OFF_SK=['rush','every3','thunder','slash','meteor','storm','drain','lifeblade','might','eagle','focus','rally','rage','haste','stop'];
+const DEF_SK=['guard','wall','heal','regen','counter','bless','fort','thorn','sanctu','iron','spirit'];
+const EPICW=[['炎帝','焔魔'],['氷皇','雪華'],['雷神','迅雷'],['冥王','黒曜'],['天照','聖光']];
+const LEGW=[['紅蓮神','灼熱王'],['絶対零度','蒼天'],['天雷','轟雷'],['深淵','終焉'],['神聖','黎明']];
+const CAT=[];
+for(let r=0;r<5;r++)TYPES.forEach((T,t)=>{const nv=r<2?1:2;for(let v=0;v<nv;v++){
+  const el=r===0?5:(t*2+v+r)%5,pool=isDefT(t)?DEF_SK:OFF_SK,sk=pool[(t*7+v*5+r*3)%pool.length];
+  const name=r===0?['木の','古びた','錆びた'][t%3]+T.n:r===1?['鉄の','鋼の','兵士の'][t%3]+T.n:r===2?`${ELEM[el].w[v]}の${T.n}`:r===3?`${EPICW[el][v]}の${T.n}`:`${LEGW[el][v]}${T.n}「${KANA[(t+v*3)%KANA.length]}」`;
+  CAT.push({c:`c${r}_${t}_${v}`,t,r,el,name,sk})}});
+const CATI=Object.fromEntries(CAT.map(e=>[e.c,e]));
+/* unique skills: each unique has its own overpowered skill */
+const UARCH={
+ A:{tr:{type:'every',n:3},ct:6,fx:[{t:'multi',v:.5,n:30}]},
+ B:{tr:{type:'every',n:5},ct:8,fx:[{t:'dmg',v:25}]},
+ C:{tr:{type:'hit'},ct:10,fx:[{t:'heal',v:25},{t:'shield',v:30}]},
+ D:{tr:{type:'win',n:4,s:4},ct:12,fx:[{t:'atkbuf',v:120,dur:6},{t:'critbuf',v:50,dur:6}]},
+ E:{tr:{type:'every',n:6},ct:14,fx:[{t:'delay',v:6},{t:'multi',v:.6,n:20}]},
+ F:{tr:{type:'every',n:2},ct:5,fx:[{t:'multi',v:.4,n:10},{t:'drain',v:60}]},
+ G:{tr:{type:'hit'},ct:6,fx:[{t:'multi',v:1,n:15}]},
+ H:{tr:{type:'crit'},ct:5,fx:[{t:'multi',v:.7,n:20}]},
+ I:{tr:{type:'low'},ct:20,fx:[{t:'shield',v:80},{t:'heal',v:50},{t:'atkbuf',v:80,dur:10}]},
+ J:{tr:{type:'every',n:8},ct:12,fx:[{t:'ctcut',v:6},{t:'atkbuf',v:50,dur:8},{t:'critbuf',v:40,dur:8}]},
+ K:{tr:{type:'win',n:10,s:8},ct:15,fx:[{t:'dmg',v:60}]},
+ L:{tr:{type:'every',n:4},ct:8,fx:[{t:'shield',v:20},{t:'heal',v:10}]}};
+const USKN={slime:'粘液大爆発',worm:'千糸結界',bat:'吸血乱舞',rat:'鼠算式連撃',toad:'猛毒の沼',shroom:'胞子の楽園',spider:'蜘蛛の巣地獄',bee:'女王蜂の号令',wolf:'満月の狂宴',snake:'蛇神の呪縛',
+ crab:'甲殻要塞',ghost:'霊界の守護',skel:'骨王の行進',zombie:'不死の軍勢',scorp:'死針一閃',boar:'猪突猛進',owl:'夜梟の千里眼',troll:'巨人の守り',griffon:'天翼の嵐',croc:'鰐王の顎',
+ ifrit:'灼熱地獄',kraken:'深海の大渦',shark:'鮫牙乱舞',jester:'道化の奇術',eye:'千眼の邪視',rhino:'鋼角突撃',drake:'竜鱗の加護',bear:'熊王の剛腕',ape:'巨猿乱打',wyvern:'飛竜の急降下',
+ mgolem:'機神装甲',alien:'異界の光線',pdemon:'電脳バグ',frost:'絶対凍結',flame:'劫火の舞',volt:'万雷',tempest:'天嵐',shadow:'影縫い',crystal:'晶石の輝き',magma:'溶岩噴火',
+ ogre:'鬼神の金棒',snail:'螺旋城壁',golem:'岩神の不動',turtle:'金剛不壊',vamp:'真祖の血宴',chimera:'獣王の咆哮',mino:'迷宮の暴君',delf:'翠星の流星雨',siren:'海歌の魅了',lich:'冥王の宣告',
+ mammoth:'氷河の進軍',levia:'海神の怒り',nightmare:'悪夢の刻',kyubi:'九尾の狐火',demon:'魔界の門',dknight:'死神の鎌',whale:'深淵の歌',dragon:'龍神の咆哮',fallen:'堕天の審判',maou:'覇王の最終奥義'};
+const UTYPE={crab:8,mgolem:8,snail:8,ghost:10,turtle:10,ape:9,bear:9};
+const UNAME={crab:'甲殻の大盾',mgolem:'機神の大盾',snail:'螺旋の大盾',ghost:'霊魂の護符',turtle:'金剛の護符',ape:'巨猿の籠手',bear:'熊王の籠手'};
+{const offA='ABDEFGHJK',defA='CIL';let oi=0,di=0;
+ NORMALS.concat(BOSSES).forEach((d,i)=>{if(UTYPE[d.id]!=null)d.ut=UTYPE[d.id];if(UNAME[d.id])d.un=UNAME[d.id];
+  const boss=i>=NORMALS.length,ak=isDefT(d.ut)?defA[di++%3]:offA[oi++%offA.length],a=UARCH[ak],k='x_'+d.id,mul=boss?1.3:1;
+  SK[k]={n:USKN[d.id],uq:true,tr:a.tr,ct:a.ct,fx:a.fx.map(f=>Object.assign({},f,f.t==='multi'?{n:Math.round(f.n*mul)}:f.t==='delay'||f.t==='ctcut'?{}:{v:f.v*mul}))};d.us=k})}
+function migrateW(w){
+  if(w.u){const d=NORMALS.concat(BOSSES).find(x=>x.id===w.u);if(d)w.sk=d.us;return}
+  if(w.c&&CATI[w.c])return;
+  const e=CAT.find(x=>x.t===w.t&&x.r===w.r&&x.c.endsWith('_'+(w.id%2)))||CAT.find(x=>x.t===w.t&&x.r===w.r)||CAT.find(x=>x.r===w.r);
+  if(e){w.c=e.c;w.sk=e.sk;w.el=e.el;if(w.name!=='旅立ちの短剣')w.name=e.name}
+}
+
 
 /* ===== sound (all synthesized with WebAudio, original chiptune) ===== */
 const AU={ctx:null,bgm:null,se:null,want:null,track:null,step:0,next:0,lastHit:0,lastKey:0,opt:{bgm:true,se:true}};
@@ -996,7 +1064,7 @@ function tokenize(kana){
 /* ===== save ===== */
 let S;
 function freshRec(){return{kills:0,hits:0,dmg:0,keys:0,maxCombo:0,bestKps:0,time:0,clears:0,uniq:[],dex:{}}}
-function dexKey(w){return w.u?'u:'+w.u:`t${w.t}r${w.r}`}
+function dexKey(w){return w.u?'u:'+w.u:w.c?'c:'+w.c:`t${w.t}r${w.r}`}
 function fresh(){return{exp:0,maxF:0,inv:[],eq:[null,null,null,null,null],nid:1,lastF:1,rec:freshRec()}}
 function load(){
   const d=readLocal(curKey())||(CL.pid?null:null);if(d){adopt(d);return}
@@ -1005,16 +1073,15 @@ function load(){
 function save(){S._t=Date.now();try{localStorage.setItem(curKey(),JSON.stringify(S))}catch(e){}queueCloud()}
 
 /* ===== weapons ===== */
-function genAff(n){const a=[];for(let i=0;i<n;i++){const d=AFF[rand(AFF.length)];a.push({k:d.k,v:r1(d.min+Math.random()*(d.max-d.min))});}return a}
-function makeW(o){return{id:S.nid++,t:o.t,r:o.r,f:o.f,lv:1,xp:0,tx:0,name:o.name,sk:o.sk,u:o.u||null,el:o.el??5,aff:genAff(RAR[o.r].slots)}}
+function genAff(n,def){const P=def?AFF.concat(AFF.filter(x=>x.k==='hp'||x.k==='def'),AFF.filter(x=>x.k==='hp'||x.k==='def')):AFF;const a=[];for(let i=0;i<n;i++){const d=P[rand(P.length)];a.push({k:d.k,v:r1(d.min+Math.random()*(d.max-d.min))});}return a}
+function makeW(o){return{id:S.nid++,t:o.t,r:o.r,f:o.f,lv:1,xp:0,tx:0,name:o.name,sk:o.sk,u:o.u||null,c:o.c||null,el:o.el??5,aff:genAff(RAR[o.r].slots,isDefT(o.t))}}
 function rarW(f,boss){const t=Math.min(1,Math.max(0,(f-1)/99)),L=(a,b)=>a+(b-a)*t,u=boss?L(.6,1):L(.3,.9),w=[L(60,10),L(28,25),L(9,30),L(2.5,22),L(.5,12)],sum=w.reduce((a,b)=>a+b,0);return w.map(x=>x/sum*(100-u)).concat(u)}
 function rollRarity(f,boss){const w=rarW(f,boss);let x=Math.random()*100;for(let i=5;i>=0;i--){if(x<w[i])return i;x-=w[i]}return 0}
 function rollWeapon(f,d,boss){
   const r=rollRarity(f,boss);
   if(r===5)return makeW({t:d.ut,r:5,f,name:d.un,sk:d.us,u:d.id});
-  const t=rand(TYPES.length),el=r===0?5:rand(5),E=ELEM[el];
-  const name=r===0?PRE[0][rand(3)]+TYPES[t].n:r<4?`${E.w[rand(3)]}の${TYPES[t].n}`:`${E.w[rand(3)]}${TYPES[t].n}「${KANA[rand(KANA.length)]}」`;
-  return makeW({t,r,f,el,name,sk:NSK[rand(NSK.length)]});
+  const L=CAT.filter(e=>e.r===r),e=L[rand(L.length)];
+  return makeW({t:e.t,r,f,el:e.el,name:e.name,sk:e.sk,c:e.c});
 }
 const WBASE=[8,16,30,55,95,160];
 function wBase(w){const T=TYPES[w.t],b=WBASE[w.r]*(1+.025*(w.lv-1));return{atk:Math.round(b*T.a),hp:Math.round(b*5*T.h),def:Math.round(b*.6*T.d)}}
@@ -1166,7 +1233,7 @@ function spawn(){
   B.active=true;nextWord();if(it.boss)playBgm('boss');requestAnimationFrame(measureEnemy);
 }
 function nextWord(){
-  const f=B.floor;let t=f<=8?0:f<=25?1:f<=55?2:3;if(B.enemy.boss)t++;if(Math.random()<.3)t--;t=Math.max(0,Math.min(3,t));
+  const f=B.floor;let t=f<=10?0:f<=30?1:2;if(B.enemy.boss)t++;if(f>=50&&Math.random()<.35)t=3;if(Math.random()<.3)t--;t=Math.max(0,Math.min(f>=50?3:2,t));
   const WL=getWords()[t];let w;do{w=WL[rand(WL.length)]}while(w===B.lastWord&&WL.length>1);B.lastWord=w;
   W={d:w.d,kana:w.k,toks:tokenize(w.k),idx:0,buf:'',done:[]};renderWord();
 }
@@ -1401,8 +1468,8 @@ const CL={db:null,uid:null,ready:false,pid:null,name:null,timer:null,writing:fal
 try{const ss=JSON.parse(localStorage.getItem('td_session')||'null');if(ss&&ss.pid){CL.pid=ss.pid;CL.name=ss.name}}catch(e){}
 function curKey(){return CL.pid?'td_save_'+CL.pid:SAVE_KEY}
 function pref(pid){return CL.db.doc(`data/users/${CL.uid}/p_${pid}`)}
-function adopt(d){S=Object.assign(fresh(),d);S.rec=Object.assign(freshRec(),d.rec||{});S.rec.dex=Object.assign({},S.rec.dex||{});S.inv.forEach(w=>{if(w.u&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u);S.rec.dex[dexKey(w)]=1});S.rec.uniq.forEach(u=>S.rec.dex['u:'+u]=1)}
-function newGame(){S=fresh();const w=makeW({t:0,r:0,f:1,name:'旅立ちの短剣',sk:'every3'});S.inv.push(w);S.eq[0]=w.id;S.rec.dex[dexKey(w)]=1}
+function adopt(d){S=Object.assign(fresh(),d);S.rec=Object.assign(freshRec(),d.rec||{});S.rec.dex=Object.assign({},S.rec.dex||{});S.inv.forEach(w=>{migrateW(w);if(w.u&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u);S.rec.dex[dexKey(w)]=1});S.rec.uniq.forEach(u=>S.rec.dex['u:'+u]=1)}
+function newGame(){S=fresh();const w=makeW({t:0,r:0,f:1,name:'旅立ちの短剣',sk:CATI.c0_0_0.sk,c:'c0_0_0'});S.inv.push(w);S.eq[0]=w.id;S.rec.dex[dexKey(w)]=1}
 function readLocal(key){try{const d=JSON.parse(localStorage.getItem(key));if(d&&Array.isArray(d.inv))return d}catch(e){}return null}
 async function hashPw(pass,salt){const enc=new TextEncoder(),k=await crypto.subtle.importKey('raw',enc.encode(pass),'PBKDF2',false,['deriveBits']);
   const b=await crypto.subtle.deriveBits({name:'PBKDF2',salt:enc.encode(salt),iterations:60000,hash:'SHA-256'},k,256);return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
@@ -1539,16 +1606,16 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='1.0.3-alpha';
+const VERSION='1.0.4-alpha';
 const CHANGELOG=[
+ ['1.0.4-alpha',['強化・合成画面で、強化後／合成後の数値を「現在の値 → 結果」で表示（上がる値は緑、下がる値は赤）','防御系の装備「大盾」「護符」と、攻防バランス型の「籠手」を追加','盾・大盾・護符には防御系スキル（シールド・回復など）が付き、追加能力もHP・防御が付きやすく','武器ごとにスキルを固定。通常武器を88種に増やし、図鑑は全148種に（所持中の通常武器も対応する武器に変換されます）','ユニーク武器60種すべてに、それぞれ専用の強力な固有スキルを追加','防御系スキル「堅守」「茨の守り」「聖域」「不動」を追加','出題ワードを約530語に拡張（食べ物・持ち物・場所・動作・あいさつなど日常の言葉を追加）','10文字以上のワードは50層以降のみ出題','図鑑に「防御系」の絞り込みを追加']],
  ['1.0.3-alpha',['出題ワードを実用的な言葉中心に一新し、約400語に増量','ランクが上がると基礎ステータス（HP・攻撃・防御・クリ率・クリダメ）が上昇','武器の基礎値をレアリティごとに固定（入手した階層で差が出なくなりました。所持中の武器も新しい基準になります）','深い階層ほど高レアリティの武器が出やすく','クリ率・クリダメの伸びを強化（追加能力の幅とレベルごとの成長量アップ）','拠点の武器ボタンを「装備・強化・合成」の3つに分割','アイテム図鑑を追加（通常武器40種＋ユニーク60種）','バージョン表示と更新情報を追加']],
  ['1.0.2-alpha',['GitHub Pagesで公開','引き継ぎコード（書き出し・読み込み）とプレイヤー名を追加','フロア開始時の3秒カウントダウンを追加']]
 ];
 const DEX=[];
-for(let r=0;r<5;r++)TYPES.forEach((T,t)=>DEX.push({key:`t${t}r${r}`,t,r}));
+CAT.forEach(e=>DEX.push({key:'c:'+e.c,t:e.t,r:e.r,cat:e}));
 NORMALS.concat(BOSSES).forEach((d,i)=>DEX.push({key:'u:'+d.id,t:d.ut,r:5,u:d.id,d,boss:i>=NORMALS.length}));
-DEX.forEach((e,i)=>{e.w={id:700000+i,t:e.t,r:e.r,f:1,lv:1,xp:0,tx:0,el:e.r===0?5:(e.t+e.r)%5,u:e.u||null,aff:[],sk:e.u?e.d.us:null,
-  name:e.u?e.d.un:(e.r===0?PRE[0][1]+TYPES[e.t].n:`${RAR[e.r].n}の${TYPES[e.t].n}`)}});
+DEX.forEach((e,i)=>{e.w={id:700000+i,t:e.t,r:e.r,f:1,lv:1,xp:0,tx:0,el:e.cat?e.cat.el:5,u:e.u||null,c:e.cat?e.cat.c:null,aff:[],sk:e.u?e.d.us:e.cat.sk,name:e.u?e.d.un:e.cat.name}});
 const DX={sel:null,hov:null,f:'all'};
 function floorsOf(id){const fl=[];for(let f=1;f<=100;f++){const fi=floorInfo(f);if(fi.boss.id===id||fi.pool.some(d=>d.id===id))fl.push(f)}
   const out=[];let a=null,p=null;fl.forEach(f=>{if(a===null){a=p=f}else if(f===p+1)p=f;else{out.push(a===p?`${a}層`:`${a}〜${p}層`);a=p=f}});if(a!==null)out.push(a===p?`${a}層`:`${a}〜${p}層`);return out.join('、')}
@@ -1556,19 +1623,19 @@ function dexPane(e){
   if(!e)return '<div class="tag">アイテム図鑑</div><div class="empty">アイテムにカーソルを合わせるか、タップして詳細を見る</div>';
   if(!S.rec.dex[e.key])return `<div class="tag">No.${DEX.indexOf(e)+1}</div><div class="ph" style="--rc:var(--faint)"><span class="dem qm">？</span><div><div class="dn" style="color:var(--dim)">？？？</div><div class="dr">${RAR[e.r].n}</div></div></div><div class="empty">まだ入手していません</div>`;
   const w=e.w,R=RAR[e.r],T=TYPES[e.t],b1=wBase(w),bm=wBase(Object.assign({},w,{lv:R.cap}));
-  const sk=e.u?SK[e.d.us]:null;
+  const sk=SK[e.w.sk];
   const rate=f=>rarW(f,false)[e.r];
-  return `<div class="tag">No.${DEX.indexOf(e)+1}</div><div class="ph" style="--rc:${R.c}"><span class="dem">${wIcon(w)}</span><div style="min-width:0"><div class="dn">${e.u?w.name:`${R.n}の${T.n}`}</div><div class="dr">${R.n}　${T.n}　最大Lv${R.cap}</div></div></div>
+  return `<div class="tag">No.${DEX.indexOf(e)+1}</div><div class="ph" style="--rc:${R.c}"><span class="dem">${wIcon(w)}</span><div style="min-width:0"><div class="dn">${w.name}</div><div class="dr">${R.n}　${T.n}　最大Lv${R.cap}</div></div></div>
   <div class="pbody"><div><div class="psec">基礎ステータス（Lv1 → Lv${R.cap}）</div><div class="rows">${[['攻撃','atk'],['HP','hp'],['防御','def']].map(([n,k])=>`<span>${n}</span><b>${b1[k]?`${b1[k]} → ${bm[k]}`:'-'}</b>`).join('')}</div>
     <div class="psec">追加能力</div><div class="small" style="margin-top:4px">${R.slots?`${R.slots}枠（種類はランダム）`:'なし'}</div></div>
   <div><div class="psec">ドロップする敵</div><div style="margin-top:4px">${e.u?`<span class="dxe"><img src="${eSprite(e.d)}" alt="">${e.boss?'<span class="bs">BOSS</span>':''}${e.d.n}</span>`:'すべての敵'}</div>
     <div class="psec">入手できる階層</div><div style="margin-top:4px">${e.u?floorsOf(e.d.id):'1〜100層（深い層ほど高レアが出やすい）'}</div>
-    <div class="psec">入手率の目安</div><div class="small" style="margin-top:4px">${e.u?`撃破時 約${(rarW(1,e.boss)[5]*(e.boss?1:.35)).toFixed(2)}〜${(rarW(100,e.boss)[5]*(e.boss?1:.35)).toFixed(2)}%`:`ドロップ時 1層 ${rate(1).toFixed(1)}% → 50層 ${rate(50).toFixed(1)}% → 100層 ${rate(100).toFixed(1)}%`}</div></div></div>
-  <div class="psec">スキル</div><div class="psk" style="margin-top:2px">${sk?`<b>${sk.n}</b>　CT${sk.ct}秒<br>${trText(sk.tr)}：${sk.fx.map(f=>fxText(f,R.sm)).join('、')}`:'通常スキルからランダムで1つ'}</div>`;
+    <div class="psec">入手率の目安</div><div class="small" style="margin-top:4px">${e.u?`撃破時 約${(rarW(1,e.boss)[5]*(e.boss?1:.35)).toFixed(2)}〜${(rarW(100,e.boss)[5]*(e.boss?1:.35)).toFixed(2)}%`:`ドロップ時 1層 ${(rate(1)/CAT.filter(x=>x.r===e.r).length).toFixed(2)}% → 100層 ${(rate(100)/CAT.filter(x=>x.r===e.r).length).toFixed(2)}%`}</div></div></div>
+  <div class="psec">スキル</div><div class="psk" style="margin-top:2px"><b>${sk.n}</b>${sk.uq?'<span class="uqt">固有</span>':''}　CT${sk.ct}秒<br>${trText(sk.tr)}：${sk.fx.map(f=>fxText(f,R.sm)).join('、')}</div>`;
 }
 function renderDex(){
   const got=DEX.filter(e=>S.rec.dex[e.key]).length;$('dexCnt').textContent=`${got} / ${DEX.length}`;
-  const L=DEX.filter(e=>DX.f==='all'||(DX.f==='uni'?e.u:!e.u));
+  const L=DEX.filter(e=>DX.f==='all'||(DX.f==='uni'?e.u:DX.f==='def'?isDefT(e.t):!e.u));
   $('dexGrid').innerHTML=L.map(e=>{const g=S.rec.dex[e.key],i=DEX.indexOf(e);
     return `<button class="wc dxc ${g?'':'unk'} ${DX.sel===e.key?'sel':''}" data-dx="${e.key}" style="--rc:${g?RAR[e.r].c:'var(--faint)'}">${g?wIcon(e.w):'<span class="qm">？</span>'}<span class="lv">${i+1}</span></button>`}).join('');
   renderDexPane();
@@ -1609,17 +1676,20 @@ function invList(){
   return L.sort((a,b)=>{const x=sortVal(a,k),y=sortVal(b,k);const c=typeof x==='string'?x.localeCompare(y,'ja'):x-y;return (c||a.id-b.id)*d});
 }
 function wStats(w){const b=wBase(w),a={};AFF.forEach(x=>{const v=affSum(w,x.k);if(v)a[x.k]=v});return{atk:b.atk,hp:b.hp,def:b.def,a}}
-function paneHTML(w,tag,cmp,extra){
+function paneHTML(w,tag,cmp,extra,aft){
   if(!w)return `<div class="tag">${tag}</div><div class="empty">なし</div>${extra||''}`;
   const R=RAR[w.r],sk=SK[w.sk],s=wStats(w),o=cmp===undefined?null:(cmp?wStats(cmp):{atk:0,hp:0,def:0,a:{}});
-  const keys=AFF.map(x=>x.k).filter(k=>s.a[k]||(o&&o.a[k]));
-  const row=(n,v,ov,u)=>{u=u||'';let c='',d='';if(o&&v!==ov){c=v>ov?'up':'down';d=` <small>(${v>ov?'+':''}${r1(v-ov)}${u})</small>`}
+  const sa=aft?wStats(aft):null;
+  const keys=AFF.map(x=>x.k).filter(k=>s.a[k]||(o&&o.a[k])||(sa&&sa.a[k]));
+  const row=(n,v,ov,u,key,grp)=>{u=u||'';
+    if(sa){const nv=grp==='a'?(sa.a[key]||0):sa[key];const c=nv>v?'up':nv<v?'down':'';return `<span>${n}</span><b>${v?v+u:'-'}${nv!==v?` → <span class="${c}">${nv?nv+u:'-'}</span>`:''}</b>`}
+    let c='',d='';if(o&&v!==ov){c=v>ov?'up':'down';d=` <small>(${v>ov?'+':''}${r1(v-ov)}${u})</small>`}
     return `<span>${n}</span><b class="${c}">${v?v+u:'-'}${d}</b>`};
-  return `<div class="tag">${tag}</div><div class="ph" style="--rc:${R.c}"><span class="dem">${wIcon(w)}</span><div style="min-width:0"><div class="dn">${w.fav?'★':''}${w.name}</div><div class="dr">${R.n}　Lv${w.lv}/${R.cap}</div></div></div>
-  <div class="pbody"><div><div class="psec">ステータス</div><div class="rows">${row('攻撃',s.atk,o&&o.atk)}${row('HP',s.hp,o&&o.hp)}${row('防御',s.def,o&&o.def)}</div></div>
-  <div><div class="psec">追加能力 <small>${w.aff.length}/${R.slots}</small></div>${keys.length?`<div class="rows aff">${keys.map(k=>row(AFFD[k].n,s.a[k]||0,o?(o.a[k]||0):0,'%')).join('')}</div>`:'<div class="small" style="margin-top:4px">なし</div>'}</div></div>
+  return `<div class="tag">${tag}</div><div class="ph" style="--rc:${R.c}"><span class="dem">${wIcon(w)}</span><div style="min-width:0"><div class="dn">${w.fav?'★':''}${w.name}</div><div class="dr">${R.n}　Lv${w.lv}${aft&&aft.lv!==w.lv?` → <span class="up">${aft.lv}</span>`:''}/${R.cap}</div></div></div>
+  <div class="pbody"><div><div class="psec">ステータス</div><div class="rows">${row('攻撃',s.atk,o&&o.atk,'','atk')}${row('HP',s.hp,o&&o.hp,'','hp')}${row('防御',s.def,o&&o.def,'','def')}</div></div>
+  <div><div class="psec">追加能力 <small>${w.aff.length}/${R.slots}</small></div>${keys.length?`<div class="rows aff">${keys.map(k=>row(AFFD[k].n,s.a[k]||0,o?(o.a[k]||0):0,'%',k,'a')).join('')}</div>`:'<div class="small" style="margin-top:4px">なし</div>'}</div></div>
   <div class="psec">スキル</div>
-  <div class="psk" style="margin-top:2px"><b>${sk.n}</b>　CT${sk.ct}秒<br>${trText(sk.tr)}：${sk.fx.map(f=>fxText(f,R.sm)).join('、')}</div>${extra||''}`;
+  <div class="psk" style="margin-top:2px"><b>${sk.n}</b>${sk.uq?'<span class="uqt">固有</span>':''}　CT${sk.ct}秒<br>${trText(sk.tr)}：${sk.fx.map(f=>fxText(f,R.sm)).join('、')}</div>${extra||''}`;
 }
 function simLv(w,g){let lv=w.lv,xp=w.xp+g;const cap=RAR[w.r].cap;while(lv<cap&&xp>=needXP(w,lv)){xp-=needXP(w,lv);lv++}return lv}
 function setTab(t){A.tab=t;A.target=null;A.mats.clear();A.synMat=null;A.pick.clear();A.hover=null;
@@ -1646,14 +1716,15 @@ function renderTop(){
   }else if(A.tab==='enh'){
     const t=byId(A.target);
     if(t){const mats=[...A.mats].map(byId).filter(Boolean),g=mats.reduce((s,m)=>s+matExp(m),0),sim=simLv(t,g),cap=RAR[t.r].cap;
-      L=paneHTML(t,'強化対象',undefined,`<div class="prev">素材${mats.length}個　+${g}EXP　Lv${t.lv} → <b>${sim}</b>${sim>=cap?'（上限）':''}</div>`);
+      L=paneHTML(t,'強化対象',undefined,`<div class="prev">素材${mats.length}個　+${g}EXP　Lv${t.lv} → <b class="up">${sim}</b>${sim>=cap?'（上限）':''}</div>`,mats.length?Object.assign({},t,{lv:sim}):null);
       mr=`<div class="mlab">素材 ${mats.length}個<span class="small">（タップで外す）</span></div><div class="mats">${mats.length?mats.map(w=>`<button class="wc mini" data-mid="${w.id}" style="--rc:${RAR[w.r].c}" title="${w.name}">${wIcon(w)}<span class="lv">Lv${w.lv}</span></button>`).join(''):'<span class="small">下の一覧から素材にする武器をタップ</span>'}</div>`;
       act=`<button class="btn pri" data-a="enh" ${mats.length&&t.lv<cap?'':'disabled'}>強化する</button><button class="btn" data-a="reset">対象を選び直す</button><button class="btn" data-a="bulk0">白を一括選択</button><button class="btn" data-a="bulk1">緑以下を一括選択</button>`;
     }else L='<div class="tag">強化対象</div><div class="empty">下の一覧から武器を選んでください</div>';
     R=hov&&hov.id!==A.target?paneHTML(hov,'カーソル中の武器',undefined,`<div class="prev">素材にすると +${matExp(hov)}EXP</div>`):'<div class="tag">素材</div><div class="empty">'+(t?'素材にする武器をタップ':'—')+'</div>';
   }else{
     const t=byId(A.target),m=byId(A.synMat);
-    L=t?paneHTML(t,'ベース'):'<div class="tag">ベース</div><div class="empty">アンコモン以上の武器を選んでください</div>';
+    const mm=byId(A.synMat),prv=(t&&mm&&A.pick.size)?Object.assign({},t,{aff:[...A.pick].map(k=>(k[0]==='b'?t.aff:mm.aff)[+k.slice(1)])}):null;
+    L=t?paneHTML(t,prv?'ベース（合成後の結果）':'ベース',undefined,'',prv):'<div class="tag">ベース</div><div class="empty">アンコモン以上の武器を選んでください</div>';
     R=m?paneHTML(m,'素材（消費）'):hov&&hov.id!==A.target?paneHTML(hov,'カーソル中の武器'):`<div class="tag">素材</div><div class="empty">${t?`同じレア度（${RAR[t.r].n}）の武器をタップ`:'—'}</div>`;
     if(t)mr=`<div class="mlab">素材${m?'<span class="small">（タップで外す）</span>':''}</div><div class="mats">${m?`<button class="wc mini" data-mid="${m.id}" style="--rc:${RAR[m.r].c}" title="${m.name}">${wIcon(m)}<span class="lv">Lv${m.lv}</span></button>`:`<span class="small">同じレア度（${RAR[t.r].n}）の武器を下の一覧からタップ</span>`}</div>`;
     if(t&&m){const n=RAR[t.r].slots,pool=[...t.aff.map((a,i)=>({key:'b'+i,a,src:'ベース'})),...m.aff.map((a,i)=>({key:'m'+i,a,src:'素材'}))];
