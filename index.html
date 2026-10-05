@@ -1645,7 +1645,7 @@ $('mbox').addEventListener('click',async e=>{
   if(a==='make'){$('xOut').value=await makeCode();S.lastBackup=Date.now();save();toast('引き継ぎコードを作りました')}
   else if(a==='copy'){if(!$('xOut').value)$('xOut').value=await makeCode();try{await navigator.clipboard.writeText($('xOut').value);toast('コピーしました')}catch(x){$('xOut').select();err('自動コピーできませんでした。選択された文字をコピーしてください')}S.lastBackup=Date.now();save()}
   else if(a==='file'){const code=$('xOut').value||await makeCode();$('xOut').value=code;const d=new Date(),ds=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
-    const url=URL.createObjectURL(new Blob([code],{type:'text/plain'})),l=document.createElement('a');l.href=url;l.download=`typedungeons_${ds}.txt`;document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);S.lastBackup=Date.now();save()}
+    const url=URL.createObjectURL(new Blob([code],{type:'text/plain'})),l=document.createElement('a');l.href=url;const nm=(($('xName')&&$('xName').value.trim())||(CL.pid?CL.name:'')||S.pname||'ゲスト').replace(/[\\/:*?"<>|\s]+/g,'_').slice(0,16);l.download=`${nm}_${ds}.txt`;document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);S.lastBackup=Date.now();save()}
   else if(a==='pick')$('xFile').click();
   else if(a==='load'){
     let d;try{d=await readCode($('xIn').value)}catch(x){return err(x.message==='nodecomp'?'このブラウザでは読み込めません。新しいブラウザでお試しください':'コードが正しくありません。全部コピーできているか確認してください')}
@@ -1657,8 +1657,9 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='1.0.8-alpha';
+const VERSION='1.0.9-alpha';
 const CHANGELOG=[
+ ['1.0.9-alpha',['引き継ぎコードをファイルに保存する時のファイル名を「ユーザー名_年月日.txt」に変更（例：はなこ_20261005.txt）']],
  ['1.0.8-alpha',['装備・強化・合成画面のレイアウトを変更（左上に装備中／ベースの武器、左下に装備枠・素材・追加能力の選択、右側にインベントリ）','カーソルを合わせた武器の詳細を、拠点画面と同じポップアップ表示に（装備画面では選択中の枠の武器との比較付き）','スマホでは武器をタップした時のメニューに詳細も表示','拠点画面の操作説明の文を削除']],
  ['1.0.7-alpha',['同じ種類の追加能力は1つの武器に1つまでに（所持中の武器で重複していたものは、高いほうを残して別の能力に置き換え）','合成でも同じ種類の追加能力は1つまでしか選べないように','合成画面の素材の追加能力を、ベースのレベルに換算した値で表示']],
  ['1.0.6-alpha',['追加能力の数をレア2・エピック3・レジェンダリー4・ユニーク5に統一（所持中の武器も自動で調整）','ハードでは4文字以下の言葉が出ないように','難易度の説明文を削除','強化と合成に専用の効果音を追加']],
