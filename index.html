@@ -829,95 +829,162 @@ const GRIPS=[[[150,92,52],[98,56,26]],[[110,70,170],[60,35,100]],[[210,55,55],[1
 const UNI={m:[[255,180,180],[225,35,55],[100,0,25]],g:[255,70,70],grip:[[50,20,30],[15,5,10]]};
 const KANA=['ラグナ','ノヴァ','ゼノン','カリス','ヴァルム','オルデア','ジーク','アストラ','ミストル','レーヴァ'];
 const OUTC=[22,12,30];
-const SPR={};
+const SPR={};let SPEC=null;
+const PALS={
+ iron:{m:[[232,238,244],[160,170,184],[80,90,106]],g:[120,200,140]},steel:{m:[[240,248,255],[140,165,205],[55,72,110]],g:[90,180,255]},
+ bronze:{m:[[244,205,150],[192,132,70],[110,64,28]],g:[120,220,170]},wood:{m:[[226,186,128],[165,112,60],[96,60,30]],g:[140,210,90]},
+ rust:{m:[[214,156,112],[150,86,50],[86,44,24]],g:[200,120,60]},fire:{m:[[255,222,150],[240,110,40],[150,35,20]],g:[255,90,30]},
+ ice:{m:[[236,252,255],[150,215,250],[50,110,190]],g:[120,230,255]},thunder:{m:[[255,255,205],[250,218,60],[170,118,10]],g:[255,250,120]},
+ dark:{m:[[192,172,222],[102,70,152],[40,20,72]],g:[205,80,255]},holy:{m:[[255,255,255],[226,232,242],[150,160,186]],g:[255,236,140]},
+ poison:{m:[[212,255,170],[110,200,70],[40,100,40]],g:[175,255,90]},blood:{m:[[255,175,175],[212,32,52],[100,0,25]],g:[255,60,70]},
+ water:{m:[[205,250,250],[60,190,205],[18,90,125]],g:[80,232,255]},stone:{m:[[222,216,200],[150,140,124],[80,74,64]],g:[255,180,80]},
+ moon:{m:[[232,236,255],[160,170,222],[78,84,142]],g:[220,232,255]},nature:{m:[[222,250,190],[122,182,82],[50,100,40]],g:[255,222,90]},
+ beast:{m:[[232,192,142],[172,116,60],[96,56,26]],g:[255,200,90]},dragon:{m:[[200,255,205],[60,172,102],[20,82,52]],g:[255,212,60]},
+ crystal:{m:[[255,238,255],[232,168,242],[142,80,172]],g:[255,150,255]},gold:{m:[[255,250,190],[242,200,70],[160,110,20]],g:[255,80,80]},
+ shadow:{m:[[156,156,176],[72,72,94],[26,26,38]],g:[255,60,60]},cyber:{m:[[182,255,255],[0,220,200],[0,100,122]],g:[255,0,200]},
+ spirit:{m:[[232,255,255],[150,222,232],[70,122,152]],g:[180,255,255]},bone:{m:[[252,246,226],[212,202,170],[130,120,95]],g:[255,80,80]},
+ storm:{m:[[222,240,255],[122,162,202],[50,70,112]],g:[150,255,255]}};
+const UPAL={slime:'poison',worm:'nature',bat:'blood',rat:'beast',toad:'poison',shroom:'nature',spider:'moon',bee:'thunder',wolf:'moon',snake:'poison',crab:'stone',ghost:'spirit',skel:'bone',zombie:'poison',scorp:'dark',boar:'beast',owl:'moon',troll:'stone',griffon:'holy',croc:'dragon',ifrit:'fire',kraken:'water',shark:'water',jester:'crystal',eye:'dark',rhino:'stone',drake:'dragon',bear:'beast',ape:'beast',wyvern:'dragon',mgolem:'cyber',alien:'cyber',pdemon:'cyber',frost:'ice',flame:'fire',volt:'thunder',tempest:'storm',shadow:'shadow',crystal:'crystal',magma:'fire',
+ ogre:'blood',snail:'stone',golem:'stone',turtle:'gold',vamp:'blood',chimera:'gold',mino:'bronze',delf:'nature',siren:'water',lich:'dark',mammoth:'ice',levia:'water',nightmare:'dark',kyubi:'fire',demon:'dark',dknight:'shadow',whale:'water',dragon:'dragon',fallen:'shadow',maou:'gold'};
+const UFORCE={rat:{v:2},bear:{v:1},ape:{v:2},croc:{curved:1},ifrit:{curved:1,v:1},kraken:{v:1},levia:{v:1},whale:{v:1},ogre:{v:3},nightmare:{v:3},bee:{v:3},scorp:{v:3},bat:{v:2},shark:{v:2},alien:{v:2},eye:{v:0},crystal:{v:3},volt:{v:2},maou:{v:1},dragon:{v:1}};
+function buildSpecs(){
+  SPEC={};const used=new Set();
+  const take=(key,t,r,pal,v0,g0,fv,extra)=>{let sp=null;
+    for(let a=0;a<16&&!sp;a++){const v=fv!=null?fv:(v0+Math.floor(a/4))%4,g=(g0+a)%4,sig=t+'|'+pal+'|'+v+'|'+g;if(!used.has(sig)){used.add(sig);sp={t,r,pal,v,g,seed:hashS(key)}}}
+    SPEC[key]=Object.assign(sp||{t,r,pal,v:v0,g:g0,seed:hashS(key)},extra||{})};
+  SPEC['s:starter']={t:0,r:0,pal:'bronze',v:0,g:3,seed:777};used.add('0|bronze|0|3');
+  NORMALS.concat(BOSSES).forEach(d=>{const h=hashS(d.id),f=UFORCE[d.id]||{};take('u:'+d.id,d.ut,5,UPAL[d.id]||'gold',f.v!=null?f.v:h%4,(h>>>3)%4,f.v,{curved:!!f.curved,uq:true})});
+  CAT.slice().sort((a,b)=>b.r-a.r).forEach(e=>{const h=hashS(e.c),pal=e.r===0?['wood','iron','rust'][e.t%3]:e.r===1?(e.name.startsWith('鉄')?'iron':e.name.startsWith('鋼')?'steel':'bronze'):['fire','ice','thunder','dark','holy'][e.el];
+    take('c:'+e.c,e.t,e.r,pal,h%4,(h>>>3)%4)});
+}
+function specKey(w){return w.name==='旅立ちの短剣'?'s:starter':w.u?'u:'+w.u:w.c?'c:'+w.c:'i:'+w.id}
+const mix=(a,b,k)=>a.map((x,i)=>Math.round(x*(1-k)+b[i]*k));
 function wSprite(w){
-  const key=w.id+':'+w.r;if(SPR[key])return SPR[key];
-  const G=[16,20,24,32,40,48][w.r],R=mulb(w.u?hashS(w.u):(w.id*2654435761)>>>0),uq=w.r===5,el=w.el??(w.id%6),E=ELEM[el];
-  const M=uq?UNI.m:(w.r===0?IRON:E.m),GU=(w.r>=4)?GOLD:(w.r>=2?IRON:BRONZE),GR=uq?UNI.grip:GRIPS[Math.floor(R()*GRIPS.length)],GEM=uq?UNI.g:E.g,gem=w.r>=2;
-  const t=w.t,stripe=u=>(Math.floor(u*G*1.5)%2)?GR[0]:GR[1];
-  const shade=(P,r)=>r<-.4?P[0]:r>.45?P[2]:P[1];
-  // per-type params
-  const big=t===1,gs=big?.27:.25,bw=(big?.075:.045)+R()*(big?.03:.02),gw=(big?.15:.11)+R()*.06,wavy=w.r>=2&&R()<.35,serr=w.r>=3&&R()<.35,claw=w.r>=1&&R()<.6;
-  const dbl=w.r>=3&&R()<.6,hl=.27+R()*.06,hw=.16+R()*.05,spk=w.r>=3;
+  if(!SPEC)buildSpecs();
+  const key=specKey(w),ck=key+':'+w.r;if(SPR[ck])return SPR[ck];
+  let sp=SPEC[key];if(!sp){const h=hashS(key);sp={t:w.t,r:w.r,pal:['fire','ice','thunder','dark','holy','iron'][w.el??5],v:h%4,g:(h>>>3)%4,seed:h}}
+  const t=w.t,r=w.r,G=[16,20,24,32,40,48][r],R=mulb(sp.seed),P=PALS[sp.pal]||PALS.iron,M=P.m,GEM=P.g,V=sp.v,Gs=sp.g,uq=r===5;
+  const GU=sp.pal==='gold'?PALS.shadow.m:r>=4?GOLD:r>=2?IRON:BRONZE,GR=uq?[[60,22,34],[22,6,14]]:GRIPS[Math.floor(R()*GRIPS.length)],gem=r>=2,EDGE=mix(M[0],GEM,.55);
+  const stripe=u=>(Math.floor(u*G*1.5)%2)?GR[0]:GR[1],shade=(Pp,q)=>q<-.4?Pp[0]:q>.45?Pp[2]:Pp[1];
+  const big=t===1,gs=big?.27:.25,bw=(big?.075:.047)+R()*(big?.025:.015),gw=(big?.15:.11)+R()*.05,hl=.27+R()*.05,hw=.15+R()*.05;
+  const bladeCol=(q,av,wd,u,lim)=>{if(r>=4&&Math.abs(q)>.62)return EDGE;if(av<wd*.2&&u<lim&&r>=1){if(r>=3&&(Math.floor(u*G)%3===0))return GEM;return M[2]}if(uq&&u>lim+.06)return mix(M[0],GEM,.4);return shade(M,q)};
   const shape=(u,v,X,Y)=>{
-    const av=Math.abs(v);
+    const av=Math.abs(v),du=(u-.85)*1.103;
     if(t===0||t===1){
       if(u<0||u>1)return null;
       if(u<.06)return av<.05?(gem&&av<.028&&u>.015?GEM:GU[1]):null;
       if(u<gs-.035)return av<.028?stripe(u):null;
-      if(u<gs)return av<gw?(gem&&av<.035?GEM:shade(GU,v/gw)):null;
-      if(claw&&u<gs+.05&&av>gw-.04&&av<gw)return GU[1];
+      if(Gs===2){const k=av/(gw*1.3);if(av<gw*1.3&&u<gs-k*.07&&u>gs-.04-k*.07)return gem&&av<.035?GEM:shade(GU,v/gw)}
+      else if(Gs===3){if(Math.hypot((u-(gs-.018))*1.103,v)<gw*.6)return gem&&Math.hypot((u-(gs-.018))*1.103,v)<.03?GEM:shade(GU,v/gw)}
+      else if(u<gs&&u>=gs-.035)return av<gw?(gem&&av<.035?GEM:shade(GU,v/gw)):null;
+      if(Gs===1&&u>=gs&&u<gs+.06&&av>gw-.035&&av<gw)return GU[1];
+      if(u<gs)return null;
+      const ve=sp.curved?v+.22*Math.pow(u-gs,2):v,ae=Math.abs(ve);
       let wd=u<.82?bw*(1-.25*(u-gs)/(.82-gs)):bw*.75*Math.max(0,(.99-u)/.17);
-      if(wavy)wd+=.013*Math.sin(u*42);if(serr&&u<.82)wd+=(Math.floor(u*G*.8)%2)*.013;
-      if(av<wd){const r=v/wd;return (av<wd*.2&&u<.78&&w.r>=1)?M[2]:shade(M,r)}
+      if(V===1)wd+=.014*Math.sin(u*42);if(V===2&&u<.82)wd+=(Math.floor(u*G*.8)%2)*.014;if(V===3)wd*=1+.35*Math.abs(((u*8)%2)-1);
+      if(ae<wd){const q=ve/wd;if(V===3&&u<.82)return (Math.floor(u*8)%2)?(q<0?M[0]:M[1]):(q<0?M[1]:M[2]);return bladeCol(q,ae,wd,u,.78)}
       return null;
     }
     if(t===2){
-      if(u<0||u>.98)return null;
-      if(u>.92)return av<.025?GU[1]:null;
-      const sv=dbl?av:v;
-      if(Math.abs(u-.78)<.045&&av<.055)return GU[1];
-      if(sv>.02&&sv<hl){const half=.05+.11*(sv/hl),du=Math.abs(u-.78);if(du<half)return sv>hl-.05?M[0]:du>half-.03?M[2]:M[1]}
-      if(av<.026)return u<.1?GU[1]:stripe(u);
-      return null;
+      if(u<0||u>.99)return null;
+      if(u>.92)return (Gs%2===0)&&av<.025*(1-(u-.92)/.07)+.004?M[0]:null;
+      const hc=.78,sv=V===1?av:v;
+      if(Math.abs(u-hc)<.045&&av<.055)return Gs>=2&&gem&&Math.abs(u-hc)<.02&&av<.02?GEM:GU[1];
+      if(sv>.02&&sv<hl){let lo,hi;if(V===3){lo=hc-.1;hi=hc+.1}else{const half=.05+.11*(sv/hl);lo=hc-half-(V===2?.12*(sv/hl):0);hi=hc+half}
+        if(u>lo&&u<hi){if(sv>hl-.05)return r>=4?EDGE:M[0];if(u<lo+.03||u>hi-.03)return M[2];return r>=3&&Math.abs(u-hc)<.025&&Math.abs(sv-hl*.55)<.03?GEM:M[1]}}
+      if(av<.026)return u<.1?GU[1]:stripe(u);return null;
     }
     if(t===3){
       if(u<0||u>1)return null;
-      if(u>.74){const wd=u<.82?.1*(u-.74)/.08:.1*(1-u)/.18;if(spk&&u<.8&&av>.06&&av<.06+(.8-u)*1.2)return M[2];return av<wd?shade(M,v/Math.max(wd,.001)):null}
+      if(Gs&1&&u>.58&&u<.7&&v>.03&&v<.03+(u-.58)*.55)return GEM;
+      if(u<=.7&&u>.66&&av<(Gs&2?.06:.04))return GU[1];
+      if(u<=.66)return av<.022?(Gs&2?(Math.floor(u*G)%2?GU[1]:GU[2]):stripe(u)):null;
+      if(V===1){if(u>.74){if(av<.022)return shade(M,v/.022);for(const c of[-.075,.075]){if(Math.abs(v-c)<.018&&u<(Gs&2?.9:.95))return shade(M,(v-c)/.018)}if(u<.78&&av<.095)return GU[1];return null}}
+      else if(V===2){if(u>.74){const wd=u<.8?.07*(u-.74)/.06:.07*(1-u)/.2;if(av<wd)return bladeCol(v/Math.max(wd,.001),av,wd,u,.86);if(u>.74&&u<.86&&v>.02&&v<.17-(u-.74)*.5)return v>.13-(u-.74)*.5?M[0]:M[1];return null}}
+      else if(V===3){if(u>.66){const wd=u<.95?.03:.03*(1-u)/.05;if(av<wd)return bladeCol(v/wd,av,wd,u,.9);if(u<.7&&av<.1)return av>.08?GEM:GU[1];return null}}
+      else if(u>.74){const wd=u<.82?.1*(u-.74)/.08:.1*(1-u)/.18;return av<wd?bladeCol(v/Math.max(wd,.001),av,wd,u,.9):null}
       if(u>.7)return av<.045?GU[1]:null;
-      if(gem&&u>.6&&u<.7&&v>.03&&v<.03+(u-.6)*.6)return GEM;
+      if(gem&&Gs%2===0&&u>.6&&u<.7&&v>.03&&v<.03+(u-.6)*.6)return GEM;
       return av<.022?stripe(u):null;
     }
     if(t===7){
       if(u<0||u>1)return null;
-      if(u>.94)return spk&&av<(1-u)/.06*.045?M[0]:null;
+      if(V===3){if(u>.42){const wd=.03+.07*(u-.42)/.58;if(av<wd){if((gem||Gs>=2)&&(Math.floor(u*G*.7)%2===0)&&Math.abs(av-wd*.6)<.02)return GEM;if(Gs%2===0&&av>wd-.02&&Math.floor(u*G)%3===0)return M[0];return shade(M,v/wd)}if(Gs%2===0&&av<wd+.03&&Math.floor(u*G*.5)%2===0&&u>.5)return M[0];return null}return av<.03?stripe(u):null}
+      const hcu=.83,dd=Math.hypot((u-hcu)*1.103,v);
+      if(V===1||V===2){const rr=V===1?.14:.11;if(dd<rr){if((gem&&dd<.035)||(Gs>=2&&dd<.055))return GEM;if(Gs%2&&Math.abs(dd-rr*.6)<.012)return GU[1];return dd>rr-.03?M[2]:(v<0?M[0]:M[1])}
+        if(V===2){const ang=Math.atan2(v,(u-hcu)*1.103),k=Math.abs(((ang/(Math.PI/4))%1+1)%1-.5);if(dd<rr+.07&&k<.18*(1-(dd-rr)/.07))return M[0]}
+        if(u<.72)return av<.026?(u<.05||(Gs%2&&Math.floor(u*G)%3===0)?GU[1]:stripe(u)):null;return null}
+      if(u>.94)return Gs%2===0&&av<(1-u)/.06*.045?M[0]:null;
       if(u>.7){if(av>hw)return null;if(gem&&Math.abs(u-.82)<.04&&av<.045)return GEM;return (u<.725||u>.915||av>hw-.03)?M[2]:shade(M,v/hw)}
       return av<.026?(u<.05?GU[1]:stripe(u)):null;
     }
     if(t===5){
-      const du=(u-.85)*1.103,d=Math.hypot(du,v);
-      if(d<.1)return d>.075?GEM.map(c=>c*.55|0):(v<-.02&&du>.0?[255,255,255]:GEM);
-      if(w.r>=1&&d>.115&&d<.15&&du<.04)return GU[1];
+      const d=Math.hypot(du,v);
+      if(V===0&&d<.1)return d>.075?GEM.map(c=>c*.55|0):(v<-.02&&du>0?[255,255,255]:GEM);
+      if(V===1){if(d<.13&&d>.08&&!(v>.02&&Math.abs(du)<.06))return d>.115?M[2]:M[0];if(d<(Gs%2?.06:.04))return GEM}
+      if(V===2&&Math.abs(du)/.13+av/.07<1)return v<0?(du>0?[255,255,255]:mix(GEM,[255,255,255],.4)):GEM.map(c=>c*.7|0);
+      if(V===3){if((Math.abs(du)<.13*(1-av/.03)&&av<.03)||(av<.13*(1-Math.abs(du)/.03)&&Math.abs(du)<.03))return d<.03?[255,255,255]:GEM;if(d<.05)return GEM}
+      if(Gs%2===1&&r>=1&&d>.13&&d<.16&&du<.03&&V!==1)return GU[1];
       if(u<0||u>.78)return null;
       if(u<.04)return av<.035?GU[1]:null;
-      return av<.024?(w.r>=4?GU[1]:stripe(u)):null;
+      return av<.024?(Gs>=2||r>=4?GU[1]:stripe(u)):null;
     }
     if(t===4){
+      if(u<.02||u>.98)return null;
+      const kk=[.2,.26,.24,.22][V],x=(u-.04)/.92;let c=-kk*Math.sin(Math.PI*Math.min(1,Math.max(0,x)));if(V===3)c+=.06*Math.pow(Math.abs(x-.5)*2,6);
+      const dv=v-c,L=r>=2?M:BRONZE,th=r>=3?.042:.032,tip=Math.min(u-.04,.96-u);
+      if(V===1&&tip<.1&&tip>-.02&&dv>-.1&&dv<-.03){const k=(dv+.1)/.07;if(tip<.1*k)return Math.floor((u+dv)*G)%2?GEM:mix(GEM,[255,255,255],.5)}
+      if(V===3&&tip<.12&&tip>-.02&&dv<-.03&&dv>-.03-(.12-tip)*.6)return dv<-.05?EDGE:M[0];
       if(u<.04||u>.96)return null;
-      const c=-.24*Math.sin(Math.PI*(u-.04)/.92),dv=v-c,L=w.r>=2?M:BRONZE;
-      if((u<.09||u>.91)&&Math.abs(dv)<.045&&gem)return GEM;
-      if(Math.abs(dv)<.032)return Math.abs(u-.5)<.06?stripe(u):shade(L,dv/.032);
-      if(Math.abs(v)<.012)return [240,240,240];
+      if((u<.09||u>.91)&&Math.abs(dv)<.05&&gem&&Gs%2===0)return GEM;
+      if(Gs>=2&&Math.abs(u-.5)<.1&&dv>.03&&dv<.03+(.1-Math.abs(u-.5))*.8)return Math.floor(u*G)%2?GEM:L[0];
+      if(Math.abs(dv)<th){if(V===2&&Math.floor(u*G)%4===0&&Math.abs(u-.5)>.08)return GEM;return Math.abs(u-.5)<.06?stripe(u):shade(L,dv/th)}
+      if(Math.abs(v)<.012)return V===2?mix(GEM,[255,255,255],.6):[240,240,240];
       return null;
     }
-    if(t===8){const x=Math.abs(X-.5),ins=s=>{const top=.07+s+ (x/.34)*(x/.34)*.06;if(Y<top)return false;const lim=.34-s-Math.max(0,Y-.72)*1.1;return Y<.95-s&&x<lim};
-      if(!ins(0))return null;if(!ins(.055))return X<.5?GU[0]:GU[2];
-      if(gem&&Math.hypot(X-.5,Y-.42)<.075)return GEM;
-      if(w.r>=1&&(Math.abs(X-.5)<.03&&Y>.15&&Y<.85||Math.abs(Y-.42)<.03&&x<.26))return GU[1];
-      if(w.r>=3&&Math.hypot(x-.2,Y-.2)<.03)return GU[0];
+    if(t===8){const x=Math.abs(X-.5),ins=s=>{const top=(Gs%2?.07:.1)+s+(Gs%2?(x/.34)*(x/.34)*.07:0);if(Y<top)return false;const lim=.34-s-Math.max(0,Y-.72)*1.1;return Y<.95-s&&x<lim};
+      if(!ins(0))return null;if(!ins(.055))return Gs>=2&&Math.floor(Y*G/3)%2===0?GEM:(X<.5?GU[0]:GU[2]);
+      if(V===0&&(Math.abs(X-.5)<.03&&Y>.15&&Y<.85||Math.abs(Y-.42)<.03&&x<.26))return GU[1];
+      if(V===1&&x<.25&&Math.floor((X-.25)*G/(G*.1))%2===0)return M[2];
+      if(V===2){const d=Math.hypot(X-.5,Y-.45);if(d<.09)return GEM;if(d<.13&&d>.11)return GU[1]}
+      if(V===3&&(Math.abs((X-.5)-(Y-.45))<.03||Math.abs((X-.5)+(Y-.45))<.03)&&Math.hypot(X-.5,Y-.45)<.22)return GEM;
+      if(gem&&V!==2&&Math.hypot(X-.5,Y-.42)<.06)return GEM;
       return X<.5?(Y<.42?M[0]:M[1]):(Y<.42?M[1]:M[2])}
-    if(t===9){const cuff=Y>.66&&Y<.9&&Math.abs(X-.5)<.2,hand=Y>.3&&Y<=.66&&Math.abs(X-.5)<.24,fing=Y>.16&&Y<=.3&&Math.abs(X-.5)<.24&&(Math.floor((X-.26)*G/ (G*.12))%2===0);
-      const spike=w.r>=3&&Y>.06&&Y<=.16&&Math.abs(X-.5)<.24&&Math.abs(((X-.26)/.12)%1-.5)<(.16-Y)*4;
-      if(spike)return M[0];if(cuff)return Math.abs(Y-.72)<.025?GU[0]:(X<.5?GU[1]:GU[2]);
-      if(hand){if(gem&&Math.hypot(X-.5,Y-.48)<.07)return GEM;return X<.4?M[0]:X>.62?M[2]:M[1]}if(fing)return X<.5?M[1]:M[2];return null}
-    if(t===10){const dx=X-.5,cy=.66,d=Math.hypot(dx,(Y-cy)*1.05);
-      if(d<.17){if(d>.13)return GU[d>.15?2:1];if(gem||w.r>=1)return d<.06&&Y<cy?[255,255,255]:(Y<cy?GEM:GEM.map(c=>c*.7|0));return M[1]}
-      if(w.r>=3&&d>.19&&d<.23&&Math.abs(dx)>.12)return GU[1];
-      const chain=Y<cy-.15&&Y>.08&&Math.abs(Math.abs(dx)-(cy-.15-Y)*.9)<.025&&(Math.floor(Y*G)%2===0);if(chain)return GU[1];return null}
-    // shield
+    if(t===9){const cuff=Y>.66&&Y<.9&&Math.abs(X-.5)<.2,hand=Y>.3&&Y<=.66&&Math.abs(X-.5)<.24,fpos=((X-.26)/.12),fing=Y>.16&&Y<=.3&&Math.abs(X-.5)<.24&&(Math.floor(fpos)%2===0);
+      if(V===1){for(const cx of[.33,.5,.67]){if(Math.abs(X-cx)<.025*(1-(.3-Y)/.3*.6)&&Y>.02&&Y<=.3)return Y<.12?EDGE:(X<cx?M[0]:M[1])}}
+      if(V===2&&Y>.08&&Y<=.16&&Math.abs(X-.5)<.24&&Math.abs((fpos%1)-.5)<(.16-Y)*4)return M[0];
+      if(cuff)return Math.abs(Y-.72)<.025?(Gs%2?GEM:GU[0]):(X<.5?GU[1]:GU[2]);
+      if(hand){if(V===3&&Math.floor(Y*G/2)%2===0)return M[2];if((gem||Gs>=2)&&Math.hypot(X-.5,Y-.48)<.07)return GEM;return X<.4?M[0]:X>.62?M[2]:M[1]}
+      if(fing&&V!==1)return X<.5?M[1]:M[2];if(V===1&&Y>.24&&Y<=.3&&Math.abs(X-.5)<.24)return M[2];return null}
+    if(t===10){const dx=X-.5,cy=.66,dy=Y-cy,d=Math.hypot(dx,dy*1.05);
+      let inP=false,edge=false;
+      if(V===0){inP=d<.17;edge=d>.13}else if(V===1){const m=Math.abs(dx)/.16+Math.abs(dy)/.2;inP=m<1;edge=m>.78}
+      else if(V===2){const a=Math.atan2(dy,dx),rr=.1+.09*Math.pow(Math.abs(Math.cos(a*2.5)),3);inP=d<rr;edge=d>rr-.035}
+      else{inP=d<.17&&Math.hypot(dx-.07,dy-.02)>.13;edge=d>.13}
+      if(inP){if(edge)return GU[1];return (dy<-.03&&dx<0)?[255,255,255]:(dy<0?GEM:GEM.map(c=>c*.7|0))}
+      if(r>=3&&d>.19&&d<.22&&Math.abs(dx)>.12)return GU[1];
+      const chain=Y<cy-.15&&Y>.08&&Math.abs(Math.abs(dx)-(cy-.15-Y)*.9)<.025&&(Gs%2?Math.floor(Y*G)%2===0:Math.floor(Y*G)%3!==0);if(chain)return Gs>=2?GEM:GU[1];return null}
+    // shield (t6)
+    if(Gs>=2){const d=Math.hypot(X-.5,Y-.5);if(d>.4)return null;if(d>.35)return X<.5?GU[0]:GU[2];
+      if(V===0&&(Math.abs(X-.5)<.03||Math.abs(Y-.5)<.03))return GU[1];if(V===1&&d<.1)return GEM;if(V===2&&Math.abs(Math.abs(X-.5)-(Y-.3)*.8)<.035&&Y>.3)return GU[1];if(V===3)return ((X<.5)===(Y<.5))?M[0]:M[2];
+      if(d<.06&&gem)return GEM;return X<.5?M[0]:M[1]}
     const ins=(s)=>{const x=Math.abs(X-.5)+s,top=.1+s,mid=.55,bot=.93-s*1.6;if(Y<top||Y>bot)return false;return Y<mid?x<.37:x<.37*Math.pow(Math.max(0,1-(Y-mid)/(bot-mid)),.7)};
     if(!ins(0))return null;
-    if(!ins(.05))return X<.5?GU[0]:GU[2];
-    if(gem&&Math.hypot(X-.5,Y-.42)<.075)return GEM;
-    if(w.r>=1&&(Math.abs(X-.5)<.03||Math.abs(Y-.42)<.03))return GU[1];
+    if(!ins(.05))return Gs%2&&Math.floor((X+Y)*G/3)%3===0?GEM:(X<.5?GU[0]:GU[2]);
+    if(V===1&&Math.hypot(X-.5,Y-.42)<.1)return GEM;
+    if(V===0&&r>=1&&(Math.abs(X-.5)<.03||Math.abs(Y-.42)<.03))return GU[1];
+    if(V===2&&Math.abs(Math.abs(X-.5)-(Y-.25)*.7)<.035&&Y>.25)return GU[1];
+    if(gem&&Math.hypot(X-.5,Y-.42)<.06)return GEM;
+    if(V===3)return ((X<.5)===(Y<.42))?M[0]:M[2];
     return ((X<.5)===(Y<.42))?M[1]:M[2];
   };
   const px=new Array(G*G).fill(null);
   for(let y=0;y<G;y++)for(let x=0;x<G;x++){const X=(x+.5)/G,Y=(y+.5)/G,ax=X-.12,ay=Y-.88;px[y*G+x]=shape((ax*.7071-ay*.7071)/1.103,ax*.7071+ay*.7071,X,Y)}
-  const c=document.createElement('canvas');c.width=c.height=G;const g=c.getContext('2d'),im=g.createImageData(G,G),d=im.data;
-  for(let i=0;i<G*G;i++){let col=px[i];if(!col){const x=i%G,y=(i/G)|0;if((x>0&&px[i-1])||(x<G-1&&px[i+1])||(y>0&&px[i-G])||(y<G-1&&px[i+G]))col=OUTC}if(col){d[i*4]=col[0];d[i*4+1]=col[1];d[i*4+2]=col[2];d[i*4+3]=255}}
-  g.putImageData(im,0,0);return SPR[key]=c.toDataURL();
+  const OC=uq?[70,0,18]:OUTC,c=document.createElement('canvas');c.width=c.height=G;const g=c.getContext('2d'),im=g.createImageData(G,G),d=im.data;
+  for(let i=0;i<G*G;i++){let col=px[i];if(!col){const x=i%G,y=(i/G)|0;if((x>0&&px[i-1])||(x<G-1&&px[i+1])||(y>0&&px[i-G])||(y<G-1&&px[i+G]))col=OC}if(col){d[i*4]=col[0];d[i*4+1]=col[1];d[i*4+2]=col[2];d[i*4+3]=255}}
+  g.putImageData(im,0,0);return SPR[ck]=c.toDataURL();
 }
+
 function wIcon(w){const s=wSprite(w);return `<span class="wic r${w.r}"><img src="${s}" alt="">${w.r>=2?`<i class="sh" style="-webkit-mask-image:url('${s}');mask-image:url('${s}')"></i>`:''}</span>`}
 const ESPR={};
 function eSprite(d){
@@ -1657,8 +1724,9 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='1.0.9-alpha';
+const VERSION='1.0.10-alpha';
 const CHANGELOG=[
+ ['1.0.10-alpha',['武器アイコンを全面的に作り直し、全148種がそれぞれ違う見た目に（同じ名前の武器は同じ見た目）','ユニーク60種は名前に合わせた色と形に（曲刀・三叉槍・金棒・牙・爪・針など）','剣は刃（直刃・炎刃・ギザ刃・結晶刃・曲刃）と鍔（横・爪・翼・円盤）の組み合わせ、他の種類も頭部や紋章の形を複数用意','高レアリティほど刃のルーン・縁の輝き・宝石などの装飾が増え、ユニークは専用の縁取り色に']],
  ['1.0.9-alpha',['引き継ぎコードをファイルに保存する時のファイル名を「ユーザー名_年月日.txt」に変更（例：はなこ_20261005.txt）']],
  ['1.0.8-alpha',['装備・強化・合成画面のレイアウトを変更（左上に装備中／ベースの武器、左下に装備枠・素材・追加能力の選択、右側にインベントリ）','カーソルを合わせた武器の詳細を、拠点画面と同じポップアップ表示に（装備画面では選択中の枠の武器との比較付き）','スマホでは武器をタップした時のメニューに詳細も表示','拠点画面の操作説明の文を削除']],
  ['1.0.7-alpha',['同じ種類の追加能力は1つの武器に1つまでに（所持中の武器で重複していたものは、高いほうを残して別の能力に置き換え）','合成でも同じ種類の追加能力は1つまでしか選べないように','合成画面の素材の追加能力を、ベースのレベルに換算した値で表示']],
