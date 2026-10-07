@@ -1381,8 +1381,8 @@ function freshProg(){return{easy:{maxF:0,lastF:1},normal:{maxF:0,lastF:1},hard:{
 function fresh(){return{exp:0,inv:[],eq:[null,null,null,null,null],nid:1,diff:'normal',prog:freshProg(),rec:freshRec(),tut:{stage:'intro'},tseen:{}}}
 function PG(){return S.prog[S.diff]||S.prog.normal}
 const DIFF={easy:{n:'イージー',c:'#3fa9ff',hp:.8,atk:.5,int:1.8,exp:1,desc:'キー入力に慣れていない人向け。短い言葉が中心で、敵の攻撃もゆっくり・弱め。ユニーク武器は出ません。'},
- normal:{n:'ノーマル',c:'#22c55e',hp:1,atk:1,int:1,exp:1,desc:'標準の難易度。言葉は最大10文字まで。'},
- hard:{n:'ハード',c:'#ff3b3b',hp:1.5,atk:1.4,int:.85,exp:1.5,desc:'長い言葉も出題。敵が強い代わりに、高レアリティとユニーク（3%）が出やすく、経験値1.5倍。'},
+ normal:{n:'ノーマル',c:'#22c55e',hp:1,atk:1,int:1.2,exp:1,desc:'標準の難易度。言葉は最大10文字まで。'},
+ hard:{n:'ハード',c:'#ff3b3b',hp:1.5,atk:1.4,int:1.8,exp:1.5,desc:'長い言葉も出題。敵が強い代わりに、高レアリティとユニーク（3%）が出やすく、経験値1.5倍。'},
  nightmare:{n:'ナイトメア',c:'#b04dff',hp:2.4,atk:2.2,int:.72,exp:2.5,desc:''}};
 function load(){
   const d=readLocal(curKey())||(CL.pid?null:null);if(d){adopt(d);return}
@@ -1536,8 +1536,8 @@ document.addEventListener('keydown',e=>{
 /* ===== battle ===== */
 let B=null,W=null;
 /* 想定戦闘力（その層を余裕を持って攻略できる目安）から敵ステータスを逆算 */
-const PTGT={easy:[100,450,900,1500,1800,2100],normal:[90,700,2200,7000,10000,12000],hard:[11000,13000,17000,26000,34000,40000],nightmare:[50000,62000,90000,150000,230000,320000]},PFL=[1,10,25,50,75,100];
-const DTUNE={easy:{kps:1.3,wk:2.2,fr:.45},normal:{kps:2.5,wk:2.6,fr:.55},hard:{kps:3.8,wk:3,fr:.6},nightmare:{kps:4.5,wk:3.2,fr:.65}};
+const PTGT={easy:[100,450,900,1500,1800,2100],normal:[90,700,2200,7000,10000,12000],hard:[100,700,3500,14000,28000,40000],nightmare:[50000,62000,90000,150000,230000,320000]},PFL=[1,10,25,50,75,100];
+const DTUNE={easy:{kps:1.3,wk:2.2,fr:.45},normal:{kps:2.5,wk:2.6,fr:.7},hard:{kps:3.8,wk:3,fr:.85},nightmare:{kps:4.5,wk:3.2,fr:.65}};
 function ptgt(d,f){const T=PTGT[d]||PTGT.normal;for(let i=0;i<PFL.length-1;i++)if(f<=PFL[i+1]){const t=Math.max(0,(f-PFL[i])/(PFL[i+1]-PFL[i]));return Math.exp(Math.log(T[i])+(Math.log(T[i+1])-Math.log(T[i]))*t)}return T[T.length-1]}
 function avgLen(d,f,b){if(d==='easy')return b?3.6:f>50?3.3:2.8;
   if(d==='normal')return f<=10?(b?5:2):f<=30?(b?8:4.7):f<50?(b?8:6.6):(b?9:7);
@@ -2013,8 +2013,10 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='2.0.1-alpha';
+const VERSION='2.0.3-alpha';
 const CHANGELOG=[
+ ['2.0.3-alpha',['ノーマル・ハードの敵の攻撃力を上げました。攻撃の間隔が少し長くなる代わりに、一撃が重くなります（速く正確に打って、攻撃される前に倒すのが攻略のカギ）']],
+ ['2.0.2-alpha',['ハード序盤の敵を弱めに調整（タイピングに自信があれば最初から挑める強さに）。中盤以降は育成が必要なのは変わりません']],
  ['2.0.1-alpha',['引き継ぎ画面に「データを消して最初から始める」を追加（確認2回）']],
  ['2.0.0-alpha',['縺翫ｲ縺溘ゅ縺ｽ繧輔∪螟｢縺ｮ縺励ｇ縺ｵ縺ｪ縺ｮ縺\uFFFD','邨碁ｨ薙′\uFFFD\uFFFD縺ｪ縺ｫ縺九′縺翫°縺励＞','蜑｣縺ｮ縺溘ゅ∪縺ｸ縺ｾ繧九＞\uFFFD縺｣縺ｦ縺ｪ縺ｫ縺溘ｍ','\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD']]
 ];
