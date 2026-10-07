@@ -424,29 +424,40 @@ img{image-rendering:pixelated}
 .hq.lock small{position:static;display:block;font-size:9px;color:var(--dim)}
 .hq.empty{border-style:dashed}
 .diffsel.one{grid-template-columns:1fr}
+.btn.danger{border-color:#ff3b3b;color:#ff3b3b}.btn.danger:hover:not(:disabled){border-color:#ff7a7a;color:#ff7a7a}.dz{color:#ff3b3b}
 /* sub glitch (unlocked) */
 .sub.subgl{cursor:pointer;animation:subglow 2.4s ease-in-out infinite,subj 3.3s steps(1) infinite;user-select:none}
 @keyframes subj{0%,100%{transform:none;text-shadow:0 0 8px rgba(255,180,40,.7),0 2px 0 #5a1a00}7%{transform:translateX(-3px) skewX(14deg);text-shadow:2px 0 #f0f,-2px 0 #0ff}9%{transform:none}31%{transform:translate(2px,1px);clip-path:inset(0 0 45% 0)}33%{transform:none;clip-path:none}52%{transform:skewX(-10deg) scaleX(1.06);text-shadow:-3px 0 #f0f,3px 0 #0ff}53%{transform:none}54%{transform:translateX(4px)}56%{transform:none;text-shadow:0 0 8px rgba(255,180,40,.7),0 2px 0 #5a1a00}83%{transform:translateY(-2px);clip-path:inset(50% 0 0 0)}85%{transform:none;clip-path:none}}
 /* nightmare home */
-#home.nmui{background:radial-gradient(ellipse at 50% 25%,#22041e 0%,#0c0010 50%,#000 100%)}
-#home.nmui::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:15;background:repeating-linear-gradient(0deg,rgba(255,0,90,.045) 0 1px,transparent 1px 3px),radial-gradient(ellipse at center,transparent 40%,rgba(30,0,20,.7) 100%);animation:nmscan 6s steps(1) infinite}
-#home.nmui .hero .rays{background:repeating-conic-gradient(rgba(190,0,70,.2) 0 3deg,transparent 3deg 23deg);animation:spin 46s linear infinite reverse}
-#home.nmui .logo span{background-image:linear-gradient(105deg,transparent 42%,rgba(255,200,255,.8) 50%,transparent 58%),linear-gradient(180deg,#f6dcff 0%,#c27bff 35%,#7a12c4 65%,#2a0030 100%);
+body.nmui{background:radial-gradient(ellipse at 50% 25%,#22041e 0%,#0c0010 50%,#000 100%)}
+body.nmui::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:15;background:repeating-linear-gradient(0deg,rgba(255,0,90,.045) 0 1px,transparent 1px 3px),radial-gradient(ellipse at center,transparent 40%,rgba(30,0,20,.7) 100%);animation:nmscan 6s steps(1) infinite}
+body.nmui #home .hero .rays{background:repeating-conic-gradient(rgba(190,0,70,.2) 0 3deg,transparent 3deg 23deg);animation:spin 46s linear infinite reverse}
+body.nmui #home .logo span{background-image:linear-gradient(105deg,transparent 42%,rgba(255,200,255,.8) 50%,transparent 58%),linear-gradient(180deg,#f6dcff 0%,#c27bff 35%,#7a12c4 65%,#2a0030 100%);
   filter:drop-shadow(2px 0 #ff004c) drop-shadow(-2px 0 #00e5ff) drop-shadow(0 0 14px rgba(176,77,255,.7));animation:nmlw 3.6s ease-in-out infinite,nmch 2.9s steps(1) infinite,lshine 4.2s ease-in-out infinite;animation-delay:calc(var(--i)*.11s),calc(var(--i)*-.41s),calc(var(--i)*.07s)}
-#home.nmui .logo span.lz{background-image:none;color:#ff2a6a;-webkit-text-fill-color:#ff2a6a}
+body.nmui #home .logo span.lz{background-image:none;color:#ff2a6a;-webkit-text-fill-color:#ff2a6a}
 @keyframes nmlw{0%,100%{translate:0 0}50%{translate:0 4px}}
 @keyframes nmch{0%,100%{transform:none}11%{transform:translateX(-4px) skewX(18deg)}13%{transform:none}46%{transform:translateY(3px) scaleY(1.15)}47%{transform:translateX(5px)}49%{transform:none}77%{transform:skewY(-8deg)}79%{transform:none}}
-#home.nmui .sub{color:#ff3b6b;letter-spacing:.42em;text-shadow:2px 0 #b04dff,-2px 0 #00e5ff,0 0 14px rgba(255,0,80,.8)}
-#home.nmui .spk i{color:#ff2a6a;text-shadow:0 0 8px #b04dff}
-#home.nmui .card{border-color:#5a1580;box-shadow:inset 0 0 26px rgba(176,77,255,.18),0 0 24px rgba(255,0,70,.12);position:relative;animation:nmbreath 4.5s ease-in-out infinite}
+body.nmui #home .sub{color:#ff3b6b;letter-spacing:.42em;text-shadow:2px 0 #b04dff,-2px 0 #00e5ff,0 0 14px rgba(255,0,80,.8)}
+body.nmui #home .spk i{color:#ff2a6a;text-shadow:0 0 8px #b04dff}
+body.nmui #home .card{border-color:#5a1580;box-shadow:inset 0 0 26px rgba(176,77,255,.18),0 0 24px rgba(255,0,70,.12);position:relative;animation:nmbreath 4.5s ease-in-out infinite}
 @keyframes nmbreath{0%,100%{box-shadow:inset 0 0 26px rgba(176,77,255,.18),0 0 24px rgba(255,0,70,.12)}50%{box-shadow:inset 0 0 34px rgba(176,77,255,.3),0 0 34px rgba(255,0,70,.25)}}
-#home.nmui .card::after,#home.nmui .big.go::after{content:"";position:absolute;inset:-6px;border:3px solid #ff004c;pointer-events:none;animation:gxb 1.9s steps(1) infinite;z-index:2}
-#home.nmui .card:nth-of-type(2)::after{animation-delay:-.8s;border-color:#00e5ff}
-#home.nmui .big.go{border-color:#b04dff;color:#f0d6ff;text-shadow:2px 0 #ff004c,-2px 0 #00e5ff;animation:gob 2.2s steps(1) infinite;background:rgba(80,0,60,.25)}
+body.nmui #home .card::after,body.nmui #home .big.go::after{content:"";position:absolute;inset:-6px;border:3px solid #ff004c;pointer-events:none;animation:gxb 1.9s steps(1) infinite;z-index:2}
+body.nmui #home .card:nth-of-type(2)::after{animation-delay:-.8s;border-color:#00e5ff}
+body.nmui #home .big.go{border-color:#b04dff;color:#f0d6ff;text-shadow:2px 0 #ff004c,-2px 0 #00e5ff;animation:gob 2.2s steps(1) infinite;background:rgba(80,0,60,.25)}
 @keyframes gob{0%,100%{transform:none}17%{transform:translateX(-3px) skewX(8deg)}19%{transform:none}58%{transform:translate(3px,1px);filter:hue-rotate(90deg)}60%{transform:none;filter:none}61%{transform:translateX(-2px)}62%{transform:none}}
-#home.nmui .fgrid{filter:hue-rotate(255deg) saturate(1.4)}
-#home.nmui .hcard .emb,#home.nmui .hcard .xpbar,#home.nmui .pbar{filter:hue-rotate(250deg)}
-#home.nmui.burst .hscroll{transform:translateX(-5px) skewX(2deg);filter:hue-rotate(60deg) contrast(1.3)}
+body.nmui #home .fgrid{filter:hue-rotate(255deg) saturate(1.4)}
+body.nmui{--fg:#ecd8ff;--dim:#9a7aae;--faint:#3a1f4a;--btn:#c06bff;--sel:#ff3b8b}
+body.nmui .screen{background:radial-gradient(ellipse at 50% 20%,#1c0320 0%,#0a000e 55%,#000 100%)}
+body.nmui :is(#armory,#dex) .pane{position:relative;box-shadow:inset 0 0 22px rgba(176,77,255,.16),0 0 18px rgba(255,0,70,.1)}
+body.nmui :is(#armory,#dex) .pane::after{content:"";position:absolute;inset:-5px;border:2px solid #ff004c;pointer-events:none;animation:gxb 2.3s steps(1) infinite;z-index:3}
+body.nmui :is(#armory,#dex) #paneR::after{animation-delay:-1.1s;border-color:#00e5ff}
+body.nmui .atitle,body.nmui #dex .abar>span:first-of-type{text-shadow:2px 0 #ff004c,-2px 0 #00e5ff;animation:nmt 2.6s steps(1) infinite;display:inline-block}
+body.nmui :is(.cmd,.abar){border-color:#5a1580}
+body.nmui .cmd button.on{animation:gob 2.4s steps(1) infinite;text-shadow:2px 0 #ff004c,-2px 0 #00e5ff}
+body.nmui .back{text-shadow:1px 0 #ff004c,-1px 0 #00e5ff}
+body.nmui .mbox{border-color:#7a2aa8;box-shadow:0 0 30px rgba(176,77,255,.35)}
+body.nmui #home .hcard .emb,body.nmui #home .hcard .xpbar,body.nmui #home .pbar{filter:hue-rotate(250deg)}
+body.nmui #home.burst .hscroll{transform:translateX(-5px) skewX(2deg);filter:hue-rotate(60deg) contrast(1.3)}
 #home.nmin .hscroll{animation:nmin 1.8s steps(18) forwards}#home.nmout .hscroll{animation:nmout 1.8s steps(18) forwards}
 #home.nmin::after,#home.nmout::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:16;background:repeating-linear-gradient(0deg,rgba(176,77,255,.25) 0 2px,rgba(0,0,0,.3) 2px 5px,transparent 5px 9px);animation:nmveil 1.8s steps(12) forwards}
 @keyframes nmveil{0%{opacity:0;transform:translateY(0)}20%{opacity:.6;transform:translateY(-14px)}45%{opacity:1;transform:translateY(10px)}55%{opacity:1;background-color:rgba(20,0,20,.85)}70%{opacity:.7;transform:translateY(-6px)}100%{opacity:0}}
@@ -1180,7 +1191,7 @@ const GJ='繝繧縺螟蜑譁邨碁ｨ薙ｒ謨ｵ迚遘峨ｹｼｸﾞｮ\uFFFD'
 function garble(s,p){let h=hashS(s+'#'),o='';for(const c of s){h=Math.imul(h^c.charCodeAt(0),16777619)>>>0;o+=(h%1000)/1000<p?GJ[(h>>>10)%GJ.length]:c}if(o===s&&p>0&&s.length){const a=[...s],i=hashS(s)%a.length;a[i]=GJ[hashS(s+'!')%GJ.length];o=a.join('')}return o}
 const NME={};function nmE(d){return d.nm||d.gl?d:(NME[d.id]||(NME[d.id]=Object.assign({},d,{id:'n_'+d.id,n:garble(d.n,.5),nm:true,base:d})))}
 function gwify(w){w.gw=1;w.name=garble(w.name,.3);return w}
-function smOf(w){return RAR[w.r].sm*(w.gw?1.25:1)}
+function smOf(w){return RAR[w.r].sm*(w.gw?1.3:1)}
 function glMat(g,f){const w=makeW({t:g.wt,r:g.wr,f:f||1,name:g.wn,sk:'g_'+g.id,g:g.id});return w}
 function glitchPx(d,G,R,k){
   const src=new Uint8ClampedArray(d);
@@ -1396,8 +1407,8 @@ function rollWeapon0(f,d,boss){
   return makeW({t:e.t,r,f,el:e.el,name:e.name,sk:e.sk,c:e.c});
 }
 const WBASE=[8,16,30,55,95,160];
-function wBase(w){if(w.g)return{atk:1,hp:1,def:1};const T=TYPES[w.t],b=WBASE[w.r]*(1+.025*(w.lv-1))*(w.gw?1.4:1);return{atk:Math.round(b*T.a),hp:Math.round(b*5*T.h),def:Math.round(b*.6*T.d)}}
-function affVal(w,a){return r1(a.v*(1+(a.k==='cr'||a.k==='cd'?.025:.015)*(w.lv-1)))}
+function wBase(w){if(w.g)return{atk:1,hp:1,def:1};const T=TYPES[w.t],b=WBASE[w.r]*(1+.025*(w.lv-1))*(w.gw?1.6:1);return{atk:Math.round(b*T.a),hp:Math.round(b*5*T.h),def:Math.round(b*.6*T.d)}}
+function affVal(w,a){return r1(a.v*(1+(a.k==='cr'||a.k==='cd'?.025:.015)*(w.lv-1))*(w.gw?1.25:1))}
 function affTxt(w,a){return `${AFFD[a.k].n}+${affVal(w,a)}%`}
 function needXP(w,L){return Math.floor(15*L*(1+w.r*.3))}
 function matExp(w){if(w.g)return GLI[w.g].mexp+Math.floor(w.tx*.5);return Math.floor(60*Math.pow(w.r+1,2))+Math.floor(w.tx*.5)}
@@ -1524,7 +1535,17 @@ document.addEventListener('keydown',e=>{
 
 /* ===== battle ===== */
 let B=null,W=null;
-function enemyStats(f,boss){const g=1+.15*(f-1),D=DIFF[B&&B.diff||'normal'];return{hp:Math.round(30*Math.pow(g,2.1)*(boss?4:1)*D.hp),atk:Math.max(1,Math.round(8*Math.pow(g,1.5)*(boss?1.5:1)*D.atk)),int:Math.max(2.2,(boss?3.4:4)-f*.012)*D.int}}
+/* 想定戦闘力（その層を余裕を持って攻略できる目安）から敵ステータスを逆算 */
+const PTGT={easy:[100,450,900,1500,1800,2100],normal:[90,700,2200,7000,10000,12000],hard:[11000,13000,17000,26000,34000,40000],nightmare:[50000,62000,90000,150000,230000,320000]},PFL=[1,10,25,50,75,100];
+const DTUNE={easy:{kps:1.3,wk:2.2,fr:.45},normal:{kps:2.5,wk:2.6,fr:.55},hard:{kps:3.8,wk:3,fr:.6},nightmare:{kps:4.5,wk:3.2,fr:.65}};
+function ptgt(d,f){const T=PTGT[d]||PTGT.normal;for(let i=0;i<PFL.length-1;i++)if(f<=PFL[i+1]){const t=Math.max(0,(f-PFL[i])/(PFL[i+1]-PFL[i]));return Math.exp(Math.log(T[i])+(Math.log(T[i+1])-Math.log(T[i]))*t)}return T[T.length-1]}
+function avgLen(d,f,b){if(d==='easy')return b?3.6:f>50?3.3:2.8;
+  if(d==='normal')return f<=10?(b?5:2):f<=30?(b?8:4.7):f<50?(b?8:6.6):(b?9:7);
+  if(d==='nightmare')f=Math.max(f,50);return f<=10?(b?7.5:6):f<=30?(b?10:7):f<50?(b?11:9):(b?11:9.5)}
+function enemyStats(f,boss){const d=B&&B.diff||'normal',D=DIFF[d]||DIFF.normal,T=DTUNE[d]||DTUNE.normal,P=ptgt(d,f),hp=6.27*Math.pow(P,.619),df=.32*Math.pow(P,.674),ae=Math.max(5,(P-.5*hp-2*df)/3);
+  const iv=b=>Math.max(2.2,(b?3.4:4)-f*.012)*D.int,dpw=b=>ae*(.6+.25*avgLen(d,f,b))*1.3,tw=b=>1.9*avgLen(d,f,b)/T.kps+.45,wb=T.wk*2.5,n=3+Math.floor(f/25);
+  const hN=n*T.wk*tw(false)/iv(false),hB=wb*tw(true)/iv(true),x=T.fr*hp/(hN+1.25*hB);
+  return{hp:Math.max(10,Math.round(dpw(boss)*(boss?wb:T.wk))),atk:Math.max(1,Math.round(x*(boss?1.25:1)*(100+df)/100)),int:iv(boss)}}
 function startFloor(f,opt){
   const st=calcStats(),fi=floorInfo(f),band=fi.band%10,pool=fi.pool;
   const dif=(opt&&opt.diff)||S.diff,mp=it=>it.gl||dif!=='nightmare'?it:Object.assign({},it,{d:nmE(it.d)});
@@ -1549,15 +1570,15 @@ function spawn(){
   if(!it.boss&&!it.gl&&!B.glDone&&!B.test){const g=glPick(false,B.diff);if(g){B.glDone=1;B.q.splice(B.qi,0,{d:g,boss:false,gl:true});it=B.q[B.qi]}}
   const es=enemyStats(B.floor,it.boss),gl=!!it.gl;
   B.enemy=gl?{d:it.d,boss:it.boss,gl:true,hp:it.d.hp,max:it.d.hp,atk:0,int:it.d.flee,timer:-.8,stun:0,dead:false}:{d:it.d,boss:it.boss,hp:es.hp,max:es.hp,atk:es.atk,int:es.int,timer:-.8,stun:0,dead:false};
-  $('stage').classList.toggle('gl',gl);kbGlitch(gl?true:B.diff==='nightmare'?'nm':false);
+  const nmB=B.diff==='nightmare';$('stage').classList.toggle('gl',gl||nmB);kbGlitch(gl||nmB?true:false);
   const eg=$('eg');eg.innerHTML=`<img src="${eSprite(it.d)}" alt="${it.d.n}">`;eg.className='';void eg.offsetWidth;eg.className='enter';
   $('enemy').classList.toggle('boss',it.boss);
   $('ename').innerHTML=(it.boss?`<span class="bs">${gl?'B縺SS':'BOSS'}</span>`:'')+it.d.n;
-  $('floorLbl').innerHTML=`<span class="dtag" style="--dc:${DIFF[B.diff].c}">${DIFF[B.diff].n}</span>${B.floor}層　${gl?'繧\uFFFD/\uFFFDｼ':`${B.qi+1}/${B.q.length}`}`;
-  B.active=true;nextWord();if(gl){playBgm(null);se('glitch');blog('\uFFFD\uFFFD 繧ｨ繝ｩ繝ｼ縺檎匱逕溘＠縺ｾ縺励◆ \uFFFD\uFFFD','gl')}else if(it.boss)playBgm(bgmFor(true));requestAnimationFrame(()=>{measureEnemy();fxLayout()});
+  $('floorLbl').innerHTML=`<span class="dtag" style="--dc:${DIFF[B.diff].c}">${DIFF[B.diff].n}</span>${B.floor}層　${gl||nmB?'繧\uFFFD/\uFFFDｼ':`${B.qi+1}/${B.q.length}`}`;
+  B.active=true;nextWord();if(nmB&&!gl){playBgm(null);se('glitch')}else if(gl){playBgm(null);se('glitch');blog('\uFFFD\uFFFD 繧ｨ繝ｩ繝ｼ縺檎匱逕溘＠縺ｾ縺励◆ \uFFFD\uFFFD','gl')}else if(it.boss)playBgm(bgmFor(true));requestAnimationFrame(()=>{measureEnemy();fxLayout()});
 }
 function wordBand(){
-  const f=B.floor,boss=B.enemy&&B.enemy.boss,rr=Math.random(),dif=B.diff;let lo,hi;
+  const f=B.diff==='nightmare'?Math.max(50,B.floor):B.floor,boss=B.enemy&&B.enemy.boss,rr=Math.random(),dif=B.diff;let lo,hi;
   if(dif==='easy'){if(boss?rr<.45:rr<(f>50?.3:.1)){lo=4;hi=6}else if(rr<.92){lo=2;hi=3}else{lo=1;hi=3}}
   else if(dif==='normal'){
     if(f<=10){[lo,hi]=boss?[4,6]:[1,3]}else if(f<=30){[lo,hi]=boss?[7,9]:[4,6]}else if(f<50){[lo,hi]=boss?[7,9]:(rr<.3?[4,6]:[7,9])}else{[lo,hi]=boss?[8,10]:(rr<.3?[4,6]:[7,10])}
@@ -1737,7 +1758,7 @@ function enemyDie(){
   const en=B.enemy;en.dead=true;B.active=false;W=null;renderWord();S.rec.kills++;
   const eg=$('eg');eg.className='';void eg.offsetWidth;eg.className='die';
   blog(`${en.d.n}を倒した！`,'dmg');se('kill');
-  if(en.gl){$('stage').classList.remove('gl');kbGlitch(B.diff==='nightmare'?'nm':false);if(!S.nm)S.nm=1;const g=en.d,xp=Math.floor((20*Math.pow(B.floor,1.3)*g.xm+g.xa)*DIFF[B.diff].exp);
+  if(en.gl){$('stage').classList.remove('gl');kbGlitch(B.diff==='nightmare');if(B.diff!=='nightmare')$('stage').classList.remove('gl');if(!S.nm)S.nm=1;const g=en.d,xp=Math.floor((20*Math.pow(B.floor,1.3)*g.xm+g.xa)*DIFF[B.diff].exp);
     S.exp+=xp;B.gxp+=xp;const w=glMat(g,B.floor);B.drops.push(w);save();pop('+'+fmt(xp)+' EXP','crit',50,Math.max(fxTop+6,30),30);
     blog(`経験値を ${fmt(xp)} 獲得！`,'drop big','var(--sel)');setTimeout(()=>se('drop',w.r),250);blog(`★【${RAR[w.r].n}】${w.name}を手に入れた！`,'drop big',RAR[w.r].c);nextEnemy();return}
   if(Math.random()<(en.boss?1:.35)){const w=rollWeapon(B.floor,en.d,en.boss);B.drops.push(w);setTimeout(()=>se('drop',w.r),250);blog(`${w.r>=4?'★':''}【${RAR[w.r].n}】${w.name}を手に入れた！`,'drop'+(w.r>=4?' big':''),RAR[w.r].c)}
@@ -1746,10 +1767,10 @@ function enemyDie(){
 function nextEnemy(){const ref=B,wasGl=B.enemy&&B.enemy.gl;setTimeout(()=>{if(B!==ref)return;B.qi++;if(B.qi>=B.q.length)floorClear();
   else if(B.q[B.qi].boss){if(!B.glDone&&!B.test&&!B.q[B.qi].gl){const g=glPick(true,B.diff);if(g){B.glDone=1;B.q.splice(B.qi,0,{d:g,boss:true,gl:true})}}bossAlert()}
   else{if(wasGl)playBgm(bgmFor(false));spawn()}},750)}
-function glFlee(){const en=B.enemy;if(!en||en.dead)return;en.dead=true;B.active=false;W=null;renderWord();$('stage').classList.remove('gl');kbGlitch(B.diff==='nightmare'?'nm':false);
+function glFlee(){const en=B.enemy;if(!en||en.dead)return;en.dead=true;B.active=false;W=null;renderWord();if(B.diff!=='nightmare')$('stage').classList.remove('gl');kbGlitch(B.diff==='nightmare');
   const eg=$('eg');eg.className='';void eg.offsetWidth;eg.className='flee';blog(`${en.d.n}は 騾\uFFFD縺貞\uFFFDｺ縺励◆`,'gl');se('glitch');nextEnemy()}
 let KBG=0,KBF=0,WNZ=0;
-function bgmFor(boss){return B&&B.diff==='nightmare'?(boss?'nmboss':'nm'):(boss?'boss':'battle')}
+function bgmFor(boss){return B&&B.diff==='nightmare'?null:(boss?'boss':'battle')}
 function kbGlitch(on){const kb=$('kb');clearInterval(KBG);clearInterval(KBF);KBG=KBF=0;kb.classList.toggle('glitch',on===true);kb.classList.toggle('nmg',on==='nm');
   Object.entries(keyEl).forEach(([k,el])=>{el.textContent=k.toUpperCase();el.classList.remove('nz');['--gx','--gy','--gr','--gs'].forEach(v=>el.style.removeProperty(v))});
   if(!on)return;
@@ -1768,7 +1789,7 @@ function wordNoise(on){clearInterval(WNZ);WNZ=0;if(!on)return;const J='繝繧縺
     const nz=ch.join(''),pe=n.parentElement;n.data=nz;if(pe!==$('wdisp'))pe.classList.add('wnz');
     setTimeout(()=>{if(n.data===nz)n.data=orig;pe.classList.remove('wnz')},90+Math.random()*70)},380)}
 function bossAlert(){
-  const it=B.q[B.qi],d=it.d,a=$('alert'),gl=!!it.gl;B.alerting=true;$('aname').innerHTML=`<img src="${eSprite(d)}" alt="">${d.n}`;$('eg').innerHTML='';$('ename').innerHTML='';
+  const it=B.q[B.qi],d=it.d,a=$('alert'),gl=!!it.gl||B.diff==='nightmare';B.alerting=true;$('aname').innerHTML=`<img src="${eSprite(d)}" alt="">${d.n}`;$('eg').innerHTML='';$('ename').innerHTML='';
   a.querySelector('.atxt').textContent=gl?'W\uFFFDRN1NG':'WARNING';a.querySelector('.asub').textContent=gl?'繝輔Ο繧｢繝懊せ謗･霑\uFFFD':'フロアボス接近';a.classList.toggle('gl',gl);
   $('floorLbl').textContent=`${B.floor}層　${gl?'繧\uFFFD/\uFFFDｼ':`${B.qi+1}/${B.q.length}`}`;
   a.classList.remove('on');void a.offsetWidth;a.classList.add('on');playBgm(null);se(gl?'glitch':'alert');
@@ -1961,12 +1982,21 @@ function showTransfer(){
     <div class="mbtns"><button class="btn" data-x="pick">ファイルから選ぶ</button><button class="btn" data-x="load">読み込む</button></div>
     <input type="file" id="xFile" accept=".txt,text/plain" style="display:none">
     <p class="aerr" id="xErr"></p>
+    <div class="mlab dz" style="margin-top:18px;text-align:left">データを消して最初から</div>
+    <p class="small" style="text-align:left">すべての進行データ（ランク・武器・図鑑・記録）を消して、最初から始めます。</p>
+    <div class="mbtns"><button class="btn danger" data-x="reset">データを消して最初から始める</button></div>
     <div class="mbtns"><button class="btn pri" data-x="close">閉じる</button></div>`);
   $('xFile').onchange=async e=>{const f=e.target.files[0];if(f)$('xIn').value=(await f.text()).trim()};
   $('xName').onchange=e=>{S.pname=e.target.value.trim().slice(0,16);save();if(screen==='home')renderHome()};
 }
 $('mbox').addEventListener('click',async e=>{
-  const b=e.target.closest('[data-x]');if(!b)return;const a=b.dataset.x,err=t=>{$('xErr').textContent=t};err('');
+  const b=e.target.closest('[data-x]');if(!b)return;const a=b.dataset.x,err=t=>{const x=$('xErr');if(x)x.textContent=t};err('');
+  if(a==='reset'){const ri=rankInfo().r;accBox(`<h2>データを消しますか？</h2><p>ランク${ri}・武器${S.inv.length}本・図鑑${Object.keys(S.rec.dex).length}件 のデータをすべて消して、最初から始めます。</p><p>引き継ぎコードを控えていない場合、元に戻すことはできません。</p>${CL.pid?'<p>ログイン中のアカウントのデータも消えます。</p>':''}
+    <div class="mbtns"><button class="btn" data-x="back">やめる</button><button class="btn danger" data-x="reset2">消して最初から始める</button></div>`);return}
+  if(a==='reset2'){accBox(`<h2 class="dz">最終確認</h2><p>本当にすべてのデータを消しますか？</p><p>この操作は取り消せません。</p>
+    <div class="mbtns"><button class="btn pri" data-x="back">やめる</button><button class="btn danger" data-x="reset3">すべて消す</button></div>`);return}
+  if(a==='back'){showTransfer();return}
+  if(a==='reset3'){newGame();save();closeAcc();document.body.classList.remove('nmui');show('home');toast('データを消しました。最初から始めます');setTimeout(()=>{if(typeof tutAuto==='function')tutAuto()},400);return}
   if(a==='close'){const n=$('xName');if(n){S.pname=n.value.trim().slice(0,16);save()}closeAcc();if(screen==='home')renderHome();return}
   if(a==='make'){$('xOut').value=await makeCode();S.lastBackup=Date.now();save();toast('引き継ぎコードを作りました')}
   else if(a==='copy'){if(!$('xOut').value)$('xOut').value=await makeCode();try{await navigator.clipboard.writeText($('xOut').value);toast('コピーしました')}catch(x){$('xOut').select();err('自動コピーできませんでした。選択された文字をコピーしてください')}S.lastBackup=Date.now();save()}
@@ -1983,8 +2013,9 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='2.0.0-alpha';
+const VERSION='2.0.1-alpha';
 const CHANGELOG=[
+ ['2.0.1-alpha',['引き継ぎ画面に「データを消して最初から始める」を追加（確認2回）']],
  ['2.0.0-alpha',['縺翫ｲ縺溘ゅ縺ｽ繧輔∪螟｢縺ｮ縺励ｇ縺ｵ縺ｪ縺ｮ縺\uFFFD','邨碁ｨ薙′\uFFFD\uFFFD縺ｪ縺ｫ縺九′縺翫°縺励＞','蜑｣縺ｮ縺溘ゅ∪縺ｸ縺ｾ繧九＞\uFFFD縺｣縺ｦ縺ｪ縺ｫ縺溘ｍ','\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD']]
 ];
 const DEX=[];
@@ -2144,7 +2175,7 @@ function tutTab(t){if(!['enh','syn','evo'].includes(t)||TUT.on||tutStage()!=='do
 /* ===== nightmare UI ===== */
 const SUBTXT='TYPE DUNGEONS',NMTXT='NIGHTMARE MODE',NZC='繝繧縺螟蜑譁ｨ薙ｸｼ#%&?@\uFFFD';let NMT=0;
 function nmUI(){return S.diff==='nightmare'&&!!S.nm}
-function applyNmUI(){const on=nmUI(),sb=$('heroSub');$('home').classList.toggle('nmui',on);sb.classList.toggle('subgl',!!S.nm);sb.dataset.t=on?NMTXT:SUBTXT;sb.textContent=sb.dataset.t}
+function applyNmUI(){const on=nmUI(),sb=$('heroSub');document.body.classList.toggle('nmui',on);sb.classList.toggle('subgl',!!S.nm);sb.dataset.t=on?NMTXT:SUBTXT;sb.textContent=sb.dataset.t}
 function nmToggle(){if(NMT||!S.nm)return;NMT=1;const h=$('home'),to=!nmUI();playBgm(null);
   [0,280,620,980].forEach(t=>setTimeout(()=>se('glitch'),t));h.classList.add(to?'nmin':'nmout');
   setTimeout(()=>{if(to){if(S.diff!=='nightmare')S.pdiff=S.diff;S.diff='nightmare'}else S.diff=S.pdiff&&S.pdiff!=='nightmare'?S.pdiff:'hard';save();renderHome();playBgm(to?'nm':'home')},950);
