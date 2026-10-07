@@ -424,6 +424,10 @@ img{image-rendering:pixelated}
 .hq.lock small{position:static;display:block;font-size:9px;color:var(--dim)}
 .hq.empty{border-style:dashed}
 .diffsel.one{grid-template-columns:1fr}
+.pwbox{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:baseline;margin:10px 0;padding:10px 12px;border:3px solid var(--sel);text-align:left}
+.pwbox .pwv{font-size:28px;letter-spacing:.12em;color:var(--sel);font-family:ui-monospace,monospace}.pwbox .pwn{font-size:18px}.pwbox p{grid-column:1/-1;margin:6px 0 0}
+.pwi{font-family:ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase}
+.xadv{margin-top:16px;text-align:left}.xadv summary{cursor:pointer;font-size:13px;color:var(--dim);padding:6px 0}
 .btn.danger{border-color:#ff3b3b;color:#ff3b3b}.btn.danger:hover:not(:disabled){border-color:#ff7a7a;color:#ff7a7a}.dz{color:#ff3b3b}
 /* sub glitch (unlocked) */
 .sub.subgl{cursor:pointer;animation:subglow 2.4s ease-in-out infinite,subj 3.3s steps(1) infinite;user-select:none}
@@ -1969,9 +1973,25 @@ async function makeCode(){const raw=new TextEncoder().encode(JSON.stringify(S));
 async function readCode(code){code=(code||'').replace(/\s+/g,'');const m=code.match(/^TD([01])-([A-Za-z0-9_-]+)$/);if(!m)throw new Error('format');
   let u8=b64u.dec(m[2]);if(m[1]==='1'){if(!window.DecompressionStream)throw new Error('nodecomp');u8=await pipeBytes(u8,new DecompressionStream('deflate-raw'))}
   const d=JSON.parse(new TextDecoder().decode(u8));if(!d||!Array.isArray(d.inv)||typeof d.exp!=='number')throw new Error('data');return d}
+/* かんたん引き継ぎ（Firestore REST） */
+const FB={key:'AIzaSyDClAr5V2VjZyvmhSX3s8sCCekjdynwen0',project:'type-dungeons-cloud'},PWA='ABCDEFGHJKMNPQRSTUVWXYZ23456789';let PWX=null;
+function fsReq(m,id,body){return fetch(`https://firestore.googleapis.com/v1/projects/${FB.project}/databases/(default)/documents/xfer/${id}?key=${FB.key}`,{method:m,headers:body?{'Content-Type':'application/json'}:undefined,body:body?JSON.stringify(body):undefined})}
+function pwGen(){const a=new Uint32Array(8);crypto.getRandomValues(a);let s='';a.forEach(x=>s+=PWA[x%PWA.length]);return s.slice(0,4)+'-'+s.slice(4)}
+function pwNorm(p){return (p||'').normalize('NFKC').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,8)}
+async function pwId(name,pw){const t=name.normalize('NFKC').trim().toLowerCase()+'|'+pwNorm(pw),h=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('td-xfer|'+t));return [...new Uint8Array(h)].map(x=>x.toString(16).padStart(2,'0')).join('')}
 function showTransfer(){
   accBox(`<h2>引き継ぎ・バックアップ</h2>
     <label class="fld">プレイヤー名<input class="inp" id="xName" maxlength="16" value="${esc(S.pname||'')}" placeholder="ゲスト"></label>
+    <div class="mlab" style="margin-top:14px;text-align:left">かんたん引き継ぎ（名前＋パスワード）</div>
+    <p class="small" style="text-align:left">プレイヤー名とパスワードだけで、別の端末に続きを引き継げます。引き継ぐ直前に発行してください。</p>
+    <div class="mbtns"><button class="btn pri" data-x="pwIssue">パスワードを発行</button></div>
+    <div id="pwOut"></div>
+    <div class="mlab" style="margin-top:16px;text-align:left">パスワードで受け取る</div>
+    <label class="fld">プレイヤー名<input class="inp" id="pwName" maxlength="16" autocomplete="off"></label>
+    <label class="fld">パスワード<input class="inp pwi" id="pwPass" maxlength="12" placeholder="XXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false"></label>
+    <div class="mbtns"><button class="btn" data-x="pwGet">受け取る</button></div>
+    <p class="aerr" id="pwErr"></p>
+    <details class="xadv"><summary>引き継ぎコード・ファイル（予備）</summary>
     <div class="mlab" style="margin-top:14px;text-align:left">引き継ぎコードを書き出す</div>
     <p class="small" style="text-align:left">別の端末で続きを遊ぶ時や、バックアップに使います。ときどき保存しておくと安心です。</p>
     <textarea class="inp xcode" id="xOut" readonly placeholder="「コードを作る」を押してください"></textarea>
@@ -1981,7 +2001,7 @@ function showTransfer(){
     <textarea class="inp xcode" id="xIn" placeholder="TD1-… を貼り付け"></textarea>
     <div class="mbtns"><button class="btn" data-x="pick">ファイルから選ぶ</button><button class="btn" data-x="load">読み込む</button></div>
     <input type="file" id="xFile" accept=".txt,text/plain" style="display:none">
-    <p class="aerr" id="xErr"></p>
+    <p class="aerr" id="xErr"></p></details>
     <div class="mlab dz" style="margin-top:18px;text-align:left">データを消して最初から</div>
     <p class="small" style="text-align:left">すべての進行データ（ランク・武器・図鑑・記録）を消して、最初から始めます。</p>
     <div class="mbtns"><button class="btn danger" data-x="reset">データを消して最初から始める</button></div>
@@ -1991,6 +2011,25 @@ function showTransfer(){
 }
 $('mbox').addEventListener('click',async e=>{
   const b=e.target.closest('[data-x]');if(!b)return;const a=b.dataset.x,err=t=>{const x=$('xErr');if(x)x.textContent=t};err('');
+  const perr=t=>{const x=$('pwErr');if(x)x.textContent=t};if($('pwErr'))perr('');
+  if(a==='pwIssue'){const nm=($('xName').value||'').trim().slice(0,16);if(!nm){perr('先にプレイヤー名を入力してください（受け取るときに使います）');$('xName').focus();return}
+    S.pname=nm;b.disabled=true;b.textContent='発行中…';
+    try{const pw=pwGen(),id=await pwId(nm,pw),code=await makeCode();if(S.xferId&&S.xferId!==id)await fsReq('DELETE',S.xferId).catch(()=>{});
+      const r=await fsReq('PATCH',id,{fields:{d:{stringValue:code},t:{integerValue:String(Date.now())},v:{integerValue:'1'}}});if(!r.ok)throw new Error('http'+r.status);
+      S.xferId=id;save();$('pwOut').innerHTML=`<div class="pwbox"><span class="small">プレイヤー名</span><b class="pwn">${esc(nm)}</b><span class="small">パスワード</span><b class="pwv">${pw}</b>
+        <p class="small">新しい端末の「パスワードで受け取る」に入力してください。<br>一度受け取ると、このパスワードは使えなくなります。発行し直すと前のパスワードは無効になります。<br>発行した後に遊んだ分は引き継がれません。</p></div>`}
+    catch(x){perr(x.message&&x.message.startsWith('http')?'保存できませんでした。時間をおいてもう一度お試しください':'通信できませんでした。インターネット接続を確認してください')}
+    finally{b.disabled=false;b.textContent='パスワードを発行'}return}
+  if(a==='pwGet'){const nm=($('pwName').value||'').trim().slice(0,16),pw=pwNorm($('pwPass').value);if(!nm||pw.length!==8)return perr('プレイヤー名と8文字のパスワードを入力してください');
+    b.disabled=true;b.textContent='確認中…';
+    try{const id=await pwId(nm,pw),r=await fsReq('GET',id);if(r.status===404||r.status===403)throw new Error('nf');if(!r.ok)throw new Error('http');
+      const j=await r.json(),d=await readCode(j.fields&&j.fields.d&&j.fields.d.stringValue);PWX={id,d};
+      const ri=(()=>{let q=1,x=d.exp;while(x>=needR(q)){x-=needR(q);q++}return q})();
+      accBox(`<h2>データを受け取りますか？</h2><p>プレイヤー名「${esc(nm)}」・ランク${ri}・武器${d.inv.length}本 のデータです。</p><p>今の端末の進行データは、受け取ったデータで上書きされます。</p>
+        <div class="mbtns"><button class="btn" data-x="back">やめる</button><button class="btn pri" data-x="pwOk">受け取る</button></div>`)}
+    catch(x){perr(x.message==='nf'?'見つかりません。名前とパスワードを確かめてください（一度使ったパスワードは使えません）':x.message==='http'?'読み込めませんでした。時間をおいてもう一度お試しください':x.message==='format'||x.message==='nodecomp'?'データを読み込めませんでした':'通信できませんでした。インターネット接続を確認してください')}
+    finally{if(b.isConnected){b.disabled=false;b.textContent='受け取る'}}return}
+  if(a==='pwOk'){if(!PWX)return;const {id,d}=PWX;PWX=null;adopt(d);S.xferId=null;save();fsReq('DELETE',id).catch(()=>{});closeAcc();toast('データを受け取りました');afterLoadRender();return}
   if(a==='reset'){const ri=rankInfo().r;accBox(`<h2>データを消しますか？</h2><p>ランク${ri}・武器${S.inv.length}本・図鑑${Object.keys(S.rec.dex).length}件 のデータをすべて消して、最初から始めます。</p><p>引き継ぎコードを控えていない場合、元に戻すことはできません。</p>${CL.pid?'<p>ログイン中のアカウントのデータも消えます。</p>':''}
     <div class="mbtns"><button class="btn" data-x="back">やめる</button><button class="btn danger" data-x="reset2">消して最初から始める</button></div>`);return}
   if(a==='reset2'){accBox(`<h2 class="dz">最終確認</h2><p>本当にすべてのデータを消しますか？</p><p>この操作は取り消せません。</p>
@@ -2013,12 +2052,9 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='2.0.3-alpha';
+const VERSION='2.1.0-alpha';
 const CHANGELOG=[
- ['2.0.3-alpha',['ノーマル・ハードの敵の攻撃力を上げました。攻撃の間隔が少し長くなる代わりに、一撃が重くなります（速く正確に打って、攻撃される前に倒すのが攻略のカギ）']],
- ['2.0.2-alpha',['ハード序盤の敵を弱めに調整（タイピングに自信があれば最初から挑める強さに）。中盤以降は育成が必要なのは変わりません']],
- ['2.0.1-alpha',['引き継ぎ画面に「データを消して最初から始める」を追加（確認2回）']],
- ['2.0.0-alpha',['縺翫ｲ縺溘ゅ縺ｽ繧輔∪螟｢縺ｮ縺励ｇ縺ｵ縺ｪ縺ｮ縺\uFFFD','邨碁ｨ薙′\uFFFD\uFFFD縺ｪ縺ｫ縺九′縺翫°縺励＞','蜑｣縺ｮ縺溘ゅ∪縺ｸ縺ｾ繧九＞\uFFFD縺｣縺ｦ縺ｪ縺ｫ縺溘ｍ','\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD']]
+ ['2.1.0-alpha',['かんたん引き継ぎを追加：「パスワードを発行」で8文字のパスワードを発行し、新しい端末でプレイヤー名とパスワードを入力するだけで続きを遊べるように（有効期限なし・一度受け取ると無効）','これまでの引き継ぎコード・ファイル保存は「予備」としてそのまま使えます']]
 ];
 const DEX=[];
 CAT.forEach(e=>DEX.push({key:'c:'+e.c,t:e.t,r:e.r,cat:e}));
