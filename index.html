@@ -604,6 +604,29 @@ button.chip.dis{opacity:.3;text-decoration:line-through}
   .abody .abot{border-top:none!important;max-width:none!important;width:auto!important;margin:0!important;min-height:0;height:100%;padding-top:10px}
   .abody .cmp .pane{height:auto;min-height:260px}
 }
+
+/* ---------- tutorial ---------- */
+#tut{position:fixed;inset:0;z-index:200;display:none;pointer-events:none}
+#tut.on{display:block}
+.tut-hole{position:fixed;border:3px solid var(--sel);box-shadow:0 0 0 200vmax rgba(0,0,0,.72);pointer-events:none;transition:left .25s,top .25s,width .25s,height .25s}
+.tut-hole:not(.on){border-color:transparent}
+.tut-hole.on{animation:tutpulse 1.2s ease-in-out infinite}
+@keyframes tutpulse{0%,100%{outline:3px solid transparent;outline-offset:2px}50%{outline:3px solid color-mix(in srgb,var(--sel) 60%,transparent);outline-offset:8px}}
+.tut-box{position:fixed;width:min(380px,calc(100vw - 16px));background:var(--bg);color:var(--fg);border:4px solid var(--fg);padding:12px 14px;pointer-events:auto;box-shadow:0 8px 30px rgba(0,0,0,.6)}
+.tut-box.tpop{animation:tutin .25s ease-out}
+@keyframes tutin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.tut-head{display:flex;align-items:center;gap:8px;font-size:13px}
+.tut-face{width:34px;height:34px;image-rendering:pixelated;animation:ebob 1.6s ease-in-out infinite}
+.tut-head b{font-weight:400;color:var(--sel)}
+.tut-no{margin-left:auto;color:var(--dim);font-size:11px}
+.tut-txt{margin:8px 0 12px;font-size:17px;line-height:1.7;white-space:pre-line;letter-spacing:.06em}
+.tut-btns{display:flex;align-items:center;gap:8px}
+.tut-skip{font-size:12px;color:var(--dim);text-decoration:underline}
+.tut-next{margin-left:auto;padding:8px 16px;border:3px solid var(--sel);color:var(--sel);font-size:16px}
+.tut-hint{display:none;margin-left:auto;font-size:13px;color:var(--sel);animation:blink 1s steps(2) infinite}
+#tut.wait .tut-next{display:none}
+#tut.wait .tut-hint{display:inline}
+@media (max-width:420px){.tut-txt{font-size:15px}}
 </style>
 </head>
 <body>
@@ -643,7 +666,7 @@ button.chip.dis{opacity:.3;text-decoration:line-through}
       <div class="finfo" id="fInfo"></div>
       <button class="big go" id="goBtn">出撃</button>
     </div>
-    <p class="small hnote"><span id="verTxt"></span>　<button class="linkb" id="clogBtn">更新情報</button></p>
+    <p class="small hnote"><span id="verTxt"></span>　<button class="linkb" id="clogBtn">更新情報</button>　<button class="linkb" id="tutBtn">あそびかた</button></p>
   </div>
 </section>
 
@@ -1165,7 +1188,7 @@ let S;
 function freshRec(){return{kills:0,hits:0,dmg:0,keys:0,maxCombo:0,bestKps:0,time:0,clears:0,uniq:[],dex:{}}}
 function dexKey(w){return w.u?'u:'+w.u:w.c?'c:'+w.c:`t${w.t}r${w.r}`}
 function freshProg(){return{easy:{maxF:0,lastF:1},normal:{maxF:0,lastF:1},hard:{maxF:0,lastF:1}}}
-function fresh(){return{exp:0,inv:[],eq:[null,null,null,null,null],nid:1,diff:'normal',prog:freshProg(),rec:freshRec()}}
+function fresh(){return{exp:0,inv:[],eq:[null,null,null,null,null],nid:1,diff:'normal',prog:freshProg(),rec:freshRec(),tut:{stage:'intro'}}}
 function PG(){return S.prog[S.diff]||S.prog.normal}
 const DIFF={easy:{n:'イージー',c:'#3fa9ff',hp:.8,atk:.5,int:1.8,exp:1,desc:'キー入力に慣れていない人向け。短い言葉が中心で、敵の攻撃もゆっくり・弱め。ユニーク武器は出ません。'},
  normal:{n:'ノーマル',c:'#22c55e',hp:1,atk:1,int:1,exp:1,desc:'標準の難易度。言葉は最大10文字まで。'},
@@ -1181,8 +1204,8 @@ function genAff(n,def,excl){const used=new Set(excl||[]),a=[];
   for(let i=0;i<n;i++){const P0=AFF.filter(x=>!used.has(x.k));if(!P0.length)break;const P=def?P0.concat(P0.filter(x=>x.k==='hp'||x.k==='def'),P0.filter(x=>x.k==='hp'||x.k==='def')):P0;
     const d=P[rand(P.length)];used.add(d.k);a.push({k:d.k,v:r1(d.min+Math.random()*(d.max-d.min))})}return a}
 function makeW(o){return{id:S.nid++,t:o.t,r:o.r,f:o.f,lv:1,xp:0,tx:0,name:o.name,sk:o.sk,u:o.u||null,c:o.c||null,el:o.el??5,aff:genAff(RAR[o.r].slots,isDefT(o.t))}}
-function rarW(f,boss,dif){dif=dif||'normal';const t=Math.min(1,Math.max(0,(f-1)/99)),L=(a,b)=>a+(b-a)*t;let u=boss?L(.6,1):L(.3,.9),w=[L(60,10),L(28,25),L(9,30),L(2.5,22),L(.5,12)];
-  if(dif==='easy')u=0;if(dif==='hard'){u=3;w=[w[0]*.7,w[1],w[2]*1.3,w[3]*1.7,w[4]*2.2]}
+function rarW(f,boss,dif){dif=dif||'normal';const t=Math.min(1,Math.max(0,(f-1)/99)),L=(a,b)=>a+(b-a)*t;let u=boss?L(.6,1):L(.3,.9),w=[L(55,10),L(28,24),L(11,30),L(4.5,22),L(1.5,14)];
+  if(dif==='easy')u=0;if(dif==='hard'){u=3;w=[w[0]*.6,w[1],w[2]*1.3,w[3]*1.7,w[4]*2.5]}
   const sum=w.reduce((a,b)=>a+b,0);return w.map(x=>x/sum*(100-u)).concat(u)}
 function rollRarity(f,boss,dif){const w=rarW(f,boss,dif);let x=Math.random()*100;for(let i=5;i>=0;i--){if(x<w[i])return i;x-=w[i]}return 0}
 function rollWeapon(f,d,boss){
@@ -1326,7 +1349,7 @@ function startFloor(f){
   B.ws.forEach(e=>{const d=document.createElement('div');d.className='wi';d.style.setProperty('--rc',RAR[e.w.r].c);
     d.title=`${e.w.name}：${SK[e.w.sk].n}`;d.innerHTML=`${wIcon(e.w)}<span class="ct"></span>`;e.el=d;$('wicons').appendChild(d)});
   if(!B.ws.length)$('wicons').innerHTML='<span class="small" style="align-self:center">武器を装備していません</span>';
-  spawn();B.active=false;B.alerting=true;W=null;renderWord();countdown(B);
+  spawn();B.active=false;B.alerting=true;W=null;renderWord();if(tutStage()==='battle'){const ref=B;setTimeout(()=>{if(B!==ref)return;nextWord();tutRun('battle',()=>{if(B===ref){W=null;renderWord();countdown(B)}})},500)}else countdown(B);
 }
 function countdown(ref){const el=$('cdown');let n=3;
   const tick=()=>{if(B!==ref){el.className='cdown';return}
@@ -1536,6 +1559,7 @@ function floorClear(){
   h+=B.drops.length?`<div class="drops">${B.drops.slice().sort((a,b)=>b.r-a.r).map(dropHTML).join('')}</div>`:'<p class="small">武器のドロップはありませんでした</p>';
   if(f===100)h+='<p><b>百層を制覇しました。</b></p>';
   const b=[{t:'拠点へ',fn:()=>show('home')}];if(f<100)b.push({t:'次の層へ',pri:true,fn:()=>startFloor(f+1)});
+  if(tutStage()==='waitclear'){tutSet('post');b.length=0;b.push({t:'拠点へ もどる',pri:true,fn:()=>{show('home');setTimeout(()=>tutRun('post'),350)}})}
   modal(h,b);
 }
 function defeat(){
@@ -1586,7 +1610,7 @@ const CL={db:null,uid:null,ready:false,pid:null,name:null,timer:null,writing:fal
 try{const ss=JSON.parse(localStorage.getItem('td_session')||'null');if(ss&&ss.pid){CL.pid=ss.pid;CL.name=ss.name}}catch(e){}
 function curKey(){return CL.pid?'td_save_'+CL.pid:SAVE_KEY}
 function pref(pid){return CL.db.doc(`data/users/${CL.uid}/p_${pid}`)}
-function adopt(d){S=Object.assign(fresh(),d);if(!d.prog){S.prog=freshProg();S.prog.normal={maxF:d.maxF||0,lastF:d.lastF||1}}if(!DIFF[S.diff])S.diff='normal';S.rec=Object.assign(freshRec(),d.rec||{});S.rec.dex=Object.assign({},S.rec.dex||{});S.inv.forEach(w=>{migrateW(w);if(w.u&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u);S.rec.dex[dexKey(w)]=1});S.rec.uniq.forEach(u=>S.rec.dex['u:'+u]=1)}
+function adopt(d){S=Object.assign(fresh(),d);if(!d.tut)S.tut={stage:((d.exp||0)>0||(d.maxF||0)>0||(d.prog&&Object.values(d.prog).some(x=>x.maxF>0)))?'done':'intro'};if(!d.prog){S.prog=freshProg();S.prog.normal={maxF:d.maxF||0,lastF:d.lastF||1}}if(!DIFF[S.diff])S.diff='normal';S.rec=Object.assign(freshRec(),d.rec||{});S.rec.dex=Object.assign({},S.rec.dex||{});S.inv.forEach(w=>{migrateW(w);if(w.u&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u);S.rec.dex[dexKey(w)]=1});S.rec.uniq.forEach(u=>S.rec.dex['u:'+u]=1)}
 function newGame(){S=fresh();const w=makeW({t:0,r:0,f:1,name:'旅立ちの短剣',sk:CATI.c0_0_0.sk,c:'c0_0_0'});S.inv.push(w);S.eq[0]=w.id;S.rec.dex[dexKey(w)]=1}
 function readLocal(key){try{const d=JSON.parse(localStorage.getItem(key));if(d&&Array.isArray(d.inv))return d}catch(e){}return null}
 async function hashPw(pass,salt){const enc=new TextEncoder(),k=await crypto.subtle.importKey('raw',enc.encode(pass),'PBKDF2',false,['deriveBits']);
@@ -1724,8 +1748,10 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='1.0.10-alpha';
+const VERSION='1.0.12-alpha';
 const CHANGELOG=[
+ ['1.0.12-alpha',['チュートリアルを合成の説明のあと、拠点に戻ったところで終わるように（次の階層への案内を削除）']],
+ ['1.0.11-alpha',['レアリティごとの出やすさを調整し、どの難易度・階層でもレジェンダリーがユニークより出やすく（レジェンダリーは1層1.5%〜100層14%、ハードは4.2%〜24%）','チュートリアルを追加（はじめて遊ぶ時に自動で開始。光っている場所を順番に案内）','チュートリアルの内容：難易度と階層の選び方 → バトル画面の見方と戦い方 → クリア後に装備・強化・合成 → 次の階層へ','拠点画面の下の「あそびかた」から、いつでもチュートリアルをもう一度見られるように']],
  ['1.0.10-alpha',['武器アイコンを全面的に作り直し、全148種がそれぞれ違う見た目に（同じ名前の武器は同じ見た目）','ユニーク60種は名前に合わせた色と形に（曲刀・三叉槍・金棒・牙・爪・針など）','剣は刃（直刃・炎刃・ギザ刃・結晶刃・曲刃）と鍔（横・爪・翼・円盤）の組み合わせ、他の種類も頭部や紋章の形を複数用意','高レアリティほど刃のルーン・縁の輝き・宝石などの装飾が増え、ユニークは専用の縁取り色に']],
  ['1.0.9-alpha',['引き継ぎコードをファイルに保存する時のファイル名を「ユーザー名_年月日.txt」に変更（例：はなこ_20261005.txt）']],
  ['1.0.8-alpha',['装備・強化・合成画面のレイアウトを変更（左上に装備中／ベースの武器、左下に装備枠・素材・追加能力の選択、右側にインベントリ）','カーソルを合わせた武器の詳細を、拠点画面と同じポップアップ表示に（装備画面では選択中の枠の武器との比較付き）','スマホでは武器をタップした時のメニューに詳細も表示','拠点画面の操作説明の文を削除']],
@@ -1773,6 +1799,85 @@ $('dexBack').onclick=()=>show('home');
 $('dexLink').onclick=()=>show('dex');
 $('verTxt').textContent='Ver.'+VERSION;
 $('clogBtn').onclick=()=>modal(`<h2>更新情報</h2>${CHANGELOG.map(([v,l])=>`<div class="clog"><b>Ver.${v}</b><ul>${l.map(x=>`<li>${x}</li>`).join('')}</ul></div>`).join('')}`,[{t:'閉じる',pri:true}]);
+
+/* ===== tutorial ===== */
+const TUT_STEPS={
+ intro:[
+  {t:'ようこそ！ ここは ことばを うって たたかう ダンジョンだよ。\nいっしょに あそびかたを みていこう！'},
+  {sel:'#diffSel',t:'まずは むずかしさを えらぼう。\nはじめての ひとは「イージー」が おすすめ！\nすきな ボタンを おしてね。',wait:1},
+  {sel:'#fgrid',t:'つぎは いく かいそうを えらぶよ。\nさいしょは「1」から。クリアすると つぎの かいそうに いけるよ。'},
+  {sel:'#goBtn',t:'じゅんび OK！\n「しゅつげき」ボタンを おして ぼうけんスタート！',wait:1,end:'battle'}],
+ battle:[
+  {sel:'#word',t:'ここに うつ ことばが でるよ。\nひらがなの したに ある ローマじを うとう。'},
+  {sel:'#kb',t:'つぎに おす キーは きいろく ひかるよ。\nキーボードか、がめんの キーを おしてね。'},
+  {sel:'.enemy-wrap',t:'ことばを さいごまで うつと てきに こうげき！\nてきの HPを 0に したら かちだよ。'},
+  {sel:'#etimerBox',t:'この バーが いっぱいに なると てきが こうげきしてくるよ。\nいそいで うとう！'},
+  {sel:'.php',t:'これが きみの HP。\n0に なると まけちゃうから きをつけてね。'},
+  {sel:'#wicons',t:'そうびした ぶきの わざは、じどうで でるよ。\nつかうと すこし やすみが ひつようだよ。'},
+  {sel:'#comboLbl',t:'まちがえずに うつと コンボが ふえて、\nこうげきが つよく なるよ！'},
+  {t:'さいごの ボスまで たおせば クリア！\nさあ、たたかおう！',end:'waitclear'}],
+ post:[
+  {t:'クリア おめでとう！\nてに いれた ぶきで もっと つよく なろう。'},
+  {sel:'[data-arm=equip]',t:'「そうび」ボタンを おしてみよう。',wait:1},
+  {sel:'#invwrap',t:'ここが もっている ぶき だよ。\nぶきを おすと そうび できるよ。'},
+  {sel:'#slots',t:'ここが そうびの わく。\nランクが あがると わくが ふえて、ぶきを たくさん もてるよ。'},
+  {sel:'#tabs [data-tab=enh]',t:'つぎは「きょうか」。\nボタンを おしてね。',wait:1},
+  {sel:'#invwrap',t:'つよく したい ぶきを えらんで、\nほかの ぶきを「そざい」に すると レベルが あがるよ。'},
+  {sel:'#tabs [data-tab=syn]',t:'さいごは「ごうせい」。\nボタンを おしてね。',wait:1},
+  {sel:'#invwrap',t:'おなじ いろの ぶき どうしで、\nほしい「ついか のうりょく」を えらんで まとめられるよ。'},
+  {sel:'#armBack',t:'これで あそびかたは おしまい！\nきょてんに もどろう。',wait:1,end:'done'}]};
+const TUT={on:false,list:null,i:0,cb:null,raf:0};
+const tutEl=document.createElement('div');tutEl.id='tut';
+tutEl.innerHTML='<div class="tut-hole"></div><div class="tut-box"><div class="tut-head"><img class="tut-face" alt=""><b>ナビ</b><span class="tut-no"></span></div><p class="tut-txt"></p><div class="tut-btns"><button class="tut-skip">スキップ</button><span class="tut-hint">ひかっている ところを おしてね</span><button class="tut-next">つぎへ ▶</button></div></div>';
+document.body.appendChild(tutEl);
+const tutHole=tutEl.querySelector('.tut-hole'),tutBox=tutEl.querySelector('.tut-box');
+function tutStage(){return (S.tut&&S.tut.stage)||'done'}
+function tutSet(st){S.tut={stage:st};save()}
+function tutTarget(){const st=TUT.list&&TUT.list[TUT.i];if(!st||!st.sel)return null;const el=document.querySelector(st.sel);if(!el)return null;const r=el.getBoundingClientRect();return r.width&&r.height?el:null}
+function tutPlace(force){
+  if(!TUT.on)return;const el=tutTarget();
+  const rr=el?el.getBoundingClientRect():null,key=TUT.i+':'+innerWidth+'x'+innerHeight+':'+(rr?[rr.left,rr.top,rr.width,rr.height].map(Math.round).join(','):'-');if(!force&&key===TUT.key)return;TUT.key=key;
+  if(el){const r=el.getBoundingClientRect(),p=6;Object.assign(tutHole.style,{left:r.left-p+'px',top:r.top-p+'px',width:r.width+p*2+'px',height:r.height+p*2+'px'});tutHole.classList.add('on')}
+  else{Object.assign(tutHole.style,{left:innerWidth/2+'px',top:innerHeight/2+'px',width:'0px',height:'0px'});tutHole.classList.remove('on')}
+  const b=tutBox.getBoundingClientRect(),W=innerWidth,H=innerHeight;let x,y;
+  if(el){const r=el.getBoundingClientRect();x=r.left+r.width/2-b.width/2;
+    if(r.bottom+14+b.height<H-8)y=r.bottom+14;else if(r.top-14-b.height>8)y=r.top-14-b.height;else y=r.height>H*.5?H-b.height-12:Math.max(8,H/2-b.height/2)}
+  else{x=W/2-b.width/2;y=H/2-b.height/2}
+  tutBox.style.left=Math.max(8,Math.min(x,W-b.width-8))+'px';tutBox.style.top=Math.max(8,Math.min(y,H-b.height-8))+'px';
+}
+function tutLoop(){if(!TUT.on)return;tutPlace();TUT.raf=requestAnimationFrame(tutLoop)}
+function tutShow(){
+  const st=TUT.list[TUT.i];tutEl.querySelector('.tut-txt').textContent=st.t;
+  tutEl.querySelector('.tut-no').textContent=`${TUT.i+1} / ${TUT.list.length}`;
+  tutEl.classList.toggle('wait',!!st.wait);tutEl.classList.toggle('nohole',!st.sel);
+  tutBox.classList.remove('tpop');void tutBox.offsetWidth;tutBox.classList.add('tpop');tutPlace(true);
+}
+function tutRun(name,cb){
+  if(TUT.on)tutClose();TUT.list=TUT_STEPS[name];TUT.i=0;TUT.cb=cb||null;TUT.on=true;TUT.name=name;
+  tutEl.querySelector('.tut-face').src=eSprite(NORMALS[0]);tutEl.classList.add('on');armTipOff&&armTipOff();closeCtx&&closeCtx();
+  tutShow();cancelAnimationFrame(TUT.raf);TUT.raf=requestAnimationFrame(tutLoop);
+}
+function tutClose(){TUT.on=false;tutEl.classList.remove('on');cancelAnimationFrame(TUT.raf)}
+function tutNext(){
+  if(!TUT.on)return;const st=TUT.list[TUT.i];if(st.end)tutSet(st.end);
+  if(TUT.i+1>=TUT.list.length){const cb=TUT.cb;tutClose();if(cb)cb();return}
+  TUT.i++;setTimeout(()=>{if(TUT.on)tutShow()},st.wait?220:0);
+}
+tutEl.querySelector('.tut-next').onclick=()=>tutNext();
+tutEl.querySelector('.tut-skip').onclick=()=>{const cb=TUT.cb,nm=TUT.name;tutClose();tutSet('done');if(cb)cb()};
+['pointerdown','pointerup','mousedown','mouseup','touchstart','touchend','click','dblclick','contextmenu'].forEach(ev=>window.addEventListener(ev,e=>{
+  if(!TUT.on)return;if(ev==='pointerdown'||ev==='touchstart')auInit();
+  if(tutBox.contains(e.target))return;
+  const st=TUT.list[TUT.i],el=st.wait&&tutTarget();
+  if(el&&el.contains(e.target)){if(ev==='click'){if(st.end)tutSet(st.end);if(TUT.i+1>=TUT.list.length)tutClose();else setTimeout(tutNext,30)}return}
+  e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
+},{capture:true,passive:false}));
+window.addEventListener('keydown',e=>{if(!TUT.on)return;const st=TUT.list[TUT.i];
+  if((e.key==='Enter'||e.key===' ')&&!st.wait){tutNext()}else if(e.key==='Escape')tutEl.querySelector('.tut-skip').click();
+  e.preventDefault();e.stopPropagation();e.stopImmediatePropagation()},{capture:true});
+addEventListener('resize',()=>{if(TUT.on)tutPlace()});
+$('tutBtn').onclick=()=>{tutSet('intro');show('home');setTimeout(()=>tutRun('intro'),150)};
+function tutAuto(){if(tutStage()==='intro'&&screen==='home'&&!$('modal').classList.contains('on'))tutRun('intro')}
 
 /* ===== armory ===== */
 const A={tab:'equip',sel:null,hover:null,slot:0,target:null,mats:new Set(),synMat:null,pick:new Set(),
@@ -1997,7 +2102,7 @@ function dropGhost(p,x,y,cancel){
   if(s)equipTo(p.wid,+s.dataset.slot);renderArmory();
 }
 
-$('accBtn').onclick=()=>showAccount();$('xferBtn').onclick=()=>showTransfer();if(!window.claude)$('accBtn').style.display='none';load();renderHome();renderSnd();renderAcc();AU.want='home';
+$('accBtn').onclick=()=>showAccount();$('xferBtn').onclick=()=>showTransfer();if(!window.claude)$('accBtn').style.display='none';load();renderHome();renderSnd();renderAcc();AU.want='home';setTimeout(tutAuto,700);
 
 </script>
 </body>
