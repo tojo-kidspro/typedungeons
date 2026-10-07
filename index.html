@@ -2,29 +2,20 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#000000">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>タイプダンジョンズ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#ffffff;--fg:#000000;--dim:#6b6b6b;--faint:#cfcfcf;--btn:#c2410c;--sel:#b45309;
-  --hp:#e0b000;--hpbg:#c8102e;--ehp:#16a34a;--shield:#0284c7;--keyhi:#ffd400;
-  --mf:grayscale(1) contrast(1.15);
-  --r0:#555555;--r1:#15803d;--r2:#1d4ed8;--r3:#7e22ce;--r4:#a16207;--r5:#dc2626;
+  --bg:#000000;--fg:#ffffff;--dim:#8a8a8a;--faint:#333333;--btn:#ff8a1f;--sel:#ffe600;
+  --hp:#ffe600;--hpbg:#c8102e;--ehp:#22e05a;--shield:#3fb6ff;--keyhi:#ffe600;
+  --mf:grayscale(1) brightness(1.35) contrast(1.2);
+  --r0:#ffffff;--r1:#3dff6e;--r2:#3fa9ff;--r3:#c77dff;--r4:#ffd43b;--r5:#ff3b3b;
+  color-scheme:dark;
   box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
-}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#000000;--fg:#ffffff;--dim:#8a8a8a;--faint:#333333;--btn:#ff8a1f;--sel:#ffe600;
-  --hp:#ffe600;--hpbg:#c8102e;--ehp:#22e05a;--shield:#3fb6ff;--keyhi:#ffe600;
-  --mf:grayscale(1) brightness(1.35) contrast(1.2);
-  --r0:#ffffff;--r1:#3dff6e;--r2:#3fa9ff;--r3:#c77dff;--r4:#ffd43b;--r5:#ff3b3b;
-}}
-:root[data-theme="dark"]{
-  --bg:#000000;--fg:#ffffff;--dim:#8a8a8a;--faint:#333333;--btn:#ff8a1f;--sel:#ffe600;
-  --hp:#ffe600;--hpbg:#c8102e;--ehp:#22e05a;--shield:#3fb6ff;--keyhi:#ffe600;
-  --mf:grayscale(1) brightness(1.35) contrast(1.2);
-  --r0:#ffffff;--r1:#3dff6e;--r2:#3fa9ff;--r3:#c77dff;--r4:#ffd43b;--r5:#ff3b3b;
 }
 html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -598,8 +589,8 @@ button.chip.dis{opacity:.3;text-decoration:line-through}
 .tip{width:340px}
 .ctx{max-height:82vh;overflow-y:auto;max-width:min(360px,92vw)}
 .ctxd{padding:8px 10px 10px;border-bottom:2px solid var(--faint);font-size:12px}
-@media (min-width:860px){
-  .abody{display:grid;grid-template-columns:minmax(360px,460px) 1fr;width:100%;max-width:1400px;margin:0 auto}
+@media (min-width:860px),(orientation:landscape) and (min-width:560px){
+  .abody{display:grid;grid-template-columns:minmax(min(360px,50vw),460px) 1fr;width:100%;max-width:1400px;margin:0 auto}
   .abody .atop{max-height:none!important;height:100%;min-height:0;overflow-y:auto;border-bottom:none!important;border-right:4px solid var(--fg);margin:0!important;max-width:none!important;width:auto!important}
   .abody .abot{border-top:none!important;max-width:none!important;width:auto!important;margin:0!important;min-height:0;height:100%;padding-top:10px}
   .abody .cmp .pane{height:auto;min-height:260px}
@@ -629,6 +620,78 @@ button.chip.dis{opacity:.3;text-decoration:line-through}
 @media (max-width:420px){.tut-txt{font-size:15px}}
 @media (max-height:480px){.tut-box{padding:8px 10px;width:min(320px,calc(100vw - 16px))}.tut-txt{font-size:14px;line-height:1.5;margin:4px 0 8px}.tut-face{width:24px;height:24px}.tut-next{padding:5px 12px;font-size:14px}}
 @media (orientation:landscape) and (min-width:720px) and (max-height:820px){.hscroll{align-content:start}}
+
+/* ---------- v1.0.15 layout safety ---------- */
+.screen{overflow:hidden;max-width:100vw}
+.wi,.slot,.wc,.hq,.dem,.drop .e,.ghost{overflow:hidden}
+.dpane{height:min(340px,40vh)}
+@media (max-height:520px){.dpane{height:min(260px,46vh)}.dtop{padding:6px 12px}}
+
+/* ---------- v1.0.15 responsive fixes ---------- */
+.retreat,.bhud .fl,.combo .cn,.combo .cm,.dtag{white-space:nowrap}
+.pw small{white-space:nowrap}
+@media (max-width:420px){
+  .bhud{gap:6px;padding:8px 8px 6px}
+  .retreat{padding:3px 7px;font-size:12px}
+  .bhud .fl{font-size:13px}.dtag{font-size:10px;padding:0 4px;margin-right:4px}
+  .combo .cn{font-size:11px}.combo .cm{font-size:17px;padding:0 5px}
+  .logo{font-size:min(8.6vw,72px);letter-spacing:0}
+  .sub{letter-spacing:.4em;font-size:13px}
+}
+@media (max-width:360px){
+  .emb{width:72px;height:72px;flex-basis:72px}.emn b{font-size:26px!important}
+  .hrow{gap:10px}.htitle{font-size:16px}.pw b{font-size:26px}
+  .statgrid,.recs{gap:6px 6px}.statgrid b{font-size:16px}
+}
+/* armory on phones */
+@media (max-width:560px),(max-height:520px){
+  .tools{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+  .tools::-webkit-scrollbar{display:none}
+  .tools>*{flex:0 0 auto}
+  .tools select{max-width:none;min-width:84px}
+  #invHead{margin-left:6px}
+  .cmp .pane{height:auto!important;max-height:30vh}
+}
+@media (max-height:700px){
+  .cmd{padding:6px 10px 8px}.cmd button{height:40px;font-size:16px}
+  .abar{padding:6px 10px}
+  .cmp .pane{height:auto!important;max-height:34vh}
+  .abody .cmp .pane{min-height:0!important}
+}
+/* battle on short landscape screens: word box and enemy side by side, keyboard stays at the bottom */
+@media (orientation:landscape) and (max-height:520px){
+  .stage{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);column-gap:8px}
+  .stage>.bhud{grid-column:1 / -1;padding:4px 10px 2px}
+  .word{grid-column:1;grid-row:2;align-self:start;margin:4px 0 0 10px;min-height:0;padding:6px 10px 8px}
+  .wkana{font-size:clamp(18px,6vh,28px)}
+  .wroma{font-size:clamp(12px,3.8vh,17px)}
+  .enemy-wrap{grid-column:2;grid-row:2;padding:0 8px 4px;gap:3px}
+  .enemy{--esz:min(22vh,18vw)}.enemy.boss{--esz:min(28vh,22vw)}
+  .ebar,.etimer{width:min(90%,260px)}
+  .blog{width:min(56%,340px);bottom:4px}
+  .bl{font-size:11px}
+  .hits{top:30%}
+  .console{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;padding:4px 10px 6px;align-items:center}
+  .wicons{grid-column:1;min-height:0;gap:5px}.wi{width:34px;height:34px}
+  .buffs{display:none}
+  .php{grid-column:2}.phpbar{height:14px}
+  .kb{grid-column:1 / -1;gap:3px}.kr{gap:3px}
+  .k{height:clamp(24px,8.6vh,40px);font-size:14px}
+  .cdown{font-size:clamp(48px,20vh,90px)}
+  .alert .atxt{font-size:clamp(32px,12vh,60px)}
+  .alert .aband{padding:6px 0}
+}
+
+.enemy-wrap{justify-content:safe center;overflow:hidden}
+@media (orientation:portrait) and (max-height:760px){
+  .enemy{--esz:min(34vw,14vh)}.enemy.boss{--esz:min(44vw,17vh)}
+  .k{height:clamp(34px,6vh,44px)}
+  .wicons{min-height:42px}.wi{width:42px;height:42px}
+  .word{min-height:0;padding:8px 10px 10px}
+}
+@media (max-width:360px){.statgrid span,.recs span{white-space:nowrap;font-size:11px}}
+.dfilt{overflow-x:auto;scrollbar-width:none}.dfilt::-webkit-scrollbar{display:none}.dfilt button{white-space:nowrap;flex:0 0 auto}
+@media (max-width:360px){.dfilt button{padding:4px 8px;font-size:12px}}
 </style>
 </head>
 <body>
@@ -1365,7 +1428,7 @@ function spawn(){
   $('enemy').classList.toggle('boss',it.boss);
   $('ename').innerHTML=(it.boss?'<span class="bs">BOSS</span>':'')+it.d.n;
   $('floorLbl').innerHTML=`<span class="dtag" style="--dc:${DIFF[B.diff].c}">${DIFF[B.diff].n}</span>${B.floor}層　${B.qi+1}/${B.q.length}`;
-  B.active=true;nextWord();if(it.boss)playBgm('boss');requestAnimationFrame(measureEnemy);
+  B.active=true;nextWord();if(it.boss)playBgm('boss');requestAnimationFrame(()=>{measureEnemy();fxLayout()});
 }
 function wordBand(){
   const f=B.floor,boss=B.enemy&&B.enemy.boss,rr=Math.random(),dif=B.diff;let lo,hi;
@@ -1388,7 +1451,7 @@ function renderWord(){
     else if(i===W.idx){const c=t.c.find(x=>x.startsWith(W.buf))||t.c[0];kh+=`<span class="c">${t.k}</span>`;rh+=`<span class="d">${W.buf}</span><span class="c">${c.slice(W.buf.length)}</span>`}
     else{kh+=`<span>${t.k}</span>`;rh+=`<span>${t.c[0]}</span>`}
   });
-  $('wdisp').textContent=W.d!==W.kana?W.d:'';$('wkana').innerHTML=kh;$('wroma').innerHTML=rh;
+  $('wdisp').textContent=W.d!==W.kana?W.d:'';$('wkana').innerHTML=kh;$('wroma').innerHTML=rh;if(W.idx===0&&!W.buf)fxLayout();
   const t=W.toks[W.idx],c=t.c.find(x=>x.startsWith(W.buf))||t.c[0];
   hiKey(c.length>W.buf.length?c[W.buf.length]:(W.toks[W.idx+1]?W.toks[W.idx+1].c[0][0]:null));
   renderCombo();
@@ -1439,7 +1502,16 @@ const FXC=$('fxc'),FX2=FXC.getContext('2d'),PARTS=[];let fxTop=30,ER={x:50,y:58,
 function measureEnemy(){const st=$('stage').getBoundingClientRect(),im=$('enemy').getBoundingClientRect();if(!st.width||!im.width)return;
   ER={x:(im.left+im.width/2-st.left)/st.width*100,y:(im.top+im.height/2-st.top)/st.height*100,w:im.width/st.width*100,h:im.height/st.height*100}}let fxW=0,fxH=0,fxDpr=1,fxCol=null;
 function fxResize(){const r=$('stage').getBoundingClientRect();fxDpr=Math.min(2,devicePixelRatio||1);fxW=r.width;fxH=r.height;
-  FXC.width=Math.round(fxW*fxDpr);FXC.height=Math.round(fxH*fxDpr);FX2.setTransform(fxDpr,0,0,fxDpr,0,0);FX2.textAlign='center';FX2.textBaseline='middle';FX2.lineJoin='round';const w=$('word');fxTop=fxH?Math.min(60,(w.offsetTop+w.offsetHeight+18)/fxH*100):30;measureEnemy()}
+  FXC.width=Math.round(fxW*fxDpr);FXC.height=Math.round(fxH*fxDpr);FX2.setTransform(fxDpr,0,0,fxDpr,0,0);FX2.textAlign='center';FX2.textBaseline='middle';FX2.lineJoin='round';measureEnemy();fxLayout()}
+let WB=null,HB=0,LOGMAX=7;
+function logRoom(){const st=$('stage').getBoundingClientRect(),w=$('word').getBoundingClientRect(),ew=document.querySelector('.enemy-wrap').getBoundingClientRect();if(!st.height)return;
+  const side=w.bottom>ew.top+6;LOGMAX=side?Math.max(0,Math.floor((st.bottom-w.bottom-10)/22)):(innerHeight<420?2:innerHeight<640?3:innerHeight<760?5:7);
+  const live=[...LOG.children].filter(x=>!x._x);while(live.length>LOGMAX)expireLog(live.shift())}
+function fxLayout(){const st=$('stage').getBoundingClientRect(),w=$('word').getBoundingClientRect(),ew=document.querySelector('.enemy-wrap').getBoundingClientRect();if(!st.height)return;
+  HB=document.querySelector('.stage>.bhud').getBoundingClientRect().bottom-st.top+2;logRoom();
+  WB={x:w.left-st.left-6,y:w.top-st.top-6,w:w.width+12,h:w.height+12};
+  const above=w.bottom<=ew.top+6;fxTop=above?Math.min(60,(w.bottom-st.top+14)/st.height*100):4;
+  const hb=$('hits');hb.style.top=above?Math.max(st.height*.42,w.bottom-st.top+8)+'px':'';}
 new ResizeObserver(fxResize).observe($('stage'));
 function fxColors(){const cs=getComputedStyle(document.documentElement),g=k=>cs.getPropertyValue(k).trim();
   fxCol={fg:g('--fg'),bg:g('--bg'),crit:g('--sel'),skill:'#5ad8ff',heal:g('--ehp'),pd:g('--hpbg')}}
@@ -1455,13 +1527,14 @@ function pop(txt,cls,x,y,size){
 }
 function drawFx(dt){
   FX2.clearRect(0,0,fxW,fxH);if(!PARTS.length)return;
+  FX2.save();if(WB){FX2.beginPath();FX2.rect(0,HB,fxW,fxH-HB);FX2.rect(WB.x,Math.max(HB,WB.y),WB.w,WB.h);FX2.clip('evenodd')}
   let n=0;
   for(const p of PARTS){p.age+=dt;if(p.age>=p.life)continue;PARTS[n++]=p;
     const k=p.age/p.life,sc=k<.12?1.5-.5*(k/.12)*1:1,a=k>.6?1-(k-.6)/.4:1;
     FX2.globalAlpha=a;FX2.font=`${Math.round(p.s*sc)}px DotGothic16,monospace`;
     const X=p.x*fxW,Y=p.y*fxH-k*44;
     FX2.lineWidth=4;FX2.strokeStyle=fxCol.bg;FX2.strokeText(p.t,X,Y);FX2.fillStyle=p.c;FX2.fillText(p.t,X,Y)}
-  PARTS.length=n;FX2.globalAlpha=1;
+  PARTS.length=n;FX2.globalAlpha=1;FX2.restore();
 }
 let lastHitAnim=0,lastQuake=0,chainDirty=false;
 function hitEnemy(h){
@@ -1484,7 +1557,7 @@ const LOG=$('blog');
 function blog(txt,cls,rc){
   const d=document.createElement('div');d.className='bl '+cls;d.textContent=txt;if(rc)d.style.setProperty('--rc',rc);
   const h0=LOG.offsetHeight;LOG.appendChild(d);
-  const live=[...LOG.children].filter(x=>!x._x);const mx=innerHeight<760?5:7;while(live.length>mx)expireLog(live.shift());
+  const live=[...LOG.children].filter(x=>!x._x);const mx=LOGMAX;if(mx<=0){d.remove();return}while(live.length>mx)expireLog(live.shift());
   const dh=LOG.offsetHeight-h0;if(dh>0)LOG.animate([{transform:`translateY(${dh}px)`},{transform:'translateY(0)'}],{duration:200,easing:'ease-out'});
   d._t=setTimeout(()=>expireLog(d),3400);
 }
@@ -1750,8 +1823,9 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='1.0.14-alpha';
+const VERSION='1.0.15-alpha';
 const CHANGELOG=[
+ ['1.0.15-alpha',['どの端末・設定でも常に黒基調で表示するように（端末のライト／ダークモードの影響を受けない）','スマホを横向きにした時のバトル画面を、言葉と敵を左右に並べるレイアウトに（キーボードは下のまま）','ダメージの数字とHIT数が、出題の言葉に重ならないように','バトルログの行数を画面の高さに合わせて調整','幅の狭いスマホで、バトル上部の表示や拠点のタイトルが折り返したり、はみ出したりしないように','装備・強化・合成画面：スマホ横向きでも左右2列のレイアウトに、スマホ縦向きでは絞り込みを1行にまとめてインベントリを広く','レジェンダリー・ユニークのアイコンの光が枠の外にはみ出さないように','画面の高さが低い時、図鑑の詳細欄が小さくなり一覧が見えるように']],
  ['1.0.14-alpha',['拠点画面のBGM・SE・引き継ぎボタンを画面上部の専用の列に移動し、スクロールした内容やチュートリアルの案内と重ならないように']],
  ['1.0.13-alpha',['チュートリアル中、案内している場所が画面の外にある時は自動でスクロールするように','チュートリアル中も画面をスクロールできるように（指・マウスホイール・矢印キー）','説明の吹き出しが案内している場所に重ならないように（上下に入らない時は横に表示、高さの低い画面では吹き出しを小さく）','横長で高さの低い画面で、拠点画面の上の部分がスクロールしても見えなかった問題を修正']],
  ['1.0.12-alpha',['チュートリアルを合成の説明のあと、拠点に戻ったところで終わるように（次の階層への案内を削除）']],
