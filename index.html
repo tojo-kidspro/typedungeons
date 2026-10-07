@@ -184,6 +184,7 @@ button:focus-visible{outline:2px dashed var(--sel);outline-offset:3px}
 .ctx.on{display:block}
 .ctx button{display:block;width:100%;text-align:left;padding:8px 14px;font-size:14px}
 .ctx button:hover{color:var(--sel)}
+.ctx button.danger{color:#ff3b3b}.ctx button.danger:hover{color:#ff7a7a}
 .ctx button:hover::before{content:"▶ "}
 .big.go{margin-top:12px}
 .card .big{margin-top:12px}
@@ -312,7 +313,7 @@ button.chip.on{border-color:var(--sel);color:var(--sel)}
 img{image-rendering:pixelated}
 .logo{font-size:clamp(30px,8.6vw,66px);letter-spacing:.08em}
 #eg{filter:none}
-#eg img{display:block;width:var(--esz);height:var(--esz);image-rendering:pixelated}
+#eg img{display:block;width:min(var(--esz),var(--efit,100vh));height:min(var(--esz),var(--efit,100vh));image-rendering:pixelated}
 .enemy{--esz:min(40vw,22vh)}
 .enemy.boss{--esz:min(58vw,30vh)}
 .alert .aname img{width:48px;height:48px;vertical-align:middle;margin-right:10px;image-rendering:pixelated}
@@ -687,7 +688,9 @@ button.chip.dis{opacity:.3;text-decoration:line-through}
 .tut-face{width:34px;height:34px;image-rendering:pixelated;animation:ebob 1.6s ease-in-out infinite}
 .tut-head b{font-weight:400;color:var(--sel)}
 .tut-no{margin-left:auto;color:var(--dim);font-size:11px}
-.tut-txt{margin:8px 0 12px;font-size:17px;line-height:1.7;white-space:pre-line;letter-spacing:.06em}
+.tut-txt{margin:8px 0 12px;font-size:17px;line-height:2.15;letter-spacing:.04em}
+.tut-txt rt,.wname rt{font-size:.5em;letter-spacing:0;line-height:1;color:inherit;opacity:.85}
+.tut-txt .tc0{color:#ff5a8a}.tut-txt .tc1{color:#b07cff}.tut-txt .tc2{color:#2fd6a0}.tut-txt .tc3{color:#3fa9ff}.tut-txt :is(.tc0,.tc1,.tc2,.tc3){font-weight:bold}
 .tut-btns{display:flex;align-items:center;gap:8px}
 .tut-skip{font-size:12px;color:var(--dim);text-decoration:underline}
 .tut-next{margin-left:auto;padding:8px 16px;border:3px solid var(--sel);color:var(--sel);font-size:16px}
@@ -698,7 +701,7 @@ button.chip.dis{opacity:.3;text-decoration:line-through}
 #tut.wait .tut-next{display:none}
 #tut.wait .tut-hint{display:inline}
 @media (max-width:420px){.tut-txt{font-size:15px}}
-@media (max-height:480px){.tut-box{padding:8px 10px;width:min(320px,calc(100vw - 16px))}.tut-txt{font-size:14px;line-height:1.5;margin:4px 0 8px}.tut-face{width:24px;height:24px}.tut-next{padding:5px 12px;font-size:14px}}
+@media (max-height:480px){.tut-box{padding:8px 10px;width:min(320px,calc(100vw - 16px))}.tut-txt{font-size:14px;line-height:1.95;margin:4px 0 8px}.tut-face{width:24px;height:24px}.tut-next{padding:5px 12px;font-size:14px}}
 @media (orientation:landscape) and (min-width:720px) and (max-height:820px){.hscroll{align-content:start}}
 
 /* ---------- v1.0.15 layout safety ---------- */
@@ -739,6 +742,14 @@ button.chip.dis{opacity:.3;text-decoration:line-through}
   .abody .cmp .pane{min-height:0!important}
 }
 /* battle on short landscape screens: word box and enemy side by side, keyboard stays at the bottom */
+@media (min-width:721px) and (max-height:800px){
+  .word{min-height:0!important;padding:6px 12px 8px!important}.wkana{font-size:clamp(22px,4.4vh,32px)!important}.wroma{font-size:clamp(14px,2.4vh,19px)!important;margin-top:2px}.wdisp{min-height:0}
+  .bhud{padding-top:6px!important;padding-bottom:4px!important}
+  .console{padding-top:6px!important;padding-bottom:8px!important;gap:5px!important}
+  .wicons{min-height:40px}.wi{width:40px!important;height:40px!important}
+  .k{height:clamp(36px,5.6vh,46px)!important;font-size:16px}.kb{gap:4px}.k.bump::after{bottom:5px}
+  .enemy-wrap{gap:4px;padding-bottom:4px}
+}
 @media (orientation:landscape) and (max-height:520px){
   .stage{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);column-gap:8px}
   .stage>.bhud{grid-column:1 / -1;padding:4px 10px 2px}
@@ -1456,7 +1467,7 @@ document.addEventListener('keydown',e=>{if(!$('modal').classList.contains('on')|
   const b=$('mbox').querySelector(`.mbtns [data-key="${e.key.toLowerCase()}"]`);if(!b||performance.now()<MKEY.at)return;e.preventDefault();b.click()});
 function modal(html,btns){
   $('mbox').innerHTML=html+'<div class="mbtns"></div>';const box=$('mbox').querySelector('.mbtns');
-  MKEY.at=performance.now()+500;btns.forEach(b=>{const e=document.createElement('button');e.className='btn'+(b.pri?' pri':'');e.textContent=b.t;if(b.key){e.dataset.key=b.key;const k=document.createElement('span');k.className='kk';k.textContent=b.key.toUpperCase();e.appendChild(k)}e.onclick=()=>{$('modal').classList.remove('on');b.fn&&b.fn();};box.appendChild(e);});
+  MKEY.at=performance.now()+500;btns.forEach(b=>{const e=document.createElement('button');e.className='btn'+(b.pri?' pri':'')+(b.danger?' danger':'');e.textContent=b.t;if(b.key){e.dataset.key=b.key;const k=document.createElement('span');k.className='kk';k.textContent=b.key.toUpperCase();e.appendChild(k)}e.onclick=()=>{$('modal').classList.remove('on');b.fn&&b.fn();};box.appendChild(e);});
   $('modal').classList.add('on');
 }
 let screen='home';
@@ -1466,7 +1477,7 @@ function show(name){
   if(name==='home')renderHome();if(name==='armory')renderArmory();if(name==='dex')renderDex();
   if(name!=='battle')playBgm(typeof nmUI==='function'&&nmUI()?'nm':'home');
 }
-function dropHTML(w){return `<div class="drop${w.r>=4?' big':''}" style="--rc:${RAR[w.r].c}">${w.r>=4?'<span class="gt">GET!!</span>':''}<span class="e">${wIcon(w)}</span><div><div class="n">${w.name}</div><div class="small">${RAR[w.r].n}・${SK[w.sk].n}</div></div></div>`}
+function dropHTML(w){return `<div class="drop${w.r>=4?' big':''}" style="--rc:${RAR[w.r].c}">${w.r>=4?'<span class="gt">GET!!</span>':''}<span class="e">${wIcon(w)}</span><div><div class="n">${wName(w)}</div><div class="small">${RAR[w.r].n}・${SK[w.sk].n}</div></div></div>`}
 
 /* ===== home ===== */
 let selF=1;
@@ -1487,7 +1498,7 @@ function renderHome(){
   $('hcard').style.setProperty('--tc',`var(--r${Math.min(5,tierOf(ri.r))})`);const em=$('hEmb');em.className='emb t'+tier;
   em.innerHTML=`<i class="rays"></i><i class="flame"></i><i class="glow"></i><i class="ring r1"></i><i class="ring r2"></i><i class="orb"><b></b><b></b><b></b><b></b></i><i class="embr"></i><div class="emn"><small>RANK</small><b>${ri.r}</b></div><i class="crown">♛</i>`;
   countUp($('hPow'),power(st));
-  const next=SLOT_R[open];$('hSlotTxt').textContent=next?`　${open}/5（次の枠はランク${next}）`:'　5/5';
+  const next=SLOT_R[open];$('hSlotTxt').textContent=next?`　${open}/5（次のスロットはランク${next}）`:'　5/5';
   $('hSlots').innerHTML=SLOT_R.map((v,i)=>{if(i>=open)return `<div class="hq lock">🔒<small>ランク${v}</small></div>`;
     const w=byId(S.eq[i]);return w?`<div class="hq" data-hid="${w.id}" data-hslot="${i}" style="--rc:${RAR[w.r].c}">${wIcon(w)}<small>Lv${w.lv}</small></div>`:`<div class="hq empty" data-hslot="${i}">空き</div>`}).join('');
   $('hStats').innerHTML=[['HP',st.hp],['攻撃力',st.atk],['防御力',st.def],['クリ率',st.cr+'%'],['クリダメ',st.cd+'%'],['CT軽減',st.ctr+'%'],['スキル威力',st.sp+'%'],['連撃率',st.mh+'%']]
@@ -1508,7 +1519,7 @@ function renderHome(){
 const TIP=document.createElement('div');TIP.className='tip pane';document.body.appendChild(TIP);
 function tipPos(x,y){const r=TIP.getBoundingClientRect();TIP.style.left=Math.max(8,Math.min(x+16,innerWidth-r.width-8))+'px';TIP.style.top=Math.max(8,Math.min(y+16,innerHeight-r.height-8))+'px'}
 $('hSlots').addEventListener('pointerover',e=>{if(e.pointerType!=='mouse')return;const q=e.target.closest('[data-hid]');if(!q){TIP.classList.remove('on');return}
-  const w=byId(+q.dataset.hid);if(!w)return;if(TIP._id!==w.id){TIP._id=w.id;TIP.innerHTML=paneHTML(w,`装備中（枠${+q.dataset.hslot+1}）`)+'<div class="small" style="margin-top:6px">クリックで装備画面へ</div>'}
+  const w=byId(+q.dataset.hid);if(!w)return;if(TIP._id!==w.id){TIP._id=w.id;TIP.innerHTML=paneHTML(w,`装備中（スロット${+q.dataset.hslot+1}）`)+'<div class="small" style="margin-top:6px">クリックで装備画面へ</div>'}
   TIP.classList.add('on');tipPos(e.clientX,e.clientY)});
 $('hSlots').addEventListener('pointermove',e=>{if(TIP.classList.contains('on'))tipPos(e.clientX,e.clientY)});
 $('hSlots').addEventListener('pointerleave',()=>{TIP.classList.remove('on');TIP._id=null});
@@ -1576,7 +1587,7 @@ function spawn(){
   B.enemy=gl?{d:it.d,boss:it.boss,gl:true,hp:it.d.hp,max:it.d.hp,atk:0,int:it.d.flee,timer:-.8,stun:0,dead:false}:{d:it.d,boss:it.boss,hp:es.hp,max:es.hp,atk:es.atk,int:es.int,timer:-.8,stun:0,dead:false};
   const nmB=B.diff==='nightmare';$('stage').classList.toggle('gl',gl||nmB);kbGlitch(gl||nmB?true:false);
   const eg=$('eg');eg.innerHTML=`<img src="${eSprite(it.d)}" alt="${it.d.n}">`;eg.className='';void eg.offsetWidth;eg.className='enter';
-  $('enemy').classList.toggle('boss',it.boss);
+  $('enemy').classList.toggle('boss',it.boss);fitEnemy();
   $('ename').innerHTML=(it.boss?`<span class="bs">${gl?'B縺SS':'BOSS'}</span>`:'')+it.d.n;
   $('floorLbl').innerHTML=`<span class="dtag" style="--dc:${DIFF[B.diff].c}">${DIFF[B.diff].n}</span>${B.floor}層　${gl||nmB?'繧\uFFFD/\uFFFDｼ':`${B.qi+1}/${B.q.length}`}`;
   B.active=true;nextWord();if(nmB&&!gl){playBgm(null);se('glitch')}else if(gl){playBgm(null);se('glitch');blog('\uFFFD\uFFFD 繧ｨ繝ｩ繝ｼ縺檎匱逕溘＠縺ｾ縺励◆ \uFFFD\uFFFD','gl')}else if(it.boss)playBgm(bgmFor(true));requestAnimationFrame(()=>{measureEnemy();fxLayout()});
@@ -1664,7 +1675,9 @@ function fxLayout(){const st=$('stage').getBoundingClientRect(),w=$('word').getB
   WB={x:w.left-st.left-6,y:w.top-st.top-6,w:w.width+12,h:w.height+12};
   const above=w.bottom<=ew.top+6;fxTop=above?Math.min(60,(w.bottom-st.top+14)/st.height*100):4;
   const hb=$('hits');hb.style.top=above?Math.max(st.height*.42,w.bottom-st.top+8)+'px':'';}
-new ResizeObserver(fxResize).observe($('stage'));
+function fitEnemy(){const w=document.querySelector('.enemy-wrap');if(!w||!w.clientHeight)return;const cs=getComputedStyle(w),gap=parseFloat(cs.rowGap)||0;let h=w.clientHeight-(parseFloat(cs.paddingTop)||0)-(parseFloat(cs.paddingBottom)||0);
+  [...w.children].forEach(c=>{if(c.id!=='enemy')h-=c.offsetHeight+gap});$('enemy').style.setProperty('--efit',Math.max(40,Math.floor(h-6))+'px')}
+new ResizeObserver(()=>{fxResize();fitEnemy()}).observe($('stage'));
 function fxColors(){const cs=getComputedStyle(document.documentElement),g=k=>cs.getPropertyValue(k).trim();
   fxCol={fg:g('--fg'),bg:g('--bg'),crit:g('--sel'),skill:'#5ad8ff',heal:g('--ehp'),pd:g('--hpbg')}}
 const NUMCLS={crit:'crit',sdmg:'skill',heal:'heal',pd:'pd'};
@@ -1815,7 +1828,7 @@ function floorClear(){
   const after=rankInfo().r,so=slotsOpen(before),sn=slotsOpen(after);
   let h=`<h2>${f}層 クリア</h2><p>経験値 +${xp}${first?'（初回ボーナス×2）':''}</p>${B.gxp?`<p>経験値 +${fmt(B.gxp)}<span class="glt">（繧ｨ繝ｩ繝ｼ）</span></p>`:''}`+statsHTML();
   if(after>before)h+=`<p><b>ランク ${before} → ${after}</b></p>`;
-  if(sn>so)h+=`<p><b>装備枠が${sn}つに増えました</b></p>`;
+  if(sn>so)h+=`<p><b>装備スロットが${sn}つに増えました</b></p>`;
   h+=B.drops.length?`<div class="drops">${B.drops.slice().sort((a,b)=>b.r-a.r).map(dropHTML).join('')}</div>`:'<p class="small">武器のドロップはありませんでした</p>';
   if(f===100)h+='<p><b>百層を制覇しました。</b></p>';
   const b=[{t:'拠点へ',key:'f',fn:()=>show('home')}];if(f<100)b.push({t:'次の層へ',key:'j',pri:true,fn:()=>startFloor(f+1)});
@@ -2052,8 +2065,9 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='2.1.1-alpha';
+const VERSION='2.1.2-alpha';
 const CHANGELOG=[
+ ['2.1.2-alpha',['チュートリアルの文章を漢字を使った読みやすい文章にし、漢字にふりがな（ルビ）を付けました','ホームポジションの説明で、指の名前をキーの色と同じ色で表示','横長の画面や解像度の低い画面で、バトル中の敵が装備武器と重ならないように、画面の高さに合わせて各UIの大きさを自動で調整']],
  ['2.1.1-alpha',['かんたん引き継ぎの表記を「受け取る」から「引き継ぐ」に変更','引き継ぎコード・ファイルの欄の名前を「引き継ぎ（レガシー）」に変更']],
  ['2.1.0-alpha',['かんたん引き継ぎを追加：「パスワードを発行」で8文字のパスワードを発行し、新しい端末でプレイヤー名とパスワードを入力するだけで続きを遊べるように（有効期限なし・一度引き継ぐと無効）','これまでの引き継ぎコード・ファイル保存は「引き継ぎ（レガシー）」としてそのまま使えます']]
 ];
@@ -2071,14 +2085,14 @@ function dexPane(e){
   if(!e)return '<div class="tag">アイテム図鑑</div><div class="empty">アイテムにカーソルを合わせるか、タップして詳細を見る</div>';
   if(!S.rec.dex[e.key])return `<div class="tag">No.${dexVis().indexOf(e)+1}</div><div class="ph" style="--rc:var(--faint)"><span class="dem qm">？</span><div><div class="dn" style="color:var(--dim)">？？？</div><div class="dr">${RAR[e.r].n}</div></div></div><div class="empty">まだ入手していません</div>`;
   const w=e.w,R=RAR[e.r],T=TYPES[e.t],b1=wBase(w),bm=wBase(Object.assign({},w,{lv:R.cap}));
-  if(e.g){const sk=SK[w.sk];return `<div class="tag">No.${dexVis().indexOf(e)+1}</div><div class="ph" style="--rc:${R.c}"><span class="dem">${wIcon(w)}</span><div style="min-width:0"><div class="dn">${w.name}</div><div class="dr">${R.n}　${T.n}　最大Lv${R.cap}</div></div></div>
+  if(e.g){const sk=SK[w.sk];return `<div class="tag">No.${dexVis().indexOf(e)+1}</div><div class="ph" style="--rc:${R.c}"><span class="dem">${wIcon(w)}</span><div style="min-width:0"><div class="dn">${wName(w)}</div><div class="dr">${R.n}　${T.n}　最大Lv${R.cap}</div></div></div>
   <div class="pbody"><div><div class="psec">基礎ステータス</div><div class="rows"><span>攻撃</span><b>1</b><span>HP</span><b>1</b><span>防御</span><b>1</b></div><div class="psec">追加能力</div><div class="small" style="margin-top:4px">なし</div></div>
   <div><div class="psec">ドロップする敵</div><div style="margin-top:4px"><span class="dxe"><img src="${eSprite(e.d)}" alt="">${e.boss?'<span class="bs">B縺SS</span>':''}${e.d.n}</span></div>
     <div class="psec">入手できる階層</div><div style="margin-top:4px" class="glt">蜈ｨ螻､</div><div class="psec">入手率の目安</div><div class="small glt" style="margin-top:4px">\uFFFDｼ\uFFFDｼ\uFFFDｼ</div></div></div>
   <div class="psec">スキル</div><div class="psk" style="margin-top:2px"><b>${sk.n}</b><span class="uqt">固有</span><br>${trText(sk.tr)}：${sk.fx.map(f=>fxText(f,1)).join('、')}</div>`}
   const sk=SK[e.w.sk];
   const rate=f=>rarW(f,false)[e.r];
-  return `<div class="tag">No.${dexVis().indexOf(e)+1}</div><div class="ph" style="--rc:${R.c}"><span class="dem">${wIcon(w)}</span><div style="min-width:0"><div class="dn">${w.name}</div><div class="dr">${R.n}　${T.n}　最大Lv${R.cap}</div></div></div>
+  return `<div class="tag">No.${dexVis().indexOf(e)+1}</div><div class="ph" style="--rc:${R.c}"><span class="dem">${wIcon(w)}</span><div style="min-width:0"><div class="dn">${wName(w)}</div><div class="dr">${R.n}　${T.n}　最大Lv${R.cap}</div></div></div>
   <div class="pbody"><div><div class="psec">基礎ステータス（Lv1 → Lv${R.cap}）</div><div class="rows">${[['攻撃','atk'],['HP','hp'],['防御','def']].map(([n,k])=>`<span>${n}</span><b>${b1[k]?`${b1[k]} → ${bm[k]}`:'-'}</b>`).join('')}</div>
     <div class="psec">追加能力</div><div class="small" style="margin-top:4px">${R.slots?`${R.slots}枠（種類はランダム）`:'なし'}</div></div>
   <div><div class="psec">ドロップする敵</div><div style="margin-top:4px">${e.u?`<span class="dxe"><img src="${eSprite(e.gw?nmE(e.d):e.d)}" alt="">${e.boss?'<span class="bs">BOSS</span>':''}${e.gw?nmE(e.d).n:e.d.n}</span>`:'すべての敵'}</div>
@@ -2107,46 +2121,50 @@ $('clogBtn').onclick=()=>modal(`<h2>更新情報</h2>${CHANGELOG.map(([v,l])=>`<
 /* ===== tutorial ===== */
 const TUT_STEPS={
  intro:[
-  {t:'ようこそ！ ここは ことばを うって たたかう ダンジョンだよ。\nいっしょに あそびかたを みていこう！'},
-  {sel:'#diffSel',t:'まずは むずかしさを えらぼう。\nはじめての ひとは「イージー」が おすすめ！\nすきな ボタンを おしてね。',wait:1},
-  {sel:'#fgrid',t:'つぎは いく かいそうを えらぶよ。\nさいしょは「1」から。クリアすると つぎの かいそうに いけるよ。'},
-  {sel:'#goBtn',t:'じゅんび OK！\n「しゅつげき」ボタンを おして ぼうけんスタート！',wait:1,end:'battle'}],
+  {t:'ようこそ！ここは{言葉|ことば}を{打|う}って{戦|たたか}うダンジョンだよ。\n{一緒|いっしょ}に{遊|あそ}び{方|かた}を{見|み}ていこう！'},
+  {sel:'#diffSel',t:'まずは{難|むずか}しさを{選|えら}ぼう。\n{初|はじ}めての{人|ひと}は「イージー」がおすすめ！\n{好|す}きなボタンを{押|お}してね。',wait:1},
+  {sel:'#fgrid',t:'{次|つぎ}は{行|い}く{階層|かいそう}を{選|えら}ぶよ。\n{最初|さいしょ}は「1」から。クリアすると{次|つぎ}の{階層|かいそう}に{行|い}けるよ。'},
+  {sel:'#goBtn',t:'{準備|じゅんび}OK！\n「{出撃|しゅつげき}」ボタンを{押|お}して{冒険|ぼうけん}スタート！',wait:1,end:'battle'}],
  battle:[
-  {sel:'#word',t:'ここに うつ ことばが でるよ。\nひらがなの したに ある ローマじを うとう。'},
-  {sel:'#kb',t:'つぎに おす キーは きいろく ひかるよ。\nキーボードか、がめんの キーを おしてね。'},
-  {sel:'#kb',t:'ゆびの おきばしょ（ホームポジション）を おぼえよう！\nひだりては「A S D F」、みぎては「J K L ;」に ゆびを のせるよ。\nF と J には ポッチが あるから、そこに ひとさしゆびを おいてね。'},
-  {sel:'#kb',t:'キーの したの いろは、おす ゆびの いろ だよ。\nピンク＝こゆび　むらさき＝くすりゆび\nみどり＝なかゆび　あお＝ひとさしゆび\nうったら ホームポジションに ゆびを もどそう。'},
-  {sel:'.enemy-wrap',t:'ことばを さいごまで うつと てきに こうげき！\nてきの HPを 0に したら かちだよ。'},
-  {sel:'#etimerBox',t:'この バーが いっぱいに なると てきが こうげきしてくるよ。\nいそいで うとう！'},
-  {sel:'.php',t:'これが きみの HP。\n0に なると まけちゃうから きをつけてね。'},
-  {sel:'#wicons',t:'そうびした ぶきの わざは、じどうで でるよ。\nつかうと すこし やすみが ひつようだよ。'},
-  {sel:'#comboLbl',t:'まちがえずに うつと コンボが ふえて、\nこうげきが つよく なるよ！'},
-  {t:'さいごの ボスまで たおせば クリア！\nさあ、たたかおう！',end:'waitclear'}],
+  {sel:'#word',t:'ここに{打|う}つ{言葉|ことば}が{出|で}るよ。\nひらがなの{下|した}にあるローマ{字|じ}を{打|う}とう。'},
+  {sel:'#kb',t:'{次|つぎ}に{押|お}すキーは{黄色|きいろ}く{光|ひか}るよ。\nキーボードか、{画面|がめん}のキーを{押|お}してね。'},
+  {sel:'#kb',t:'{指|ゆび}の{置|お}き{場所|ばしょ}（ホームポジション）を{覚|おぼ}えよう！\n{左手|ひだりて}は「A S D F」、{右手|みぎて}は「J K L ;」に{指|ゆび}を{乗|の}せるよ。\nFとJには{小|ちい}さな{突起|とっき}があるから、そこに{人差|ひとさ}し{指|ゆび}を{置|お}いてね。'},
+  {sel:'#kb',t:'キーの{下|した}の{色|いろ}は、{押|お}す{指|ゆび}の{色|いろ}だよ。\n[[0:ピンク＝{小指|こゆび}]]　[[1:{紫|むらさき}＝{薬指|くすりゆび}]]\n[[2:{緑|みどり}＝{中指|なかゆび}]]　[[3:{青|あお}＝{人差|ひとさ}し{指|ゆび}]]\n{打|う}ったらホームポジションに{指|ゆび}を{戻|もど}そう。'},
+  {sel:'.enemy-wrap',t:'{言葉|ことば}を{最後|さいご}まで{打|う}つと{敵|てき}に{攻撃|こうげき}！\n{敵|てき}のHPを0にしたら{勝|か}ちだよ。'},
+  {sel:'#etimerBox',t:'このバーがいっぱいになると{敵|てき}が{攻撃|こうげき}してくるよ。\n{急|いそ}いで{打|う}とう！'},
+  {sel:'.php',t:'これが{君|きみ}のHP。\n0になると{負|ま}けちゃうから{気|き}をつけてね。'},
+  {sel:'#wicons',t:'{装備|そうび}した{武器|ぶき}の{技|わざ}は、{自動|じどう}で{出|で}るよ。\n{使|つか}うと{少|すこ}し{休|やす}みが{必要|ひつよう}だよ。'},
+  {sel:'#comboLbl',t:'{間違|まちが}えずに{打|う}つとコンボが{増|ふ}えて、\n{攻撃|こうげき}が{強|つよ}くなるよ！'},
+  {t:'{最後|さいご}のボスまで{倒|たお}せばクリア！\nさあ、{戦|たたか}おう！',end:'waitclear'}],
  post:[
-  {t:'クリア おめでとう！\nてに いれた ぶきで もっと つよく なろう。'},
-  {sel:'[data-arm=equip]',t:'「そうび」ボタンを おしてみよう。',wait:1},
-  {sel:'#invwrap',t:'ここが もっている ぶき だよ。\nぶきを おすと そうび できるよ。'},
-  {sel:'#slots',t:'ここが そうびの わく。\nランクが あがると わくが ふえて、ぶきを たくさん もてるよ。'},
-  {sel:'#tabs',t:'したの ボタンで「きょうか」「ごうせい」「しんか」にも いけるよ。\nはじめて ひらいた ときに せつめい するね。'},
-  {sel:'#armBack',t:'これで あそびかたは おしまい！\nこのまま ぶきを そうび してみよう。\nおわったら この ボタンで きょてんに もどれるよ。',end:'done'}],
+  {t:'クリアおめでとう！\n{手|て}に{入|い}れた{武器|ぶき}でもっと{強|つよ}くなろう。'},
+  {sel:'[data-arm=equip]',t:'「{装備|そうび}」ボタンを{押|お}してみよう。',wait:1},
+  {sel:'#invwrap',t:'ここが{持|も}っている{武器|ぶき}だよ。\n{武器|ぶき}を{押|お}すと{装備|そうび}できるよ。'},
+  {sel:'#slots',t:'ここが{装備|そうび}スロット。\nランクが{上|あ}がるとスロットが{増|ふ}えて、{武器|ぶき}をたくさん{持|も}てるよ。'},
+  {sel:'#tabs',t:'{下|した}のボタンで「{強化|きょうか}」「{合成|ごうせい}」「{進化|しんか}」にも{行|い}けるよ。\n{初|はじ}めて{開|ひら}いた{時|とき}に{説明|せつめい}するね。'},
+  {sel:'#armBack',t:'これで{遊|あそ}び{方|かた}はおしまい！\nこのまま{武器|ぶき}を{装備|そうび}してみよう。\n{終|お}わったらこのボタンで{拠点|きょてん}に{戻|もど}れるよ。',end:'done'}],
  enh:[
-  {t:'ここは「きょうか」。\nぶきの レベルを あげて つよく できるよ。'},
-  {sel:'#invwrap',t:'まず つよく したい ぶき（ベース）を えらぼう。\nそのあと ほかの ぶきを おすと「そざい」に なるよ。'},
-  {sel:'.atop',t:'えらんだ ぶきは ここに でるよ。\nそざいの ぶきは なくなる かわりに けいけんちに なるよ。\nレアな ぶきほど たくさん もらえるよ。'},
-  {t:'そうびちゅうの ぶきと ★おきにいりの ぶきは そざいに できないよ。\nレベルが さいだいに なったら「しんか」できるよ。'}],
+  {t:'ここは「{強化|きょうか}」。\n{武器|ぶき}のレベルを{上|あ}げて{強|つよ}くできるよ。'},
+  {sel:'#invwrap',t:'まず{強|つよ}くしたい{武器|ぶき}（ベース）を{選|えら}ぼう。\nその{後|あと}、{他|ほか}の{武器|ぶき}を{押|お}すと「{素材|そざい}」になるよ。'},
+  {sel:'.atop',t:'{選|えら}んだ{武器|ぶき}はここに{出|で}るよ。\n{素材|そざい}の{武器|ぶき}は{無|な}くなる{代|か}わりに{経験値|けいけんち}になるよ。\nレアな{武器|ぶき}ほどたくさんもらえるよ。'},
+  {t:'{装備中|そうびちゅう}の{武器|ぶき}と★お{気|き}に{入|い}りの{武器|ぶき}は{素材|そざい}にできないよ。\nレベルが{最大|さいだい}になったら「{進化|しんか}」できるよ。'}],
  syn:[
-  {t:'ここは「ごうせい」。\nぶきに ついている「ついか のうりょく」を くみかえられるよ。'},
-  {sel:'#invwrap',t:'まず のうりょくを つけたい ぶき（ベース）を えらんで、\nつぎに おなじ レアリティ（おなじ いろ）の ぶきを そざいに えらぼう。'},
-  {sel:'.atop',t:'ふたつの ぶきの のうりょくから のこしたい ものを えらんで「ごうせい」！\nそざいの ぶきは なくなるよ。'},
-  {t:'コモン（しろ）の ぶきには ついか のうりょくが ないから ごうせい できないよ。'}],
+  {t:'ここは「{合成|ごうせい}」。\n{武器|ぶき}に{付|つ}いている「{追加|ついか}{能力|のうりょく}」を{組|く}み{替|か}えられるよ。'},
+  {sel:'#invwrap',t:'まず{能力|のうりょく}を{付|つ}けたい{武器|ぶき}（ベース）を{選|えら}んで、\n{次|つぎ}に{同|おな}じレアリティ（{同|おな}じ{色|いろ}）の{武器|ぶき}を{素材|そざい}に{選|えら}ぼう。'},
+  {sel:'.atop',t:'{二|ふた}つの{武器|ぶき}の{能力|のうりょく}から{残|のこ}したいものを{選|えら}んで「{合成|ごうせい}」！\n{素材|そざい}の{武器|ぶき}は{無|な}くなるよ。'},
+  {t:'コモン（{白|しろ}）の{武器|ぶき}には{追加|ついか}{能力|のうりょく}がないから{合成|ごうせい}できないよ。'}],
  evo:[
-  {t:'ここは「しんか」。\nぶきの レアリティを 1だん あげられるよ。'},
-  {sel:'#invwrap',t:'レベルが さいだいの ぶきを ベースに えらんで、\nおなじ レアリティで レベル さいだいの ぶきを そざいに しよう。'},
-  {sel:'.atop',t:'しんか すると こうげき・HP・わざの つよさ・さいだいレベルが あがって、\nついか のうりょくの わくも ふえるよ。'},
-  {t:'ふえた わくは からっぽ だから、「ごうせい」で のうりょくを いれてね。\nレジェンダリーと ユニークは しんか できないよ。'}]};
+  {t:'ここは「{進化|しんか}」。\n{武器|ぶき}のレアリティを1{段|だん}{上|あ}げられるよ。'},
+  {sel:'#invwrap',t:'レベルが{最大|さいだい}の{武器|ぶき}をベースに{選|えら}んで、\n{同|おな}じレアリティでレベル{最大|さいだい}の{武器|ぶき}を{素材|そざい}にしよう。'},
+  {sel:'.atop',t:'{進化|しんか}すると{攻撃|こうげき}・HP・{技|わざ}の{強|つよ}さ・{最大|さいだい}レベルが{上|あ}がって、\n{追加|ついか}{能力|のうりょく}の{枠|わく}も{増|ふ}えるよ。'},
+  {t:'{増|ふ}えた{枠|わく}は{空|から}っぽだから、「{合成|ごうせい}」で{能力|のうりょく}を{入|い}れてね。\nレジェンダリーとユニークは{進化|しんか}できないよ。'}]};
+function rubyText(t){return t.replace(/\{([^|{}]+)\|([^{}]+)\}/g,'<ruby>$1<rt>$2</rt></ruby>').replace(/\[\[(\d):([^\]]+)\]\]/g,'<span class="tc$1">$2</span>').replace(/\n/g,'<br>')}
+const RBD=Object.fromEntries('木:き|古:ふる|錆:さ|剣:けん|大剣:たいけん|斧:おの|槍:やり|弓:ゆみ|杖:つえ|盾:たて|鎚:つち|大盾:おおだて|籠手:こて|護符:ごふ|鉄:てつ|鋼:はがね|兵士:へいし|雷鳴:らいめい|冥府:めいふ|聖光:せいこう|烈火:れっか|氷牙:ひょうが|紫電:しでん|漆黒:しっこく|天照:あまてらす|紅蓮:ぐれん|蒼氷:そうひょう|冥王:めいおう|炎帝:えんてい|雪華:せっか|雷神:らいじん|黒曜:こくよう|焔魔:えんま|氷皇:ひょうおう|迅雷:じんらい|神聖:しんせい|灼熱王:しゃくねつおう|絶対零度:ぜったいれいど|轟雷:ごうらい|深淵:しんえん|黎明:れいめい|紅蓮神:ぐれんしん|蒼天:そうてん|天雷:てんらい|終焉:しゅうえん|粘液:ねんえき|短剣:たんけん|糸:いと|紡:つむ|吸血:きゅうけつ|牙剣:がけん|鼠王:そおう|爪斧:そうふ|毒沼:どくぬま|胞子:ほうし|魔杖:まじょう|絹糸:きぬいと|魔弓:まきゅう|女王蜂:じょおうばち|針槍:しんそう|月狼:げつろう|大剣:たいけん|蛇毒:じゃどく|魔槍:まそう|甲殻:こうかく|霊魂:れいこん|骨王:こつおう|不朽:ふきゅう|戦鎚:せんつい|死針:ししん|猪王:ちょおう|大斧:おおおの|夜梟:やきょう|巨人:きょじん|天翼:てんよく|鰐牙:がくが|曲刀:きょくとう|灼熱:しゃくねつ|深海:しんかい|三叉槍:さんさそう|鮫牙:こうが|道化:どうけ|千眼:せんがん|鋼角:こうかく|竜鱗:りゅうりん|熊王:ゆうおう|巨猿:きょえん|飛竜:ひりゅう|機神:きしん|異星:いせい|光線杖:こうせんじょう|電脳:でんのう|氷雪:ひょうせつ|劫火:ごうか|雷霆:らいてい|嵐神:らんしん|影:かげ|縫:ぬ|晶石:しょうせき|溶岩:ようがん|大鎚:おおづち|鬼王:きおう|金棒:かなぼう|螺旋:らせん|岩神:がんしん|金剛:こんごう|真紅:しんく|魔剣:まけん|獣王:じゅうおう|迷宮:めいきゅう|翠星:すいせい|神弓:しんきゅう|海歌:うみうた|氷河:ひょうが|海神:かいじん|悪夢:あくむ|角槍:つのやり|狐火:きつねび|魔界:まかい|死神:しにがみ|龍神剣:りゅうじんけん|黒翼:こくよく|聖剣:せいけん|覇王剣:はおうけん|旅立:たびだ'.split('|').map(x=>x.split(':'))),RBMAX=5;
+function rubyName(n){let o='',i=0;const a=[...n];while(i<a.length){let hit=0;for(let L=Math.min(RBMAX,a.length-i);L>0;L--){const k=a.slice(i,i+L).join('');if(RBD[k]){o+=`<ruby>${k}<rt>${RBD[k]}</rt></ruby>`;i+=L;hit=1;break}}if(!hit){o+=esc(a[i]);i++}}return o}
+function wName(w,n){return esc(n==null?w.name:n)}
 const TUT={on:false,list:null,i:0,cb:null,raf:0};
 const tutEl=document.createElement('div');tutEl.id='tut';
-tutEl.innerHTML='<div class="tut-hole"></div><div class="tut-box"><div class="tut-head"><img class="tut-face" alt=""><b>ナビ</b><span class="tut-no"></span></div><p class="tut-txt"></p><div class="tut-btns"><button class="tut-skip">スキップ</button><span class="tut-hint">ひかっている ところを おしてね</span><button class="tut-next">つぎへ ▶</button></div></div>';
+tutEl.innerHTML='<div class="tut-hole"></div><div class="tut-box"><div class="tut-head"><img class="tut-face" alt=""><b>ナビ</b><span class="tut-no"></span></div><p class="tut-txt"></p><div class="tut-btns"><button class="tut-skip">スキップ</button><span class="tut-hint"><ruby>光<rt>ひか</rt></ruby>っているところを<ruby>押<rt>お</rt></ruby>してね</span><button class="tut-next">つぎへ ▶</button></div></div>';
 document.body.appendChild(tutEl);
 const tutHole=tutEl.querySelector('.tut-hole'),tutBox=tutEl.querySelector('.tut-box');
 function tutStage(){return (S.tut&&S.tut.stage)||'done'}
@@ -2178,7 +2196,7 @@ function tutScroll(){const st=TUT.list[TUT.i];if(!st||!st.sel)return;const el=do
   if(sc&&sc!==document.body){const sr=sc.getBoundingClientRect(),d=toStart?r.top-sr.top-12:(r.top+r.height/2)-(sr.top+sr.height/2);sc.scrollTo({top:sc.scrollTop+d,behavior:'smooth'})}
   else window.scrollBy({top:dy,behavior:'smooth'})}
 function tutShow(){
-  const st=TUT.list[TUT.i];tutEl.querySelector('.tut-txt').textContent=st.t;
+  const st=TUT.list[TUT.i];tutEl.querySelector('.tut-txt').innerHTML=rubyText(st.t);
   tutEl.querySelector('.tut-no').textContent=`${TUT.i+1} / ${TUT.list.length}`;tutEl.querySelector('.tut-next').innerHTML=(TUT.i+1>=TUT.list.length?'おわる ▶':'つぎへ ▶')+'<span class="tkey">スペース</span>';
   tutEl.classList.toggle('wait',!!st.wait);tutEl.classList.toggle('nohole',!st.sel);
   tutBox.classList.remove('tpop');void tutBox.offsetWidth;tutBox.classList.add('tpop');tutPlace(true);tutScroll();setTimeout(()=>{if(TUT.on){tutScroll();tutPlace(true)}},450);
@@ -2261,7 +2279,7 @@ function paneHTML(w,tag,cmp,extra,aft){
     if(sa){const nv=grp==='a'?(sa.a[key]||0):sa[key];const c=nv>v?'up':nv<v?'down':'';return `<span>${n}</span><b>${v?v+u:'-'}${nv!==v?` → <span class="${c}">${nv?nv+u:'-'}</span>`:''}</b>`}
     let c='',d='';if(o&&v!==ov){c=v>ov?'up':'down';d=` <small>(${v>ov?'+':''}${r1(v-ov)}${u})</small>`}
     return `<span>${n}</span><b class="${c}">${v?v+u:'-'}${d}</b>`};
-  return `<div class="tag">${tag}</div><div class="ph" style="--rc:${R.c}"><span class="dem">${wIcon(w)}</span><div style="min-width:0"><div class="dn">${w.fav?'★':''}${w.name}</div><div class="dr">${R.n}${w.evo?`<span class="evot">進化+${w.evo}</span>`:''}　Lv${w.lv}${aft&&aft.lv!==w.lv?` → <span class="up">${aft.lv}</span>`:''}/${R.cap}</div></div></div>
+  return `<div class="tag">${tag}</div><div class="ph" style="--rc:${R.c}"><span class="dem">${wIcon(w)}</span><div style="min-width:0"><div class="dn">${w.fav?'★':''}${wName(w)}</div><div class="dr">${R.n}${w.evo?`<span class="evot">進化+${w.evo}</span>`:''}　Lv${w.lv}${aft&&aft.lv!==w.lv?` → <span class="up">${aft.lv}</span>`:''}/${R.cap}</div></div></div>
   <div class="pbody"><div><div class="psec">ステータス</div><div class="rows">${row('攻撃',s.atk,o&&o.atk,'','atk')}${row('HP',s.hp,o&&o.hp,'','hp')}${row('防御',s.def,o&&o.def,'','def')}</div></div>
   <div><div class="psec">追加能力 <small>${w.aff.length}/${w.g?0:R.slots}</small></div>${keys.length?`<div class="rows aff">${keys.map(k=>{const cn=w.aff.filter(x=>x.k===k).length;return row(AFFD[k].n+(cn>1?`<small class="cnt">×${cn}</small>`:''),s.a[k]||0,o?(o.a[k]||0):0,'%',k,'a')}).join('')}</div>`:'<div class="small" style="margin-top:4px">なし</div>'}</div></div>
   <div class="psec">スキル</div>
@@ -2276,25 +2294,25 @@ $('armBack').onclick=()=>show('home');
 function renderTop(){
   const open=slotsOpen(rankInfo().r);if(A.slot>=open)A.slot=0;
   $('atitle').textContent={equip:'装備',enh:'強化',syn:'合成',evo:'進化'}[A.tab];
-  $('aSub').textContent={equip:'クリックでメニュー／長押しか横に引いて枠へドラッグ',enh:'武器を素材にしてレベルを上げる',syn:'同じレア度の武器と追加能力を組み替える',evo:'レベル最大の武器を、同じレア度のレベル最大の武器と合わせて1段階上のレア度へ進化'}[A.tab];
+  $('aSub').textContent={equip:'クリックでメニュー／長押しか横に引いてスロットへドラッグ',enh:'武器を素材にしてレベルを上げる',syn:'同じレア度の武器と追加能力を組み替える',evo:'レベル最大の武器を、同じレア度のレベル最大の武器と合わせて1段階上のレア度へ進化'}[A.tab];
   const sl=$('slots');sl.style.display=A.tab==='equip'?'':'none';
   if(A.tab==='equip')sl.innerHTML=SLOT_R.map((v,i)=>{
     if(i>=open)return `<div class="slot lock">🔒<br>ランク${v}</div>`;
     const w=byId(S.eq[i]);
-    return `<button class="slot ${w?'f':''} ${A.slot===i?'sel':''}" data-slot="${i}" ${w?`style="--rc:${RAR[w.r].c}"`:''} aria-label="装備枠${i+1}">${w?wIcon(w):'＋'}<span class="sn">${i+1}</span></button>`}).join('');
+    return `<button class="slot ${w?'f':''} ${A.slot===i?'sel':''}" data-slot="${i}" ${w?`style="--rc:${RAR[w.r].c}"`:''} aria-label="スロット${i+1}">${w?wIcon(w):'＋'}<span class="sn">${i+1}</span></button>`}).join('');
   let L='',R='',ex='',act='',mr='';
   const hov=byId(A.hover);
   if(A.tab==='equip'){
     const cur=byId(S.eq[A.slot]),right=hov||byId(A.sel);
-    L=paneHTML(cur,`装備中（枠${A.slot+1}）`);
+    L=paneHTML(cur,`装備中（スロット${A.slot+1}）`);
     R=right?paneHTML(right,hov?'カーソル中の武器':'選択中の武器',right.id===(cur&&cur.id)?undefined:(cur||null)):'<div class="tag">比較</div><div class="empty">武器にカーソルを合わせるか<br>タップして選択</div>';
     const st=calcStats();ex=`<div class="small">合計　HP ${st.hp}　攻撃 ${st.atk}　防御 ${st.def}　クリ率 ${st.cr}%　クリダメ ${st.cd}%　CT軽減 ${st.ctr}%　スキル威力 ${st.sp}%</div>`;
   }else if(A.tab==='enh'){
     const t=byId(A.target);
     if(t){const mats=[...A.mats].map(byId).filter(Boolean),g=mats.reduce((s,m)=>s+matExp(m),0),sim=simLv(t,g),cap=RAR[t.r].cap;
       L=paneHTML(t,'強化対象',undefined,`<div class="prev">素材${mats.length}個　+${g}EXP　Lv${t.lv} → <b class="up">${sim}</b>${sim>=cap?'（上限）':''}</div>`,mats.length?Object.assign({},t,{lv:sim}):null);
-      mr=`<div class="mlab">素材 ${mats.length}個<span class="small">（タップで外す）</span></div><div class="mats">${mats.length?mats.map(w=>`<button class="wc mini" data-mid="${w.id}" style="--rc:${RAR[w.r].c}" title="${w.name}">${wIcon(w)}<span class="lv">Lv${w.lv}</span></button>`).join(''):'<span class="small">下の一覧から素材にする武器をタップ</span>'}</div>`;
-      act=`<button class="btn pri" data-a="enh" ${mats.length&&t.lv<cap?'':'disabled'}>強化する</button><button class="btn" data-a="reset">対象を選び直す</button><button class="btn" data-a="bulk0">白を一括選択</button><button class="btn" data-a="bulk1">緑以下を一括選択</button>`;
+      mr=`<div class="mlab">素材 ${mats.length}個<span class="small dz">（タップで外す）</span></div><div class="mats">${mats.length?mats.map(w=>`<button class="wc mini" data-mid="${w.id}" style="--rc:${RAR[w.r].c}" title="${w.name}">${wIcon(w)}<span class="lv">Lv${w.lv}</span></button>`).join(''):'<span class="small">下の一覧から素材にする武器をタップ</span>'}</div>`;
+      act=`<button class="btn pri" data-a="enh" ${mats.length&&t.lv<cap?'':'disabled'}>強化する</button><button class="btn danger" data-a="reset">対象を選び直す</button><button class="btn" data-a="bulk0">白を一括選択</button><button class="btn" data-a="bulk1">緑以下を一括選択</button>`;
     }else L='<div class="tag">強化対象</div><div class="empty">下の一覧から武器を選んでください</div>';
     R=hov&&hov.id!==A.target?paneHTML(hov,'カーソル中の武器',undefined,`<div class="prev">素材にすると +${matExp(hov)}EXP</div>`):'<div class="tag">素材</div><div class="empty">'+(t?'素材にする武器をタップ':'—')+'</div>';
   }else if(A.tab==='evo'){
@@ -2302,10 +2320,10 @@ function renderTop(){
     if(t){const R0=RAR[t.r],R1=RAR[t.r+1],maxed=t.lv>=R0.cap,canTop=t.r<4;
       const info=canTop?`<div class="prev">レアリティ ${R0.n} → <b class="up">${R1.n}</b><br>最大Lv ${R0.cap} → <b class="up">${R1.cap}</b>　追加能力の枠 ${R0.slots} → <b class="up">${R1.slots}</b>　スキル倍率 ×${R0.sm} → <b class="up">×${R1.sm}</b></div>`:'<div class="prev">これ以上 進化できません</div>';
       L=paneHTML(t,canTop?'ベース（進化後の結果）':'ベース',undefined,info,canTop?Object.assign({},t,{r:t.r+1}):null);
-      mr=`<div class="mlab">素材${m?'<span class="small">（タップで外す）</span>':''}</div><div class="mats">${m?`<button class="wc mini" data-mid="${m.id}" style="--rc:${RAR[m.r].c}" title="${m.name}">${wIcon(m)}<span class="lv">Lv${m.lv}</span></button>`:`<span class="small">${canTop?`レベル最大（Lv${R0.cap}）の${R0.n}の武器を下の一覧からタップ`:'—'}</span>`}</div>`;
+      mr=`<div class="mlab">素材${m?'<span class="small dz">（タップで外す）</span>':''}</div><div class="mats">${m?`<button class="wc mini" data-mid="${m.id}" style="--rc:${RAR[m.r].c}" title="${m.name}">${wIcon(m)}<span class="lv">Lv${m.lv}</span></button>`:`<span class="small">${canTop?`レベル最大（Lv${R0.cap}）の${R0.n}の武器を下の一覧からタップ`:'—'}</span>`}</div>`;
       const need=!canTop?'':!maxed?`ベースのレベルを最大（Lv${R0.cap}）にすると進化できます（今 Lv${t.lv}）`:!m?'素材を選んでください':'';
       ex=need?`<div class="small evoneed">${need}</div>`:'';
-      act=`<button class="btn pri" data-a="evo" ${canTop&&maxed&&m?'':'disabled'}>進化する</button><button class="btn" data-a="reset">ベースを選び直す</button>`;
+      act=`<button class="btn pri" data-a="evo" ${canTop&&maxed&&m?'':'disabled'}>進化する</button><button class="btn danger" data-a="reset">ベースを選び直す</button>`;
     }else L='<div class="tag">ベース</div><div class="empty">進化させる武器を選んでください（コモン〜エピック）</div>';
     R=m?paneHTML(m,'素材（消費）'):hov&&hov.id!==A.target?paneHTML(hov,'カーソル中の武器'):'<div class="tag">素材</div><div class="empty">—</div>';
   }else{
@@ -2313,11 +2331,11 @@ function renderTop(){
     const mm=byId(A.synMat),prv=(t&&mm&&A.pick.size)?Object.assign({},t,{aff:[...A.pick].map(k=>(k[0]==='b'?t.aff:mm.aff)[+k.slice(1)])}):null;
     L=t?paneHTML(t,prv?'ベース（合成後の結果）':'ベース',undefined,'',prv):'<div class="tag">ベース</div><div class="empty">アンコモン以上の武器を選んでください</div>';
     R=m?paneHTML(Object.assign({},m,{lv:t.lv}),`素材（消費）・追加能力はベースのLv${t.lv}に換算`):hov&&hov.id!==A.target?paneHTML(hov,'カーソル中の武器'):`<div class="tag">素材</div><div class="empty">${t?`同じレア度（${RAR[t.r].n}）の武器をタップ`:'—'}</div>`;
-    if(t)mr=`<div class="mlab">素材${m?'<span class="small">（タップで外す）</span>':''}</div><div class="mats">${m?`<button class="wc mini" data-mid="${m.id}" style="--rc:${RAR[m.r].c}" title="${m.name}">${wIcon(m)}<span class="lv">Lv${m.lv}</span></button>`:`<span class="small">同じレア度（${RAR[t.r].n}）の武器を下の一覧からタップ</span>`}</div>`;
+    if(t)mr=`<div class="mlab">素材${m?'<span class="small dz">（タップで外す）</span>':''}</div><div class="mats">${m?`<button class="wc mini" data-mid="${m.id}" style="--rc:${RAR[m.r].c}" title="${m.name}">${wIcon(m)}<span class="lv">Lv${m.lv}</span></button>`:`<span class="small">同じレア度（${RAR[t.r].n}）の武器を下の一覧からタップ</span>`}</div>`;
     if(t&&m){const n=synNeed(t,m),pool=[...t.aff.map((a,i)=>({key:'b'+i,a,src:'ベース'})),...m.aff.map((a,i)=>({key:'m'+i,a,src:'素材'}))];
       ex=`<div class="mlab">追加能力を${n}つ選択（${A.pick.size}/${n}）${n<RAR[t.r].slots?`<span class="small">（種類が足りないため${n}つ）</span>`:''}</div><div class="daff">${pool.map(p=>`<button class="chip ${A.pick.has(p.key)?'on':[...A.pick].some(q=>pool.find(x=>x.key===q).a.k===p.a.k)?'dis':''}" data-pick="${p.key}"><small>${p.src}</small>${AFFD[p.a.k].n}+${affVal(t,p.a)}%</button>`).join('')}</div>`;
-      act=`<button class="btn pri" data-a="syn" ${A.pick.size===n?'':'disabled'}>合成する</button><button class="btn" data-a="reset">ベースを選び直す</button>`;
-    }else if(t)act='<button class="btn" data-a="reset">ベースを選び直す</button>';
+      act=`<button class="btn pri" data-a="syn" ${A.pick.size===n?'':'disabled'}>合成する</button><button class="btn danger" data-a="reset">ベースを選び直す</button>`;
+    }else if(t)act='<button class="btn danger" data-a="reset">ベースを選び直す</button>';
   }
   $('paneL').innerHTML=L;$('paneR').innerHTML=R;$('extra').innerHTML=ex;$('actions').innerHTML=act;
   const mrw=$('matrow');mrw.innerHTML=mr;mrw.style.display=mr?'':'none';$('actions').classList.toggle('sep',A.tab!=='equip');$('actions').style.display=act?'':'none';
@@ -2340,25 +2358,25 @@ function renderInv(){
 }
 function renderArmory(){renderTop();renderInv()}
 
-function equipTo(id,i){const old=S.eq.indexOf(id);if(old>=0)S.eq[old]=null;S.eq[i]=id;A.slot=i;save();toast(`枠${i+1}に装備しました`)}
+function equipTo(id,i){const old=S.eq.indexOf(id);if(old>=0)S.eq[old]=null;S.eq[i]=id;A.slot=i;save();toast(`スロット${i+1}に装備しました`)}
 function closeCtx(){$('ctx').classList.remove('on')}
 document.addEventListener('pointerdown',e=>{if(!e.target.closest('#ctx'))closeCtx()},true);
 function openCtx(id,x,y,detail){armTipOff();
   const w=byId(id),open=slotsOpen(rankInfo().r),ei=S.eq.indexOf(id),items=[];
-  if(ei>=0&&ei<open)items.push([`外す（枠${ei+1}）`,()=>{S.eq[ei]=null;save();toast('外しました')}]);
+  if(ei>=0&&ei<open)items.push([`外す（スロット${ei+1}）`,()=>{S.eq[ei]=null;save();toast('外しました')}]);
   else{
-    items.push([`枠${A.slot+1}に装備`+(S.eq[A.slot]?'（入れ替え）':''),()=>equipTo(id,A.slot)]);
-    const em=S.eq.slice(0,open).indexOf(null);if(em>=0&&em!==A.slot)items.push([`空き枠（枠${em+1}）に装備`,()=>equipTo(id,em)]);
+    items.push([`スロット${A.slot+1}に装備`+(S.eq[A.slot]?'（入れ替え）':''),()=>equipTo(id,A.slot)]);
+    const em=S.eq.slice(0,open).indexOf(null);if(em>=0&&em!==A.slot)items.push([`空きスロット（スロット${em+1}）に装備`,()=>equipTo(id,em)]);
   }
   items.push([w.fav?'☆ お気に入りを解除':'★ お気に入りに登録',()=>{w.fav=!w.fav;save();toast(w.fav?'お気に入りに登録しました':'お気に入りを解除しました')}]);
   items.push(['強化する',()=>{setTab('enh');A.target=id}]);
   if(w.r>0)items.push(['合成のベースにする',()=>{setTab('syn');A.target=id}]);
   if(w.r<4)items.push(['進化のベースにする',()=>{setTab('evo');A.target=id}]);
   if(!isEq(id)&&!w.fav)items.push(['捨てる',()=>{modal(`<h2>捨てる？</h2><p>「${w.name}」（${RAR[w.r].n} Lv${w.lv}）を捨てます。元に戻せません。</p>`,
-    [{t:'やめる'},{t:'捨てる',pri:true,fn:()=>{S.inv=S.inv.filter(x=>x.id!==id);if(A.sel===id)A.sel=null;save();toast('捨てました');renderArmory()}}])}]);
+    [{t:'やめる'},{t:'捨てる',danger:true,fn:()=>{S.inv=S.inv.filter(x=>x.id!==id);if(A.sel===id)A.sel=null;save();toast('捨てました');renderArmory()}}])}]);
   items.push(['閉じる',null]);
   const c=$('ctx');c.innerHTML=detail?`<div class="ctxd">${armTip(w)}</div>`:'';
-  items.forEach(([t,f])=>{const b=document.createElement('button');b.textContent=t;b.onclick=()=>{closeCtx();if(f){f();renderArmory()}};c.appendChild(b)});
+  items.forEach(([t,f])=>{const b=document.createElement('button');b.textContent=t;if(/^外す|^捨てる/.test(t))b.className='danger';b.onclick=()=>{closeCtx();if(f){f();renderArmory()}};c.appendChild(b)});
   c.style.left='0px';c.style.top='0px';c.classList.add('on');
   const r=c.getBoundingClientRect();c.style.left=Math.max(8,Math.min(x+6,innerWidth-r.width-8))+'px';c.style.top=Math.max(8,Math.min(y+6,innerHeight-r.height-8))+'px';
 }
@@ -2430,10 +2448,10 @@ $('actions').onclick=e=>{
 /* hover preview (mouse) */
 const IW=$('invwrap');
 function armTip(w){const t=byId(A.target);
-  if(A.tab==='equip'){const cur=byId(S.eq[A.slot]);return paneHTML(w,cur&&cur.id!==w.id?`カーソル中の武器（枠${A.slot+1}の装備と比較）`:'カーソル中の武器',w.id===(cur&&cur.id)?undefined:(cur||null))}
+  if(A.tab==='equip'){const cur=byId(S.eq[A.slot]);return paneHTML(w,cur&&cur.id!==w.id?`カーソル中の武器（スロット${A.slot+1}の装備と比較）`:'カーソル中の武器',w.id===(cur&&cur.id)?undefined:(cur||null))}
   if(A.tab==='enh')return paneHTML(w,'カーソル中の武器',undefined,(t&&w.id!==t.id)?`<div class="prev">素材にすると +${matExp(w)}EXP</div>`:'');
   const cv=t&&w.r===t.r&&w.id!==t.id;return paneHTML(cv?Object.assign({},w,{lv:t.lv}):w,cv?`カーソル中の武器（追加能力はベースのLv${t.lv}に換算）`:'カーソル中の武器')}
-function armTipOn(e,w){if(!w){TIP.classList.remove('on');TIP._id=null;return}const key=[A.tab,w.id,A.slot,A.target].join(':');if(TIP._id!==key){TIP._id=key;TIP.innerHTML=armTip(w)}TIP.classList.add('on');tipPos(e.clientX,e.clientY)}
+function armTipOn(e,w){if(w&&$('ctx').classList.contains('on'))w=null;if(!w){TIP.classList.remove('on');TIP._id=null;return}const key=[A.tab,w.id,A.slot,A.target].join(':');if(TIP._id!==key){TIP._id=key;TIP.innerHTML=armTip(w)}TIP.classList.add('on');tipPos(e.clientX,e.clientY)}
 function armTipOff(){TIP.classList.remove('on');TIP._id=null}
 IW.addEventListener('pointerover',e=>{if(e.pointerType!=='mouse'||P)return;const c=e.target.closest('.wc');armTipOn(e,c&&byId(+c.dataset.id))});
 IW.addEventListener('pointermove',e=>{if(e.pointerType==='mouse'&&!P&&TIP.classList.contains('on'))tipPos(e.clientX,e.clientY)});
