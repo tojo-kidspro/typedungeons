@@ -226,6 +226,8 @@ button.chip.on{border-color:var(--sel);color:var(--sel)}
 .btn{padding:7px 14px;border:3px solid var(--btn);color:var(--btn);font-size:14px}
 .btn:hover:not(:disabled){border-color:var(--sel);color:var(--sel)}
 .btn.pri{border-color:var(--sel);color:var(--sel)}
+.btn .kk{display:inline-block;margin-left:8px;padding:0 5px;border:1px solid currentColor;font-size:11px;line-height:16px;vertical-align:1px;opacity:.8}
+@media (hover:none){.btn .kk{display:none}}
 .btn.pri::before{content:"▶ "}
 .btn:disabled{border-color:var(--faint);color:var(--faint);cursor:default}
 .btn:disabled::before{content:""}
@@ -692,6 +694,17 @@ button.chip.dis{opacity:.3;text-decoration:line-through}
 @media (max-width:360px){.statgrid span,.recs span{white-space:nowrap;font-size:11px}}
 .dfilt{overflow-x:auto;scrollbar-width:none}.dfilt::-webkit-scrollbar{display:none}.dfilt button{white-space:nowrap;flex:0 0 auto}
 @media (max-width:360px){.dfilt button{padding:4px 8px;font-size:12px}}
+
+/* ---------- v1.0.17 ---------- */
+.k{--fc:#888;position:relative;box-shadow:inset 0 -4px 0 var(--fc)}
+.k.f0{--fc:#ff5a8a}.k.f1{--fc:#b07cff}.k.f2{--fc:#2fd6a0}.k.f3{--fc:#3fa9ff}
+.k.bump::after{content:"";position:absolute;left:50%;bottom:8px;width:10px;height:2px;margin-left:-5px;background:currentColor;opacity:.8}
+.k.hi{box-shadow:inset 0 -4px 0 var(--fc),0 0 0 3px #fff,0 0 16px 2px var(--keyhi);z-index:1}
+.word.nohi .wroma .c{color:var(--dim);text-decoration:none}
+.armbtns{grid-template-columns:repeat(4,1fr)}
+.cmd button{min-width:0}
+.evot{display:inline-block;margin-left:6px;padding:0 5px;font-size:10px;color:#000;background:var(--sel)}
+.evoneed{color:var(--sel);margin:2px 0 4px}
 </style>
 </head>
 <body>
@@ -722,7 +735,7 @@ button.chip.dis{opacity:.3;text-decoration:line-through}
         <button class="prog dexlink" id="dexLink"><span>アイテム図鑑 ▶</span><div class="pbar u"><i id="hUni"></i></div><b id="hUniT"></b></button>
         <div class="recs" id="hRec"></div>
       </div>
-      <div class="armbtns"><button class="big" data-arm="equip">装備</button><button class="big" data-arm="enh">強化</button><button class="big" data-arm="syn">合成</button></div>
+      <div class="armbtns"><button class="big" data-arm="equip">装備</button><button class="big" data-arm="enh">強化</button><button class="big" data-arm="syn">合成</button><button class="big" data-arm="evo">進化</button></div>
     </div>
     <div class="card">
       <div class="diffsel" id="diffSel"><button data-diff="easy" style="--dc:#3fa9ff">イージー</button><button data-diff="normal" style="--dc:#22c55e">ノーマル</button><button data-diff="hard" style="--dc:#ff3b3b">ハード</button></div>
@@ -754,7 +767,7 @@ button.chip.dis{opacity:.3;text-decoration:line-through}
     <div class="invwrap" id="invwrap"><div class="inv" id="inv"></div></div>
   </div>
   </div>
-  <nav class="cmd" id="tabs"><button data-tab="equip" class="on">装備</button><button data-tab="enh">強化</button><button data-tab="syn">合成</button></nav>
+  <nav class="cmd" id="tabs"><button data-tab="equip" class="on">装備</button><button data-tab="enh">強化</button><button data-tab="syn">合成</button><button data-tab="evo">進化</button></nav>
 </section>
 
 <section id="dex" class="screen">
@@ -820,7 +833,7 @@ const AFFD=Object.fromEntries(AFF.map(a=>[a.k,a]));
 const SK={
  rush:{n:'連撃',tr:{type:'win',n:4,s:5},ct:8,fx:[{t:'dmg',v:1.5}]},
  every3:{n:'会心撃',tr:{type:'every',n:3},ct:6,fx:[{t:'dmg',v:2}]},
- counter:{n:'反撃',tr:{type:'hit'},ct:10,fx:[{t:'dmg',v:2.5}]},
+ counter:{n:'反撃',tr:{type:'hit'},ct:14,fx:[{t:'dmg',v:1.2}]},
  heal:{n:'癒しの光',tr:{type:'hit'},ct:15,fx:[{t:'heal',v:10}]},
  rally:{n:'鼓舞',tr:{type:'every',n:5},ct:15,fx:[{t:'atkbuf',v:20,dur:6}]},
  wall:{n:'鉄壁',tr:{type:'low'},ct:20,fx:[{t:'shield',v:15}]},
@@ -831,11 +844,11 @@ const SK={
  u_roar:{n:'龍神の咆哮',tr:{type:'win',n:3,s:3},ct:10,fx:[{t:'multi',v:.7,n:8}]},
  slash:{n:'乱れ斬り',tr:{type:'every',n:3},ct:7,fx:[{t:'multi',v:.45,n:6}]},
  meteor:{n:'流星群',tr:{type:'win',n:5,s:6},ct:12,fx:[{t:'multi',v:.35,n:12}]},
- storm:{n:'剣の嵐',tr:{type:'hit'},ct:10,fx:[{t:'multi',v:.4,n:10}]},
+ storm:{n:'剣の嵐',tr:{type:'hit'},ct:14,fx:[{t:'multi',v:.25,n:6}]},
  u_sanct:{n:'聖域の祈り',tr:{type:'every',n:5},ct:14,fx:[{t:'heal',v:12},{t:'shield',v:12}]},
  u_blessing:{n:'女神の祝福',tr:{type:'win',n:6,s:6},ct:18,fx:[{t:'atkbuf',v:40,dur:8},{t:'critbuf',v:25,dur:8}]},
  u_vamp:{n:'吸血の宴',tr:{type:'every',n:3},ct:8,fx:[{t:'multi',v:.5,n:6},{t:'drain',v:40}]},
- u_berserk:{n:'怒髪天',tr:{type:'hit'},ct:9,fx:[{t:'atkbuf',v:50,dur:6},{t:'multi',v:.4,n:10}]},
+ u_berserk:{n:'怒髪天',tr:{type:'hit'},ct:12,fx:[{t:'atkbuf',v:50,dur:6},{t:'multi',v:.3,n:6}]},
  u_aegis:{n:'絶対防壁',tr:{type:'low'},ct:16,fx:[{t:'shield',v:40},{t:'heal',v:10}]},
  u_phoenix:{n:'不死鳥の炎',tr:{type:'low'},ct:24,fx:[{t:'heal',v:40},{t:'atkbuf',v:30,dur:10}]},
  u_storm:{n:'天雷の嵐',tr:{type:'crit'},ct:8,fx:[{t:'multi',v:.5,n:12}]},
@@ -849,7 +862,7 @@ const SK={
  lifeblade:{n:'吸命剣',tr:{type:'crit'},ct:7,fx:[{t:'dmg',v:1.2},{t:'drain',v:60}]},
  haste:{n:'加速',tr:{type:'every',n:10},ct:15,fx:[{t:'ctcut',v:2}]},
  fort:{n:'堅守',tr:{type:'every',n:4},ct:10,fx:[{t:'shield',v:12}]},
- thorn:{n:'茨の守り',tr:{type:'hit'},ct:8,fx:[{t:'shield',v:8},{t:'dmg',v:1.5}]},
+ thorn:{n:'茨の守り',tr:{type:'hit'},ct:10,fx:[{t:'shield',v:8},{t:'dmg',v:.6}]},
  sanctu:{n:'聖域',tr:{type:'win',n:5,s:5},ct:12,fx:[{t:'heal',v:6},{t:'shield',v:6}]},
  iron:{n:'不動',tr:{type:'low'},ct:18,fx:[{t:'shield',v:30}]},
  spirit:{n:'闘気',tr:{type:'hit'},ct:12,fx:[{t:'atkbuf',v:15,dur:5},{t:'critbuf',v:15,dur:5}]},
@@ -1105,7 +1118,7 @@ const UARCH={
  D:{tr:{type:'win',n:4,s:4},ct:12,fx:[{t:'atkbuf',v:120,dur:6},{t:'critbuf',v:50,dur:6}]},
  E:{tr:{type:'every',n:6},ct:14,fx:[{t:'delay',v:6},{t:'multi',v:.6,n:20}]},
  F:{tr:{type:'every',n:2},ct:5,fx:[{t:'multi',v:.4,n:10},{t:'drain',v:60}]},
- G:{tr:{type:'hit'},ct:6,fx:[{t:'multi',v:1,n:15}]},
+ G:{tr:{type:'hit'},ct:10,fx:[{t:'multi',v:.45,n:8}]},
  H:{tr:{type:'crit'},ct:5,fx:[{t:'multi',v:.7,n:20}]},
  I:{tr:{type:'low'},ct:20,fx:[{t:'shield',v:80},{t:'heal',v:50},{t:'atkbuf',v:80,dur:10}]},
  J:{tr:{type:'every',n:8},ct:12,fx:[{t:'ctcut',v:6},{t:'atkbuf',v:50,dur:8},{t:'critbuf',v:40,dur:8}]},
@@ -1125,7 +1138,7 @@ const UNAME={crab:'甲殻の大盾',mgolem:'機神の大盾',snail:'螺旋の大
   SK[k]={n:USKN[d.id],uq:true,tr:a.tr,ct:a.ct,fx:a.fx.map(f=>Object.assign({},f,f.t==='multi'?{n:Math.round(f.n*mul)}:f.t==='delay'||f.t==='ctcut'?{}:{v:f.v*mul}))};d.us=k})}
 function migrateW(w){
   {const best={};w.aff.forEach(a=>{if(!best[a.k]||a.v>best[a.k].v)best[a.k]=a});w.aff=Object.values(best);
-   const ns=RAR[w.r].slots;if(w.aff.length>ns)w.aff=w.aff.slice(0,ns);else if(w.aff.length<ns)w.aff=w.aff.concat(genAff(ns-w.aff.length,isDefT(w.t),w.aff.map(a=>a.k)))}
+   const ns=RAR[w.r].slots;if(w.aff.length>ns)w.aff=w.aff.slice(0,ns);else if(w.aff.length<ns&&!w.evo)w.aff=w.aff.concat(genAff(ns-w.aff.length,isDefT(w.t),w.aff.map(a=>a.k)))}
   if(w.u){const d=NORMALS.concat(BOSSES).find(x=>x.id===w.u);if(d)w.sk=d.us;return}
   if(w.c&&CATI[w.c])return;
   const e=CAT.find(x=>x.t===w.t&&x.r===w.r&&x.c.endsWith('_'+(w.id%2)))||CAT.find(x=>x.t===w.t&&x.r===w.r)||CAT.find(x=>x.r===w.r);
@@ -1178,6 +1191,8 @@ function se(k,a){
       tone('triangle',mtof(96),t+.7,.6,.2);if(a>0)for(let i=0;i<Math.min(a,6);i++)tone('pulse',mtof(91+(i%3)*2),t+.75+i*.07,.08,.07);break}
     case'synth':{tone('sine',330,t,.6,.16,null,660);tone('sine',336,t,.6,.16,null,672);nz(t,.6,.06,6000);
       [60,64,67,72,76].forEach(m=>tone('triangle',mtof(m),t+.6,.9,.12));tone('pulse',mtof(84),t+.62,.5,.08);tone('pulse',mtof(88),t+.74,.5,.07);break}
+    case'evolve':{nz(t,.9,.05,2500);tone('square',110,t,.9,.06,null,880);[60,64,67,72,76,79,84,88].forEach((mm,i)=>tone('pulse',mtof(mm),t+.5+i*.05,.18,.11));
+      [72,76,79,84].forEach(mm=>tone('triangle',mtof(mm),t+.95,1.1,.12));tone('pulse',mtof(96),t+1,.6,.09);break}
     case'cd':tone('pulse',523,t,.18,.16);break;
     case'go':tone('pulse',1047,t,.35,.18);tone('pulse',1319,t+.06,.3,.12);break;
   }
@@ -1211,7 +1226,7 @@ function setSnd(k,v){AU.opt[k]=v;try{localStorage.setItem('td_sound',JSON.string
   if(AU.ctx){(k==='bgm'?AU.bgm:AU.se).gain.value=v?(k==='bgm'?.28:.5):0;if(k==='bgm'&&v)AU.next=AU.ctx.currentTime+.05}renderSnd()}
 function renderSnd(){document.querySelectorAll('[data-snd]').forEach(b=>{const k=b.dataset.snd;b.classList.toggle('off',!AU.opt[k]);b.textContent=(k==='bgm'?'♪BGM ':'SE ')+(AU.opt[k]?'ON':'OFF')})}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-snd]');if(b){setSnd(b.dataset.snd,!AU.opt[b.dataset.snd]);return}
-  const bt=e.target.closest('button');if(bt&&!bt.classList.contains('k')&&bt.dataset.a!=='enh'&&bt.dataset.a!=='syn')se('ui')});
+  const bt=e.target.closest('button');if(bt&&!bt.classList.contains('k')&&!['enh','syn','evo'].includes(bt.dataset.a))se('ui')});
 
 /* ===== romaji engine ===== */
 const KT=`あ:a い:i う:u|wu え:e お:o か:ka|ca き:ki く:ku|cu|qu け:ke こ:ko|co さ:sa し:shi|si|ci す:su せ:se|ce そ:so た:ta ち:chi|ti つ:tsu|tu て:te と:to な:na に:ni ぬ:nu ね:ne の:no は:ha ひ:hi ふ:fu|hu へ:he ほ:ho ま:ma み:mi む:mu め:me も:mo や:ya ゆ:yu よ:yo ら:ra り:ri る:ru れ:re ろ:ro わ:wa を:wo ん:nn が:ga ぎ:gi ぐ:gu げ:ge ご:go ざ:za じ:ji|zi ず:zu ぜ:ze ぞ:zo だ:da ぢ:di づ:du で:de ど:do ば:ba び:bi ぶ:bu べ:be ぼ:bo ぱ:pa ぴ:pi ぷ:pu ぺ:pe ぽ:po ゔ:vu ぁ:xa|la ぃ:xi|li ぅ:xu|lu ぇ:xe|le ぉ:xo|lo ゃ:xya|lya ゅ:xyu|lyu ょ:xyo|lyo っ:xtu|ltu ー:- きゃ:kya きゅ:kyu きょ:kyo しゃ:sha|sya しゅ:shu|syu しょ:sho|syo しぇ:she|sye ちゃ:cha|tya|cya ちゅ:chu|tyu|cyu ちょ:cho|tyo|cyo ちぇ:che|tye にゃ:nya にゅ:nyu にょ:nyo ひゃ:hya ひゅ:hyu ひょ:hyo みゃ:mya みゅ:myu みょ:myo りゃ:rya りゅ:ryu りょ:ryo ぎゃ:gya ぎゅ:gyu ぎょ:gyo じゃ:ja|zya|jya じゅ:ju|zyu|jyu じょ:jo|zyo|jyo じぇ:je|zye びゃ:bya びゅ:byu びょ:byo ぴゃ:pya ぴゅ:pyu ぴょ:pyo ふぁ:fa ふぃ:fi ふぇ:fe ふぉ:fo てぃ:thi でぃ:dhi うぃ:wi うぇ:we`;
@@ -1253,7 +1268,7 @@ let S;
 function freshRec(){return{kills:0,hits:0,dmg:0,keys:0,maxCombo:0,bestKps:0,time:0,clears:0,uniq:[],dex:{}}}
 function dexKey(w){return w.u?'u:'+w.u:w.c?'c:'+w.c:`t${w.t}r${w.r}`}
 function freshProg(){return{easy:{maxF:0,lastF:1},normal:{maxF:0,lastF:1},hard:{maxF:0,lastF:1}}}
-function fresh(){return{exp:0,inv:[],eq:[null,null,null,null,null],nid:1,diff:'normal',prog:freshProg(),rec:freshRec(),tut:{stage:'intro'}}}
+function fresh(){return{exp:0,inv:[],eq:[null,null,null,null,null],nid:1,diff:'normal',prog:freshProg(),rec:freshRec(),tut:{stage:'intro'},tseen:{}}}
 function PG(){return S.prog[S.diff]||S.prog.normal}
 const DIFF={easy:{n:'イージー',c:'#3fa9ff',hp:.8,atk:.5,int:1.8,exp:1,desc:'キー入力に慣れていない人向け。短い言葉が中心で、敵の攻撃もゆっくり・弱め。ユニーク武器は出ません。'},
  normal:{n:'ノーマル',c:'#22c55e',hp:1,atk:1,int:1,exp:1,desc:'標準の難易度。言葉は最大10文字まで。'},
@@ -1270,7 +1285,7 @@ function genAff(n,def,excl){const used=new Set(excl||[]),a=[];
     const d=P[rand(P.length)];used.add(d.k);a.push({k:d.k,v:r1(d.min+Math.random()*(d.max-d.min))})}return a}
 function makeW(o){return{id:S.nid++,t:o.t,r:o.r,f:o.f,lv:1,xp:0,tx:0,name:o.name,sk:o.sk,u:o.u||null,c:o.c||null,el:o.el??5,aff:genAff(RAR[o.r].slots,isDefT(o.t))}}
 function rarW(f,boss,dif){dif=dif||'normal';const t=Math.min(1,Math.max(0,(f-1)/99)),L=(a,b)=>a+(b-a)*t;let u=boss?L(.6,1):L(.3,.9),w=[L(55,10),L(28,24),L(11,30),L(4.5,22),L(1.5,14)];
-  if(dif==='easy')u=0;if(dif==='hard'){u=3;w=[w[0]*.6,w[1],w[2]*1.3,w[3]*1.7,w[4]*2.5]}
+  if(dif==='easy'){u=0;w[4]=0}if(dif==='normal')u=0;if(dif==='hard'){u=3;w=[w[0]*.6,w[1],w[2]*1.3,w[3]*1.7,w[4]*2.5]}
   const sum=w.reduce((a,b)=>a+b,0);return w.map(x=>x/sum*(100-u)).concat(u)}
 function rollRarity(f,boss,dif){const w=rarW(f,boss,dif);let x=Math.random()*100;for(let i=5;i>=0;i--){if(x<w[i])return i;x-=w[i]}return 0}
 function rollWeapon(f,d,boss){
@@ -1319,9 +1334,12 @@ function calcStats(){
 /* ===== UI helpers ===== */
 let toastT;
 function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove('on'),1800)}
+const MKEY={at:0};
+document.addEventListener('keydown',e=>{if(!$('modal').classList.contains('on')||e.ctrlKey||e.metaKey||e.altKey||e.repeat||(typeof TUT!=='undefined'&&TUT.on))return;if(/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement&&document.activeElement.tagName))return;
+  const b=$('mbox').querySelector(`.mbtns [data-key="${e.key.toLowerCase()}"]`);if(!b||performance.now()<MKEY.at)return;e.preventDefault();b.click()});
 function modal(html,btns){
   $('mbox').innerHTML=html+'<div class="mbtns"></div>';const box=$('mbox').querySelector('.mbtns');
-  btns.forEach(b=>{const e=document.createElement('button');e.className='btn'+(b.pri?' pri':'');e.textContent=b.t;e.onclick=()=>{$('modal').classList.remove('on');b.fn&&b.fn();};box.appendChild(e);});
+  MKEY.at=performance.now()+500;btns.forEach(b=>{const e=document.createElement('button');e.className='btn'+(b.pri?' pri':'');e.textContent=b.t;if(b.key){e.dataset.key=b.key;const k=document.createElement('span');k.className='kk';k.textContent=b.key.toUpperCase();e.appendChild(k)}e.onclick=()=>{$('modal').classList.remove('on');b.fn&&b.fn();};box.appendChild(e);});
   $('modal').classList.add('on');
 }
 let screen='home';
@@ -1387,11 +1405,12 @@ $('diffSel').onclick=e=>{const b=e.target.closest('[data-diff]');if(!b||b.datase
 $('fgrid').onclick=e=>{const b=e.target.closest('[data-f]');if(!b||b.disabled)return;selF=+b.dataset.f;PG().lastF=selF;
   $('fgrid').querySelectorAll('.sel').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');renderFInfo()};
 $('goBtn').onclick=()=>startFloor(selF);
-document.querySelectorAll('[data-arm]').forEach(b=>b.onclick=()=>{setTab(b.dataset.arm);A.target=null;show('armory')});
+document.querySelectorAll('[data-arm]').forEach(b=>b.onclick=()=>{setTab(b.dataset.arm);A.target=null;show('armory');tutTab(b.dataset.arm)});
 
 /* ===== keyboard ===== */
 const ROWS=['qwertyuiop-','asdfghjkl','zxcvbnm'];const keyEl={};
-ROWS.forEach(r=>{const row=document.createElement('div');row.className='kr';[...r].forEach(k=>{const b=document.createElement('button');b.className='k';b.textContent=k.toUpperCase();b.setAttribute('aria-label',k);
+const KFING={q:0,a:0,z:0,w:1,s:1,x:1,e:2,d:2,c:2,r:3,f:3,v:3,t:3,g:3,b:3,y:3,h:3,n:3,u:3,j:3,m:3,i:2,k:2,o:1,l:1,p:0,'-':0};
+ROWS.forEach(r=>{const row=document.createElement('div');row.className='kr';[...r].forEach(k=>{const b=document.createElement('button');b.className='k f'+KFING[k]+(k==='f'||k==='j'?' bump':'');b.textContent=k.toUpperCase();b.setAttribute('aria-label',k);
   b.addEventListener('pointerdown',e=>{e.preventDefault();typeKey(k)});keyEl[k]=b;row.appendChild(b)});$('kb').appendChild(row)});
 let hiK=null;
 function hiKey(k){if(hiK&&keyEl[hiK])keyEl[hiK].classList.remove('hi');hiK=k;if(k&&keyEl[k])keyEl[k].classList.add('hi')}
@@ -1453,7 +1472,8 @@ function renderWord(){
   });
   $('wdisp').textContent=W.d!==W.kana?W.d:'';$('wkana').innerHTML=kh;$('wroma').innerHTML=rh;if(W.idx===0&&!W.buf)fxLayout();
   const t=W.toks[W.idx],c=t.c.find(x=>x.startsWith(W.buf))||t.c[0];
-  hiKey(c.length>W.buf.length?c[W.buf.length]:(W.toks[W.idx+1]?W.toks[W.idx+1].c[0][0]:null));
+  const nohi=B&&B.diff==='hard';$('word').classList.toggle('nohi',nohi);
+  hiKey(nohi?null:(c.length>W.buf.length?c[W.buf.length]:(W.toks[W.idx+1]?W.toks[W.idx+1].c[0][0]:null)));
   renderCombo();
 }
 let lastStep=0;
@@ -1576,10 +1596,13 @@ function trig(kind){
     }
   });
 }
+const OFFX=['dmg','multi','drain'];
+function idleNow(){return !B.at.length||performance.now()-B.at[B.at.length-1]>5000}
+function skFx(sk){return (sk.tr.type==='hit'||sk.tr.type==='low')&&idleNow()?sk.fx.filter(f=>!OFFX.includes(f.t)):sk.fx}
 function fire(e){
-  const sk=SK[e.w.sk],m=RAR[e.w.r].sm;e.ct=sk.ct*(1-B.st.ctr/100);let last=0;const parts=[];
+  const sk=SK[e.w.sk],m=RAR[e.w.r].sm,fxs=skFx(sk);if(!fxs.length)return;e.ct=sk.ct*(1-B.st.ctr/100);let last=0;const parts=[];
   e.el.animate([{transform:'scale(1)'},{transform:'scale(1.25)'},{transform:'scale(1)'}],{duration:380,easing:'ease-out'});
-  sk.fx.forEach(f=>{const v=f.v*m;
+  fxs.forEach(f=>{const v=f.v*m;
     if(f.t==='dmg'){last=Math.round(curAtk()*v*(1+B.st.sp/100)*comboMul());hitEnemy({d:last,crit:false,skill:true});parts.push(`${fmt(last)}ダメージ`)}
     else if(f.t==='multi'){const n=Math.round(f.n*(1+(m-1)*.6)),hits=rollHits(curAtk()*f.v*(1+B.st.sp/100)*comboMul(),n,true,.15);last=hits.reduce((a,h)=>a+h.d,0);schedule(hits,40);parts.push(`${n}連撃 ${fmt(last)}ダメージ`)}
     else if(f.t==='heal'){const a=heal(B.maxHp*v/100);if(a)parts.push(`HP${fmt(a)}回復`)}
@@ -1589,7 +1612,7 @@ function fire(e){
     else if(f.t==='ctcut'){const sec=f.v*Math.sqrt(m);B.ws.forEach(o=>{if(o!==e)o.ct=Math.max(0,o.ct-sec)});parts.push(`CT${sec.toFixed(1)}秒短縮`)}
     else if(f.t==='drain'){const a=heal(last*v/100);if(a)parts.push(`HP${fmt(a)}吸収`)}
   });
-  const kind=sk.fx.some(f=>f.t==='dmg'||f.t==='multi')?'skill':sk.fx.some(f=>f.t==='heal'||f.t==='shield')?'heal':'buff';
+  const kind=fxs.some(f=>f.t==='dmg'||f.t==='multi')?'skill':fxs.some(f=>f.t==='heal'||f.t==='shield')?'heal':'buff';
   se(kind);
   blog(`◆${sk.n}！${parts.length?' '+parts.join('・'):''}`,kind);
 }
@@ -1633,13 +1656,13 @@ function floorClear(){
   if(sn>so)h+=`<p><b>装備枠が${sn}つに増えました</b></p>`;
   h+=B.drops.length?`<div class="drops">${B.drops.slice().sort((a,b)=>b.r-a.r).map(dropHTML).join('')}</div>`:'<p class="small">武器のドロップはありませんでした</p>';
   if(f===100)h+='<p><b>百層を制覇しました。</b></p>';
-  const b=[{t:'拠点へ',fn:()=>show('home')}];if(f<100)b.push({t:'次の層へ',pri:true,fn:()=>startFloor(f+1)});
-  if(tutStage()==='waitclear'){tutSet('post');b.length=0;b.push({t:'拠点へ もどる',pri:true,fn:()=>{show('home');setTimeout(()=>tutRun('post'),350)}})}
+  const b=[{t:'拠点へ',key:'f',fn:()=>show('home')}];if(f<100)b.push({t:'次の層へ',key:'j',pri:true,fn:()=>startFloor(f+1)});
+  if(tutStage()==='waitclear'){tutSet('post');b.length=0;b.push({t:'拠点へ もどる',key:'f',pri:true,fn:()=>{show('home');setTimeout(()=>tutRun('post'),350)}})}
   modal(h,b);
 }
 function defeat(){
   B.active=false;W=null;renderWord();playBgm(null);se('lose');commitRec();save();
-  modal(`<h2>力尽きた…</h2><p>${B.floor}層で倒れました。この層で拾った武器は失われます。</p>`+statsHTML()+`<p>武器を強化・合成して、もう一度挑もう。</p>`,[{t:'拠点へ',pri:true,fn:()=>show('home')}]);
+  modal(`<h2>力尽きた…</h2><p>${B.floor}層で倒れました。この層で拾った武器は失われます。</p>`+statsHTML()+`<p>武器を強化・合成して、もう一度挑もう。</p>`,[{t:'拠点へ',key:'f',pri:true,fn:()=>show('home')}]);
 }
 $('retreat').onclick=()=>{if(!B||B.alerting)return;const was=B.active;B.active=false;
   modal('<h2>撤退する？</h2><p>この層で拾った武器は持ち帰れません。</p>',[{t:'続ける',fn:()=>{if(B&&was)B.active=true}},{t:'撤退する',pri:true,fn:retreatResult}])};
@@ -1647,7 +1670,7 @@ function retreatResult(){
   if(!B)return;W=null;renderWord();commitRec();PG().lastF=B.floor;save();
   let h=`<h2>${B.floor}層から撤退</h2><p class="small">${B.qi}/${B.q.length}体を撃破</p>`+statsHTML();
   h+='<div class="drops"><div class="drop" style="--rc:var(--line)"><span class="small">ドロップ</span><b>なし</b></div></div>';
-  modal(h,[{t:'拠点へ',pri:true,fn:()=>show('home')}]);
+  modal(h,[{t:'拠点へ',key:'f',pri:true,fn:()=>show('home')}]);
 }
 
 const UI={};
@@ -1823,8 +1846,12 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='1.0.15-alpha';
+const VERSION='1.0.19-alpha';
 const CHANGELOG=[
+ ['1.0.19-alpha',['リザルト画面で F キーで拠点へ、J キーで次の層へ（クリックもこれまで通り）。ボタンにキーの印を表示','バトルのチュートリアルにホームポジションと指の色の説明を追加']],
+ ['1.0.18-alpha',['はじめての クリア後の チュートリアルは 装備画面の説明だけにして、そのまま装備画面で終わるように（拠点へ戻るボタンの場所を案内）','強化・合成・進化は、はじめて開いた時にそれぞれのチュートリアルが出るように','チュートリアルの最後のボタンを「おわる」に','チュートリアルで画面が横にずれることがある問題を修正']],
+ ['1.0.17-alpha',['1.0.16のおためし機能（ゆびガイド・FJチェック・ホームポジション練習）を取り消し','キーボードを指ごとに色分け（こゆび：ピンク、くすりゆび：むらさき、なかゆび：みどり、ひとさしゆび：あお）。F と J には目印','ドロップするレアリティの上限を難易度ごとに：イージーはエピックまで、ノーマルはレジェンダリーまで、ハードはユニークまで','被ダメージ時などに自動で反撃するスキルを弱体化し、5秒以上攻撃していない時は反撃ダメージが出ないように（放置でクリアできないように）','ハードでは次に打つキーとローマ字のハイライトを表示しないように','武器の「進化」を追加：レベル最大の武器に、同じレアリティのレベル最大の武器を素材にして、1段階上のレアリティへ（コモン〜エピック）','合成で、追加能力の種類が足りない時は選べる数だけで合成できるように']],
+ ['1.0.16-alpha',['おためし機能（取り消し済み）']],
  ['1.0.15-alpha',['どの端末・設定でも常に黒基調で表示するように（端末のライト／ダークモードの影響を受けない）','スマホを横向きにした時のバトル画面を、言葉と敵を左右に並べるレイアウトに（キーボードは下のまま）','ダメージの数字とHIT数が、出題の言葉に重ならないように','バトルログの行数を画面の高さに合わせて調整','幅の狭いスマホで、バトル上部の表示や拠点のタイトルが折り返したり、はみ出したりしないように','装備・強化・合成画面：スマホ横向きでも左右2列のレイアウトに、スマホ縦向きでは絞り込みを1行にまとめてインベントリを広く','レジェンダリー・ユニークのアイコンの光が枠の外にはみ出さないように','画面の高さが低い時、図鑑の詳細欄が小さくなり一覧が見えるように']],
  ['1.0.14-alpha',['拠点画面のBGM・SE・引き継ぎボタンを画面上部の専用の列に移動し、スクロールした内容やチュートリアルの案内と重ならないように']],
  ['1.0.13-alpha',['チュートリアル中、案内している場所が画面の外にある時は自動でスクロールするように','チュートリアル中も画面をスクロールできるように（指・マウスホイール・矢印キー）','説明の吹き出しが案内している場所に重ならないように（上下に入らない時は横に表示、高さの低い画面では吹き出しを小さく）','横長で高さの低い画面で、拠点画面の上の部分がスクロールしても見えなかった問題を修正']],
@@ -1858,7 +1885,7 @@ function dexPane(e){
     <div class="psec">追加能力</div><div class="small" style="margin-top:4px">${R.slots?`${R.slots}枠（種類はランダム）`:'なし'}</div></div>
   <div><div class="psec">ドロップする敵</div><div style="margin-top:4px">${e.u?`<span class="dxe"><img src="${eSprite(e.d)}" alt="">${e.boss?'<span class="bs">BOSS</span>':''}${e.d.n}</span>`:'すべての敵'}</div>
     <div class="psec">入手できる階層</div><div style="margin-top:4px">${e.u?floorsOf(e.d.id):'1〜100層（深い層ほど高レアが出やすい）'}</div>
-    <div class="psec">入手率の目安</div><div class="small" style="margin-top:4px">${e.u?`撃破時 ノーマル約${(rarW(1,e.boss)[5]*(e.boss?1:.35)).toFixed(2)}〜${(rarW(100,e.boss)[5]*(e.boss?1:.35)).toFixed(2)}%／ハード約${(3*(e.boss?1:.35)).toFixed(2)}%／イージーは出ません`:`ドロップ時 1層 ${(rate(1)/CAT.filter(x=>x.r===e.r).length).toFixed(2)}% → 100層 ${(rate(100)/CAT.filter(x=>x.r===e.r).length).toFixed(2)}%`}</div></div></div>
+    <div class="psec">入手率の目安</div><div class="small" style="margin-top:4px">${e.u?`撃破時 約${(3*(e.boss?1:.35)).toFixed(2)}%（ハードのみ）`:`ドロップ時 1層 ${(rate(1)/CAT.filter(x=>x.r===e.r).length).toFixed(2)}% → 100層 ${(rate(100)/CAT.filter(x=>x.r===e.r).length).toFixed(2)}%`}</div></div></div>
   <div class="psec">スキル</div><div class="psk" style="margin-top:2px"><b>${sk.n}</b>${sk.uq?'<span class="uqt">固有</span>':''}　CT${sk.ct}秒<br>${trText(sk.tr)}：${sk.fx.map(f=>fxText(f,R.sm)).join('、')}</div>`;
 }
 function renderDex(){
@@ -1888,6 +1915,8 @@ const TUT_STEPS={
  battle:[
   {sel:'#word',t:'ここに うつ ことばが でるよ。\nひらがなの したに ある ローマじを うとう。'},
   {sel:'#kb',t:'つぎに おす キーは きいろく ひかるよ。\nキーボードか、がめんの キーを おしてね。'},
+  {sel:'#kb',t:'ゆびの おきばしょ（ホームポジション）を おぼえよう！\nひだりては「A S D F」、みぎては「J K L ;」に ゆびを のせるよ。\nF と J には ポッチが あるから、そこに ひとさしゆびを おいてね。'},
+  {sel:'#kb',t:'キーの したの いろは、おす ゆびの いろ だよ。\nピンク＝こゆび　むらさき＝くすりゆび\nみどり＝なかゆび　あお＝ひとさしゆび\nうったら ホームポジションに ゆびを もどそう。'},
   {sel:'.enemy-wrap',t:'ことばを さいごまで うつと てきに こうげき！\nてきの HPを 0に したら かちだよ。'},
   {sel:'#etimerBox',t:'この バーが いっぱいに なると てきが こうげきしてくるよ。\nいそいで うとう！'},
   {sel:'.php',t:'これが きみの HP。\n0に なると まけちゃうから きをつけてね。'},
@@ -1899,11 +1928,23 @@ const TUT_STEPS={
   {sel:'[data-arm=equip]',t:'「そうび」ボタンを おしてみよう。',wait:1},
   {sel:'#invwrap',t:'ここが もっている ぶき だよ。\nぶきを おすと そうび できるよ。'},
   {sel:'#slots',t:'ここが そうびの わく。\nランクが あがると わくが ふえて、ぶきを たくさん もてるよ。'},
-  {sel:'#tabs [data-tab=enh]',t:'つぎは「きょうか」。\nボタンを おしてね。',wait:1},
-  {sel:'#invwrap',t:'つよく したい ぶきを えらんで、\nほかの ぶきを「そざい」に すると レベルが あがるよ。'},
-  {sel:'#tabs [data-tab=syn]',t:'さいごは「ごうせい」。\nボタンを おしてね。',wait:1},
-  {sel:'#invwrap',t:'おなじ いろの ぶき どうしで、\nほしい「ついか のうりょく」を えらんで まとめられるよ。'},
-  {sel:'#armBack',t:'これで あそびかたは おしまい！\nきょてんに もどろう。',wait:1,end:'done'}]};
+  {sel:'#tabs',t:'したの ボタンで「きょうか」「ごうせい」「しんか」にも いけるよ。\nはじめて ひらいた ときに せつめい するね。'},
+  {sel:'#armBack',t:'これで あそびかたは おしまい！\nこのまま ぶきを そうび してみよう。\nおわったら この ボタンで きょてんに もどれるよ。',end:'done'}],
+ enh:[
+  {t:'ここは「きょうか」。\nぶきの レベルを あげて つよく できるよ。'},
+  {sel:'#invwrap',t:'まず つよく したい ぶき（ベース）を えらぼう。\nそのあと ほかの ぶきを おすと「そざい」に なるよ。'},
+  {sel:'.atop',t:'えらんだ ぶきは ここに でるよ。\nそざいの ぶきは なくなる かわりに けいけんちに なるよ。\nレアな ぶきほど たくさん もらえるよ。'},
+  {t:'そうびちゅうの ぶきと ★おきにいりの ぶきは そざいに できないよ。\nレベルが さいだいに なったら「しんか」できるよ。'}],
+ syn:[
+  {t:'ここは「ごうせい」。\nぶきに ついている「ついか のうりょく」を くみかえられるよ。'},
+  {sel:'#invwrap',t:'まず のうりょくを つけたい ぶき（ベース）を えらんで、\nつぎに おなじ レアリティ（おなじ いろ）の ぶきを そざいに えらぼう。'},
+  {sel:'.atop',t:'ふたつの ぶきの のうりょくから のこしたい ものを えらんで「ごうせい」！\nそざいの ぶきは なくなるよ。'},
+  {t:'コモン（しろ）の ぶきには ついか のうりょくが ないから ごうせい できないよ。'}],
+ evo:[
+  {t:'ここは「しんか」。\nぶきの レアリティを 1だん あげられるよ。'},
+  {sel:'#invwrap',t:'レベルが さいだいの ぶきを ベースに えらんで、\nおなじ レアリティで レベル さいだいの ぶきを そざいに しよう。'},
+  {sel:'.atop',t:'しんか すると こうげき・HP・わざの つよさ・さいだいレベルが あがって、\nついか のうりょくの わくも ふえるよ。'},
+  {t:'ふえた わくは からっぽ だから、「ごうせい」で のうりょくを いれてね。\nレジェンダリーと ユニークは しんか できないよ。'}]};
 const TUT={on:false,list:null,i:0,cb:null,raf:0};
 const tutEl=document.createElement('div');tutEl.id='tut';
 tutEl.innerHTML='<div class="tut-hole"></div><div class="tut-box"><div class="tut-head"><img class="tut-face" alt=""><b>ナビ</b><span class="tut-no"></span></div><p class="tut-txt"></p><div class="tut-btns"><button class="tut-skip">スキップ</button><span class="tut-hint">ひかっている ところを おしてね</span><button class="tut-next">つぎへ ▶</button></div></div>';
@@ -1933,10 +1974,13 @@ function tutScroll(){const st=TUT.list[TUT.i];if(!st||!st.sel)return;const el=do
   const r=el.getBoundingClientRect(),boxH=tutBox.getBoundingClientRect().height||200;
   if(r.top>=8&&r.bottom<=innerHeight-8&&(r.bottom+boxH+20<=innerHeight||r.top-boxH-20>=0))return;
   const roomBelow=r.height+boxH+40<=innerHeight;el.style.scrollMarginTop='12px';el.style.scrollMarginBottom='12px';
-  try{el.scrollIntoView({block:(roomBelow||r.height>innerHeight*.55)?'start':'center',inline:'nearest',behavior:'smooth'})}catch(e){el.scrollIntoView()}}
+  const toStart=roomBelow||r.height>innerHeight*.55,dy=toStart?r.top-12:(r.top+r.height/2)-innerHeight/2;
+  let sc=el.parentElement;while(sc&&sc!==document.body){const o=getComputedStyle(sc).overflowY;if((o==='auto'||o==='scroll')&&sc.scrollHeight>sc.clientHeight+1)break;sc=sc.parentElement}
+  if(sc&&sc!==document.body){const sr=sc.getBoundingClientRect(),d=toStart?r.top-sr.top-12:(r.top+r.height/2)-(sr.top+sr.height/2);sc.scrollTo({top:sc.scrollTop+d,behavior:'smooth'})}
+  else window.scrollBy({top:dy,behavior:'smooth'})}
 function tutShow(){
   const st=TUT.list[TUT.i];tutEl.querySelector('.tut-txt').textContent=st.t;
-  tutEl.querySelector('.tut-no').textContent=`${TUT.i+1} / ${TUT.list.length}`;
+  tutEl.querySelector('.tut-no').textContent=`${TUT.i+1} / ${TUT.list.length}`;tutEl.querySelector('.tut-next').textContent=TUT.i+1>=TUT.list.length?'おわる ▶':'つぎへ ▶';
   tutEl.classList.toggle('wait',!!st.wait);tutEl.classList.toggle('nohole',!st.sel);
   tutBox.classList.remove('tpop');void tutBox.offsetWidth;tutBox.classList.add('tpop');tutPlace(true);tutScroll();setTimeout(()=>{if(TUT.on){tutScroll();tutPlace(true)}},450);
 }
@@ -1966,7 +2010,8 @@ window.addEventListener('keydown',e=>{if(!TUT.on)return;const st=TUT.list[TUT.i]
   if(!['ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(e.key))e.preventDefault();e.stopPropagation();e.stopImmediatePropagation()},{capture:true});
 addEventListener('resize',()=>{if(TUT.on)tutPlace(true)});
 document.addEventListener('scroll',()=>{if(TUT.on)tutPlace(true)},{capture:true,passive:true});
-$('tutBtn').onclick=()=>{tutSet('intro');show('home');setTimeout(()=>tutRun('intro'),150)};
+$('tutBtn').onclick=()=>{S.tseen={};tutSet('intro');show('home');setTimeout(()=>tutRun('intro'),150)};
+function tutTab(t){if(!['enh','syn','evo'].includes(t)||TUT.on||tutStage()!=='done')return;S.tseen=S.tseen||{};if(S.tseen[t])return;S.tseen[t]=1;save();setTimeout(()=>{if(!TUT.on&&screen==='armory'&&A.tab===t)tutRun(t)},250)}
 function tutAuto(){if(tutStage()==='intro'&&screen==='home'&&!$('modal').classList.contains('on'))tutRun('intro')}
 
 /* ===== armory ===== */
@@ -2004,22 +2049,22 @@ function paneHTML(w,tag,cmp,extra,aft){
     if(sa){const nv=grp==='a'?(sa.a[key]||0):sa[key];const c=nv>v?'up':nv<v?'down':'';return `<span>${n}</span><b>${v?v+u:'-'}${nv!==v?` → <span class="${c}">${nv?nv+u:'-'}</span>`:''}</b>`}
     let c='',d='';if(o&&v!==ov){c=v>ov?'up':'down';d=` <small>(${v>ov?'+':''}${r1(v-ov)}${u})</small>`}
     return `<span>${n}</span><b class="${c}">${v?v+u:'-'}${d}</b>`};
-  return `<div class="tag">${tag}</div><div class="ph" style="--rc:${R.c}"><span class="dem">${wIcon(w)}</span><div style="min-width:0"><div class="dn">${w.fav?'★':''}${w.name}</div><div class="dr">${R.n}　Lv${w.lv}${aft&&aft.lv!==w.lv?` → <span class="up">${aft.lv}</span>`:''}/${R.cap}</div></div></div>
+  return `<div class="tag">${tag}</div><div class="ph" style="--rc:${R.c}"><span class="dem">${wIcon(w)}</span><div style="min-width:0"><div class="dn">${w.fav?'★':''}${w.name}</div><div class="dr">${R.n}${w.evo?`<span class="evot">進化+${w.evo}</span>`:''}　Lv${w.lv}${aft&&aft.lv!==w.lv?` → <span class="up">${aft.lv}</span>`:''}/${R.cap}</div></div></div>
   <div class="pbody"><div><div class="psec">ステータス</div><div class="rows">${row('攻撃',s.atk,o&&o.atk,'','atk')}${row('HP',s.hp,o&&o.hp,'','hp')}${row('防御',s.def,o&&o.def,'','def')}</div></div>
   <div><div class="psec">追加能力 <small>${w.aff.length}/${R.slots}</small></div>${keys.length?`<div class="rows aff">${keys.map(k=>{const cn=w.aff.filter(x=>x.k===k).length;return row(AFFD[k].n+(cn>1?`<small class="cnt">×${cn}</small>`:''),s.a[k]||0,o?(o.a[k]||0):0,'%',k,'a')}).join('')}</div>`:'<div class="small" style="margin-top:4px">なし</div>'}</div></div>
   <div class="psec">スキル</div>
   <div class="psk" style="margin-top:2px"><b>${sk.n}</b>${sk.uq?'<span class="uqt">固有</span>':''}　CT${sk.ct}秒<br>${trText(sk.tr)}：${sk.fx.map(f=>fxText(f,R.sm)).join('、')}</div>${extra||''}`;
 }
 function simLv(w,g){let lv=w.lv,xp=w.xp+g;const cap=RAR[w.r].cap;while(lv<cap&&xp>=needXP(w,lv)){xp-=needXP(w,lv);lv++}return lv}
-function setTab(t){A.tab=t;A.target=null;A.mats.clear();A.synMat=null;A.pick.clear();A.hover=null;
+function setTab(t){A.tab=t;A.target=null;A.mats.clear();A.synMat=null;A.evoMat=null;A.pick.clear();A.hover=null;
   $('tabs').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x.dataset.tab===t))}
-$('tabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;setTab(b.dataset.tab);renderArmory()};
+$('tabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;setTab(b.dataset.tab);renderArmory();tutTab(b.dataset.tab)};
 $('armBack').onclick=()=>show('home');
 
 function renderTop(){
   const open=slotsOpen(rankInfo().r);if(A.slot>=open)A.slot=0;
-  $('atitle').textContent={equip:'装備',enh:'強化',syn:'合成'}[A.tab];
-  $('aSub').textContent={equip:'クリックでメニュー／長押しか横に引いて枠へドラッグ',enh:'武器を素材にしてレベルを上げる',syn:'同じレア度の武器と追加能力を組み替える'}[A.tab];
+  $('atitle').textContent={equip:'装備',enh:'強化',syn:'合成',evo:'進化'}[A.tab];
+  $('aSub').textContent={equip:'クリックでメニュー／長押しか横に引いて枠へドラッグ',enh:'武器を素材にしてレベルを上げる',syn:'同じレア度の武器と追加能力を組み替える',evo:'レベル最大の武器を、同じレア度のレベル最大の武器と合わせて1段階上のレア度へ進化'}[A.tab];
   const sl=$('slots');sl.style.display=A.tab==='equip'?'':'none';
   if(A.tab==='equip')sl.innerHTML=SLOT_R.map((v,i)=>{
     if(i>=open)return `<div class="slot lock">🔒<br>ランク${v}</div>`;
@@ -2040,14 +2085,25 @@ function renderTop(){
       act=`<button class="btn pri" data-a="enh" ${mats.length&&t.lv<cap?'':'disabled'}>強化する</button><button class="btn" data-a="reset">対象を選び直す</button><button class="btn" data-a="bulk0">白を一括選択</button><button class="btn" data-a="bulk1">緑以下を一括選択</button>`;
     }else L='<div class="tag">強化対象</div><div class="empty">下の一覧から武器を選んでください</div>';
     R=hov&&hov.id!==A.target?paneHTML(hov,'カーソル中の武器',undefined,`<div class="prev">素材にすると +${matExp(hov)}EXP</div>`):'<div class="tag">素材</div><div class="empty">'+(t?'素材にする武器をタップ':'—')+'</div>';
+  }else if(A.tab==='evo'){
+    const t=byId(A.target),m=byId(A.evoMat);
+    if(t){const R0=RAR[t.r],R1=RAR[t.r+1],maxed=t.lv>=R0.cap,canTop=t.r<4;
+      const info=canTop?`<div class="prev">レアリティ ${R0.n} → <b class="up">${R1.n}</b><br>最大Lv ${R0.cap} → <b class="up">${R1.cap}</b>　追加能力の枠 ${R0.slots} → <b class="up">${R1.slots}</b>　スキル倍率 ×${R0.sm} → <b class="up">×${R1.sm}</b></div>`:'<div class="prev">これ以上 進化できません</div>';
+      L=paneHTML(t,canTop?'ベース（進化後の結果）':'ベース',undefined,info,canTop?Object.assign({},t,{r:t.r+1}):null);
+      mr=`<div class="mlab">素材${m?'<span class="small">（タップで外す）</span>':''}</div><div class="mats">${m?`<button class="wc mini" data-mid="${m.id}" style="--rc:${RAR[m.r].c}" title="${m.name}">${wIcon(m)}<span class="lv">Lv${m.lv}</span></button>`:`<span class="small">${canTop?`レベル最大（Lv${R0.cap}）の${R0.n}の武器を下の一覧からタップ`:'—'}</span>`}</div>`;
+      const need=!canTop?'':!maxed?`ベースのレベルを最大（Lv${R0.cap}）にすると進化できます（今 Lv${t.lv}）`:!m?'素材を選んでください':'';
+      ex=need?`<div class="small evoneed">${need}</div>`:'';
+      act=`<button class="btn pri" data-a="evo" ${canTop&&maxed&&m?'':'disabled'}>進化する</button><button class="btn" data-a="reset">ベースを選び直す</button>`;
+    }else L='<div class="tag">ベース</div><div class="empty">進化させる武器を選んでください（コモン〜エピック）</div>';
+    R=m?paneHTML(m,'素材（消費）'):hov&&hov.id!==A.target?paneHTML(hov,'カーソル中の武器'):'<div class="tag">素材</div><div class="empty">—</div>';
   }else{
     const t=byId(A.target),m=byId(A.synMat);
     const mm=byId(A.synMat),prv=(t&&mm&&A.pick.size)?Object.assign({},t,{aff:[...A.pick].map(k=>(k[0]==='b'?t.aff:mm.aff)[+k.slice(1)])}):null;
     L=t?paneHTML(t,prv?'ベース（合成後の結果）':'ベース',undefined,'',prv):'<div class="tag">ベース</div><div class="empty">アンコモン以上の武器を選んでください</div>';
     R=m?paneHTML(Object.assign({},m,{lv:t.lv}),`素材（消費）・追加能力はベースのLv${t.lv}に換算`):hov&&hov.id!==A.target?paneHTML(hov,'カーソル中の武器'):`<div class="tag">素材</div><div class="empty">${t?`同じレア度（${RAR[t.r].n}）の武器をタップ`:'—'}</div>`;
     if(t)mr=`<div class="mlab">素材${m?'<span class="small">（タップで外す）</span>':''}</div><div class="mats">${m?`<button class="wc mini" data-mid="${m.id}" style="--rc:${RAR[m.r].c}" title="${m.name}">${wIcon(m)}<span class="lv">Lv${m.lv}</span></button>`:`<span class="small">同じレア度（${RAR[t.r].n}）の武器を下の一覧からタップ</span>`}</div>`;
-    if(t&&m){const n=RAR[t.r].slots,pool=[...t.aff.map((a,i)=>({key:'b'+i,a,src:'ベース'})),...m.aff.map((a,i)=>({key:'m'+i,a,src:'素材'}))];
-      ex=`<div class="mlab">追加能力を${n}つ選択（${A.pick.size}/${n}）</div><div class="daff">${pool.map(p=>`<button class="chip ${A.pick.has(p.key)?'on':[...A.pick].some(q=>pool.find(x=>x.key===q).a.k===p.a.k)?'dis':''}" data-pick="${p.key}"><small>${p.src}</small>${AFFD[p.a.k].n}+${affVal(t,p.a)}%</button>`).join('')}</div>`;
+    if(t&&m){const n=synNeed(t,m),pool=[...t.aff.map((a,i)=>({key:'b'+i,a,src:'ベース'})),...m.aff.map((a,i)=>({key:'m'+i,a,src:'素材'}))];
+      ex=`<div class="mlab">追加能力を${n}つ選択（${A.pick.size}/${n}）${n<RAR[t.r].slots?`<span class="small">（種類が足りないため${n}つ）</span>`:''}</div><div class="daff">${pool.map(p=>`<button class="chip ${A.pick.has(p.key)?'on':[...A.pick].some(q=>pool.find(x=>x.key===q).a.k===p.a.k)?'dis':''}" data-pick="${p.key}"><small>${p.src}</small>${AFFD[p.a.k].n}+${affVal(t,p.a)}%</button>`).join('')}</div>`;
       act=`<button class="btn pri" data-a="syn" ${A.pick.size===n?'':'disabled'}>合成する</button><button class="btn" data-a="reset">ベースを選び直す</button>`;
     }else if(t)act='<button class="btn" data-a="reset">ベースを選び直す</button>';
   }
@@ -2064,7 +2120,9 @@ function renderInv(){
     if(A.tab==='syn'&&t&&!A.synMat&&w.id!==t.id&&(w.r!==t.r||isEq(w.id)))cls='dim';
     if(A.tab==='syn'&&!t&&w.r===0)cls='dim';
     if(A.tab==='enh'&&t&&w.id!==t.id&&isEq(w.id))cls='dim';
-    const ck=(A.tab==='enh'&&A.mats.has(w.id))||(A.tab==='syn'&&A.synMat===w.id);
+    if(A.tab==='evo'&&t&&!A.evoMat&&w.id!==t.id&&(w.r!==t.r||w.lv<RAR[w.r].cap||isEq(w.id)))cls='dim';
+    if(A.tab==='evo'&&!t&&w.r>=4)cls='dim';
+    const ck=(A.tab==='enh'&&A.mats.has(w.id))||(A.tab==='syn'&&A.synMat===w.id)||(A.tab==='evo'&&A.evoMat===w.id);
     return `<div class="wc ${cls}" data-id="${w.id}" style="--rc:${RAR[w.r].c}" title="${w.name}">${wIcon(w)}<span class="lv">Lv${w.lv}</span>${isEq(w.id)?'<span class="eb">E</span>':''}${w.fav?'<span class="fvb">★</span>':''}${ck?'<span class="ck">✓</span>':''}</div>`}).join('')
     ||'<div class="empty" style="grid-column:1/-1">条件に合う武器がありません</div>';
 }
@@ -2083,6 +2141,7 @@ function openCtx(id,x,y,detail){armTipOff();
   items.push([w.fav?'☆ お気に入りを解除':'★ お気に入りに登録',()=>{w.fav=!w.fav;save();toast(w.fav?'お気に入りに登録しました':'お気に入りを解除しました')}]);
   items.push(['強化する',()=>{setTab('enh');A.target=id}]);
   if(w.r>0)items.push(['合成のベースにする',()=>{setTab('syn');A.target=id}]);
+  if(w.r<4)items.push(['進化のベースにする',()=>{setTab('evo');A.target=id}]);
   if(!isEq(id)&&!w.fav)items.push(['捨てる',()=>{modal(`<h2>捨てる？</h2><p>「${w.name}」（${RAR[w.r].n} Lv${w.lv}）を捨てます。元に戻せません。</p>`,
     [{t:'やめる'},{t:'捨てる',pri:true,fn:()=>{S.inv=S.inv.filter(x=>x.id!==id);if(A.sel===id)A.sel=null;save();toast('捨てました');renderArmory()}}])}]);
   items.push(['閉じる',null]);
@@ -2100,6 +2159,16 @@ function tapCard(id,x,y,pt){
     else if(isEq(id))toast('装備中の武器は素材にできません');
     else if(w.fav)toast('お気に入りの武器は素材にできません（解除すると使えます）');
     else A.mats.add(id);
+  }else if(A.tab==='evo'){
+    const t=byId(A.target),cap=RAR[w.r].cap;
+    if(!t){if(w.r>=4)toast('レジェンダリーとユニークは これ以上進化できません');else A.target=id}
+    else if(id===t.id)return;
+    else if(A.evoMat===id)A.evoMat=null;
+    else if(w.r!==t.r)toast('同じレアリティの武器だけ素材にできます');
+    else if(w.lv<cap)toast(`素材もレベル最大（Lv${cap}）が必要です`);
+    else if(isEq(id))toast('装備中の武器は素材にできません');
+    else if(w.fav)toast('お気に入りの武器は素材にできません（解除すると使えます）');
+    else A.evoMat=id;
   }else{
     const t=byId(A.target);
     if(!t){if(w.r===0)toast('コモンには追加能力がないため合成できません');else A.target=id}
@@ -2115,8 +2184,9 @@ function tapCard(id,x,y,pt){
   renderArmory();
 }
 $('slots').onclick=e=>{const b=e.target.closest('[data-slot]');if(!b)return;const i=+b.dataset.slot;A.slot=i;renderTop();if(S.eq[i])openCtx(S.eq[i],e.clientX,e.clientY,e.pointerType&&e.pointerType!=='mouse')};
-$('matrow').onclick=e=>{const b=e.target.closest('[data-mid]');if(!b)return;const id=+b.dataset.mid;if(A.tab==='enh')A.mats.delete(id);else{A.synMat=null;A.pick.clear()}renderArmory()};
-$('extra').onclick=e=>{const b=e.target.closest('[data-pick]');if(!b)return;const k=b.dataset.pick,t=byId(A.target),mm=byId(A.synMat),n=RAR[t.r].slots;
+$('matrow').onclick=e=>{const b=e.target.closest('[data-mid]');if(!b)return;const id=+b.dataset.mid;if(A.tab==='enh')A.mats.delete(id);else if(A.tab==='evo')A.evoMat=null;else{A.synMat=null;A.pick.clear()}renderArmory()};
+function synNeed(t,m){return Math.min(RAR[t.r].slots,new Set(t.aff.concat(m.aff).map(a=>a.k)).size)}
+$('extra').onclick=e=>{const b=e.target.closest('[data-pick]');if(!b)return;const k=b.dataset.pick,t=byId(A.target),mm=byId(A.synMat),n=synNeed(t,mm);
   const aOf=key=>(key[0]==='b'?t.aff:mm.aff)[+key.slice(1)];
   if(A.pick.has(k))A.pick.delete(k);
   else if([...A.pick].some(q=>aOf(q).k===aOf(k).k))toast('同じ追加能力は1つまでしか付けられません');
@@ -2128,8 +2198,12 @@ $('actions').onclick=e=>{
     const t=byId(A.target),mats=[...A.mats].map(byId).filter(Boolean),g=mats.reduce((s,m)=>s+matExp(m),0),from=t.lv,cap=RAR[t.r].cap;
     t.xp+=g;t.tx+=g;while(t.lv<cap&&t.xp>=needXP(t,t.lv)){t.xp-=needXP(t,t.lv);t.lv++}if(t.lv>=cap)t.xp=0;
     S.inv=S.inv.filter(w=>!A.mats.has(w.id));A.mats.clear();save();se('enhance',t.lv-from);toast(`強化しました　Lv${from} → ${t.lv}`);
-  }else if(a==='reset'){A.target=null;A.mats.clear();A.synMat=null;A.pick.clear()}
+  }else if(a==='reset'){A.target=null;A.mats.clear();A.synMat=null;A.evoMat=null;A.pick.clear()}
   else if(a==='unmat'){A.synMat=null;A.pick.clear()}
+  else if(a==='evo'){
+    const t=byId(A.target),m=byId(A.evoMat);if(!t||!m||t.r>=4||t.lv<RAR[t.r].cap||m.lv<RAR[m.r].cap)return;
+    const from=RAR[t.r].n;t.r++;t.evo=(t.evo||0)+1;t.xp=0;S.inv=S.inv.filter(w=>w.id!==m.id);A.evoMat=null;save();se('evolve');toast(`進化しました　${from} → ${RAR[t.r].n}`);
+  }
   else if(a==='syn'){
     const t=byId(A.target),m=byId(A.synMat);
     t.aff=[...A.pick].map(k=>({...(k[0]==='b'?t.aff:m.aff)[+k.slice(1)]}));
