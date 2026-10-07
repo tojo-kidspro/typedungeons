@@ -420,6 +420,19 @@ img{image-rendering:pixelated}
 .hq.lock{border-color:var(--faint);text-align:center;font-size:14px}
 .hq.lock small{position:static;display:block;font-size:9px;color:var(--dim)}
 .hq.empty{border-style:dashed}
+
+.hq[data-hslot]{cursor:pointer}.hq.empty[data-hslot]:hover{border-color:var(--sel);color:var(--sel)}
+@keyframes glj{0%{transform:translate(0,0)}20%{transform:translate(-3px,1px) skewX(10deg)}40%{transform:translate(3px,-2px)}60%{transform:translate(-2px,2px) skewX(-8deg)}80%{transform:translate(2px,0) scaleX(1.06)}100%{transform:translate(0,0)}}
+@keyframes glh{0%,100%{filter:none}30%{filter:hue-rotate(120deg) saturate(2)}60%{filter:hue-rotate(250deg)}}
+#stage.gl #eg img{animation:glj .22s steps(2) infinite,glh .9s steps(3) infinite}
+#stage.gl #ename{animation:glj .3s steps(2) infinite;color:#f0f;text-shadow:2px 0 #0ff}
+#eg.flee{animation:gflee .5s steps(5) forwards}
+@keyframes gflee{0%{opacity:1;transform:none}40%{transform:translateX(-12px) skewX(30deg) scaleY(.6)}70%{opacity:.6;transform:translateX(14px) scaleY(.15)}100%{opacity:0;transform:scaleY(0)}}
+.alert.gl .aband{animation:glj .2s steps(2) infinite}.alert.gl{filter:hue-rotate(160deg) saturate(1.6)}
+.bl.gl{color:#f0f;text-shadow:1px 0 #0ff}.glt{color:#f0f}
+#kb.glitch .k{transform:translate(var(--gx,0),var(--gy,0)) rotate(var(--gr,0)) skewX(var(--gs,0));transition:transform .15s steps(2)}
+#kb.glitch{animation:kbg 1.4s steps(1) infinite}
+@keyframes kbg{0%,100%{transform:none;filter:none}12%{transform:translateX(-8px) skewX(6deg);filter:hue-rotate(90deg)}15%{transform:none;filter:none}48%{transform:translate(7px,3px) skewY(2deg);filter:hue-rotate(220deg)}51%{transform:none;filter:none}77%{transform:scaleX(1.05) skewX(-5deg)}80%{transform:none}}
 .hcard .statgrid{margin-top:14px}
 .prog{display:flex;align-items:center;gap:10px;font-size:12px;margin-bottom:8px}
 .prog span{width:84px;color:var(--dim)}
@@ -616,6 +629,9 @@ button.chip.dis{opacity:.3;text-decoration:line-through}
 .tut-btns{display:flex;align-items:center;gap:8px}
 .tut-skip{font-size:12px;color:var(--dim);text-decoration:underline}
 .tut-next{margin-left:auto;padding:8px 16px;border:3px solid var(--sel);color:var(--sel);font-size:16px}
+.tut-next .tkey{display:inline-block;margin-left:8px;padding:0 5px;border:1px solid currentColor;font-size:11px;line-height:16px;vertical-align:2px;opacity:.85}
+.tut-next .tkey::before{content:"";}
+@media (hover:none){.tut-next .tkey{display:none}}
 .tut-hint{display:none;margin-left:auto;font-size:13px;color:var(--sel);animation:blink 1s steps(2) infinite}
 #tut.wait .tut-next{display:none}
 #tut.wait .tut-hint{display:inline}
@@ -955,10 +971,11 @@ function buildSpecs(){
     SPEC[key]=Object.assign(sp||{t,r,pal,v:v0,g:g0,seed:hashS(key)},extra||{})};
   SPEC['s:starter']={t:0,r:0,pal:'bronze',v:0,g:3,seed:777};used.add('0|bronze|0|3');
   NORMALS.concat(BOSSES).forEach(d=>{const h=hashS(d.id),f=UFORCE[d.id]||{};take('u:'+d.id,d.ut,5,UPAL[d.id]||'gold',f.v!=null?f.v:h%4,(h>>>3)%4,f.v,{curved:!!f.curved,uq:true})});
+  GLITCH.forEach(g=>{SPEC['g:'+g.id]={t:g.wt,r:g.wr,pal:'cyber',v:hashS(g.id)%4,g:1,seed:hashS(g.id+'w'),gl:true}});
   CAT.slice().sort((a,b)=>b.r-a.r).forEach(e=>{const h=hashS(e.c),pal=e.r===0?['wood','iron','rust'][e.t%3]:e.r===1?(e.name.startsWith('鉄')?'iron':e.name.startsWith('鋼')?'steel':'bronze'):['fire','ice','thunder','dark','holy'][e.el];
     take('c:'+e.c,e.t,e.r,pal,h%4,(h>>>3)%4)});
 }
-function specKey(w){return w.name==='旅立ちの短剣'?'s:starter':w.u?'u:'+w.u:w.c?'c:'+w.c:'i:'+w.id}
+function specKey(w){return w.g?'g:'+w.g:w.name==='旅立ちの短剣'?'s:starter':w.u?'u:'+w.u:w.c?'c:'+w.c:'i:'+w.id}
 const mix=(a,b,k)=>a.map((x,i)=>Math.round(x*(1-k)+b[i]*k));
 function wSprite(w){
   if(!SPEC)buildSpecs();
@@ -1083,7 +1100,7 @@ function wSprite(w){
   for(let y=0;y<G;y++)for(let x=0;x<G;x++){const X=(x+.5)/G,Y=(y+.5)/G,ax=X-.12,ay=Y-.88;px[y*G+x]=shape((ax*.7071-ay*.7071)/1.103,ax*.7071+ay*.7071,X,Y)}
   const OC=uq?[70,0,18]:OUTC,c=document.createElement('canvas');c.width=c.height=G;const g=c.getContext('2d'),im=g.createImageData(G,G),d=im.data;
   for(let i=0;i<G*G;i++){let col=px[i];if(!col){const x=i%G,y=(i/G)|0;if((x>0&&px[i-1])||(x<G-1&&px[i+1])||(y>0&&px[i-G])||(y<G-1&&px[i+G]))col=OC}if(col){d[i*4]=col[0];d[i*4+1]=col[1];d[i*4+2]=col[2];d[i*4+3]=255}}
-  g.putImageData(im,0,0);return SPR[ck]=c.toDataURL();
+  if(sp.gl)glitchPx(d,G,R,1.1);g.putImageData(im,0,0);return SPR[ck]=c.toDataURL();
 }
 
 function wIcon(w){const s=wSprite(w);return `<span class="wic r${w.r}"><img src="${s}" alt="">${w.r>=2?`<i class="sh" style="-webkit-mask-image:url('${s}');mask-image:url('${s}')"></i>`:''}</span>`}
@@ -1092,12 +1109,31 @@ function eSprite(d){
   if(ESPR[d.id])return ESPR[d.id];
   const N=d.px,P=N+2,c=document.createElement('canvas');c.width=c.height=P;const g=c.getContext('2d');
   g.textAlign='center';g.textBaseline='middle';g.font=`${Math.floor(N*.88)}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;g.fillText(d.e,P/2,P/2+N*.05);
+  if(d.e2){g.font=`${Math.floor(N*.42)}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;g.fillText(d.e2,P/2,P*.2)}
   const im=g.getImageData(0,0,P,P),a=im.data,q=v=>Math.min(255,Math.round(v/48)*48),op=new Uint8Array(P*P);
   for(let i=0;i<P*P;i++){if(a[i*4+3]<120){a[i*4+3]=0}else{a[i*4]=q(a[i*4]);a[i*4+1]=q(a[i*4+1]);a[i*4+2]=q(a[i*4+2]);a[i*4+3]=255;op[i]=1}}
   for(let i=0;i<P*P;i++){if(op[i])continue;const x=i%P,y=(i/P)|0;if((x>0&&op[i-1])||(x<P-1&&op[i+1])||(y>0&&op[i-P])||(y<P-1&&op[i+P])){a[i*4]=OUTC[0];a[i*4+1]=OUTC[1];a[i*4+2]=OUTC[2];a[i*4+3]=255}}
-  g.putImageData(im,0,0);return ESPR[d.id]=c.toDataURL();
+  if(d.gl)glitchPx(a,P,mulb(hashS(d.id)),1.5);g.putImageData(im,0,0);return ESPR[d.id]=c.toDataURL();
 }
 NORMALS.forEach((d,i)=>d.px=Math.round(12+i*52/(NORMALS.length-1)));BOSSES.forEach((d,i)=>d.px=Math.round(32+i*96/(BOSSES.length-1)));
+/* ===== ??? ===== */
+const GLITCH=[
+ {id:'g1',e:'💧',n:'繝後Ν繧ｹ繝ｩ繧､繝',px:22,hp:8,flee:9,xm:10,xa:200,wn:'谺迚\uFFFD縺ｮ蜑｣',wt:0,wr:3,skn:'邨碁ｨ薙ｒ蝟ｰ繧峨≧',mexp:30000,gl:1},
+ {id:'g2',e:'🌀',n:'縺ｯ縺舌ｌ繝昴う繝ｳ繧ｿ',px:26,hp:12,flee:8,xm:30,xa:1000,wn:'邨先匕縺ｮ譚\uFFFD',wt:5,wr:4,skn:'險俶\uFFFDｶ縺ｮ譁ｭ迚\uFFFD',mexp:100000,gl:1},
+ {id:'g3',e:'🦠',e2:'👑',n:'繧ｪ繝ｼ繝舌\uFFFDｼ繝輔Ο繝ｼ邇\uFFFD',px:72,hp:28,flee:15,xm:100,xa:5000,wn:'譬ｸ縺ｮ螟ｧ蜑｣',wt:1,wr:5,skn:'縺ｬ繧九⊃',mexp:400000,gl:1,boss:1}];
+const GLI=Object.fromEntries(GLITCH.map(g=>[g.id,g]));
+GLITCH.forEach(g=>{SK['g_'+g.id]={n:g.skn,uq:true,tr:{type:'mat'},ct:0,fx:[{t:'mat',v:g.mexp}]}});
+function glPick(boss,dif){const r=Math.random();if(boss)return dif==='hard'&&r<.015?GLI.g3:null;if(dif!=='easy'&&r<.006)return GLI.g2;return r<.026?GLI.g1:null}
+function glMat(g,f){const w=makeW({t:g.wt,r:g.wr,f:f||1,name:g.wn,sk:'g_'+g.id,g:g.id});return w}
+function glitchPx(d,G,R,k){
+  const src=new Uint8ClampedArray(d);
+  for(let y=0;y<G;y++){if(R()<.35*k){const sh=Math.round((R()*2-1)*G*.16*k);for(let x=0;x<G;x++){const i=(y*G+x)*4,sx=x-sh;if(sx<0||sx>=G){d[i+3]=0;continue}const j=(y*G+sx)*4;d[i]=src[j];d[i+1]=src[j+1];d[i+2]=src[j+2];d[i+3]=src[j+3]}}}
+  const s2=new Uint8ClampedArray(d);
+  for(let i=0;i<G*G;i++){if(s2[i*4+3])continue;const x=i%G;if(x>0&&s2[(i-1)*4+3]){d[i*4]=255;d[i*4+1]=0;d[i*4+2]=200;d[i*4+3]=255}else if(x<G-1&&s2[(i+1)*4+3]){d[i*4]=0;d[i*4+1]=230;d[i*4+2]=255;d[i*4+3]=255}}
+  const C=[[255,0,255],[0,255,255],[0,255,90],[255,255,255],[16,16,16],[255,230,0]],nb=Math.round((5+R()*5)*k);
+  for(let b=0;b<nb;b++){const w=1+Math.floor(R()*G*.35),h=1+Math.floor(R()*Math.max(1,G/14)),x0=Math.floor(R()*G),y0=Math.floor(R()*G),c=C[Math.floor(R()*C.length)];
+    for(let y=y0;y<Math.min(G,y0+h);y++)for(let x=x0;x<Math.min(G,x0+w);x++){const i=(y*G+x)*4;d[i]=c[0];d[i+1]=c[1];d[i+2]=c[2];d[i+3]=255}}
+}
 /* ===== weapon catalog (fixed skill per weapon) & unique skills ===== */
 const DEF_T=[6,8,10];const isDefT=t=>DEF_T.includes(t);
 const OFF_SK=['rush','every3','thunder','slash','meteor','storm','drain','lifeblade','might','eagle','focus','rally','rage','haste','stop'];
@@ -1137,6 +1173,7 @@ const UNAME={crab:'甲殻の大盾',mgolem:'機神の大盾',snail:'螺旋の大
   const boss=i>=NORMALS.length,ak=isDefT(d.ut)?defA[di++%3]:offA[oi++%offA.length],a=UARCH[ak],k='x_'+d.id,mul=boss?1.3:1;
   SK[k]={n:USKN[d.id],uq:true,tr:a.tr,ct:a.ct,fx:a.fx.map(f=>Object.assign({},f,f.t==='multi'?{n:Math.round(f.n*mul)}:f.t==='delay'||f.t==='ctcut'?{}:{v:f.v*mul}))};d.us=k})}
 function migrateW(w){
+  if(w.g){w.aff=[];w.sk='g_'+w.g;return}
   {const best={};w.aff.forEach(a=>{if(!best[a.k]||a.v>best[a.k].v)best[a.k]=a});w.aff=Object.values(best);
    const ns=RAR[w.r].slots;if(w.aff.length>ns)w.aff=w.aff.slice(0,ns);else if(w.aff.length<ns&&!w.evo)w.aff=w.aff.concat(genAff(ns-w.aff.length,isDefT(w.t),w.aff.map(a=>a.k)))}
   if(w.u){const d=NORMALS.concat(BOSSES).find(x=>x.id===w.u);if(d)w.sk=d.us;return}
@@ -1194,6 +1231,7 @@ function se(k,a){
     case'evolve':{nz(t,.9,.05,2500);tone('square',110,t,.9,.06,null,880);[60,64,67,72,76,79,84,88].forEach((mm,i)=>tone('pulse',mtof(mm),t+.5+i*.05,.18,.11));
       [72,76,79,84].forEach(mm=>tone('triangle',mtof(mm),t+.95,1.1,.12));tone('pulse',mtof(96),t+1,.6,.09);break}
     case'cd':tone('pulse',523,t,.18,.16);break;
+    case'glitch':for(let i=0;i<9;i++){const tt=t+i*.045;if(Math.random()<.5)nz(tt,.04,.16,400+Math.random()*6000);else tone('square',80+Math.random()*1800,tt,.04,.07,null,40+Math.random()*3000)}break;
     case'go':tone('pulse',1047,t,.35,.18);tone('pulse',1319,t+.06,.3,.12);break;
   }
 }
@@ -1266,7 +1304,7 @@ function tokenize(kana){
 /* ===== save ===== */
 let S;
 function freshRec(){return{kills:0,hits:0,dmg:0,keys:0,maxCombo:0,bestKps:0,time:0,clears:0,uniq:[],dex:{}}}
-function dexKey(w){return w.u?'u:'+w.u:w.c?'c:'+w.c:`t${w.t}r${w.r}`}
+function dexKey(w){return w.g?'g:'+w.g:w.u?'u:'+w.u:w.c?'c:'+w.c:`t${w.t}r${w.r}`}
 function freshProg(){return{easy:{maxF:0,lastF:1},normal:{maxF:0,lastF:1},hard:{maxF:0,lastF:1}}}
 function fresh(){return{exp:0,inv:[],eq:[null,null,null,null,null],nid:1,diff:'normal',prog:freshProg(),rec:freshRec(),tut:{stage:'intro'},tseen:{}}}
 function PG(){return S.prog[S.diff]||S.prog.normal}
@@ -1283,7 +1321,7 @@ function save(){S._t=Date.now();try{localStorage.setItem(curKey(),JSON.stringify
 function genAff(n,def,excl){const used=new Set(excl||[]),a=[];
   for(let i=0;i<n;i++){const P0=AFF.filter(x=>!used.has(x.k));if(!P0.length)break;const P=def?P0.concat(P0.filter(x=>x.k==='hp'||x.k==='def'),P0.filter(x=>x.k==='hp'||x.k==='def')):P0;
     const d=P[rand(P.length)];used.add(d.k);a.push({k:d.k,v:r1(d.min+Math.random()*(d.max-d.min))})}return a}
-function makeW(o){return{id:S.nid++,t:o.t,r:o.r,f:o.f,lv:1,xp:0,tx:0,name:o.name,sk:o.sk,u:o.u||null,c:o.c||null,el:o.el??5,aff:genAff(RAR[o.r].slots,isDefT(o.t))}}
+function makeW(o){return{id:S.nid++,t:o.t,r:o.r,f:o.f,lv:1,xp:0,tx:0,name:o.name,sk:o.sk,u:o.u||null,c:o.c||null,g:o.g||null,el:o.el??5,aff:o.g?[]:genAff(RAR[o.r].slots,isDefT(o.t))}}
 function rarW(f,boss,dif){dif=dif||'normal';const t=Math.min(1,Math.max(0,(f-1)/99)),L=(a,b)=>a+(b-a)*t;let u=boss?L(.6,1):L(.3,.9),w=[L(55,10),L(28,24),L(11,30),L(4.5,22),L(1.5,14)];
   if(dif==='easy'){u=0;w[4]=0}if(dif==='normal')u=0;if(dif==='hard'){u=3;w=[w[0]*.6,w[1],w[2]*1.3,w[3]*1.7,w[4]*2.5]}
   const sum=w.reduce((a,b)=>a+b,0);return w.map(x=>x/sum*(100-u)).concat(u)}
@@ -1295,14 +1333,14 @@ function rollWeapon(f,d,boss){
   return makeW({t:e.t,r,f,el:e.el,name:e.name,sk:e.sk,c:e.c});
 }
 const WBASE=[8,16,30,55,95,160];
-function wBase(w){const T=TYPES[w.t],b=WBASE[w.r]*(1+.025*(w.lv-1));return{atk:Math.round(b*T.a),hp:Math.round(b*5*T.h),def:Math.round(b*.6*T.d)}}
+function wBase(w){if(w.g)return{atk:1,hp:1,def:1};const T=TYPES[w.t],b=WBASE[w.r]*(1+.025*(w.lv-1));return{atk:Math.round(b*T.a),hp:Math.round(b*5*T.h),def:Math.round(b*.6*T.d)}}
 function affVal(w,a){return r1(a.v*(1+(a.k==='cr'||a.k==='cd'?.025:.015)*(w.lv-1)))}
 function affTxt(w,a){return `${AFFD[a.k].n}+${affVal(w,a)}%`}
 function needXP(w,L){return Math.floor(15*L*(1+w.r*.3))}
-function matExp(w){return Math.floor(60*Math.pow(w.r+1,2))+Math.floor(w.tx*.5)}
+function matExp(w){if(w.g)return GLI[w.g].mexp+Math.floor(w.tx*.5);return Math.floor(60*Math.pow(w.r+1,2))+Math.floor(w.tx*.5)}
 function byId(id){return S.inv.find(w=>w.id===id)}
 function isEq(id){return S.eq.includes(id)}
-function trText(tr){return{win:`${tr.s}秒以内に${tr.n}回攻撃`,every:`${tr.n}回攻撃ごと`,hit:'被ダメージ時',crit:'クリティカル時',low:'HP50%以下で被弾時'}[tr.type]}
+function trText(tr){return{mat:'強化の素材にした時',win:`${tr.s}秒以内に${tr.n}回攻撃`,every:`${tr.n}回攻撃ごと`,hit:'被ダメージ時',crit:'クリティカル時',low:'HP50%以下で被弾時'}[tr.type]}
 function fxText(f,m){
   switch(f.t){
     case'dmg':return `攻撃力×${(f.v*m).toFixed(2)}の追撃`;
@@ -1313,6 +1351,7 @@ function fxText(f,m){
     case'delay':return `敵の行動を${(f.v*Math.sqrt(m)).toFixed(1)}秒停止`;
     case'drain':return `与えたダメージの${Math.round(f.v*m)}%を吸収`;
     case'ctcut':return `他の武器のCTを${(f.v*Math.sqrt(m)).toFixed(1)}秒短縮`;
+    case'mat':return `経験値 +${f.v.toLocaleString()}`;
     case'multi':return `攻撃力×${f.v}の${Math.round(f.n*(1+(m-1)*.6))}連撃`;
   }
 }
@@ -1345,7 +1384,7 @@ function modal(html,btns){
 let screen='home';
 function show(name){
   screen=name;document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===name));
-  if(name!=='battle'){B=null;W=null;}if(typeof TIP!=='undefined'){TIP.classList.remove('on');TIP._id=null}if(name!=='battle'){$('alert').classList.remove('on')}closeCtx&&closeCtx();
+  if(name!=='battle'){B=null;W=null;if(typeof kbGlitch==='function'){kbGlitch(false);$('stage').classList.remove('gl')}}if(typeof TIP!=='undefined'){TIP.classList.remove('on');TIP._id=null}if(name!=='battle'){$('alert').classList.remove('on')}closeCtx&&closeCtx();
   if(name==='home')renderHome();if(name==='armory')renderArmory();if(name==='dex')renderDex();
   if(name!=='battle')playBgm('home');
 }
@@ -1372,11 +1411,11 @@ function renderHome(){
   countUp($('hPow'),power(st));
   const next=SLOT_R[open];$('hSlotTxt').textContent=next?`　${open}/5（次の枠はランク${next}）`:'　5/5';
   $('hSlots').innerHTML=SLOT_R.map((v,i)=>{if(i>=open)return `<div class="hq lock">🔒<small>ランク${v}</small></div>`;
-    const w=byId(S.eq[i]);return w?`<div class="hq" data-hid="${w.id}" data-hslot="${i}" style="--rc:${RAR[w.r].c}">${wIcon(w)}<small>Lv${w.lv}</small></div>`:'<div class="hq empty">空き</div>'}).join('');
+    const w=byId(S.eq[i]);return w?`<div class="hq" data-hid="${w.id}" data-hslot="${i}" style="--rc:${RAR[w.r].c}">${wIcon(w)}<small>Lv${w.lv}</small></div>`:`<div class="hq empty" data-hslot="${i}">空き</div>`}).join('');
   $('hStats').innerHTML=[['HP',st.hp],['攻撃力',st.atk],['防御力',st.def],['クリ率',st.cr+'%'],['クリダメ',st.cd+'%'],['CT軽減',st.ctr+'%'],['スキル威力',st.sp+'%'],['連撃率',st.mh+'%']]
     .map(([a,b])=>`<div><span class="small">${a}</span><b>${b}</b></div>`).join('');
   $('hProg').style.width=PG().maxF+'%';$('hProgT').textContent=`${DIFF[S.diff].n} ${PG().maxF}/100層`;
-  const dc=DEX.filter(e=>S.rec.dex[e.key]).length;$('hUni').style.width=(dc/DEX.length*100)+'%';$('hUniT').textContent=`${dc}/${DEX.length}`;
+  const DV=dexVis(),dc=DV.filter(e=>S.rec.dex[e.key]).length;$('hUni').style.width=(dc/DV.length*100)+'%';$('hUniT').textContent=`${dc}/${DV.length}`;
   $('hRec').innerHTML=[['撃破数',fmtBig(R.kills)+'体'],['総ヒット',fmtBig(R.hits)],['総ダメージ',fmtBig(R.dmg)],['最大コンボ',R.maxCombo],
     ['最高速度',R.bestKps.toFixed(2)+'打/秒'],['総打鍵',fmtBig(R.keys)],['層クリア',R.clears+'回'],['プレイ時間',fmtTime(R.time)]]
     .map(([a,b])=>`<div><span class="small">${a}</span><b>${b}</b></div>`).join('');
@@ -1395,8 +1434,8 @@ $('hSlots').addEventListener('pointerover',e=>{if(e.pointerType!=='mouse')return
   TIP.classList.add('on');tipPos(e.clientX,e.clientY)});
 $('hSlots').addEventListener('pointermove',e=>{if(TIP.classList.contains('on'))tipPos(e.clientX,e.clientY)});
 $('hSlots').addEventListener('pointerleave',()=>{TIP.classList.remove('on');TIP._id=null});
-$('hSlots').addEventListener('click',e=>{const q=e.target.closest('[data-hid]');if(!q)return;TIP.classList.remove('on');TIP._id=null;
-  setTab('equip');A.slot=+q.dataset.hslot;A.sel=+q.dataset.hid;A.hover=null;show('armory')});
+$('hSlots').addEventListener('click',e=>{const q=e.target.closest('[data-hslot]');if(!q)return;TIP.classList.remove('on');TIP._id=null;
+  setTab('equip');A.slot=+q.dataset.hslot;A.sel=q.dataset.hid?+q.dataset.hid:null;A.hover=null;show('armory')});
 function floorInfo(f){const band=Math.min(BOSSES.length-1,Math.floor((f-1)/5)),start=Math.round(band*(NORMALS.length-4)/(BOSSES.length-1));return{band,pool:NORMALS.slice(start,start+4),boss:BOSSES[band]}}
 function renderFInfo(){const fi=floorInfo(selF);
   $('fInfo').innerHTML=`＊ ${selF}層　${selF<=PG().maxF?'クリア済み':'未踏の層'}<br><span class="small">出現：${fi.pool.map(d=>d.n).join('・')}<br>ボス：${fi.boss.n}</span>`;
@@ -1423,10 +1462,11 @@ document.addEventListener('keydown',e=>{
 /* ===== battle ===== */
 let B=null,W=null;
 function enemyStats(f,boss){const g=1+.15*(f-1),D=DIFF[B&&B.diff||'normal'];return{hp:Math.round(30*Math.pow(g,2.1)*(boss?4:1)*D.hp),atk:Math.max(1,Math.round(8*Math.pow(g,1.5)*(boss?1.5:1)*D.atk)),int:Math.max(2.2,(boss?3.4:4)-f*.012)*D.int}}
-function startFloor(f){
+function startFloor(f,opt){
   const st=calcStats(),fi=floorInfo(f),band=fi.band%10,pool=fi.pool;
-  const q=[];const n=3+Math.floor(f/25);for(let i=0;i<n;i++)q.push({d:pool[rand(pool.length)],boss:false});q.push({d:fi.boss,boss:true});
-  B={diff:S.diff,floor:f,q,qi:0,st,hp:st.hp,maxHp:st.hp,shield:0,combo:0,maxCombo:0,keys:0,miss:0,tt:0,chain:0,chainDmg:0,chainT:0,at:[],buffs:[],drops:[],active:false,enemy:null,lt:0,lastWord:null,
+  let q=[];const n=3+Math.floor(f/25);for(let i=0;i<n;i++)q.push({d:pool[rand(pool.length)],boss:false});q.push({d:fi.boss,boss:true});
+  if(opt&&opt.q)q=opt.q;kbGlitch(false);
+  B={diff:(opt&&opt.diff)||S.diff,test:!!(opt&&opt.q),rank0:rankInfo().r,gxp:0,floor:f,q,qi:0,st,hp:st.hp,maxHp:st.hp,shield:0,combo:0,maxCombo:0,keys:0,miss:0,tt:0,chain:0,chainDmg:0,chainT:0,at:[],buffs:[],drops:[],active:false,enemy:null,lt:0,lastWord:null,
      ws:equipped().map(w=>({w,ct:0,cnt:0,el:null}))};
   PG().lastF=f;lastStep=0;show('battle');playBgm('battle');renderSnd();LOG.innerHTML='';for(const k in UI)delete UI[k];PARTS.length=0;chainShown=-1;fxCol=null;fxResize();$('pRank').textContent='RANK '+rankInfo().r;renderCombo();$('stage').style.setProperty('--scene',SCENES[band]);$('fx').innerHTML='';
   $('wicons').innerHTML='';
@@ -1441,13 +1481,16 @@ function countdown(ref){const el=$('cdown');let n=3;
     else{el.textContent='START!';el.className='cdown';void el.offsetWidth;el.className='cdown on go';se('go');B.alerting=false;B.active=true;nextWord();setTimeout(()=>{if(el.textContent==='START!')el.className='cdown'},700)}};
   tick()}
 function spawn(){
-  const it=B.q[B.qi],es=enemyStats(B.floor,it.boss);
-  B.enemy={d:it.d,boss:it.boss,hp:es.hp,max:es.hp,atk:es.atk,int:es.int,timer:-.8,stun:0,dead:false};
+  let it=B.q[B.qi];
+  if(!it.boss&&!it.gl&&!B.glDone&&!B.test){const g=glPick(false,B.diff);if(g){B.glDone=1;B.q.splice(B.qi,0,{d:g,boss:false,gl:true});it=B.q[B.qi]}}
+  const es=enemyStats(B.floor,it.boss),gl=!!it.gl;
+  B.enemy=gl?{d:it.d,boss:it.boss,gl:true,hp:it.d.hp,max:it.d.hp,atk:0,int:it.d.flee,timer:-.8,stun:0,dead:false}:{d:it.d,boss:it.boss,hp:es.hp,max:es.hp,atk:es.atk,int:es.int,timer:-.8,stun:0,dead:false};
+  $('stage').classList.toggle('gl',gl);kbGlitch(gl);
   const eg=$('eg');eg.innerHTML=`<img src="${eSprite(it.d)}" alt="${it.d.n}">`;eg.className='';void eg.offsetWidth;eg.className='enter';
   $('enemy').classList.toggle('boss',it.boss);
-  $('ename').innerHTML=(it.boss?'<span class="bs">BOSS</span>':'')+it.d.n;
-  $('floorLbl').innerHTML=`<span class="dtag" style="--dc:${DIFF[B.diff].c}">${DIFF[B.diff].n}</span>${B.floor}層　${B.qi+1}/${B.q.length}`;
-  B.active=true;nextWord();if(it.boss)playBgm('boss');requestAnimationFrame(()=>{measureEnemy();fxLayout()});
+  $('ename').innerHTML=(it.boss?`<span class="bs">${gl?'B縺SS':'BOSS'}</span>`:'')+it.d.n;
+  $('floorLbl').innerHTML=`<span class="dtag" style="--dc:${DIFF[B.diff].c}">${DIFF[B.diff].n}</span>${B.floor}層　${gl?'繧\uFFFD/\uFFFDｼ':`${B.qi+1}/${B.q.length}`}`;
+  B.active=true;nextWord();if(gl){playBgm(null);se('glitch');blog('\uFFFD\uFFFD 繧ｨ繝ｩ繝ｼ縺檎匱逕溘＠縺ｾ縺励◆ \uFFFD\uFFFD','gl')}else if(it.boss)playBgm('boss');requestAnimationFrame(()=>{measureEnemy();fxLayout()});
 }
 function wordBand(){
   const f=B.floor,boss=B.enemy&&B.enemy.boss,rr=Math.random(),dif=B.diff;let lo,hi;
@@ -1559,6 +1602,7 @@ function drawFx(dt){
 let lastHitAnim=0,lastQuake=0,chainDirty=false;
 function hitEnemy(h){
   const en=B&&B.enemy;if(!en||en.dead)return;
+  if(en.gl){const d=h.skill?(h.crit?1:0):(h.crit?2:1);if(!d){pop('MISS','',Math.max(8,Math.min(92,ER.x+(Math.random()-.5)*30)),Math.max(fxTop,ER.y),18);return}h=Object.assign({},h,{d})}
   en.hp-=h.d;S.rec.hits++;S.rec.dmg+=h.d;se(h.crit?'crit':'hit');
   const px=Math.max(8,Math.min(92,ER.x+(Math.random()-.5)*Math.max(ER.w*1.5,34))),py=Math.max(fxTop,Math.min(90,ER.y+(Math.random()-.5)*Math.max(ER.h*1.3,24)));
   pop(fmt(h.d)+(h.crit?'!':''),(h.crit?'crit':'')+(h.skill?' sdmg':''),px,py,h.crit?34+Math.random()*12:20+Math.random()*10);
@@ -1629,13 +1673,30 @@ function enemyDie(){
   const en=B.enemy;en.dead=true;B.active=false;W=null;renderWord();S.rec.kills++;
   const eg=$('eg');eg.className='';void eg.offsetWidth;eg.className='die';
   blog(`${en.d.n}を倒した！`,'dmg');se('kill');
+  if(en.gl){$('stage').classList.remove('gl');kbGlitch(false);const g=en.d,xp=Math.floor((20*Math.pow(B.floor,1.3)*g.xm+g.xa)*DIFF[B.diff].exp);
+    S.exp+=xp;B.gxp+=xp;const w=glMat(g,B.floor);B.drops.push(w);save();pop('+'+fmt(xp)+' EXP','crit',50,Math.max(fxTop+6,30),30);
+    blog(`経験値を ${fmt(xp)} 獲得！`,'drop big','var(--sel)');setTimeout(()=>se('drop',w.r),250);blog(`★【${RAR[w.r].n}】${w.name}を手に入れた！`,'drop big',RAR[w.r].c);nextEnemy();return}
   if(Math.random()<(en.boss?1:.35)){const w=rollWeapon(B.floor,en.d,en.boss);B.drops.push(w);setTimeout(()=>se('drop',w.r),250);blog(`${w.r>=4?'★':''}【${RAR[w.r].n}】${w.name}を手に入れた！`,'drop'+(w.r>=4?' big':''),RAR[w.r].c)}
-  const ref=B;setTimeout(()=>{if(B!==ref)return;B.qi++;if(B.qi>=B.q.length)floorClear();else if(B.q[B.qi].boss)bossAlert();else spawn()},750);
+  nextEnemy();
 }
+function nextEnemy(){const ref=B,wasGl=B.enemy&&B.enemy.gl;setTimeout(()=>{if(B!==ref)return;B.qi++;if(B.qi>=B.q.length)floorClear();
+  else if(B.q[B.qi].boss){if(!B.glDone&&!B.test&&!B.q[B.qi].gl){const g=glPick(true,B.diff);if(g){B.glDone=1;B.q.splice(B.qi,0,{d:g,boss:true,gl:true})}}bossAlert()}
+  else{if(wasGl)playBgm('battle');spawn()}},750)}
+function glFlee(){const en=B.enemy;if(!en||en.dead)return;en.dead=true;B.active=false;W=null;renderWord();$('stage').classList.remove('gl');kbGlitch(false);
+  const eg=$('eg');eg.className='';void eg.offsetWidth;eg.className='flee';blog(`${en.d.n}は 騾\uFFFD縺貞\uFFFDｺ縺励◆`,'gl');se('glitch');nextEnemy()}
+let KBG=0;
+function kbGlitch(on){const kb=$('kb');clearInterval(KBG);KBG=0;kb.classList.toggle('glitch',!!on);
+  if(!on){Object.entries(keyEl).forEach(([k,el])=>{el.textContent=k.toUpperCase();['--gx','--gy','--gr','--gs'].forEach(v=>el.style.removeProperty(v))});return}
+  const J='繝繧縺ｹｼ\uFFFD#%&?@ｸﾞ',r=Math.random,step=()=>Object.entries(keyEl).forEach(([k,el])=>{
+    el.style.setProperty('--gx',((r()*2-1)*16).toFixed(1)+'px');el.style.setProperty('--gy',((r()*2-1)*12).toFixed(1)+'px');
+    el.style.setProperty('--gr',Math.round((r()*2-1)*20)+'deg');el.style.setProperty('--gs',Math.round((r()*2-1)*24)+'deg');
+    el.textContent=r()<.5?J[Math.floor(r()*J.length)]:r()<.3?ROWS.join('')[Math.floor(r()*27)].toUpperCase():k.toUpperCase()});
+  step();KBG=setInterval(step,600)}
 function bossAlert(){
-  const d=B.q[B.qi].d,a=$('alert');B.alerting=true;$('aname').innerHTML=`<img src="${eSprite(d)}" alt="">${d.n}`;$('eg').innerHTML='';$('ename').innerHTML='';
-  $('floorLbl').textContent=`${B.floor}層　${B.qi+1}/${B.q.length}`;
-  a.classList.remove('on');void a.offsetWidth;a.classList.add('on');playBgm(null);se('alert');
+  const it=B.q[B.qi],d=it.d,a=$('alert'),gl=!!it.gl;B.alerting=true;$('aname').innerHTML=`<img src="${eSprite(d)}" alt="">${d.n}`;$('eg').innerHTML='';$('ename').innerHTML='';
+  a.querySelector('.atxt').textContent=gl?'W\uFFFDRN1NG':'WARNING';a.querySelector('.asub').textContent=gl?'繝輔Ο繧｢繝懊せ謗･霑\uFFFD':'フロアボス接近';a.classList.toggle('gl',gl);
+  $('floorLbl').textContent=`${B.floor}層　${gl?'繧\uFFFD/\uFFFDｼ':`${B.qi+1}/${B.q.length}`}`;
+  a.classList.remove('on');void a.offsetWidth;a.classList.add('on');playBgm(null);se(gl?'glitch':'alert');
   const ref=B;setTimeout(()=>{a.classList.remove('on');if(B===ref){B.alerting=false;spawn()}},2400);
 }
 function statsHTML(){
@@ -1648,10 +1709,11 @@ function commitRec(){if(!B||B.committed)return;B.committed=true;const R=S.rec;R.
   if(B.keys>=30&&B.tt>0)R.bestKps=Math.max(R.bestKps,B.keys/B.tt)}
 function floorClear(){
   commitRec();S.rec.clears++;B.drops.forEach(w=>S.rec.dex[dexKey(w)]=1);playBgm(null);se('clear');B.drops.forEach(w=>{if(w.u&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)});
-  const f=B.floor,first=f>PG().maxF,xp=Math.floor(20*Math.pow(f,1.3)*(first?2:1)*DIFF[B.diff].exp),before=rankInfo().r;
-  S.exp+=xp;if(first)PG().maxF=f;S.inv.push(...B.drops);PG().lastF=Math.min(100,f+1);save();
+  kbGlitch(false);$('stage').classList.remove('gl');
+  const f=B.floor,first=f>PG().maxF&&!B.test,xp=Math.floor(20*Math.pow(f,1.3)*(first?2:1)*DIFF[B.diff].exp),before=B.rank0||rankInfo().r;
+  S.exp+=xp;if(first)PG().maxF=f;S.inv.push(...B.drops);if(!B.test)PG().lastF=Math.min(100,f+1);save();
   const after=rankInfo().r,so=slotsOpen(before),sn=slotsOpen(after);
-  let h=`<h2>${f}層 クリア</h2><p>経験値 +${xp}${first?'（初回ボーナス×2）':''}</p>`+statsHTML();
+  let h=`<h2>${f}層 クリア</h2><p>経験値 +${xp}${first?'（初回ボーナス×2）':''}</p>${B.gxp?`<p>経験値 +${fmt(B.gxp)}<span class="glt">（繧ｨ繝ｩ繝ｼ）</span></p>`:''}`+statsHTML();
   if(after>before)h+=`<p><b>ランク ${before} → ${after}</b></p>`;
   if(sn>so)h+=`<p><b>装備枠が${sn}つに増えました</b></p>`;
   h+=B.drops.length?`<div class="drops">${B.drops.slice().sort((a,b)=>b.r-a.r).map(dropHTML).join('')}</div>`:'<p class="small">武器のドロップはありませんでした</p>';
@@ -1661,7 +1723,7 @@ function floorClear(){
   modal(h,b);
 }
 function defeat(){
-  B.active=false;W=null;renderWord();playBgm(null);se('lose');commitRec();save();
+  kbGlitch(false);$('stage').classList.remove('gl');B.active=false;W=null;renderWord();playBgm(null);se('lose');commitRec();save();
   modal(`<h2>力尽きた…</h2><p>${B.floor}層で倒れました。この層で拾った武器は失われます。</p>`+statsHTML()+`<p>武器を強化・合成して、もう一度挑もう。</p>`,[{t:'拠点へ',key:'f',pri:true,fn:()=>show('home')}]);
 }
 $('retreat').onclick=()=>{if(!B||B.alerting)return;const was=B.active;B.active=false;
@@ -1686,7 +1748,7 @@ function loop(ts){
     B.tt+=dt;
     B.ws.forEach(e=>{if(e.ct>0)e.ct=Math.max(0,e.ct-dt)});
     const now=performance.now();if(B.buffs.length)B.buffs=B.buffs.filter(b=>b.until>now);
-    const en=B.enemy;if(en&&!en.dead){if(en.stun>0)en.stun-=dt;else{en.timer+=dt;if(en.timer>=en.int){en.timer=0;enemyHit()}}}
+    const en=B.enemy;if(en&&!en.dead){if(en.stun>0)en.stun-=dt;else{en.timer+=dt;if(en.timer>=en.int){en.timer=0;if(en.gl)glFlee();else enemyHit()}}}
   }
   if(!B)return;
   if(B.chain&&performance.now()-B.chainT>1200){B.chain=0;B.chainDmg=0;chainDirty=true}
@@ -1846,31 +1908,17 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='1.0.19-alpha';
+const VERSION='1.1.1-alpha';
 const CHANGELOG=[
- ['1.0.19-alpha',['リザルト画面で F キーで拠点へ、J キーで次の層へ（クリックもこれまで通り）。ボタンにキーの印を表示','バトルのチュートリアルにホームポジションと指の色の説明を追加']],
- ['1.0.18-alpha',['はじめての クリア後の チュートリアルは 装備画面の説明だけにして、そのまま装備画面で終わるように（拠点へ戻るボタンの場所を案内）','強化・合成・進化は、はじめて開いた時にそれぞれのチュートリアルが出るように','チュートリアルの最後のボタンを「おわる」に','チュートリアルで画面が横にずれることがある問題を修正']],
- ['1.0.17-alpha',['1.0.16のおためし機能（ゆびガイド・FJチェック・ホームポジション練習）を取り消し','キーボードを指ごとに色分け（こゆび：ピンク、くすりゆび：むらさき、なかゆび：みどり、ひとさしゆび：あお）。F と J には目印','ドロップするレアリティの上限を難易度ごとに：イージーはエピックまで、ノーマルはレジェンダリーまで、ハードはユニークまで','被ダメージ時などに自動で反撃するスキルを弱体化し、5秒以上攻撃していない時は反撃ダメージが出ないように（放置でクリアできないように）','ハードでは次に打つキーとローマ字のハイライトを表示しないように','武器の「進化」を追加：レベル最大の武器に、同じレアリティのレベル最大の武器を素材にして、1段階上のレアリティへ（コモン〜エピック）','合成で、追加能力の種類が足りない時は選べる数だけで合成できるように']],
- ['1.0.16-alpha',['おためし機能（取り消し済み）']],
- ['1.0.15-alpha',['どの端末・設定でも常に黒基調で表示するように（端末のライト／ダークモードの影響を受けない）','スマホを横向きにした時のバトル画面を、言葉と敵を左右に並べるレイアウトに（キーボードは下のまま）','ダメージの数字とHIT数が、出題の言葉に重ならないように','バトルログの行数を画面の高さに合わせて調整','幅の狭いスマホで、バトル上部の表示や拠点のタイトルが折り返したり、はみ出したりしないように','装備・強化・合成画面：スマホ横向きでも左右2列のレイアウトに、スマホ縦向きでは絞り込みを1行にまとめてインベントリを広く','レジェンダリー・ユニークのアイコンの光が枠の外にはみ出さないように','画面の高さが低い時、図鑑の詳細欄が小さくなり一覧が見えるように']],
- ['1.0.14-alpha',['拠点画面のBGM・SE・引き継ぎボタンを画面上部の専用の列に移動し、スクロールした内容やチュートリアルの案内と重ならないように']],
- ['1.0.13-alpha',['チュートリアル中、案内している場所が画面の外にある時は自動でスクロールするように','チュートリアル中も画面をスクロールできるように（指・マウスホイール・矢印キー）','説明の吹き出しが案内している場所に重ならないように（上下に入らない時は横に表示、高さの低い画面では吹き出しを小さく）','横長で高さの低い画面で、拠点画面の上の部分がスクロールしても見えなかった問題を修正']],
- ['1.0.12-alpha',['チュートリアルを合成の説明のあと、拠点に戻ったところで終わるように（次の階層への案内を削除）']],
- ['1.0.11-alpha',['レアリティごとの出やすさを調整し、どの難易度・階層でもレジェンダリーがユニークより出やすく（レジェンダリーは1層1.5%〜100層14%、ハードは4.2%〜24%）','チュートリアルを追加（はじめて遊ぶ時に自動で開始。光っている場所を順番に案内）','チュートリアルの内容：難易度と階層の選び方 → バトル画面の見方と戦い方 → クリア後に装備・強化・合成 → 次の階層へ','拠点画面の下の「あそびかた」から、いつでもチュートリアルをもう一度見られるように']],
- ['1.0.10-alpha',['武器アイコンを全面的に作り直し、全148種がそれぞれ違う見た目に（同じ名前の武器は同じ見た目）','ユニーク60種は名前に合わせた色と形に（曲刀・三叉槍・金棒・牙・爪・針など）','剣は刃（直刃・炎刃・ギザ刃・結晶刃・曲刃）と鍔（横・爪・翼・円盤）の組み合わせ、他の種類も頭部や紋章の形を複数用意','高レアリティほど刃のルーン・縁の輝き・宝石などの装飾が増え、ユニークは専用の縁取り色に']],
- ['1.0.9-alpha',['引き継ぎコードをファイルに保存する時のファイル名を「ユーザー名_年月日.txt」に変更（例：はなこ_20261005.txt）']],
- ['1.0.8-alpha',['装備・強化・合成画面のレイアウトを変更（左上に装備中／ベースの武器、左下に装備枠・素材・追加能力の選択、右側にインベントリ）','カーソルを合わせた武器の詳細を、拠点画面と同じポップアップ表示に（装備画面では選択中の枠の武器との比較付き）','スマホでは武器をタップした時のメニューに詳細も表示','拠点画面の操作説明の文を削除']],
- ['1.0.7-alpha',['同じ種類の追加能力は1つの武器に1つまでに（所持中の武器で重複していたものは、高いほうを残して別の能力に置き換え）','合成でも同じ種類の追加能力は1つまでしか選べないように','合成画面の素材の追加能力を、ベースのレベルに換算した値で表示']],
- ['1.0.6-alpha',['追加能力の数をレア2・エピック3・レジェンダリー4・ユニーク5に統一（所持中の武器も自動で調整）','ハードでは4文字以下の言葉が出ないように','難易度の説明文を削除','強化と合成に専用の効果音を追加']],
- ['1.0.5-alpha',['難易度「イージー（青）」「ノーマル（緑）」「ハード（赤）」を追加。拠点の階層選択の上でいつでも切り替え可能','階層の進み具合は難易度ごとに別々に記録（ランク・武器・図鑑は共通）','イージー：敵の攻撃がゆっくり＆ダメージ半分、言葉は2〜3文字中心で最大6文字、ユニークは出ない','ノーマル：これまでの難易度で、言葉は最大10文字まで','ハード：文字数制限なし、敵のHP1.5倍・攻撃1.4倍・攻撃速め、高レアリティが出やすくユニークは3%、経験値1.5倍','これまでの進み具合はノーマルに引き継ぎ']],
- ['1.0.4-alpha',['強化・合成画面で、強化後／合成後の数値を「現在の値 → 結果」で表示（上がる値は緑、下がる値は赤）','防御系の装備「大盾」「護符」と、攻防バランス型の「籠手」を追加','盾・大盾・護符には防御系スキル（シールド・回復など）が付き、追加能力もHP・防御が付きやすく','武器ごとにスキルを固定。通常武器を88種に増やし、図鑑は全148種に（所持中の通常武器も対応する武器に変換されます）','ユニーク武器60種すべてに、それぞれ専用の強力な固有スキルを追加','防御系スキル「堅守」「茨の守り」「聖域」「不動」を追加','出題ワードを約530語に拡張（食べ物・持ち物・場所・動作・あいさつなど日常の言葉を追加）','10文字以上のワードは50層以降のみ出題','図鑑に「防御系」の絞り込みを追加']],
- ['1.0.3-alpha',['出題ワードを実用的な言葉中心に一新し、約400語に増量','ランクが上がると基礎ステータス（HP・攻撃・防御・クリ率・クリダメ）が上昇','武器の基礎値をレアリティごとに固定（入手した階層で差が出なくなりました。所持中の武器も新しい基準になります）','深い階層ほど高レアリティの武器が出やすく','クリ率・クリダメの伸びを強化（追加能力の幅とレベルごとの成長量アップ）','拠点の武器ボタンを「装備・強化・合成」の3つに分割','アイテム図鑑を追加（通常武器40種＋ユニーク60種）','バージョン表示と更新情報を追加']],
- ['1.0.2-alpha',['GitHub Pagesで公開','引き継ぎコード（書き出し・読み込み）とプレイヤー名を追加','フロア開始時の3秒カウントダウンを追加']]
+ ['1.1.1-alpha',['更新情報には、今のバージョン（1.1.x）の内容だけを表示するように']],
+ ['1.1.0-alpha',['ｮ縺◆代縺吶ﾞｪﾊ▽〒ｸ繧九ﾞ縺ｯ溘定ｦ縺縺縺°ｩ縺','縺縺\uFFFDｋ繧縺ｦ･ｫ縺九医\uFFFD縺縺譚′ｧｪ縺≧','貞縺上ｯｺ繧\uFFFD繧\uFFFD縺縺峨ｨ\uFFFD騾縺薙励ｮ↑縺′邨◆°碁','′∪ｫ>ゅｓ縺縺ｾ九縺ｽゅ\uFFFD譚ｊ縺縺溘･繧邇吶帙\uFFFD縺↑','拠点の装備枠：空いている枠をクリックしても装備画面に移動するように']],
 ];
 const DEX=[];
 CAT.forEach(e=>DEX.push({key:'c:'+e.c,t:e.t,r:e.r,cat:e}));
 NORMALS.concat(BOSSES).forEach((d,i)=>DEX.push({key:'u:'+d.id,t:d.ut,r:5,u:d.id,d,boss:i>=NORMALS.length}));
-DEX.forEach((e,i)=>{e.w={id:700000+i,t:e.t,r:e.r,f:1,lv:1,xp:0,tx:0,el:e.cat?e.cat.el:5,u:e.u||null,c:e.cat?e.cat.c:null,aff:[],sk:e.u?e.d.us:e.cat.sk,name:e.u?e.d.un:e.cat.name}});
+GLITCH.forEach(g=>DEX.push({key:'g:'+g.id,t:g.wt,r:g.wr,g:g.id,d:g,boss:!!g.boss,hid:true}));
+DEX.forEach((e,i)=>{e.w={id:700000+i,t:e.t,r:e.r,f:1,lv:1,xp:0,tx:0,el:e.cat?e.cat.el:5,u:e.u||null,c:e.cat?e.cat.c:null,g:e.g||null,aff:[],sk:e.g?'g_'+e.g:e.u?e.d.us:e.cat.sk,name:e.g?e.d.wn:e.u?e.d.un:e.cat.name}});
+function dexVis(){return DEX.filter(e=>!e.hid||S.rec.dex[e.key])}
 const DX={sel:null,hov:null,f:'all'};
 function floorsOf(id){const fl=[];for(let f=1;f<=100;f++){const fi=floorInfo(f);if(fi.boss.id===id||fi.pool.some(d=>d.id===id))fl.push(f)}
   const out=[];let a=null,p=null;fl.forEach(f=>{if(a===null){a=p=f}else if(f===p+1)p=f;else{out.push(a===p?`${a}層`:`${a}〜${p}層`);a=p=f}});if(a!==null)out.push(a===p?`${a}層`:`${a}〜${p}層`);return out.join('、')}
@@ -1878,6 +1926,11 @@ function dexPane(e){
   if(!e)return '<div class="tag">アイテム図鑑</div><div class="empty">アイテムにカーソルを合わせるか、タップして詳細を見る</div>';
   if(!S.rec.dex[e.key])return `<div class="tag">No.${DEX.indexOf(e)+1}</div><div class="ph" style="--rc:var(--faint)"><span class="dem qm">？</span><div><div class="dn" style="color:var(--dim)">？？？</div><div class="dr">${RAR[e.r].n}</div></div></div><div class="empty">まだ入手していません</div>`;
   const w=e.w,R=RAR[e.r],T=TYPES[e.t],b1=wBase(w),bm=wBase(Object.assign({},w,{lv:R.cap}));
+  if(e.g){const sk=SK[w.sk];return `<div class="tag">No.${DEX.indexOf(e)+1}</div><div class="ph" style="--rc:${R.c}"><span class="dem">${wIcon(w)}</span><div style="min-width:0"><div class="dn">${w.name}</div><div class="dr">${R.n}　${T.n}　最大Lv${R.cap}</div></div></div>
+  <div class="pbody"><div><div class="psec">基礎ステータス</div><div class="rows"><span>攻撃</span><b>1</b><span>HP</span><b>1</b><span>防御</span><b>1</b></div><div class="psec">追加能力</div><div class="small" style="margin-top:4px">なし</div></div>
+  <div><div class="psec">ドロップする敵</div><div style="margin-top:4px"><span class="dxe"><img src="${eSprite(e.d)}" alt="">${e.boss?'<span class="bs">B縺SS</span>':''}${e.d.n}</span></div>
+    <div class="psec">入手できる階層</div><div style="margin-top:4px" class="glt">蜈ｨ螻､</div><div class="psec">入手率の目安</div><div class="small glt" style="margin-top:4px">\uFFFDｼ\uFFFDｼ\uFFFDｼ</div></div></div>
+  <div class="psec">スキル</div><div class="psk" style="margin-top:2px"><b>${sk.n}</b><span class="uqt">固有</span><br>${trText(sk.tr)}：${sk.fx.map(f=>fxText(f,1)).join('、')}</div>`}
   const sk=SK[e.w.sk];
   const rate=f=>rarW(f,false)[e.r];
   return `<div class="tag">No.${DEX.indexOf(e)+1}</div><div class="ph" style="--rc:${R.c}"><span class="dem">${wIcon(w)}</span><div style="min-width:0"><div class="dn">${w.name}</div><div class="dr">${R.n}　${T.n}　最大Lv${R.cap}</div></div></div>
@@ -1886,11 +1939,11 @@ function dexPane(e){
   <div><div class="psec">ドロップする敵</div><div style="margin-top:4px">${e.u?`<span class="dxe"><img src="${eSprite(e.d)}" alt="">${e.boss?'<span class="bs">BOSS</span>':''}${e.d.n}</span>`:'すべての敵'}</div>
     <div class="psec">入手できる階層</div><div style="margin-top:4px">${e.u?floorsOf(e.d.id):'1〜100層（深い層ほど高レアが出やすい）'}</div>
     <div class="psec">入手率の目安</div><div class="small" style="margin-top:4px">${e.u?`撃破時 約${(3*(e.boss?1:.35)).toFixed(2)}%（ハードのみ）`:`ドロップ時 1層 ${(rate(1)/CAT.filter(x=>x.r===e.r).length).toFixed(2)}% → 100層 ${(rate(100)/CAT.filter(x=>x.r===e.r).length).toFixed(2)}%`}</div></div></div>
-  <div class="psec">スキル</div><div class="psk" style="margin-top:2px"><b>${sk.n}</b>${sk.uq?'<span class="uqt">固有</span>':''}　CT${sk.ct}秒<br>${trText(sk.tr)}：${sk.fx.map(f=>fxText(f,R.sm)).join('、')}</div>`;
+  <div class="psec">スキル</div><div class="psk" style="margin-top:2px"><b>${sk.n}</b>${sk.uq?'<span class="uqt">固有</span>':''}${sk.ct?`　CT${sk.ct}秒`:''}<br>${trText(sk.tr)}：${sk.fx.map(f=>fxText(f,R.sm)).join('、')}</div>`;
 }
 function renderDex(){
-  const got=DEX.filter(e=>S.rec.dex[e.key]).length;$('dexCnt').textContent=`${got} / ${DEX.length}`;
-  const L=DEX.filter(e=>DX.f==='all'||(DX.f==='uni'?e.u:DX.f==='def'?isDefT(e.t):!e.u));
+  const V=dexVis(),got=V.filter(e=>S.rec.dex[e.key]).length;$('dexCnt').textContent=`${got} / ${V.length}`;
+  const L=V.filter(e=>DX.f==='all'||(DX.f==='uni'?e.u:DX.f==='def'?isDefT(e.t):!e.u));
   $('dexGrid').innerHTML=L.map(e=>{const g=S.rec.dex[e.key],i=DEX.indexOf(e);
     return `<button class="wc dxc ${g?'':'unk'} ${DX.sel===e.key?'sel':''}" data-dx="${e.key}" style="--rc:${g?RAR[e.r].c:'var(--faint)'}">${g?wIcon(e.w):'<span class="qm">？</span>'}<span class="lv">${i+1}</span></button>`}).join('');
   renderDexPane();
@@ -1903,6 +1956,7 @@ $('dexFilt').onclick=e=>{const b=e.target.closest('[data-df]');if(!b)return;DX.f
 $('dexBack').onclick=()=>show('home');
 $('dexLink').onclick=()=>show('dex');
 $('verTxt').textContent='Ver.'+VERSION;
+
 $('clogBtn').onclick=()=>modal(`<h2>更新情報</h2>${CHANGELOG.map(([v,l])=>`<div class="clog"><b>Ver.${v}</b><ul>${l.map(x=>`<li>${x}</li>`).join('')}</ul></div>`).join('')}`,[{t:'閉じる',pri:true}]);
 
 /* ===== tutorial ===== */
@@ -1980,7 +2034,7 @@ function tutScroll(){const st=TUT.list[TUT.i];if(!st||!st.sel)return;const el=do
   else window.scrollBy({top:dy,behavior:'smooth'})}
 function tutShow(){
   const st=TUT.list[TUT.i];tutEl.querySelector('.tut-txt').textContent=st.t;
-  tutEl.querySelector('.tut-no').textContent=`${TUT.i+1} / ${TUT.list.length}`;tutEl.querySelector('.tut-next').textContent=TUT.i+1>=TUT.list.length?'おわる ▶':'つぎへ ▶';
+  tutEl.querySelector('.tut-no').textContent=`${TUT.i+1} / ${TUT.list.length}`;tutEl.querySelector('.tut-next').innerHTML=(TUT.i+1>=TUT.list.length?'おわる ▶':'つぎへ ▶')+'<span class="tkey">スペース</span>';
   tutEl.classList.toggle('wait',!!st.wait);tutEl.classList.toggle('nohole',!st.sel);
   tutBox.classList.remove('tpop');void tutBox.offsetWidth;tutBox.classList.add('tpop');tutPlace(true);tutScroll();setTimeout(()=>{if(TUT.on){tutScroll();tutPlace(true)}},450);
 }
@@ -2021,7 +2075,7 @@ const SORTS=[['id','入手順'],['fav','お気に入り'],['r','レアリティ'
 const RCOL=['白','緑','青','紫','金','赤'];
 $('sSort').innerHTML=SORTS.map(([v,n])=>`<option value="${v}">${n}</option>`).join('');
 $('fType').innerHTML='<option value="-1">全種類</option>'+TYPES.map((t,i)=>`<option value="${i}">${t.e} ${t.n}</option>`).join('');
-$('fSkill').innerHTML='<option value="">全スキル</option>'+Object.entries(SK).map(([k,s])=>`<option value="${k}">${s.n}</option>`).join('');
+$('fSkill').innerHTML='<option value="">全スキル</option>'+Object.entries(SK).filter(([k])=>!k.startsWith('g_')).map(([k,s])=>`<option value="${k}">${s.n}</option>`).join('');
 $('fAff').innerHTML='<option value="">追加能力：すべて</option>'+AFF.map(a=>`<option value="${a.k}">${a.n}を持つ</option>`).join('');
 $('fRar').innerHTML=RAR.map((r,i)=>`<button class="rchip on" data-r="${i}" style="--rc:${r.c}" title="${r.n}">${RCOL[i]}</button>`).join('');
 $('sSort').onchange=e=>{A.sort=e.target.value;renderInv()};
@@ -2051,9 +2105,9 @@ function paneHTML(w,tag,cmp,extra,aft){
     return `<span>${n}</span><b class="${c}">${v?v+u:'-'}${d}</b>`};
   return `<div class="tag">${tag}</div><div class="ph" style="--rc:${R.c}"><span class="dem">${wIcon(w)}</span><div style="min-width:0"><div class="dn">${w.fav?'★':''}${w.name}</div><div class="dr">${R.n}${w.evo?`<span class="evot">進化+${w.evo}</span>`:''}　Lv${w.lv}${aft&&aft.lv!==w.lv?` → <span class="up">${aft.lv}</span>`:''}/${R.cap}</div></div></div>
   <div class="pbody"><div><div class="psec">ステータス</div><div class="rows">${row('攻撃',s.atk,o&&o.atk,'','atk')}${row('HP',s.hp,o&&o.hp,'','hp')}${row('防御',s.def,o&&o.def,'','def')}</div></div>
-  <div><div class="psec">追加能力 <small>${w.aff.length}/${R.slots}</small></div>${keys.length?`<div class="rows aff">${keys.map(k=>{const cn=w.aff.filter(x=>x.k===k).length;return row(AFFD[k].n+(cn>1?`<small class="cnt">×${cn}</small>`:''),s.a[k]||0,o?(o.a[k]||0):0,'%',k,'a')}).join('')}</div>`:'<div class="small" style="margin-top:4px">なし</div>'}</div></div>
+  <div><div class="psec">追加能力 <small>${w.aff.length}/${w.g?0:R.slots}</small></div>${keys.length?`<div class="rows aff">${keys.map(k=>{const cn=w.aff.filter(x=>x.k===k).length;return row(AFFD[k].n+(cn>1?`<small class="cnt">×${cn}</small>`:''),s.a[k]||0,o?(o.a[k]||0):0,'%',k,'a')}).join('')}</div>`:'<div class="small" style="margin-top:4px">なし</div>'}</div></div>
   <div class="psec">スキル</div>
-  <div class="psk" style="margin-top:2px"><b>${sk.n}</b>${sk.uq?'<span class="uqt">固有</span>':''}　CT${sk.ct}秒<br>${trText(sk.tr)}：${sk.fx.map(f=>fxText(f,R.sm)).join('、')}</div>${extra||''}`;
+  <div class="psk" style="margin-top:2px"><b>${sk.n}</b>${sk.uq?'<span class="uqt">固有</span>':''}${sk.ct?`　CT${sk.ct}秒`:''}<br>${trText(sk.tr)}：${sk.fx.map(f=>fxText(f,R.sm)).join('、')}</div>${extra||''}`;
 }
 function simLv(w,g){let lv=w.lv,xp=w.xp+g;const cap=RAR[w.r].cap;while(lv<cap&&xp>=needXP(w,lv)){xp-=needXP(w,lv);lv++}return lv}
 function setTab(t){A.tab=t;A.target=null;A.mats.clear();A.synMat=null;A.evoMat=null;A.pick.clear();A.hover=null;
@@ -2154,6 +2208,7 @@ function tapCard(id,x,y,pt){
   if(A.tab==='equip'){A.sel=id;renderArmory();openCtx(id,x,y,pt&&pt!=='mouse');return}
   const w=byId(id);if(!w)return;
   if(A.tab==='enh'){
+    if((!A.target||id===A.target)&&w.g){toast('この武器は強化できません（素材にはできます）');renderArmory();return}
     if(!A.target||id===A.target){A.target=id;A.mats.clear()}
     else if(A.mats.has(id))A.mats.delete(id);
     else if(isEq(id))toast('装備中の武器は素材にできません');
@@ -2161,7 +2216,8 @@ function tapCard(id,x,y,pt){
     else A.mats.add(id);
   }else if(A.tab==='evo'){
     const t=byId(A.target),cap=RAR[w.r].cap;
-    if(!t){if(w.r>=4)toast('レジェンダリーとユニークは これ以上進化できません');else A.target=id}
+    if(w.g&&id!==(t&&t.id)){toast('この武器は進化に使えません')}
+    else if(!t){if(w.r>=4)toast('レジェンダリーとユニークは これ以上進化できません');else A.target=id}
     else if(id===t.id)return;
     else if(A.evoMat===id)A.evoMat=null;
     else if(w.r!==t.r)toast('同じレアリティの武器だけ素材にできます');
@@ -2171,7 +2227,8 @@ function tapCard(id,x,y,pt){
     else A.evoMat=id;
   }else{
     const t=byId(A.target);
-    if(!t){if(w.r===0)toast('コモンには追加能力がないため合成できません');else A.target=id}
+    if(w.g&&id!==(t&&t.id)){toast('この武器は合成に使えません')}
+    else if(!t){if(w.r===0)toast('コモンには追加能力がないため合成できません');else A.target=id}
     else if(id===t.id)return;
     else if(A.synMat===id){A.synMat=null;A.pick.clear()}
     else if(!A.synMat){
