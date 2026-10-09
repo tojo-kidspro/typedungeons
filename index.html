@@ -1561,7 +1561,7 @@ function dexKey(w){return w.god?'d:'+w.u:w.g?'g:'+w.g:w.gw?'x:'+(w.u?'u:'+w.u:'c
 function freshProg(){return{easy:{maxF:0,lastF:1},normal:{maxF:0,lastF:1},hard:{maxF:0,lastF:1},nightmare:{maxF:0,lastF:1}}}
 function fresh(){return{exp:0,inv:[],eq:[null,null,null,null,null],nid:1,diff:'normal',prog:freshProg(),rec:freshRec(),tut:{stage:'intro'},tseen:{}}}
 function PG(){return S.prog[S.diff]||S.prog.normal}
-const DIFF={easy:{n:'イージー',c:'#3fa9ff',hp:.8,atk:.5,int:1.8,exp:1,desc:'キー入力に慣れていない人向け。短い言葉が中心で、敵の攻撃もゆっくり・弱め。ユニーク武器は出ません。'},
+const DIFF={easy:{n:'イージー',c:'#3fa9ff',hp:.8,atk:.5,int:1.8,exp:1,desc:'キー入力に慣れていない人向け。1文字打つごとに攻撃でき、言葉を打ち終えるととどめの一撃。短い言葉が中心で、敵の攻撃もゆっくり・弱め。ユニーク武器は出ません。'},
  normal:{n:'ノーマル',c:'#22c55e',hp:1,atk:1,int:1.2,exp:1,desc:'標準の難易度。言葉は最大10文字まで。'},
  hard:{n:'ハード',c:'#ff3b3b',hp:1.5,atk:1.4,int:1.8,exp:1.5,desc:'長い言葉も出題。敵が強い代わりに、高レアリティとユニーク（3%）が出やすく、経験値1.5倍。'},
  nightmare:{n:'ナイトメア',c:'#b04dff',hp:2.4,atk:2.2,int:.72,exp:2.5,desc:''}};
@@ -1859,6 +1859,7 @@ function typeKey(k){
   const t=W.toks[W.idx],nb=W.buf+k;
   if(t.c.some(c=>c.startsWith(nb))){
     se('key');W.buf=nb;B.combo++;B.keys++;B.maxCombo=Math.max(B.maxCombo,B.combo);flashKey(k,true);
+    if(chipOn()){W.chip=1;const h=rollHits(curAtk()*.12*comboMul(),1,false,.1)[0];h.chip=1;hitEnemy(h);if(!W||!B.active){renderCombo();return}}
     if(t.c.includes(nb)&&!t.c.some(c=>c!==nb&&c.startsWith(nb)))advance();
     if(W)renderWord();return;
   }
@@ -1892,7 +1893,7 @@ mIn.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing&&e.keyCode
 function mFocus(){if(MOBILE&&screen==='battle'){try{mIn.focus({preventScroll:true})}catch(e){mIn.focus()}}}
 $('stage').addEventListener('click',()=>mFocus());
 if(window.visualViewport){const vv=window.visualViewport,fit=()=>{if(!MOBILE)return;document.documentElement.style.setProperty('--app-h',vv.height+'px');window.scrollTo(0,0)};vv.addEventListener('resize',fit);vv.addEventListener('scroll',fit);fit()}
-function advance(){W.done.push(W.buf);W.idx++;W.buf='';if(W.idx>=W.toks.length){const len=[...W.kana].length;W=null;playerAttack(len);if(B&&B.active)nextWord();else renderWord();}}
+function advance(){W.done.push(W.buf);W.idx++;W.buf='';if(W.idx>=W.toks.length){const len=[...W.kana].length,ch=W.chip;W=null;playerAttack(len,ch);if(B&&B.active)nextWord();else renderWord();}}
 function comboMul(){return Math.min(3,1+Math.floor(B.combo/10)*.1)}
 function buffSum(t){return B.buffs.filter(b=>b.t===t).reduce((s,b)=>s+b.v,0)}
 function curAtk(){return B.st.atk*(1+buffSum('atkbuf')/100)}
@@ -1902,9 +1903,10 @@ function rollHits(per,n,skill,var_){
   return out;
 }
 function schedule(hits,gap){const ref=B;hits.forEach((h,i)=>{if(!i)hitEnemy(h);else setTimeout(()=>{if(B===ref)hitEnemy(h)},i*(gap||45))})}
-function playerAttack(len){
+function chipOn(){return B&&B.diff==='easy'&&B.enemy&&!B.enemy.gl&&!B.enemy.dead}
+function playerAttack(len,chip){
   const st=B.st,base=1+Math.floor(len/4),mh=st.mh||0,extra=Math.floor(mh/100)+(Math.random()*100<mh%100?1:0);
-  const per=curAtk()*(.6+.25*len)*comboMul()/base;
+  const per=curAtk()*(.6+(chip?.05:.25)*len)*comboMul()/base;
   const hits=rollHits(per,base,false,.1).concat(rollHits(per*.6,extra,false,.1));
   schedule(hits,55);
   const sum=hits.reduce((a,h)=>a+h.d,0),cr=hits.some(h=>h.crit);
@@ -1958,9 +1960,9 @@ let lastHitAnim=0,lastQuake=0,chainDirty=false;
 function hitEnemy(h){
   const en=B&&B.enemy;if(!en||en.dead)return;
   if(en.gl){const d=h.skill?(h.crit?1:0):(h.crit?2:1);if(!d){pop('MISS','',Math.max(8,Math.min(92,ER.x+(Math.random()-.5)*30)),Math.max(fxTop,ER.y),18);return}h=Object.assign({},h,{d})}
-  en.hp-=h.d;S.rec.hits++;S.rec.dmg+=h.d;se(h.crit?'crit':'hit');
+  en.hp-=h.d;S.rec.hits++;S.rec.dmg+=h.d;if(!h.chip||h.crit)se(h.crit?'crit':'hit');
   const px=Math.max(8,Math.min(92,ER.x+(Math.random()-.5)*Math.max(ER.w*1.5,34))),py=Math.max(fxTop,Math.min(90,ER.y+(Math.random()-.5)*Math.max(ER.h*1.3,24)));
-  pop(fmt(h.d)+(h.crit?'!':''),(h.crit?'crit':'')+(h.skill?' sdmg':''),px,py,h.crit?34+Math.random()*12:20+Math.random()*10);
+  pop(fmt(h.d)+(h.crit?'!':''),(h.crit?'crit':'')+(h.skill?' sdmg':''),px,py,h.chip?(h.crit?24:14+Math.random()*4):h.crit?34+Math.random()*12:20+Math.random()*10);
   B.chain++;B.chainDmg+=h.d;B.chainT=performance.now();chainDirty=true;
   const now=performance.now();
   if(now-lastHitAnim>90){lastHitAnim=now;const im=$('eg').firstElementChild;if(im)im.animate([{transform:'translateX(0) scale(1)',filter:'brightness(3)'},{transform:'translateX(-6px) scale(.96,1.04)',offset:.3},{transform:'translateX(4px) scale(1.02,.98)',filter:'brightness(1.3)',offset:.6},{transform:'translateX(0) scale(1)',filter:'brightness(1)'}],{duration:220,easing:'ease-out'})}
@@ -2318,8 +2320,9 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='3.0.6-alpha';
+const VERSION='3.0.7-alpha';
 const CHANGELOG=[
+ ['3.0.7-alpha',['イージーでは、正しいキーを1つ打つごとに敵へダメージを与えるように。言葉を打ち終えると、とどめの一撃が出ます（1回の言葉で与える合計ダメージはこれまでとほぼ同じです）']],
  ['3.0.6-alpha',['「○秒以内に○回攻撃」「○回攻撃ごと」で発動するスキルが、連撃の追加攻撃も1回分として数えるように（発動しやすくなりました）','縺ｪ縺\uFFFD繝医Γ繧｢縺ｮ繝ｬ繧ｸ繧ｧ繝ｳ繝繝ｪ繝ｼ縺ｮ蜃ｺ迴ｾ邇\uFFFD繧剃ｸ九£縺ｾ縺励◆']],
  ['3.0.5-alpha',['称号を一新。称号にフレームと背景がつき、手に入れにくい称号ほど豪華に動くようになりました','ホームの称号をクリックすると、手に入れた称号から好きなものを選んでつけられるように。まだの称号は「？？？」と表示され、選ぶと入手方法がわかります','撃破数・コンボ・打鍵速度・プレイ時間・図鑑・各難易度の100層クリアなど、ランク以外で手に入る称号を追加','称号を手に入れたときに獲得演出が出るように','縺ｾ縺\uFFFD隕九〓遘ｰ蜿ｷ縺後←縺薙°縺ｫ逵\uFFFD縺｣縺ｦ縺\uFFFD繧九\uFFFD\uFFFD']],
  ['3.0.4-alpha',['イージー・ノーマル・ハードの100層を初めてクリアして拠点に戻ると、クリア特典としてランダムなユニーク武器を1本もらえるように（難易度ごとに1回。すでにクリア済みの人も受け取れます）','縺吶∋縺ｦ縺ｮ\uFFFD縺ｫ縺ｯ縺ｾ縺\uFFFD縺ｪ縺ｫ縺九′縺ゅｋ\uFFFD']],
