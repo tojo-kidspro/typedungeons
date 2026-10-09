@@ -231,6 +231,7 @@ button.chip.on{border-color:var(--sel);color:var(--sel)}
 .btn:hover:not(:disabled){border-color:var(--sel);color:var(--sel)}
 .btn.pri{border-color:var(--sel);color:var(--sel)}
 .btn .kk{display:inline-block;margin-left:8px;padding:0 5px;border:1px solid currentColor;font-size:11px;line-height:16px;vertical-align:1px;opacity:.8}
+@media (max-width:480px){.mbtns .btn:has(.kk){white-space:nowrap;padding-left:6px;padding-right:6px}.btn .kk{display:block;width:max-content;margin:4px auto 0}}
 @media (hover:none){.btn .kk{display:none}}
 .btn.pri::before{content:"▶ "}
 .btn:disabled{border-color:var(--faint);color:var(--faint);cursor:default}
@@ -1556,7 +1557,7 @@ document.addEventListener('keydown',e=>{if(!$('modal').classList.contains('on')|
   const b=$('mbox').querySelector(`.mbtns [data-key="${e.key.toLowerCase()}"]`);if(!b||performance.now()<MKEY.at)return;e.preventDefault();b.click()});
 function modal(html,btns){
   $('mbox').innerHTML=html+'<div class="mbtns"></div>';const box=$('mbox').querySelector('.mbtns');
-  MKEY.at=performance.now()+500;btns.forEach(b=>{const e=document.createElement('button');e.className='btn'+(b.pri?' pri':'')+(b.danger?' danger':'');e.textContent=b.t;if(b.key){e.dataset.key=b.key;const k=document.createElement('span');k.className='kk';k.textContent=b.key.toUpperCase();e.appendChild(k)}e.onclick=()=>{$('modal').classList.remove('on');b.fn&&b.fn();};box.appendChild(e);});
+  MKEY.at=performance.now()+500;btns.forEach(b=>{const e=document.createElement('button');e.className='btn'+(b.pri?' pri':'')+(b.danger?' danger':'');e.textContent=b.t;if(b.key){e.dataset.key=b.key;const k=document.createElement('span');k.className='kk';k.textContent=b.key===' '?'スペース':b.key.toUpperCase();e.appendChild(k)}e.onclick=()=>{$('modal').classList.remove('on');b.fn&&b.fn();};box.appendChild(e);});
   $('modal').classList.add('on');
 }
 let screen='home';
@@ -1646,6 +1647,9 @@ function ptgt(d,f){const T=PTGT[d]||PTGT.normal;for(let i=0;i<PFL.length-1;i++)i
 function avgLen(d,f,b){if(d==='easy')return b?3.6:f>50?3.3:2.8;
   if(d==='normal')return f<=10?(b?5:2):f<=30?(b?8:4.7):f<50?(b?8:6.6):(b?9:7);
   if(d==='nightmare')f=Math.max(f,50);return f<=10?(b?7.5:6):f<=30?(b?10:7):f<50?(b?11:9):(b?11:9.5)}
+/* 経験値：ナイトメアは専用テーブル（1層=12,000、敵の想定戦闘力に比例） */
+function clearXP(f,d){return d==='nightmare'?Math.round(12000*ptgt('nightmare',f)/50000):20*Math.pow(f,1.3)*((DIFF[d]||DIFF.normal).exp)}
+function xpScale(f,d){return d==='nightmare'?clearXP(f,d)/(20*Math.pow(f,1.3)*DIFF.nightmare.exp):1}
 function enemyStats(f,boss){const d=B&&B.diff||'normal',D=DIFF[d]||DIFF.normal,T=DTUNE[d]||DTUNE.normal,P=ptgt(d,f),hp=6.27*Math.pow(P,.619),df=.32*Math.pow(P,.674),ae=Math.max(5,(P-.5*hp-2*df)/3);
   const iv=b=>Math.max(2.2,(b?3.4:4)-f*.012)*D.int,dpw=b=>ae*(.6+.25*avgLen(d,f,b))*1.3,tw=b=>1.9*avgLen(d,f,b)/T.kps+.45,wb=T.wk*2.5,n=3+Math.floor(f/25);
   const hN=n*T.wk*tw(false)/iv(false),hB=wb*tw(true)/iv(true),x=T.fr*hp/(hN+1.25*hB);
@@ -1655,7 +1659,7 @@ function startFloor(f,opt){
   const dif=(opt&&opt.diff)||S.diff,mp=it=>it.gl||dif!=='nightmare'?it:Object.assign({},it,{d:nmE(it.d)});
   let q=[];const n=3+Math.floor(f/25);for(let i=0;i<n;i++)q.push({d:pool[rand(pool.length)],boss:false});q.push({d:fi.boss,boss:true});
   if(opt&&opt.q)q=opt.q;q=q.map(mp);kbGlitch(false);
-  B={diff:(opt&&opt.diff)||S.diff,test:!!(opt&&opt.q),rank0:rankInfo().r,gxp:0,floor:f,q,qi:0,st,hp:st.hp,maxHp:st.hp,shield:0,combo:0,maxCombo:0,keys:0,miss:0,tt:0,chain:0,chainDmg:0,chainT:0,at:[],buffs:[],drops:[],active:false,enemy:null,lt:0,lastWord:null,
+  B={opt,diff:(opt&&opt.diff)||S.diff,test:!!(opt&&opt.q),rank0:rankInfo().r,gxp:0,floor:f,q,qi:0,st,hp:st.hp,maxHp:st.hp,shield:0,combo:0,maxCombo:0,keys:0,miss:0,tt:0,chain:0,chainDmg:0,chainT:0,at:[],buffs:[],drops:[],active:false,enemy:null,lt:0,lastWord:null,
      ws:equipped().map(w=>({w,ct:0,cnt:0,el:null}))};
   PG().lastF=f;lastStep=0;show('battle');mClear();mFocus();playBgm(bgmFor(false));$('stage').classList.toggle('nm',B.diff==='nightmare');wordNoise(B.diff==='nightmare');renderSnd();LOG.innerHTML='';for(const k in UI)delete UI[k];PARTS.length=0;chainShown=-1;fxCol=null;fxResize();$('pRank').textContent='RANK '+rankInfo().r;renderCombo();$('stage').style.setProperty('--scene',SCENES[band]);$('fx').innerHTML='';
   $('wicons').innerHTML='';
@@ -1891,7 +1895,7 @@ function enemyDie(){
   const en=B.enemy;en.dead=true;B.active=false;W=null;renderWord();S.rec.kills++;
   const eg=$('eg');eg.className='';void eg.offsetWidth;eg.className='die';
   blog(`${en.d.n}を倒した！`,'dmg');se('kill');
-  if(en.gl){$('stage').classList.remove('gl');kbGlitch(B.diff==='nightmare');if(B.diff!=='nightmare')$('stage').classList.remove('gl');if(!S.nm)S.nm=1;const g=en.d,xp=Math.floor((20*Math.pow(B.floor,1.3)*g.xm+g.xa)*DIFF[B.diff].exp);
+  if(en.gl){$('stage').classList.remove('gl');kbGlitch(B.diff==='nightmare');if(B.diff!=='nightmare')$('stage').classList.remove('gl');if(!S.nm)S.nm=1;const g=en.d,xp=Math.floor((20*Math.pow(B.floor,1.3)*g.xm+g.xa)*DIFF[B.diff].exp*xpScale(B.floor,B.diff));
     S.exp+=xp;B.gxp+=xp;const w=glMat(EXPI[g.drop],B.floor);B.drops.push(w);save();pop('+'+fmt(xp)+' EXP','crit',50,Math.max(fxTop+6,30),30);
     blog(`経験値を ${fmt(xp)} 獲得！`,'drop big','var(--sel)');setTimeout(()=>se('drop',w.r),250);blog(`★【${RAR[w.r].n}】${w.name}を手に入れた！`,'drop big',RAR[w.r].c);nextEnemy();return}
   if(Math.random()<(en.boss?1:.35)){const w=rollWeapon(B.floor,en.d,en.boss);B.drops.push(w);setTimeout(()=>se('drop',w.r),250);blog(`${w.r>=4?'★':''}【${RAR[w.r].n}】${w.name}を手に入れた！`,'drop'+(w.r>=4?' big':''),RAR[w.r].c)}
@@ -1939,7 +1943,7 @@ function commitRec(){if(!B||B.committed)return;B.committed=true;const R=S.rec;R.
 function floorClear(){
   commitRec();S.rec.clears++;B.drops.forEach(w=>S.rec.dex[dexKey(w)]=1);playBgm(null);se('clear');B.drops.forEach(w=>{if(w.u&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)});
   kbGlitch(false);wordNoise(false);$('stage').classList.remove('gl');
-  const f=B.floor,first=f>PG().maxF&&!B.test,xp=Math.floor(20*Math.pow(f,1.3)*(first?2:1)*DIFF[B.diff].exp),before=B.rank0||rankInfo().r;
+  const f=B.floor,first=f>PG().maxF&&!B.test,xp=Math.floor(clearXP(f,B.diff)*(first?2:1)),before=B.rank0||rankInfo().r;
   S.exp+=xp;if(first)PG().maxF=f;S.inv.push(...B.drops);if(!B.test)PG().lastF=Math.min(100,f+1);save();
   const after=rankInfo().r,so=slotsOpen(before),sn=slotsOpen(after);
   let h=`<h2>${f}層 クリア</h2><p>経験値 +${xp}${first?'（初回ボーナス×2）':''}</p>${B.gxp?`<p>経験値 +${fmt(B.gxp)}<span class="glt">（繧ｨ繝ｩ繝ｼ）</span></p>`:''}`+statsHTML();
@@ -1947,21 +1951,21 @@ function floorClear(){
   if(sn>so)h+=`<p><b>装備スロットが${sn}つに増えました</b></p>`;
   h+=B.drops.length?`<div class="drops">${B.drops.slice().sort((a,b)=>b.r-a.r).map(dropHTML).join('')}</div>`:'<p class="small">武器のドロップはありませんでした</p>';
   if(f===100)h+='<p><b>百層を制覇しました。</b></p>';
-  const b=[{t:'拠点へ',key:'f',fn:()=>show('home')}];if(f<100)b.push({t:'次の層へ',key:'j',pri:true,fn:()=>startFloor(f+1)});
+  const ro=B.opt,b=[{t:'拠点へ',key:'f',fn:()=>show('home')},{t:'もう一度',key:' ',fn:()=>startFloor(f,ro)}];if(f<100&&!B.test)b.push({t:'次の層へ',key:'j',pri:true,fn:()=>startFloor(f+1)});
   if(tutStage()==='waitclear'){tutSet('post');b.length=0;b.push({t:'拠点へ もどる',key:'f',pri:true,fn:()=>{show('home');setTimeout(()=>tutRun('post'),350)}})}
   modal(h,b);
 }
 function defeat(){
-  kbGlitch(false);wordNoise(false);$('stage').classList.remove('gl');B.active=false;W=null;renderWord();playBgm(null);se('lose');commitRec();save();
-  modal(`<h2>力尽きた…</h2><p>${B.floor}層で倒れました。この層で拾った武器は失われます。</p>`+statsHTML()+`<p>武器を強化・合成して、もう一度挑もう。</p>`,[{t:'拠点へ',key:'f',pri:true,fn:()=>show('home')}]);
+  const ro=B.opt;kbGlitch(false);wordNoise(false);$('stage').classList.remove('gl');B.active=false;W=null;renderWord();playBgm(null);se('lose');commitRec();save();
+  modal(`<h2>力尽きた…</h2><p>${B.floor}層で倒れました。この層で拾った武器は失われます。</p>`+statsHTML()+`<p>武器を強化・合成して、もう一度挑もう。</p>`,[{t:'拠点へ',key:'f',fn:()=>show('home')},{t:'もう一度',key:' ',pri:true,fn:(f=>()=>startFloor(f,ro))(B.floor)}]);
 }
 $('retreat').onclick=()=>{if(!B||B.alerting)return;const was=B.active;B.active=false;
   modal('<h2>撤退する？</h2><p>この層で拾った武器は持ち帰れません。</p>',[{t:'続ける',fn:()=>{if(B&&was)B.active=true}},{t:'撤退する',pri:true,fn:retreatResult}])};
 function retreatResult(){
-  if(!B)return;W=null;renderWord();commitRec();PG().lastF=B.floor;save();
+  if(!B)return;const ro=B.opt;W=null;renderWord();commitRec();PG().lastF=B.floor;save();
   let h=`<h2>${B.floor}層から撤退</h2><p class="small">${B.qi}/${B.q.length}体を撃破</p>`+statsHTML();
   h+='<div class="drops"><div class="drop" style="--rc:var(--line)"><span class="small">ドロップ</span><b>なし</b></div></div>';
-  modal(h,[{t:'拠点へ',key:'f',pri:true,fn:()=>show('home')}]);
+  modal(h,[{t:'拠点へ',key:'f',fn:()=>show('home')},{t:'もう一度',key:' ',pri:true,fn:(f=>()=>startFloor(f,ro))(B.floor)}]);
 }
 
 const UI={};
@@ -2181,8 +2185,9 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='3.0.1-alpha';
+const VERSION='3.0.2-alpha';
 const CHANGELOG=[
+ ['3.0.2-alpha',['リザルト画面に「もう一度」ボタンを追加（同じ層にもう一度挑戦。スペースキーでも可）。並びは「拠点へ」「もう一度」「次の層へ」','力尽きた時・撤退した時の画面にも「もう一度」ボタンを追加']],
  ['3.0.1-alpha',['スマホで遊ぶときは画面のキーボードの代わりに、スマホの文字入力で打つ方式に（打ち終わったらエンターか「決定」で攻撃。ローマ字・かな・カタカナ・漢字に対応）','合成で同じ種類の追加能力がある時は、数値の高い方を最初から選ぶように','リザルト画面などで長い武器名が枠からはみ出す問題を修正','装備画面の下のボタンの文字がはみ出す問題を修正','邨碁ｨ薙縺ｮ\uFFFD縺ｪ縺ｫ縺九′螟峨ｏ縺｣縺溘ｈ\uFFFD']],
  ['3.0.0-alpha',['かわいい敵が登場！ウサギ・ハート・お菓子などの通常の敵16体と、ボス8体を追加（ボスは各5層ごとの3層目に出現）','追加した敵それぞれに、専用のユニーク武器と固有スキルを追加','かわいい武器を15種類追加（コモン〜レジェンダリー）','縺薙ｓ縺ｫ縺｡縺ｯ縲∫･槭↓縺ｪ縺｣縺溘ｍ\uFFFD\uFFFD','邨碁ｨ薙\uFFFDｮ蜑｣縺悟､峨ｏ縺｣縺溘ｈ\uFFFD','\uFFFD\uFFFD\uFFFD\uFFFD']]
 ];
