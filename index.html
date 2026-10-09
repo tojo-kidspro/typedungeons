@@ -363,6 +363,7 @@ img{image-rendering:pixelated}
 .drop{position:relative}
 .drop .e{width:46px;height:46px;flex:0 0 46px;display:block}
 .drop.big{animation:getglow .5s steps(2) infinite}
+.rwl{text-align:left!important;margin:6px 0 -2px;color:var(--sel)}
 .drop.big{padding-right:64px;height:auto;max-width:none;width:auto;font-size:inherit;letter-spacing:inherit;color:inherit;border-width:2px}.drop>div{min-width:0}.drop .n{overflow-wrap:anywhere;word-break:break-all;line-height:1.35}.drop .gt{position:absolute;right:8px;top:4px;color:var(--rc);font-size:14px;animation:blink .3s steps(2) infinite}
 .ghost{font-size:0}
 .pop.get{font-size:24px;padding:2px 10px;border:3px solid currentColor;background:var(--bg)}
@@ -1515,7 +1516,7 @@ const WBASE=[8,16,30,55,95,160,300];
 function wBase(w){if(w.g)return{atk:1,hp:1,def:1};const T=TYPES[w.t],b=WBASE[w.r]*(1+.025*(w.lv-1))*(w.gw?1.6:1);return{atk:Math.round(b*T.a),hp:Math.round(b*5*T.h),def:Math.round(b*.6*T.d)}}
 function affVal(w,a){return r1(a.v*(1+(a.k==='cr'||a.k==='cd'?.025:.015)*(w.lv-1))*(w.gw?1.25:w.god?1.4:1))}
 function affTxt(w,a){return `${AFFD[a.k].n}+${affVal(w,a)}%`}
-function needXP(w,L){return Math.floor(15*L*(1+w.r*.3))}
+function needXP(w,L){if(w.r>=6&&L>=100)return 200000;return Math.floor(15*L*(1+w.r*.3))}
 function matExp(w){if(w.g)return (EXPI[w.g]?EXPI[w.g].mexp:0)+Math.floor(w.tx*.5);return Math.floor(60*Math.pow(w.r+1,2))+Math.floor(w.tx*.5)}
 function byId(id){return S.inv.find(w=>w.id===id)}
 function isEq(id){return S.eq.includes(id)}
@@ -1564,7 +1565,7 @@ let screen='home';
 function show(name){
   screen=name;document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===name));
   if(name!=='battle'){B=null;W=null;if(typeof kbGlitch==='function'){kbGlitch(false);wordNoise(false);$('stage').classList.remove('gl','nm')}}if(typeof TIP!=='undefined'){TIP.classList.remove('on');TIP._id=null}if(name!=='battle'){$('alert').classList.remove('on')}closeCtx&&closeCtx();
-  if(name==='home'){renderHome();if(typeof tutDecHome==='function')tutDecHome()}if(name==='armory')renderArmory();if(name==='dex')renderDex();
+  if(name==='home'){renderHome();if(typeof rwCheck==='function'&&rwCheck())return;if(typeof tutDecHome==='function')tutDecHome()}if(name==='armory')renderArmory();if(name==='dex')renderDex();
   if(name!=='battle')playBgm(typeof nmUI==='function'&&nmUI()?'nm':'home');
 }
 function dropHTML(w){return `<div class="drop${w.r>=4?' big':''}" style="--rc:${RAR[w.r].c}">${w.r>=4?'<span class="gt">GET!!</span>':''}<span class="e">${wIcon(w)}</span><div><div class="n">${wName(w)}</div><div class="small">${RAR[w.r].n}・${SK[w.sk].n}</div></div></div>`}
@@ -2185,8 +2186,10 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='3.0.2-alpha';
+const VERSION='3.0.4-alpha';
 const CHANGELOG=[
+ ['3.0.4-alpha',['イージー・ノーマル・ハードの100層を初めてクリアして拠点に戻ると、クリア特典としてランダムなユニーク武器を1本もらえるように（難易度ごとに1回。すでにクリア済みの人も受け取れます）','縺吶∋縺ｦ縺ｮ\uFFFD縺ｫ縺ｯ縺ｾ縺\uFFFD縺ｪ縺ｫ縺九′縺ゅｋ\uFFFD']],
+ ['3.0.3-alpha',['邨碁ｨ薙縺ｮ\uFFFD縺後↑縺ｫ縺九′螟峨ｏ縺｣縺溘ｈ\uFFFD']],
  ['3.0.2-alpha',['リザルト画面に「もう一度」ボタンを追加（同じ層にもう一度挑戦。スペースキーでも可）。並びは「拠点へ」「もう一度」「次の層へ」','力尽きた時・撤退した時の画面にも「もう一度」ボタンを追加']],
  ['3.0.1-alpha',['スマホで遊ぶときは画面のキーボードの代わりに、スマホの文字入力で打つ方式に（打ち終わったらエンターか「決定」で攻撃。ローマ字・かな・カタカナ・漢字に対応）','合成で同じ種類の追加能力がある時は、数値の高い方を最初から選ぶように','リザルト画面などで長い武器名が枠からはみ出す問題を修正','装備画面の下のボタンの文字がはみ出す問題を修正','邨碁ｨ薙縺ｮ\uFFFD縺ｪ縺ｫ縺九′螟峨ｏ縺｣縺溘ｈ\uFFFD']],
  ['3.0.0-alpha',['かわいい敵が登場！ウサギ・ハート・お菓子などの通常の敵16体と、ボス8体を追加（ボスは各5層ごとの3層目に出現）','追加した敵それぞれに、専用のユニーク武器と固有スキルを追加','かわいい武器を15種類追加（コモン〜レジェンダリー）','縺薙ｓ縺ｫ縺｡縺ｯ縲∫･槭↓縺ｪ縺｣縺溘ｍ\uFFFD\uFFFD','邨碁ｨ薙\uFFFDｮ蜑｣縺悟､峨ｏ縺｣縺溘ｈ\uFFFD','\uFFFD\uFFFD\uFFFD\uFFFD']]
@@ -2372,6 +2375,15 @@ setInterval(()=>{if(screen!=='home'||!S||!S.nm||document.hidden)return;const r=M
   if(r()<(nm?.45:.28)){const t=sb.dataset.t||SUBTXT,a=[...t],n=1+(r()<.3?1:0);for(let i=0;i<n;i++){const j=Math.floor(r()*a.length);if(a[j]!==' ')a[j]=NZC[Math.floor(r()*NZC.length)]}sb.textContent=a.join('');setTimeout(()=>{sb.textContent=sb.dataset.t||SUBTXT},70+r()*90)}
   if(nm){if(r()<.3){const sp=$('logo').children,el=sp[Math.floor(r()*sp.length)];if(el&&!el.dataset.o){el.dataset.o=el.textContent;el.textContent=NZC[Math.floor(r()*NZC.length)];el.classList.add('lz');setTimeout(()=>{el.textContent=el.dataset.o;delete el.dataset.o;el.classList.remove('lz')},90+r()*90)}}
     if(r()<.06){const h=$('home');h.classList.add('burst');setTimeout(()=>h.classList.remove('burst'),90+r()*120)}}},150);
+/* ===== 100層クリア特典 ===== */
+function rwUnique(){const d=ALLE[rand(ALLE.length)];return makeW({t:d.ut,r:5,f:100,name:d.un,sk:d.us,u:d.id})}
+function rwCheck(){if(!S||!S.prog||(typeof TUT!=='undefined'&&TUT.on)||tutStage()!=='done')return false;S.rw=S.rw||{};const got=[];let msg='';
+  ['easy','normal','hard'].forEach(d=>{if(S.prog[d]&&S.prog[d].maxF>=100&&!S.rw[d]){S.rw[d]=1;got.push([rwUnique(),`${DIFF[d].n} 100層クリア特典`])}});
+  if(S.nm&&S.prog.nightmare&&S.prog.nightmare.maxF>=100&&!S.rw.nightmare){S.rw.nightmare=1;got.push([gwify(rwUnique()),`${DIFF.nightmare.n} 100層クリア特典`])}
+  if(['easy','normal','hard','nightmare'].every(d=>S.prog[d]&&S.prog[d].maxF>=100)&&!S.rw.all){S.rw.all=1;const a=rwUnique(),b=gwify(makeW({t:a.t,r:5,f:100,name:a.name,sk:a.sk,u:a.u}));got.push([a,'全難易度 制覇特典'],[b,'全難易度 制覇特典']);msg='<p>すべての難易度の100層を制覇した証。対応する2本の武器が手に入った。</p>'}
+  if(!got.length)return false;
+  got.forEach(([w])=>{S.inv.push(w);S.rec.dex[dexKey(w)]=1;if(w.u&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)});save();renderHome();se('clear');setTimeout(()=>se('drop',5),300);
+  modal(`<h2>クリア特典</h2><p>百層を制覇した報酬を受け取った！</p>${msg}<div class="drops">${got.map(([w,l])=>`<div class="small rwl">${l}</div>${dropHTML(w)}`).join('')}</div>`,[{t:'閉じる',pri:true,fn:()=>{renderHome();if(typeof tutDecHome==='function')tutDecHome()}}]);return true}
 function tutAuto(){if(tutStage()==='intro'&&screen==='home'&&!$('modal').classList.contains('on'))tutRun('intro')}
 
 /* ===== armory ===== */
