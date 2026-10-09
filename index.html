@@ -1577,7 +1577,7 @@ function genAff(n,def,excl){const used=new Set(excl||[]),a=[];
     const d=P[rand(P.length)];used.add(d.k);a.push({k:d.k,v:r1(d.min+Math.random()*(d.max-d.min))})}return a}
 function makeW(o){return{id:S.nid++,t:o.t,r:o.r,f:o.f,lv:1,xp:0,tx:0,name:o.name,sk:o.sk,u:o.u||null,c:o.c||null,g:o.g||null,el:o.el??5,aff:o.g?[]:genAff(RAR[o.r].slots,isDefT(o.t))}}
 function rarW(f,boss,dif){dif=dif||'normal';const t=Math.min(1,Math.max(0,(f-1)/99)),L=(a,b)=>a+(b-a)*t;let u=boss?L(.6,1):L(.3,.9),w=[L(55,10),L(28,24),L(11,30),L(4.5,22),L(1.5,14)];
-  if(dif==='easy'){u=0;w[4]=0}if(dif==='normal')u=0;if(dif==='hard'){u=3;w=[w[0]*.6,w[1],w[2]*1.3,w[3]*1.7,w[4]*2.5]}if(dif==='nightmare'){u=4;w=[w[0]*.3,w[1]*.8,w[2]*1.3,w[3]*2,w[4]*3]}
+  if(dif==='easy'){u=0;w[4]=0}if(dif==='normal')u=0;if(dif==='hard'){u=3;w=[w[0]*.6,w[1],w[2]*1.3,w[3]*1.7,w[4]*2.5]}if(dif==='nightmare'){u=4;w=[w[0]*.3,w[1]*.8,w[2]*1.3,w[3]*2,0];const lg=boss?L(8,12):L(6,9),s4=w.reduce((a,b)=>a+b,0);return w.slice(0,4).map(x=>x/s4*(100-u-lg)).concat(lg,u)}
   const sum=w.reduce((a,b)=>a+b,0);return w.map(x=>x/sum*(100-u)).concat(u)}
 function rollRarity(f,boss,dif){const w=rarW(f,boss,dif);let x=Math.random()*100;for(let i=5;i>=0;i--){if(x<w[i])return i;x-=w[i]}return 0}
 function rollWeapon(f,d,boss){const b=d.base||d;if((B?B.diff:S.diff)==='nightmare'){const r=rollRarity(f,boss,'nightmare');if(r>=5)return gwify(makeW({t:b.ut,r:5,f,name:b.un,sk:b.us,u:b.id}));return glMat(EXPW[r],f)}return rollWeapon0(f,b,boss)}
@@ -1909,8 +1909,8 @@ function playerAttack(len){
   schedule(hits,55);
   const sum=hits.reduce((a,h)=>a+h.d,0),cr=hits.some(h=>h.crit);
   blog(`${cr?'クリティカル！':''}${fmt(sum)}ダメージを与えた！${hits.length>1?`（${hits.length}HIT）`:''}`,cr?'crit':'dmg');
-  B.at.push(performance.now());if(B.at.length>30)B.at.shift();
-  trig('attack');if(hits.some(h=>h.crit))trig('crit');
+  const an=1+extra,now=performance.now();for(let i=0;i<an;i++)B.at.push(now);if(B.at.length>200)B.at.splice(0,B.at.length-200);
+  trig('attack',an);if(hits.some(h=>h.crit))trig('crit');
 }
 const fmt=n=>Math.round(n).toLocaleString('ja-JP');
 /* --- damage numbers: drawn on one canvas instead of DOM --- */
@@ -1981,12 +1981,12 @@ function blog(txt,cls,rc){
   d._t=setTimeout(()=>expireLog(d),3400);
 }
 function expireLog(d){if(d._x)return;d._x=1;clearTimeout(d._t);d.animate([{opacity:1,transform:'translateY(0)'},{opacity:0,transform:'translateY(-8px)'}],{duration:350,easing:'ease-in',fill:'forwards'}).onfinish=()=>d.remove()}
-function trig(kind){
+function trig(kind,an){an=an||1;
   if(!B||!B.active)return;const now=performance.now();
   B.ws.forEach(e=>{
     if(!B.active)return;const tr=SK[e.w.sk].tr;
     if(kind==='attack'){
-      if(tr.type==='every'){e.cnt++;if(e.cnt>=tr.n&&e.ct<=0){e.cnt=0;fire(e)}}
+      if(tr.type==='every'){e.cnt+=an;if(e.cnt>=tr.n&&e.ct<=0){e.cnt=0;fire(e)}}
       else if(tr.type==='win'&&e.ct<=0&&B.at.filter(t=>now-t<=tr.s*1000).length>=tr.n)fire(e);
     }else if(kind==='crit'){if(tr.type==='crit'&&e.ct<=0)fire(e)}
     else if(kind==='hit'){
@@ -2318,8 +2318,9 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='3.0.5-alpha';
+const VERSION='3.0.6-alpha';
 const CHANGELOG=[
+ ['3.0.6-alpha',['「○秒以内に○回攻撃」「○回攻撃ごと」で発動するスキルが、連撃の追加攻撃も1回分として数えるように（発動しやすくなりました）','縺ｪ縺\uFFFD繝医Γ繧｢縺ｮ繝ｬ繧ｸ繧ｧ繝ｳ繝繝ｪ繝ｼ縺ｮ蜃ｺ迴ｾ邇\uFFFD繧剃ｸ九£縺ｾ縺励◆']],
  ['3.0.5-alpha',['称号を一新。称号にフレームと背景がつき、手に入れにくい称号ほど豪華に動くようになりました','ホームの称号をクリックすると、手に入れた称号から好きなものを選んでつけられるように。まだの称号は「？？？」と表示され、選ぶと入手方法がわかります','撃破数・コンボ・打鍵速度・プレイ時間・図鑑・各難易度の100層クリアなど、ランク以外で手に入る称号を追加','称号を手に入れたときに獲得演出が出るように','縺ｾ縺\uFFFD隕九〓遘ｰ蜿ｷ縺後←縺薙°縺ｫ逵\uFFFD縺｣縺ｦ縺\uFFFD繧九\uFFFD\uFFFD']],
  ['3.0.4-alpha',['イージー・ノーマル・ハードの100層を初めてクリアして拠点に戻ると、クリア特典としてランダムなユニーク武器を1本もらえるように（難易度ごとに1回。すでにクリア済みの人も受け取れます）','縺吶∋縺ｦ縺ｮ\uFFFD縺ｫ縺ｯ縺ｾ縺\uFFFD縺ｪ縺ｫ縺九′縺ゅｋ\uFFFD']],
  ['3.0.3-alpha',['邨碁ｨ薙縺ｮ\uFFFD縺後↑縺ｫ縺九′螟峨ｏ縺｣縺溘ｈ\uFFFD']],
