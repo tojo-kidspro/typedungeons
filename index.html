@@ -657,6 +657,81 @@ body.nmui #home.burst .hscroll{transform:translateX(-5px) skewX(2deg);filter:hue
 @keyframes cdpop{0%{opacity:0;transform:translateY(-50%) scale(2)}15%{opacity:1;transform:translateY(-50%) scale(1)}75%{opacity:1}100%{opacity:0;transform:translateY(-50%) scale(.85)}}
 .sndbar .accb{border-color:var(--sel);color:var(--sel);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .uname{color:var(--fg);margin-right:12px}
+/* ===== 称号 ===== */
+.htitle{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;cursor:pointer}
+.htitle small{width:100%}
+.htitle .uname{margin-right:0}
+.htitle .tedit{font-size:11px;color:var(--dim);border:1px solid #444;border-radius:4px;padding:1px 6px}
+.htitle:hover .tedit{color:var(--fg);border-color:var(--fg)}
+.ttl{--a:#888;position:relative;display:inline-flex;align-items:center;justify-content:center;max-width:100%;padding:3px 14px;border-radius:6px;font-size:15px;line-height:1.45;font-weight:bold;color:#e8e8ee;border:1px solid var(--a);overflow:hidden;isolation:isolate;white-space:nowrap;vertical-align:middle}
+.ttl>b{position:relative;z-index:3;overflow:hidden;text-overflow:ellipsis;display:inline-flex;align-items:center;gap:6px}
+.ttl>.tb{position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,#2c2c36,#1b1b22)}
+.ttl em{font-style:normal;font-size:.8em;color:var(--a)}
+.ttl .sp{position:absolute;z-index:2;left:var(--x);top:var(--y);width:4px;height:4px;border-radius:50%;background:#fff;box-shadow:0 0 6px 2px var(--a);opacity:0;animation:tsp 1.8s var(--d) infinite}
+@keyframes tsp{0%,100%{opacity:0;transform:scale(.2)}45%{opacity:1;transform:scale(1)}}
+.ttl.s1{--a:var(--r1);color:#dcffe4}.ttl.s1>.tb{background:linear-gradient(180deg,#1d3a27,#13221a)}
+.ttl.s2{--a:var(--r2);color:#e2f2ff;border-width:2px}.ttl.s2>.tb{background:linear-gradient(180deg,#1b3554,#111d2e)}
+.ttl.s2::after,.ttl.s3::after,.ttl.s4::after,.ttl.s5::after,.ttl.s6::after,.ttl.sgod::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.45) 50%,transparent 65%);background-size:300% 100%;animation:barshine 3.2s linear infinite}
+.ttl.s3{--a:var(--r3);color:#f3e6ff;border:3px double var(--a);animation:tglow 2.4s ease-in-out infinite}.ttl.s3>.tb{background:radial-gradient(ellipse at 50% 0,#4a2a6e,#1d1230 75%)}
+@keyframes tglow{0%,100%{box-shadow:0 0 4px var(--a)}50%{box-shadow:0 0 14px var(--a)}}
+.ttl.s4{--a:var(--r4);border:2px solid var(--a);animation:tglow 2s ease-in-out infinite}.ttl.s4>.tb{background:linear-gradient(180deg,#5a4510,#2a1f06 60%,#3d2e08)}
+.ttl.s4>b,.ttl.s6>b,.ttl.sgod>b{color:transparent;background:linear-gradient(90deg,#fff6c8,#ffd43b,#fffbe6,#e0a800,#fff6c8);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;animation:tgold 3s linear infinite}
+.ttl.s4>b em,.ttl.s6>b em,.ttl.sgod>b em{-webkit-text-fill-color:currentColor;color:var(--a)}
+.ttl.s4 em{animation:spin 4s linear infinite;display:inline-block}
+@keyframes tgold{to{background-position:-200% 0}}
+.ttl.s5,.ttl.s6,.ttl.sgod,.ttl.snm{border:0;padding:5px 16px}
+.ttl.s5::before,.ttl.s6::before,.ttl.sgod::before,.ttl.snm::before{content:"";position:absolute;left:50%;top:50%;width:600px;height:600px;margin:-300px 0 0 -300px;z-index:-2;animation:spin 3s linear infinite}
+.ttl.s5>.tb,.ttl.s6>.tb,.ttl.sgod>.tb,.ttl.snm>.tb{inset:2px;border-radius:4px}
+.ttl.s5{--a:var(--r5);color:#ffe3e3;animation:tglow 1.6s ease-in-out infinite}.ttl.s5::before{background:conic-gradient(#ff3b3b,#ff9a3b,#5a0000,#ff3b3b,#ffcf3b,#5a0000,#ff3b3b)}
+.ttl.s5>.tb{background:linear-gradient(0deg,#6e1206,#2a0505 70%);animation:tfire 1.2s ease-in-out infinite alternate}
+@keyframes tfire{from{filter:brightness(.85)}to{filter:brightness(1.3)}}
+.ttl.s6{--a:#fff;animation:train 3s linear infinite}.ttl.s6::before{background:conic-gradient(#ff3b3b,#ffd43b,#3dff6e,#3fa9ff,#c77dff,#ff3b3b)}
+.ttl.s6>.tb{background:radial-gradient(ellipse at 50% 120%,#3a3156,#15121f 70%)}
+.ttl.s6>b{background-image:linear-gradient(90deg,#ff8a8a,#ffe08a,#8affa8,#8ad0ff,#e0a8ff,#ff8a8a)}
+@keyframes train{0%,100%{box-shadow:0 0 12px #ff5a5a}25%{box-shadow:0 0 12px #ffd43b}50%{box-shadow:0 0 12px #3fa9ff}75%{box-shadow:0 0 12px #c77dff}}
+.ttl.sgod{--a:#ffeeb0;animation:tglow 1.4s ease-in-out infinite}.ttl.sgod::before{background:conic-gradient(#fff,#ffd43b,#ff8af0,#8ad0ff,#fff,#ffd43b,#b3ff8a,#fff);animation-duration:2s}
+.ttl.sgod>.tb{background:radial-gradient(ellipse at 50% 0,#fff3c4 0,#a07a1c 18%,#2b1f0c 70%)}
+.ttl.sgod>b{background-image:linear-gradient(90deg,#fffbe6,#ffd43b,#ffffff,#ffb0f0,#b0e0ff,#fffbe6)}
+.ttl.ult{padding:6px 20px;animation:train 2s linear infinite}.ttl.ult::before{animation-duration:1.2s}
+.ttl.snm{--a:#b03bff;color:#f0d8ff;text-shadow:0 0 6px #ff2b6a;animation:tnm 2.2s ease-in-out infinite}.ttl.snm::before{background:conic-gradient(#3a0050,#ff2b6a,#12001a,#b03bff,#3a0050,#ff2b6a,#12001a);animation-duration:5s}
+.ttl.snm>.tb{background:radial-gradient(ellipse at 50% 100%,#4a0a38,#0c0010 70%)}
+@keyframes tnm{0%,100%{box-shadow:0 0 6px #6a0a8a}50%{box-shadow:0 0 18px #ff2b6a}}
+.ttl.sgl{--a:#3dff6e;color:#c8ffd6;border:1px solid #3dff6e;font-family:monospace;letter-spacing:1px}
+.ttl.sgl>.tb{background:repeating-linear-gradient(0deg,#031408 0 2px,#000 2px 4px)}
+.ttl.sgl>b{animation:tgl 2.2s steps(1) infinite}
+@keyframes tgl{0%,100%{text-shadow:none;transform:none}8%{text-shadow:2px 0 #ff2b6a,-2px 0 #3fa9ff;transform:translateX(1px)}10%{text-shadow:-3px 0 #ff2b6a,3px 0 #3fa9ff;transform:translateX(-2px) skewX(8deg)}12%{text-shadow:none;transform:none}55%{text-shadow:1px 0 #ff2b6a,-1px 0 #3fa9ff;transform:translateX(-1px)}57%{text-shadow:none;transform:none}}
+.ttl.lock{--a:#555;color:#777;border-style:dashed}.ttl.lock>.tb{background:#16161b}
+.ttl.big{font-size:22px;padding:8px 26px}
+.ttl.big.s5,.ttl.big.s6,.ttl.big.sgod,.ttl.big.snm{padding:10px 28px}
+/* 称号一覧 */
+.tinfo{min-height:52px;margin:6px 0 10px;padding:8px 10px;border-radius:6px;background:#15151c;border:1px solid #333;font-size:13px;text-align:left}
+.tinfo b{display:block;font-size:14px;margin-bottom:2px}
+.tlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:4px 6px;max-height:min(52vh,420px);overflow-y:auto;padding:4px}
+.titem{height:auto;min-height:0;align-items:center;background:none;border:2px solid transparent;border-radius:8px;padding:3px 2px;cursor:pointer;display:flex;justify-content:center;min-width:0}
+.titem:hover{border-color:#555}.titem.on{border-color:var(--sel);background:rgba(255,255,255,.05)}.titem.cur{border-color:#fff}
+.titem .ttl{font-size:12.5px;padding-left:10px;padding-right:10px}.titem .ttl>b{gap:4px}
+.tcnt{font-size:12px;color:var(--dim)}
+/* 称号獲得 */
+.tget{position:relative;padding:22px 8px 14px;text-align:center;overflow:hidden;border-radius:10px;isolation:isolate}
+.tget .tglab{font-size:13px;letter-spacing:6px;color:var(--dim);margin-bottom:12px;animation:tfade .5s both}
+.tget .ttl.big{animation:tpop .8s cubic-bezier(.2,1.6,.4,1) .15s both}
+.tget .tgd{margin-top:12px;font-size:13px;color:var(--dim);animation:tfade .5s .7s both}
+.tget .tgrays{position:absolute;left:50%;top:55%;width:900px;height:900px;margin:-450px 0 0 -450px;z-index:-1;opacity:0;pointer-events:none}
+.tget.g3 .tgrays,.tget.g4 .tgrays,.tget.g5 .tgrays,.tget.g6 .tgrays,.tget.g7 .tgrays{opacity:.35;background:repeating-conic-gradient(var(--gc) 0 6deg,transparent 6deg 18deg);animation:spin 14s linear infinite,tfade 1s both}
+.tget.g5 .tgrays{opacity:.5}.tget.g6 .tgrays,.tget.g7 .tgrays{opacity:.45;background:repeating-conic-gradient(#ff5a5a 0 5deg,transparent 5deg 12deg,#ffd43b 12deg 17deg,transparent 17deg 24deg,#3fa9ff 24deg 29deg,transparent 29deg 36deg);animation-duration:8s,1s}
+.tget.g4::after,.tget.g5::after,.tget.g6::after,.tget.g7::after{content:"";position:absolute;inset:0;z-index:4;background:#fff;pointer-events:none;animation:tflash .7s .1s both}
+@keyframes tflash{0%{opacity:0}15%{opacity:.85}100%{opacity:0}}
+@keyframes tpop{0%{transform:scale(0) rotate(-8deg);opacity:0}100%{transform:none;opacity:1}}
+@keyframes tfade{from{opacity:0}}
+.tget .cf{position:absolute;top:-10px;left:var(--x);width:6px;height:10px;background:var(--c);z-index:3;opacity:0;animation:tcf var(--t) linear var(--d) infinite}
+@keyframes tcf{0%{opacity:1;transform:translateY(0) rotate(0)}100%{opacity:0;transform:translateY(260px) rotate(720deg)}}
+.tget.gx .ttl.big{animation:tpop .8s cubic-bezier(.2,1.6,.4,1) .15s both,tshake .4s .9s 2}
+@keyframes tshake{25%{transform:translate(-3px,1px)}50%{transform:translate(3px,-1px)}75%{transform:translate(-1px,2px)}}
+.tget .tglab,.tget .tgd{position:relative;z-index:2;display:inline-block;background:rgba(8,8,14,.8);padding:2px 12px;border-radius:12px}
+.tget .ttl.big{display:flex;width:fit-content;margin:0 auto}
+.tmore{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:12px}
+.tmore .ttl{font-size:12px}
+
 .fld{display:block;text-align:left;font-size:13px;margin:10px 0}
 .inp{display:block;width:100%;margin-top:4px;font:inherit;font-size:16px;background:var(--bg);color:var(--fg);border:2px solid var(--fg);padding:8px 10px;border-radius:0}
 .inp:focus{outline:none;border-color:var(--sel)}
@@ -1565,7 +1640,7 @@ let screen='home';
 function show(name){
   screen=name;document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===name));
   if(name!=='battle'){B=null;W=null;if(typeof kbGlitch==='function'){kbGlitch(false);wordNoise(false);$('stage').classList.remove('gl','nm')}}if(typeof TIP!=='undefined'){TIP.classList.remove('on');TIP._id=null}if(name!=='battle'){$('alert').classList.remove('on')}closeCtx&&closeCtx();
-  if(name==='home'){renderHome();if(typeof rwCheck==='function'&&rwCheck())return;if(typeof tutDecHome==='function')tutDecHome()}if(name==='armory')renderArmory();if(name==='dex')renderDex();
+  if(name==='home'){renderHome();if(typeof rwCheck==='function'&&rwCheck())return;if(typeof titleCheck==='function'&&titleCheck())return;if(typeof tutDecHome==='function')tutDecHome()}if(name==='armory')renderArmory();if(name==='dex')renderDex();
   if(name!=='battle')playBgm(typeof nmUI==='function'&&nmUI()?'nm':'home');
 }
 function dropHTML(w){return `<div class="drop${w.r>=4?' big':''}" style="--rc:${RAR[w.r].c}">${w.r>=4?'<span class="gt">GET!!</span>':''}<span class="e">${wIcon(w)}</span><div><div class="n">${wName(w)}</div><div class="small">${RAR[w.r].n}・${SK[w.sk].n}</div></div></div>`}
@@ -1573,7 +1648,64 @@ function dropHTML(w){return `<div class="drop${w.r>=4?' big':''}" style="--rc:${
 /* ===== home ===== */
 let selF=1;
 function maxSel(){return Math.min(100,PG().maxF+1)}
-const TITLES=[[1,'見習い冒険者'],[3,'駆け出し剣士'],[8,'熟練の戦士'],[15,'迷宮探索者'],[25,'歴戦の勇士'],[40,'深層の覇者'],[60,'伝説の勇者'],[80,'百層の覇王'],[100,'タイプの神']];
+
+/* ===== 称号 ===== */
+const TRK=[[1,'見習い冒険者',0],[3,'駆け出し剣士',0],[8,'熟練の戦士',1],[15,'迷宮探索者',1],[25,'歴戦の勇士',2],[40,'深層の覇者',3],[60,'伝説の勇者',4],[80,'百層の覇王',5],[100,'タイプの神',6]];
+const TITLES=TRK.map(([r,n])=>[r,n]);
+function dexNorm(){const L=DEX.filter(e=>!e.hid&&!e.nmh);return[L.filter(e=>S.rec.dex[e.key]).length,L.length]}
+const P100=d=>S.prog[d]&&S.prog[d].maxF>=100;
+const TL=[...TRK.map(([r,n,t])=>({id:'r'+r,n,s:t,h:`ランク${r}に到達する`,c:()=>rankInfo().r>=r,rk:r})),
+ {id:'c1',n:'はじめの一歩',s:0,h:'ダンジョンの層を初めてクリアする',c:()=>S.rec.clears>=1},
+ {id:'k100',n:'魔物ハンター',s:1,h:'モンスターを合計100体倒す',c:()=>S.rec.kills>=100},
+ {id:'k1000',n:'千体斬り',s:2,h:'モンスターを合計1,000体倒す',c:()=>S.rec.kills>=1000},
+ {id:'k10000',n:'万魔殲滅',s:4,h:'モンスターを合計10,000体倒す',c:()=>S.rec.kills>=10000},
+ {id:'cb100',n:'連撃の使い手',s:1,h:'1回の戦闘で100コンボを達成する',c:()=>S.rec.maxCombo>=100},
+ {id:'cb300',n:'コンボマスター',s:3,h:'1回の戦闘で300コンボを達成する',c:()=>S.rec.maxCombo>=300},
+ {id:'cb1000',n:'無限連鎖',s:5,h:'1回の戦闘で1,000コンボを達成する',c:()=>S.rec.maxCombo>=1000},
+ {id:'kps4',n:'疾風の指',s:2,h:'最高速度 4.00打/秒 以上を記録する',c:()=>S.rec.bestKps>=4},
+ {id:'kps7',n:'神速の指',s:4,h:'最高速度 7.00打/秒 以上を記録する',c:()=>S.rec.bestKps>=7},
+ {id:'kps10',n:'光速の指',s:5,h:'最高速度 10.00打/秒 以上を記録する',c:()=>S.rec.bestKps>=10},
+ {id:'ky1',n:'十万打鍵',s:3,h:'総打鍵数 100,000 に到達する',c:()=>S.rec.keys>=1e5},
+ {id:'ky2',n:'百万打鍵',s:5,h:'総打鍵数 1,000,000 に到達する',c:()=>S.rec.keys>=1e6},
+ {id:'tm',n:'迷宮の住人',s:2,h:'プレイ時間が10時間に到達する',c:()=>S.rec.time>=36000},
+ {id:'u10',n:'ユニークハンター',s:3,h:'ユニーク武器を10種類集める',c:()=>S.rec.uniq.length>=10},
+ {id:'dx50',n:'蒐集家',s:2,h:'アイテム図鑑を半分以上うめる',c:()=>{const[a,b]=dexNorm();return a*2>=b}},
+ {id:'dx100',n:'全知の蒐集者',s:5,h:'アイテム図鑑をすべてうめる',c:()=>{const[a,b]=dexNorm();return a>=b}},
+ {id:'e100',n:'やさしき覇者',s:2,h:'イージーの100層をクリアする',c:()=>P100('easy')},
+ {id:'n100',n:'百層踏破者',s:3,h:'ノーマルの100層をクリアする',c:()=>P100('normal')},
+ {id:'h100',n:'修羅の王',s:5,h:'ハードの100層をクリアする',c:()=>P100('hard')},
+ {id:'xnt',n:'真夜中のタイピスト',s:3,hid:1,h:'深夜0時〜4時に層をクリアした',c:()=>!!(S.tx&&S.tx.night)},
+ {id:'xgl',n:'ノイズの観測者',s:'gl',lv:4,hid:1,h:'グリッチモンスターを初めて倒した',c:()=>!!S.nm},
+ {id:'xgk',n:'バグ狩り',s:'gl',lv:5,hid:1,h:'グリッチモンスターを10体倒した',c:()=>(S.rec.gk||0)>=10},
+ {id:'xn1',n:'悪夢に囚われし者',s:'nm',lv:5,hid:1,h:'ナイトメアの層を初めてクリアした',c:()=>S.prog.nightmare&&S.prog.nightmare.maxF>=1},
+ {id:'xn100',n:'悪夢を喰らう者',s:'nm',lv:6,hid:1,h:'ナイトメアの100層をクリアした',c:()=>P100('nightmare')},
+ {id:'xgod',n:'神を紡ぐ者',s:'god',lv:6,hid:1,h:'武器をデコードしてゴッドに到達させた',c:()=>Object.keys(S.rec.dex).some(k=>k.startsWith('d:'))},
+ {id:'xall',n:'全てを超えし者',s:'god',ult:1,lv:7,hid:1,h:'すべての難易度の100層をクリアした',c:()=>['easy','normal','hard','nightmare'].every(P100)}];
+const TLM={};TL.forEach(t=>TLM[t.id]=t);
+$('hTitle').onclick=openTitles;
+const tLv=t=>t.lv!=null?t.lv:t.s;
+function tHas(t){return(S.titles||[]).includes(t.id)||(t.rk&&rankInfo().r>=t.rk)}
+function tCur(){const t=S.title&&TLM[S.title];if(t&&tHas(t))return t;const r=rankInfo().r;return TL.filter(x=>x.rk&&r>=x.rk).pop()||TL[0]}
+function ttlHTML(t,big){const s=t.s,lv=tLv(t),orn={3:'◆',4:'✦',5:'✧',6:'♛',gl:'▚',nm:'☾',god:'❖'}[s]||'';
+  let sp='';const ns=lv>=6?6:lv>=4?3:0;for(let i=0;i<ns;i++)sp+=`<i class="sp" style="--x:${8+i*84/Math.max(1,ns-1)|0}%;--y:${i%2?62:12}%;--d:${(i*.37%1.8).toFixed(2)}s"></i>`;
+  return `<span class="ttl s${s}${t.ult?' ult':''}${big?' big':''}"><i class="tb"></i>${sp}<b>${orn?`<em>${orn}</em>`:''}${esc(t.n)}${orn?`<em>${orn}</em>`:''}</b></span>`}
+const TLOCK='<span class="ttl lock"><i class="tb"></i><b>？？？</b></span>';
+function titleCheck(){if(!S||!S.prog||(typeof TUT!=='undefined'&&TUT.on)||tutStage()!=='done')return false;S.titles=S.titles||[];const nw=[];
+  TL.forEach(t=>{if(!S.titles.includes(t.id)){let ok=false;try{ok=t.c()}catch(e){}if(ok){S.titles.push(t.id);if(t.id!=='r1')nw.push(t)}}});
+  if(!nw.length)return false;save();renderHome();titleGet(nw);return true}
+function titleGet(nw){nw=nw.slice().sort((a,b)=>tLv(b)-tLv(a));const t=nw[0],lv=tLv(t),gc=['#888','#3dff6e','#3fa9ff','#c77dff','#ffd43b','#ff3b3b','#ffeeb0'][typeof t.s==='number'?t.s:6];
+  let cf='';if(lv>=5){const C=['#ff5a5a','#ffd43b','#3dff6e','#3fa9ff','#c77dff','#fff'];for(let i=0;i<(lv>=6?28:14);i++)cf+=`<i class="cf" style="--x:${Math.random()*100|0}%;--c:${C[i%C.length]};--t:${(1.6+Math.random()*1.4).toFixed(2)}s;--d:${(Math.random()*1.5).toFixed(2)}s"></i>`}
+  se('clear');if(lv>=3)setTimeout(()=>se('drop',Math.min(5,lv)),350);
+  modal(`<div class="tget g${lv}${t.s==='gl'?' gx':''}" style="--gc:${gc}"><i class="tgrays"></i>${cf}<div class="tglab">${t.hid?'★ 隠し称号 獲得 ★':'称号獲得'}</div>${ttlHTML(t,true)}<div class="tgd">${esc(t.h)}</div>${nw.length>1?`<div class="tmore">${nw.slice(1).map(x=>ttlHTML(x)).join('')}</div><div class="tgd">ほか ${nw.length-1}個の称号も獲得</div>`:''}</div><p class="small">ホームの称号をクリックすると変更できます</p>`,
+    [{t:'この称号をつける',fn:()=>{S.title=t.id;save();renderHome();if(typeof tutDecHome==='function')tutDecHome()}},{t:'閉じる',pri:true,key:' ',fn:()=>{renderHome();if(typeof tutDecHome==='function')tutDecHome()}}])}
+function openTitles(){if(typeof TUT!=='undefined'&&TUT.on)return;S.titles=S.titles||[];const cur=tCur();
+  const vis=TL.filter(t=>!t.hid||tHas(t)),got=TL.filter(t=>!t.hid&&tHas(t)).length,hg=TL.filter(t=>t.hid&&tHas(t)).length;
+  modal(`<h2>称号</h2><div class="tcnt">獲得 ${got} / ${TL.filter(t=>!t.hid).length}${hg?`　隠し称号 ${hg}`:''}</div><div class="tinfo" id="tInfo"><b>いまの称号</b>${ttlHTML(cur)}<div class="small" style="margin-top:4px">${esc(cur.h)}</div></div>
+    <div class="tlist" id="tList">${vis.map(t=>`<button class="titem${t===cur?' cur':''}" data-tid="${t.id}">${tHas(t)?ttlHTML(t):TLOCK}</button>`).join('')}</div>`,[{t:'閉じる',pri:true}]);
+  $('tList').onclick=e=>{const b=e.target.closest('.titem');if(!b)return;const t=TLM[b.dataset.tid];$('tList').querySelectorAll('.titem').forEach(x=>x.classList.toggle('on',x===b));
+    if(tHas(t)){S.title=t.id;save();renderHome();$('tList').querySelectorAll('.titem').forEach(x=>x.classList.toggle('cur',x===b));se('key');
+      $('tInfo').innerHTML=`<b>称号を「${esc(t.n)}」に変更しました</b><div class="small">${esc(t.h)}</div>`}
+    else $('tInfo').innerHTML=`<b>？？？（未獲得）</b><div class="small">入手方法：${esc(t.h)}</div>`}}
 function tierOf(r){return r>=75?6:r>=50?5:r>=35?4:r>=20?3:r>=10?2:r>=5?1:0}
 function power(st){return Math.round(st.atk*(1+st.cr/100*st.cd/100)*(1+st.mh/100)*(1+st.sp/200)*(1+st.ctr/100)*3+st.hp*.5+st.def*2)}
 function fmtBig(n){n=Math.round(n);if(n>=1e8)return (n/1e8).toFixed(n>=1e10?0:1)+'億';if(n>=1e4)return (n/1e4).toFixed(n>=1e6?0:1)+'万';return n.toLocaleString('ja-JP')}
@@ -1584,8 +1716,8 @@ function countUp(el,to){const from=powShown,t0=performance.now();powShown=to;
 function renderHome(){if(typeof applyDec==='function')applyDec();
   const ri=rankInfo(),open=slotsOpen(ri.r),st=calcStats(),R=S.rec,tier=tierOf(ri.r);
   $('hXpTxt').textContent=`EXP ${ri.x.toLocaleString()} / ${ri.n.toLocaleString()}　次のランクまで ${(ri.n-ri.x).toLocaleString()}`;$('hXp').style.width=(ri.x/ri.n*100)+'%';
-  const tt=TITLES.filter(t=>ri.r>=t[0]).pop(),nt=TITLES.find(t=>t[0]>ri.r);
-  $('hTitle').innerHTML=`<span class="uname">${esc(CL.pid?CL.name:(S.pname||'ゲスト'))}</span>${tt[1]}${nt?`<small>次の称号「${nt[1]}」はランク${nt[0]}</small>`:''}`;
+  const nt=TITLES.find(t=>t[0]>ri.r);
+  $('hTitle').innerHTML=`<span class="uname">${esc(CL.pid?CL.name:(S.pname||'ゲスト'))}</span>${ttlHTML(tCur())}<span class="tedit">変更</span>${nt?`<small>次のランク称号「${nt[1]}」はランク${nt[0]}</small>`:''}`;
   $('hcard').style.setProperty('--tc',`var(--r${Math.min(5,tierOf(ri.r))})`);const em=$('hEmb');em.className='emb t'+tier;
   em.innerHTML=`<i class="rays"></i><i class="flame"></i><i class="glow"></i><i class="ring r1"></i><i class="ring r2"></i><i class="orb"><b></b><b></b><b></b><b></b></i><i class="embr"></i><div class="emn"><small>RANK</small><b>${ri.r}</b></div><i class="crown">♛</i>`;
   countUp($('hPow'),power(st));
@@ -1896,7 +2028,7 @@ function enemyDie(){
   const en=B.enemy;en.dead=true;B.active=false;W=null;renderWord();S.rec.kills++;
   const eg=$('eg');eg.className='';void eg.offsetWidth;eg.className='die';
   blog(`${en.d.n}を倒した！`,'dmg');se('kill');
-  if(en.gl){$('stage').classList.remove('gl');kbGlitch(B.diff==='nightmare');if(B.diff!=='nightmare')$('stage').classList.remove('gl');if(!S.nm)S.nm=1;const g=en.d,xp=Math.floor((20*Math.pow(B.floor,1.3)*g.xm+g.xa)*DIFF[B.diff].exp*xpScale(B.floor,B.diff));
+  if(en.gl){$('stage').classList.remove('gl');kbGlitch(B.diff==='nightmare');if(B.diff!=='nightmare')$('stage').classList.remove('gl');if(!S.nm)S.nm=1;S.rec.gk=(S.rec.gk||0)+1;const g=en.d,xp=Math.floor((20*Math.pow(B.floor,1.3)*g.xm+g.xa)*DIFF[B.diff].exp*xpScale(B.floor,B.diff));
     S.exp+=xp;B.gxp+=xp;const w=glMat(EXPI[g.drop],B.floor);B.drops.push(w);save();pop('+'+fmt(xp)+' EXP','crit',50,Math.max(fxTop+6,30),30);
     blog(`経験値を ${fmt(xp)} 獲得！`,'drop big','var(--sel)');setTimeout(()=>se('drop',w.r),250);blog(`★【${RAR[w.r].n}】${w.name}を手に入れた！`,'drop big',RAR[w.r].c);nextEnemy();return}
   if(Math.random()<(en.boss?1:.35)){const w=rollWeapon(B.floor,en.d,en.boss);B.drops.push(w);setTimeout(()=>se('drop',w.r),250);blog(`${w.r>=4?'★':''}【${RAR[w.r].n}】${w.name}を手に入れた！`,'drop'+(w.r>=4?' big':''),RAR[w.r].c)}
@@ -1945,7 +2077,7 @@ function floorClear(){
   commitRec();S.rec.clears++;B.drops.forEach(w=>S.rec.dex[dexKey(w)]=1);playBgm(null);se('clear');B.drops.forEach(w=>{if(w.u&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)});
   kbGlitch(false);wordNoise(false);$('stage').classList.remove('gl');
   const f=B.floor,first=f>PG().maxF&&!B.test,xp=Math.floor(clearXP(f,B.diff)*(first?2:1)),before=B.rank0||rankInfo().r;
-  S.exp+=xp;if(first)PG().maxF=f;S.inv.push(...B.drops);if(!B.test)PG().lastF=Math.min(100,f+1);save();
+  S.exp+=xp;if(first)PG().maxF=f;if(!B.test&&new Date().getHours()<4){S.tx=S.tx||{};S.tx.night=1}S.inv.push(...B.drops);if(!B.test)PG().lastF=Math.min(100,f+1);save();
   const after=rankInfo().r,so=slotsOpen(before),sn=slotsOpen(after);
   let h=`<h2>${f}層 クリア</h2><p>経験値 +${xp}${first?'（初回ボーナス×2）':''}</p>${B.gxp?`<p>経験値 +${fmt(B.gxp)}<span class="glt">（繧ｨ繝ｩ繝ｼ）</span></p>`:''}`+statsHTML();
   if(after>before)h+=`<p><b>ランク ${before} → ${after}</b></p>`;
@@ -2186,8 +2318,9 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='3.0.4-alpha';
+const VERSION='3.0.5-alpha';
 const CHANGELOG=[
+ ['3.0.5-alpha',['称号を一新。称号にフレームと背景がつき、手に入れにくい称号ほど豪華に動くようになりました','ホームの称号をクリックすると、手に入れた称号から好きなものを選んでつけられるように。まだの称号は「？？？」と表示され、選ぶと入手方法がわかります','撃破数・コンボ・打鍵速度・プレイ時間・図鑑・各難易度の100層クリアなど、ランク以外で手に入る称号を追加','称号を手に入れたときに獲得演出が出るように','縺ｾ縺\uFFFD隕九〓遘ｰ蜿ｷ縺後←縺薙°縺ｫ逵\uFFFD縺｣縺ｦ縺\uFFFD繧九\uFFFD\uFFFD']],
  ['3.0.4-alpha',['イージー・ノーマル・ハードの100層を初めてクリアして拠点に戻ると、クリア特典としてランダムなユニーク武器を1本もらえるように（難易度ごとに1回。すでにクリア済みの人も受け取れます）','縺吶∋縺ｦ縺ｮ\uFFFD縺ｫ縺ｯ縺ｾ縺\uFFFD縺ｪ縺ｫ縺九′縺ゅｋ\uFFFD']],
  ['3.0.3-alpha',['邨碁ｨ薙縺ｮ\uFFFD縺後↑縺ｫ縺九′螟峨ｏ縺｣縺溘ｈ\uFFFD']],
  ['3.0.2-alpha',['リザルト画面に「もう一度」ボタンを追加（同じ層にもう一度挑戦。スペースキーでも可）。並びは「拠点へ」「もう一度」「次の層へ」','力尽きた時・撤退した時の画面にも「もう一度」ボタンを追加']],
@@ -2383,7 +2516,7 @@ function rwCheck(){if(!S||!S.prog||(typeof TUT!=='undefined'&&TUT.on)||tutStage(
   if(['easy','normal','hard','nightmare'].every(d=>S.prog[d]&&S.prog[d].maxF>=100)&&!S.rw.all){S.rw.all=1;const a=rwUnique(),b=gwify(makeW({t:a.t,r:5,f:100,name:a.name,sk:a.sk,u:a.u}));got.push([a,'全難易度 制覇特典'],[b,'全難易度 制覇特典']);msg='<p>すべての難易度の100層を制覇した証。対応する2本の武器が手に入った。</p>'}
   if(!got.length)return false;
   got.forEach(([w])=>{S.inv.push(w);S.rec.dex[dexKey(w)]=1;if(w.u&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)});save();renderHome();se('clear');setTimeout(()=>se('drop',5),300);
-  modal(`<h2>クリア特典</h2><p>百層を制覇した報酬を受け取った！</p>${msg}<div class="drops">${got.map(([w,l])=>`<div class="small rwl">${l}</div>${dropHTML(w)}`).join('')}</div>`,[{t:'閉じる',pri:true,fn:()=>{renderHome();if(typeof tutDecHome==='function')tutDecHome()}}]);return true}
+  modal(`<h2>クリア特典</h2><p>百層を制覇した報酬を受け取った！</p>${msg}<div class="drops">${got.map(([w,l])=>`<div class="small rwl">${l}</div>${dropHTML(w)}`).join('')}</div>`,[{t:'閉じる',pri:true,fn:()=>{renderHome();if(titleCheck())return;if(typeof tutDecHome==='function')tutDecHome()}}]);return true}
 function tutAuto(){if(tutStage()==='intro'&&screen==='home'&&!$('modal').classList.contains('on'))tutRun('intro')}
 
 /* ===== armory ===== */
