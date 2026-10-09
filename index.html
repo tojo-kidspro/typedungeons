@@ -441,6 +441,34 @@ img{image-rendering:pixelated}
 .hq.lock small{position:static;display:block;font-size:9px;color:var(--dim)}
 .hq.empty{border-style:dashed}
 .diffsel.one{grid-template-columns:1fr}
+.mwrap{display:none}
+body.mobile .mwrap{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%}
+body.mobile .mform{display:flex;gap:6px;width:100%;max-width:520px}body.mobile .mgo{flex:0 0 auto;padding:0 14px;border:3px solid var(--sel);color:var(--sel);font-size:16px;background:var(--bg)}
+body.mobile .mwrap.okp #mIn{border-color:#3dff6e}body.mobile .mwrap.bad #mIn{border-color:#ff3b3b}
+body.mobile #mIn{flex:1;min-width:0;width:100%;max-width:520px;font:inherit;font-size:20px;text-align:center;letter-spacing:.08em;padding:10px 12px;background:var(--bg);color:var(--fg);border:3px solid var(--sel);border-radius:0;outline:none;caret-color:var(--sel)}
+body.mobile #mIn:focus{box-shadow:0 0 0 2px rgba(255,230,0,.35)}
+body.mobile #mIn::placeholder{color:var(--dim)}
+body.mobile .mhint{font-size:11px;color:var(--dim)}
+body.mobile .mwrap.ng #mIn{animation:shake .25s steps(3);border-color:var(--hpbg)}
+body.mobile .mwrap.glitch #mIn{border-color:#f0f;box-shadow:3px 0 #0ff,-3px 0 #f0f;animation:glj .3s steps(2) infinite}
+body.mobile #kb{display:none!important}
+body.mobile .screen{height:var(--app-h,100%)}
+body.mobile .console{padding-bottom:8px}
+@media (max-height:520px){
+ body.mobile:not(.land) .bhud{padding:4px 10px 2px!important}
+ body.mobile:not(.land) .word{min-height:0!important;padding:4px 10px 6px!important;margin-top:2px}
+ body.mobile:not(.land) .wdisp{font-size:11px;min-height:0}
+ body.mobile:not(.land) .wkana{font-size:clamp(18px,6.4vh,26px)!important;line-height:1.2}
+ body.mobile:not(.land) .wroma{font-size:clamp(12px,3.6vh,16px)!important;margin-top:0}
+ body.mobile:not(.land) .enemy-wrap{gap:2px;padding-bottom:2px}
+ body.mobile:not(.land) .console{padding:4px 10px 6px!important;gap:4px!important}
+ body.mobile:not(.land) .wicons{min-height:0}body.mobile:not(.land) .wi{width:30px!important;height:30px!important}
+ body.mobile:not(.land) .buffs{display:none}
+ body.mobile:not(.land) .phpbar{height:12px}
+ body.mobile:not(.land) .mhint{display:none}
+ body.mobile:not(.land) #mIn{padding:6px 10px;font-size:17px}
+ body.mobile:not(.land) .bl{font-size:11px}
+}
 .pwbox{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:baseline;margin:10px 0;padding:10px 12px;border:3px solid var(--sel);text-align:left}
 .pwbox .pwv{font-size:28px;letter-spacing:.12em;color:var(--sel);font-family:ui-monospace,monospace}.pwbox .pwn{font-size:18px}.pwbox p{grid-column:1/-1;margin:6px 0 0}
 .pwi{font-family:ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase}
@@ -766,27 +794,27 @@ button.chip.dis{opacity:.3;text-decoration:line-through}
   .k{height:clamp(36px,5.6vh,46px)!important;font-size:16px}.kb{gap:4px}.k.bump::after{bottom:5px}
   .enemy-wrap{gap:4px;padding-bottom:4px}
 }
-@media (orientation:landscape) and (max-height:520px){
-  .stage{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);column-gap:8px}
-  .stage>.bhud{grid-column:1 / -1;padding:4px 10px 2px}
-  .word{grid-column:1;grid-row:2;align-self:start;margin:4px 0 0 10px;min-height:0;padding:6px 10px 8px}
-  .wkana{font-size:clamp(18px,6vh,28px)}
-  .wroma{font-size:clamp(12px,3.8vh,17px)}
-  .enemy-wrap{grid-column:2;grid-row:2;padding:0 8px 4px;gap:3px}
-  .enemy{--esz:min(22vh,18vw)}.enemy.boss{--esz:min(28vh,22vw)}
-  .ebar,.etimer{width:min(90%,260px)}
-  .blog{width:min(56%,340px);bottom:4px}
-  .bl{font-size:11px}
-  .hits{top:30%}
-  .console{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;padding:4px 10px 6px;align-items:center}
-  .wicons{grid-column:1;min-height:0;gap:5px}.wi{width:34px;height:34px}
-  .buffs{display:none}
-  .php{grid-column:2}.phpbar{height:14px}
-  .kb{grid-column:1 / -1;gap:3px}.kr{gap:3px}
-  .k{height:clamp(24px,8.6vh,40px);font-size:14px}
-  .cdown{font-size:clamp(48px,20vh,90px)}
-  .alert .atxt{font-size:clamp(32px,12vh,60px)}
-  .alert .aband{padding:6px 0}
+@media (max-height:520px){
+ body.land .stage{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);column-gap:8px}
+ body.land .stage>.bhud{grid-column:1 / -1;padding:4px 10px 2px}
+ body.land .word{grid-column:1;grid-row:2;align-self:start;margin:4px 0 0 10px;min-height:0;padding:6px 10px 8px}
+ body.land .wkana{font-size:clamp(18px,6vh,28px)}
+ body.land .wroma{font-size:clamp(12px,3.8vh,17px)}
+ body.land .enemy-wrap{grid-column:2;grid-row:2;padding:0 8px 4px;gap:3px}
+ body.land .enemy{--esz:min(22vh,18vw)} body.land .enemy.boss{--esz:min(28vh,22vw)}
+ body.land .ebar,body.land .etimer{width:min(90%,260px)}
+ body.land .blog{width:min(56%,340px);bottom:4px}
+ body.land .bl{font-size:11px}
+ body.land .hits{top:30%}
+ body.land .console{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;padding:4px 10px 6px;align-items:center}
+ body.land .wicons{grid-column:1;min-height:0;gap:5px} body.land .wi{width:34px;height:34px}
+ body.land .buffs{display:none}
+ body.land .php{grid-column:2} body.land .phpbar{height:14px}
+ body.land .kb{grid-column:1 / -1;gap:3px} body.land .kr{gap:3px}
+ body.land .k{height:clamp(24px,8.6vh,40px);font-size:14px}
+ body.land .cdown{font-size:clamp(48px,20vh,90px)}
+ body.land .alert .atxt{font-size:clamp(32px,12vh,60px)}
+ body.land .alert .aband{padding:6px 0}
 }
 
 .enemy-wrap{justify-content:safe center;overflow:hidden}
@@ -907,6 +935,7 @@ button.chip.dis{opacity:.3;text-decoration:line-through}
     <div class="wicons" id="wicons"></div>
     <div class="buffs" id="buffs"></div>
     <div class="php"><span class="lab" id="pRank">RANK 1</span><span class="lab">HP</span><div class="phpbar"><i id="php"></i><b id="psh"></b></div><span class="phptxt" id="phpTxt"></span></div>
+    <div class="mwrap" id="mWrap"><form id="mForm" class="mform" autocomplete="off"><input id="mIn" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="send" placeholder="ここをタップして入力"><button type="submit" class="mgo">決定</button></form><span class="mhint">打ち終わったらエンター（決定）で攻撃。ローマ字でも、かな入力でもOK</span></div>
     <div class="kb" id="kb"></div>
   </div>
 </section>
@@ -1628,7 +1657,7 @@ function startFloor(f,opt){
   if(opt&&opt.q)q=opt.q;q=q.map(mp);kbGlitch(false);
   B={diff:(opt&&opt.diff)||S.diff,test:!!(opt&&opt.q),rank0:rankInfo().r,gxp:0,floor:f,q,qi:0,st,hp:st.hp,maxHp:st.hp,shield:0,combo:0,maxCombo:0,keys:0,miss:0,tt:0,chain:0,chainDmg:0,chainT:0,at:[],buffs:[],drops:[],active:false,enemy:null,lt:0,lastWord:null,
      ws:equipped().map(w=>({w,ct:0,cnt:0,el:null}))};
-  PG().lastF=f;lastStep=0;show('battle');playBgm(bgmFor(false));$('stage').classList.toggle('nm',B.diff==='nightmare');wordNoise(B.diff==='nightmare');renderSnd();LOG.innerHTML='';for(const k in UI)delete UI[k];PARTS.length=0;chainShown=-1;fxCol=null;fxResize();$('pRank').textContent='RANK '+rankInfo().r;renderCombo();$('stage').style.setProperty('--scene',SCENES[band]);$('fx').innerHTML='';
+  PG().lastF=f;lastStep=0;show('battle');mClear();mFocus();playBgm(bgmFor(false));$('stage').classList.toggle('nm',B.diff==='nightmare');wordNoise(B.diff==='nightmare');renderSnd();LOG.innerHTML='';for(const k in UI)delete UI[k];PARTS.length=0;chainShown=-1;fxCol=null;fxResize();$('pRank').textContent='RANK '+rankInfo().r;renderCombo();$('stage').style.setProperty('--scene',SCENES[band]);$('fx').innerHTML='';
   $('wicons').innerHTML='';
   B.ws.forEach(e=>{const d=document.createElement('div');d.className='wi';d.style.setProperty('--rc',RAR[e.w.r].c);
     d.title=`${e.w.name}：${SK[e.w.sk].n}`;d.innerHTML=`${wIcon(e.w)}<span class="ct"></span>`;e.el=d;$('wicons').appendChild(d)});
@@ -1699,6 +1728,33 @@ function typeKey(k){
   if(W.buf&&t.c.includes(W.buf)){advance();if(W)typeKey(k);return}
   se('miss');B.combo=0;B.miss++;flashKey(k,false);renderCombo();const wd=$('word');wd.classList.remove('shake');void wd.offsetWidth;wd.classList.add('shake');renderWord();
 }
+/* ===== スマホ入力 ===== */
+const MOBILE=/[?&]mobile=1/.test(location.search)||(matchMedia('(pointer:coarse)').matches&&!matchMedia('(hover:hover)').matches);
+if(MOBILE)document.body.classList.add('mobile');
+function landFit(){const vw=innerWidth,vh=innerHeight,upright=MOBILE&&window.screen.height>window.screen.width;document.body.classList.toggle('land',vw>vh&&!upright)}
+addEventListener('resize',landFit);landFit();
+const MI={used:0,comp:false,flush:false},mIn=$('mIn');
+function hira(v){return v.replace(/[\u30a1-\u30f6]/g,c=>String.fromCharCode(c.charCodeAt(0)-0x60)).replace(/\s/g,'')}
+function mMiss(){if(!B||!W)return;se('miss');B.combo=0;B.miss++;renderCombo();const wd=$('word');wd.classList.remove('shake');void wd.offsetWidth;wd.classList.add('shake');const m=$('mWrap');m.classList.remove('ng');void m.offsetWidth;m.classList.add('ng');renderWord()}
+function applyTok(){const t=W.toks[W.idx],i0=W.idx,w0=W,c=t.c.find(x=>x.startsWith(W.buf))||t.c[0];for(const ch of c.slice(W.buf.length)){typeKey(ch);if(W!==w0||!W||W.idx!==i0)return}if(W===w0&&W.idx===i0&&t.c.includes(W.buf))advance()}
+function mClear(){mIn.value='';MI.used=0;$('mWrap').classList.remove('okp','bad')}
+function remKana(){return W.toks.slice(W.idx).map(t=>t.k).join('')}
+function romaOK(s,pre){const T=W.toks;const go=(i,p)=>{if(p===s.length)return pre||i===T.length;if(i>=T.length)return false;
+  for(const c of T[i].c){if(s.startsWith(c,p)&&go(i+1,p+c.length))return true;if(pre&&c.startsWith(s.slice(p)))return true}return false};return go(W.idx,0)}
+function mFeedback(){const m=$('mWrap'),v=mIn.value.replace(/\s/g,'');m.classList.remove('ng');if(!v||!W){m.classList.remove('okp','bad');return}
+  const ok=/^[a-z\-]+$/i.test(v)?romaOK(v.toLowerCase(),true):(remKana().startsWith(hira(v))||(W.d&&W.d.startsWith(v))||MI.comp);
+  m.classList.toggle('okp',!!ok);m.classList.toggle('bad',!ok)}
+function mSubmit(){if(!B||!B.active||!W){mClear();return}const v=mIn.value.replace(/\s/g,'');if(!v)return;const w0=W;
+  const ok=/^[a-z\-]+$/i.test(v)?romaOK(v.toLowerCase(),false):(hira(v)===remKana()||(!!W.d&&v===W.d));
+  if(ok){let g=0;while(W===w0&&g++<99)applyTok()}else mMiss();mClear()}
+mIn.addEventListener('compositionstart',()=>{MI.comp=true});
+mIn.addEventListener('compositionend',()=>{MI.comp=false;mFeedback()});
+mIn.addEventListener('input',()=>mFeedback());
+$('mForm').addEventListener('submit',e=>{e.preventDefault();if(MI.comp)return;mSubmit()});
+mIn.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing&&e.keyCode!==229){e.preventDefault();MI.comp=false;mSubmit()}e.stopPropagation()});
+function mFocus(){if(MOBILE&&screen==='battle'){try{mIn.focus({preventScroll:true})}catch(e){mIn.focus()}}}
+$('stage').addEventListener('click',()=>mFocus());
+if(window.visualViewport){const vv=window.visualViewport,fit=()=>{if(!MOBILE)return;document.documentElement.style.setProperty('--app-h',vv.height+'px');window.scrollTo(0,0)};vv.addEventListener('resize',fit);vv.addEventListener('scroll',fit);fit()}
 function advance(){W.done.push(W.buf);W.idx++;W.buf='';if(W.idx>=W.toks.length){const len=[...W.kana].length;W=null;playerAttack(len);if(B&&B.active)nextWord();else renderWord();}}
 function comboMul(){return Math.min(3,1+Math.floor(B.combo/10)*.1)}
 function buffSum(t){return B.buffs.filter(b=>b.t===t).reduce((s,b)=>s+b.v,0)}
@@ -1848,7 +1904,7 @@ function glFlee(){const en=B.enemy;if(!en||en.dead)return;en.dead=true;B.active=
   const eg=$('eg');eg.className='';void eg.offsetWidth;eg.className='flee';blog(`${en.d.n}は 騾\uFFFD縺貞\uFFFDｺ縺励◆`,'gl');se('glitch');nextEnemy()}
 let KBG=0,KBF=0,WNZ=0;
 function bgmFor(boss){return B&&B.diff==='nightmare'?null:(boss?'boss':'battle')}
-function kbGlitch(on){const kb=$('kb');clearInterval(KBG);clearInterval(KBF);KBG=KBF=0;kb.classList.toggle('glitch',on===true);kb.classList.toggle('nmg',on==='nm');
+function kbGlitch(on){const kb=$('kb');$('mWrap').classList.toggle('glitch',!!on);clearInterval(KBG);clearInterval(KBF);KBG=KBF=0;kb.classList.toggle('glitch',on===true);kb.classList.toggle('nmg',on==='nm');
   Object.entries(keyEl).forEach(([k,el])=>{el.textContent=k.toUpperCase();el.classList.remove('nz');['--gx','--gy','--gr','--gs'].forEach(v=>el.style.removeProperty(v))});
   if(!on)return;
   const J='繝繧縺ｹｼ\uFFFD#%&?@ｸﾞ',r=Math.random,a=on===true?1:.4,step=()=>Object.entries(keyEl).forEach(([k,el])=>{if(on==='nm'&&r()<.55)return;
@@ -2125,8 +2181,9 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='3.0.0-alpha';
+const VERSION='3.0.1-alpha';
 const CHANGELOG=[
+ ['3.0.1-alpha',['スマホで遊ぶときは画面のキーボードの代わりに、スマホの文字入力で打つ方式に（打ち終わったらエンターか「決定」で攻撃。ローマ字・かな・カタカナ・漢字に対応）','合成で同じ種類の追加能力がある時は、数値の高い方を最初から選ぶように','リザルト画面などで長い武器名が枠からはみ出す問題を修正','装備画面の下のボタンの文字がはみ出す問題を修正','邨碁ｨ薙縺ｮ\uFFFD縺ｪ縺ｫ縺九′螟峨ｏ縺｣縺溘ｈ\uFFFD']],
  ['3.0.0-alpha',['かわいい敵が登場！ウサギ・ハート・お菓子などの通常の敵16体と、ボス8体を追加（ボスは各5層ごとの3層目に出現）','追加した敵それぞれに、専用のユニーク武器と固有スキルを追加','かわいい武器を15種類追加（コモン〜レジェンダリー）','縺薙ｓ縺ｫ縺｡縺ｯ縲∫･槭↓縺ｪ縺｣縺溘ｍ\uFFFD\uFFFD','邨碁ｨ薙\uFFFDｮ蜑｣縺悟､峨ｏ縺｣縺溘ｈ\uFFFD','\uFFFD\uFFFD\uFFFD\uFFFD']]
 ];
 const DEX=[];
@@ -2269,7 +2326,7 @@ function tutShow(){
   tutBox.classList.remove('tpop');void tutBox.offsetWidth;tutBox.classList.add('tpop');tutPlace(true);tutScroll();setTimeout(()=>{if(TUT.on){tutScroll();tutPlace(true)}},450);
 }
 function tutRun(name,cb){
-  if(TUT.on)tutClose();TUT.list=TUT_STEPS[name];TUT.i=0;TUT.cb=cb||null;TUT.on=true;TUT.name=name;
+  if(TUT.on)tutClose();TUT.list=TUT_STEPS[name];if(MOBILE&&name==='battle'){const L=TUT_STEPS.battle.filter(x=>x.sel!=='#kb');L.splice(1,0,{sel:'#mWrap',t:'スマホでは、ここをタップして{出|で}てくるキーボードで{入力|にゅうりょく}するよ。\nローマ{字|じ}でも、かな{入力|にゅうりょく}でも{打|う}てるよ。'});TUT.list=L}TUT.i=0;TUT.cb=cb||null;TUT.on=true;TUT.name=name;
   tutEl.querySelector('.tut-face').src=eSprite(NORMALS[0]);tutEl.classList.add('on');armTipOff&&armTipOff();closeCtx&&closeCtx();
   tutShow();cancelAnimationFrame(TUT.raf);TUT.raf=requestAnimationFrame(tutLoop);
 }
