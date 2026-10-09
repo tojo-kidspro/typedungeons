@@ -16,7 +16,7 @@
   --bg:#000000;--fg:#ffffff;--dim:#8a8a8a;--faint:#333333;--btn:#ff8a1f;--sel:#ffe600;
   --hp:#ffe600;--hpbg:#c8102e;--ehp:#22e05a;--shield:#3fb6ff;--keyhi:#ffe600;
   --mf:grayscale(1) brightness(1.35) contrast(1.2);
-  --r0:#ffffff;--r1:#3dff6e;--r2:#3fa9ff;--r3:#c77dff;--r4:#ffd43b;--r5:#ff3b3b;
+  --r0:#ffffff;--r1:#3dff6e;--r2:#3fa9ff;--r3:#c77dff;--r4:#ffd43b;--r5:#ff3b3b;--r6:#ffeeb0;
   color-scheme:dark;
   box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
 }
@@ -254,7 +254,7 @@ button.chip.on{border-color:var(--sel);color:var(--sel)}
 .mbox p{margin:8px 0;font-size:14px;line-height:1.6}
 .mbox p:not(.small)::before{content:"＊ "}
 .mbox p.small{text-align:center}
-.drops{display:flex;flex-direction:column;gap:6px;margin:12px 0}
+.drops{display:flex;flex-direction:column;gap:6px;margin:12px 0;flex-shrink:0}.drops>.drop{flex-shrink:0}
 .drop{display:flex;align-items:center;gap:10px;padding:6px 10px;border:2px solid var(--rc)}
 .drop .e{font-size:22px}
 .drop .n{color:var(--rc)}
@@ -336,6 +336,22 @@ img{image-rendering:pixelated}
 .wic.r4::after{animation-duration:.9s}
 .wic.r5::after{background:radial-gradient(circle at 20% 90%,#ffb02a 0 1.6px,transparent 2.8px),radial-gradient(circle at 50% 100%,#ff3a3a 0 1.8px,transparent 3px),
   radial-gradient(circle at 80% 92%,#ffd23a 0 1.4px,transparent 2.6px),radial-gradient(circle at 35% 96%,#ff6a2a 0 1.2px,transparent 2.4px);animation:ember 1s linear infinite}
+.wic.r6::before{inset:-22%;border-radius:50%;background:conic-gradient(#ff3b6b,#ffb400,#fff36b,#4dff8a,#38d9ff,#8a6bff,#ff5ad8,#ff3b6b);
+  -webkit-mask:radial-gradient(circle,#000 18%,transparent 66%);mask:radial-gradient(circle,#000 18%,transparent 66%);animation:spin 2.4s linear infinite;opacity:.9}
+.wic.r6::after{background:radial-gradient(circle at 18% 22%,#fff 0 1.6px,transparent 3px),radial-gradient(circle at 82% 28%,#fff6b0 0 1.4px,transparent 2.8px),radial-gradient(circle at 74% 84%,#fff 0 1.8px,transparent 3.2px),radial-gradient(circle at 26% 78%,#b0f6ff 0 1.3px,transparent 2.6px),radial-gradient(circle at 50% 8%,#fff 0 1.2px,transparent 2.4px);animation:twinkle .8s steps(4) infinite}
+.wic.r6>.sh{background:linear-gradient(110deg,transparent 15%,rgba(255,60,120,.6) 30%,rgba(255,220,0,.6) 40%,rgba(80,255,150,.6) 50%,rgba(60,200,255,.6) 60%,rgba(190,90,255,.6) 70%,transparent 85%) no-repeat;background-size:300% 100%;animation:shine 2.2s linear infinite;mix-blend-mode:screen}
+.wic.r6>img{filter:drop-shadow(0 0 4px #fff6c0) drop-shadow(0 0 8px rgba(255,220,120,.7));animation:hover 1.6s ease-in-out infinite}
+@property --ga{syntax:'<angle>';inherits:false;initial-value:0deg}
+:is(.wc,.hq,.drop,.wi,.dem):has(.wic.r6){position:relative;border-color:transparent!important;
+  background:linear-gradient(var(--bg),var(--bg)) padding-box,conic-gradient(from var(--ga),#ff3b6b,#ffb400,#fff36b,#4dff8a,#38d9ff,#8a6bff,#ff5ad8,#ff3b6b) border-box!important;
+  animation:godspin 2.4s linear infinite,godglow 2.2s ease-in-out infinite}
+@keyframes godspin{to{--ga:360deg}}
+.tools .rchip[data-r="6"]{border-color:transparent;color:transparent!important;background:linear-gradient(90deg,#ff3b6b,#ffb400,#fff36b,#4dff8a,#38d9ff,#8a6bff,#ff5ad8,#ff3b6b) 0 0/200% 100%,linear-gradient(var(--bg),var(--bg)),conic-gradient(from var(--ga),#ff3b6b,#ffb400,#fff36b,#4dff8a,#38d9ff,#8a6bff,#ff5ad8,#ff3b6b);-webkit-background-clip:text,padding-box,border-box;background-clip:text,padding-box,border-box;background-origin:border-box;animation:godspin 2.4s linear infinite,godtx 3s linear infinite}
+.tools .rchip[data-r="6"].on{box-shadow:0 0 8px rgba(255,236,160,.6)}
+@keyframes godhue{to{filter:hue-rotate(360deg)}}
+@keyframes godglow{0%,100%{box-shadow:0 0 10px rgba(255,236,160,.45)}50%{box-shadow:0 0 22px rgba(255,236,160,.9),0 0 34px rgba(150,220,255,.4)}}
+.godt,.godn,.godb{background:linear-gradient(90deg,#ff3b6b,#ffb400,#fff36b,#4dff8a,#38d9ff,#8a6bff,#ff5ad8,#ff3b6b);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent!important;animation:godtx 3s linear infinite}
+@keyframes godtx{to{background-position:200% 0}}
 .wic.r4>img,.wic.r5>img{animation:hover 1.6s ease-in-out infinite}
 .wic.r5>img{filter:drop-shadow(0 0 3px #ff2a3a)}
 .wc .lv,.wc .eb,.wc .ck{z-index:6}
@@ -346,7 +362,7 @@ img{image-rendering:pixelated}
 .drop{position:relative}
 .drop .e{width:46px;height:46px;flex:0 0 46px;display:block}
 .drop.big{animation:getglow .5s steps(2) infinite}
-.drop .gt{position:absolute;right:8px;top:4px;color:var(--rc);font-size:14px;animation:blink .3s steps(2) infinite}
+.drop.big{padding-right:64px;height:auto;max-width:none;width:auto;font-size:inherit;letter-spacing:inherit;color:inherit;border-width:2px}.drop>div{min-width:0}.drop .n{overflow-wrap:anywhere;word-break:break-all;line-height:1.35}.drop .gt{position:absolute;right:8px;top:4px;color:var(--rc);font-size:14px;animation:blink .3s steps(2) infinite}
 .ghost{font-size:0}
 .pop.get{font-size:24px;padding:2px 10px;border:3px solid currentColor;background:var(--bg)}
 .pop.get.r2{color:var(--r2)}.pop.get.r3{color:var(--r3)}.pop.get.r4{color:var(--r4)}.pop.get.r5{color:var(--r5)}
@@ -790,7 +806,12 @@ button.chip.dis{opacity:.3;text-decoration:line-through}
 .k.bump::after{content:"";position:absolute;left:50%;bottom:8px;width:10px;height:2px;margin-left:-5px;background:currentColor;opacity:.8}
 .k.hi{box-shadow:inset 0 -4px 0 var(--fc),0 0 0 3px #fff,0 0 16px 2px var(--keyhi);z-index:1}
 .word.nohi .wroma .c{color:var(--dim);text-decoration:none}
-.armbtns{grid-template-columns:repeat(4,1fr)}
+.armbtns{grid-template-columns:repeat(3,1fr)}.armbtns.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+.armbtns{container-type:inline-size}.armbtns.four .big{font-size:clamp(11px,4.2cqi,18px);letter-spacing:.02em;padding:0 2px;white-space:nowrap;overflow:hidden}
+#tabs{container-type:inline-size}#tabs button{min-width:0;white-space:nowrap;overflow:hidden;padding-left:2px;padding-right:2px;font-size:clamp(11px,3.5cqi,18px)}
+@media (max-width:560px){#tabs button{letter-spacing:0}}
+.wc.mini .lv{font-size:9px;letter-spacing:-.02em}
+.actions .btn{white-space:nowrap}
 .cmd button{min-width:0}
 .evot{display:inline-block;margin-left:6px;padding:0 5px;font-size:10px;color:#000;background:var(--sel)}
 .evoneed{color:var(--sel);margin:2px 0 4px}
@@ -824,7 +845,7 @@ button.chip.dis{opacity:.3;text-decoration:line-through}
         <button class="prog dexlink" id="dexLink"><span>アイテム図鑑 ▶</span><div class="pbar u"><i id="hUni"></i></div><b id="hUniT"></b></button>
         <div class="recs" id="hRec"></div>
       </div>
-      <div class="armbtns"><button class="big" data-arm="equip">装備</button><button class="big" data-arm="enh">強化</button><button class="big" data-arm="syn">合成</button><button class="big" data-arm="evo">進化</button></div>
+      <div class="armbtns"><button class="big" data-arm="equip">装備</button><button class="big" data-arm="enh">強化</button><button class="big" data-arm="syn">合成</button><button class="big decb" data-arm="evo" hidden>デコード</button></div>
     </div>
     <div class="card">
       <div class="diffsel" id="diffSel"><button data-diff="easy" style="--dc:#3fa9ff">イージー</button><button data-diff="normal" style="--dc:#22c55e">ノーマル</button><button data-diff="hard" style="--dc:#ff3b3b">ハード</button><button data-diff="nightmare" class="nmb" style="--dc:#b04dff" hidden>ナイトメア</button></div>
@@ -856,13 +877,13 @@ button.chip.dis{opacity:.3;text-decoration:line-through}
     <div class="invwrap" id="invwrap"><div class="inv" id="inv"></div></div>
   </div>
   </div>
-  <nav class="cmd" id="tabs"><button data-tab="equip" class="on">装備</button><button data-tab="enh">強化</button><button data-tab="syn">合成</button><button data-tab="evo">進化</button></nav>
+  <nav class="cmd" id="tabs"><button data-tab="equip" class="on">装備</button><button data-tab="enh">強化</button><button data-tab="syn">合成</button><button data-tab="evo" class="decb" hidden>デコード</button></nav>
 </section>
 
 <section id="dex" class="screen">
   <div class="abar"><button class="back" id="dexBack">◀ 拠点</button><span class="atitle">アイテム図鑑</span><span class="small" id="dexCnt"></span></div>
   <div class="dtop"><div class="pane dpane" id="dexPane"></div></div>
-  <div class="dfilt" id="dexFilt"><button data-df="all" class="on">すべて</button><button data-df="gen">通常武器</button><button data-df="def">防御系</button><button data-df="uni">ユニーク</button><button data-df="gw" id="dfGw" class="nmb" hidden>グリッチ</button></div>
+  <div class="dfilt" id="dexFilt"><button data-df="all" class="on">すべて</button><button data-df="gen">通常武器</button><button data-df="def">防御系</button><button data-df="uni">ユニーク</button><button data-df="gw" id="dfGw" class="nmb" hidden>グリッチ</button><button data-df="god" id="dfGod" class="godb" hidden>ゴッド</button></div>
   <div class="invwrap dexwrap"><div class="inv dexg" id="dexGrid"></div></div>
 </section>
 <section id="battle" class="screen">
@@ -909,7 +930,8 @@ const RAR=[
  {n:'レア',c:'var(--r2)',slots:2,cap:40,m:1.3,sm:1.45},
  {n:'エピック',c:'var(--r3)',slots:3,cap:60,m:1.5,sm:1.75},
  {n:'レジェンダリー',c:'var(--r4)',slots:4,cap:80,m:1.75,sm:2.1},
- {n:'ユニーク',c:'var(--r5)',slots:5,cap:100,m:2.1,sm:2.6}];
+ {n:'ユニーク',c:'var(--r5)',slots:5,cap:100,m:2.1,sm:2.6},
+ {n:'ゴッド',c:'var(--r6)',slots:6,cap:120,m:2.6,sm:3.8}];
 const TYPES=[
  {n:'剣',e:'🗡️',a:1.0,h:.3,d:.3},{n:'大剣',e:'⚔️',a:1.3,h:0,d:.2},{n:'斧',e:'🪓',a:1.4,h:.2,d:0},{n:'槍',e:'🔱',a:1.1,h:.2,d:.2},
  {n:'弓',e:'🏹',a:1.15,h:.1,d:.1},{n:'杖',e:'🪄',a:.9,h:.5,d:.2},{n:'盾',e:'🛡️',a:.6,h:.8,d:1.0},{n:'鎚',e:'🔨',a:1.2,h:.3,d:.3},
@@ -994,6 +1016,21 @@ const BOSSES=[
  ['demon','😈','アークデーモン','魔界の大剣',1,'u_chrono'],['dknight','☠️','デスナイト','死神の大剣',1,'u_berserk'],
  ['whale','🐋','アビスホエール','深淵の三叉槍',3,'u_storm'],['dragon','🐉','エンシェントドラゴン','龍神剣',1,'u_roar'],
  ['fallen','👼','堕天使','黒翼の聖剣',0,'u_blessing'],['maou','👿','魔王','覇王剣ラストワード',0,'u_thousand']].map(mk);
+const CUTEN=[
+ ['bunny','🐰','もこもこウサギ','うさみみステッキ',5,''],['chick','🐥','ひよこナイト','ぴよぴよアミュレット',10,''],
+ ['candy','🍬','キャンディスライム','ぐるぐるキャンディハンマー',7,''],['kitten','🐱','こねこマジシャン','ねこじゃらしスピア',3,''],
+ ['strawb','🍓','いちごフェアリー','ストロベリーレイピア',0,''],['hamster','🐹','ハムスター騎士','ひまわりシールド',6,''],
+ ['lolli','🍭','ロリポップピクシー','ロリポップワンド',5,''],['donut','🍩','ドーナツリング','ドーナツブレード',0,''],
+ ['heart','💗','ときめきハート','ハートフルボウ',4,''],['teddy','🧸','テディベア','ぬいぐるみハンマー',7,''],
+ ['ribbon','🎀','リボンゴースト','リボンガントレット',9,''],['icecream','🍦','ソフトクリーム兵','アイスクリームソード',1,''],
+ ['cupcake','🧁','カップケーキゴーレム','クリームの大盾',8,''],['sakura','🌸','さくらスピリット','桜吹雪の斧',2,''],
+ ['panda','🐼','パンダベビー','笹の葉アックス',2,''],['starry','🌟','きらきらスター','流れ星の弓',4,'']].map(mk);
+const CUTEB=[
+ ['cake','🎂','バースデーケーキクイーン','キャンドルセイバー',0,''],['moonrab','🐇','ムーンラビット','月うさぎの杵',7,''],
+ ['heartq','💝','ハートクイーン','クイーンハートの杖',5,''],['choco','🍫','ショコラキング','ショコラの大剣',1,''],
+ ['shortcake','🍰','ショートケーキ姫','いちごショートの盾',6,''],['rainbow','🌈','にじいろプリンセス','にじいろの弓',4,''],
+ ['dango','🍡','おだんごトリオ','三色だんごの槍',3,''],['swan','🦢','スワンバレリーナ','白鳥の羽の護符',10,'']].map(mk);
+const ALLE=NORMALS.concat(CUTEN,BOSSES,CUTEB),ISB=d=>BOSSES.includes(d)||CUTEB.includes(d);
 const SCENES=[
  'linear-gradient(180deg,#1f3b2c,#0e1d17)','linear-gradient(180deg,#3a3326,#16130d)','linear-gradient(180deg,#3b1730,#150914)',
  'linear-gradient(180deg,#3d2a12,#170f05)','linear-gradient(180deg,#123433,#061413)','linear-gradient(180deg,#1f1d3f,#0a0918)',
@@ -1033,8 +1070,11 @@ const PALS={
  crystal:{m:[[255,238,255],[232,168,242],[142,80,172]],g:[255,150,255]},gold:{m:[[255,250,190],[242,200,70],[160,110,20]],g:[255,80,80]},
  shadow:{m:[[156,156,176],[72,72,94],[26,26,38]],g:[255,60,60]},cyber:{m:[[182,255,255],[0,220,200],[0,100,122]],g:[255,0,200]},
  spirit:{m:[[232,255,255],[150,222,232],[70,122,152]],g:[180,255,255]},bone:{m:[[252,246,226],[212,202,170],[130,120,95]],g:[255,80,80]},
- storm:{m:[[222,240,255],[122,162,202],[50,70,112]],g:[150,255,255]}};
-const UPAL={slime:'poison',worm:'nature',bat:'blood',rat:'beast',toad:'poison',shroom:'nature',spider:'moon',bee:'thunder',wolf:'moon',snake:'poison',crab:'stone',ghost:'spirit',skel:'bone',zombie:'poison',scorp:'dark',boar:'beast',owl:'moon',troll:'stone',griffon:'holy',croc:'dragon',ifrit:'fire',kraken:'water',shark:'water',jester:'crystal',eye:'dark',rhino:'stone',drake:'dragon',bear:'beast',ape:'beast',wyvern:'dragon',mgolem:'cyber',alien:'cyber',pdemon:'cyber',frost:'ice',flame:'fire',volt:'thunder',tempest:'storm',shadow:'shadow',crystal:'crystal',magma:'fire',
+ storm:{m:[[222,240,255],[122,162,202],[50,70,112]],g:[150,255,255]},
+ pink:{m:[[255,228,242],[255,140,196],[196,64,128]],g:[255,246,140]},cream:{m:[[255,250,230],[250,208,150],[196,138,80]],g:[255,120,176]},
+ lavender:{m:[[246,234,255],[198,160,255],[120,80,196]],g:[255,170,222]},mint:{m:[[230,255,246],[140,236,200],[58,160,128]],g:[255,150,200]},
+ sky:{m:[[234,248,255],[150,210,255],[80,128,220]],g:[255,200,240]},divine:{m:[[255,255,255],[255,236,170],[214,160,60]],g:[150,255,255]}};
+const UPAL={bunny:'pink',chick:'cream',candy:'pink',kitten:'cream',strawb:'pink',hamster:'cream',lolli:'lavender',donut:'cream',heart:'pink',teddy:'cream',ribbon:'pink',icecream:'mint',cupcake:'lavender',sakura:'pink',panda:'mint',starry:'cream',cake:'pink',moonrab:'lavender',heartq:'pink',choco:'cream',shortcake:'pink',rainbow:'sky',dango:'mint',swan:'sky',slime:'poison',worm:'nature',bat:'blood',rat:'beast',toad:'poison',shroom:'nature',spider:'moon',bee:'thunder',wolf:'moon',snake:'poison',crab:'stone',ghost:'spirit',skel:'bone',zombie:'poison',scorp:'dark',boar:'beast',owl:'moon',troll:'stone',griffon:'holy',croc:'dragon',ifrit:'fire',kraken:'water',shark:'water',jester:'crystal',eye:'dark',rhino:'stone',drake:'dragon',bear:'beast',ape:'beast',wyvern:'dragon',mgolem:'cyber',alien:'cyber',pdemon:'cyber',frost:'ice',flame:'fire',volt:'thunder',tempest:'storm',shadow:'shadow',crystal:'crystal',magma:'fire',
  ogre:'blood',snail:'stone',golem:'stone',turtle:'gold',vamp:'blood',chimera:'gold',mino:'bronze',delf:'nature',siren:'water',lich:'dark',mammoth:'ice',levia:'water',nightmare:'dark',kyubi:'fire',demon:'dark',dknight:'shadow',whale:'water',dragon:'dragon',fallen:'shadow',maou:'gold'};
 const UFORCE={rat:{v:2},bear:{v:1},ape:{v:2},croc:{curved:1},ifrit:{curved:1,v:1},kraken:{v:1},levia:{v:1},whale:{v:1},ogre:{v:3},nightmare:{v:3},bee:{v:3},scorp:{v:3},bat:{v:2},shark:{v:2},alien:{v:2},eye:{v:0},crystal:{v:3},volt:{v:2},maou:{v:1},dragon:{v:1}};
 function buildSpecs(){
@@ -1043,18 +1083,18 @@ function buildSpecs(){
     for(let a=0;a<16&&!sp;a++){const v=fv!=null?fv:(v0+Math.floor(a/4))%4,g=(g0+a)%4,sig=t+'|'+pal+'|'+v+'|'+g;if(!used.has(sig)){used.add(sig);sp={t,r,pal,v,g,seed:hashS(key)}}}
     SPEC[key]=Object.assign(sp||{t,r,pal,v:v0,g:g0,seed:hashS(key)},extra||{})};
   SPEC['s:starter']={t:0,r:0,pal:'bronze',v:0,g:3,seed:777};used.add('0|bronze|0|3');
-  NORMALS.concat(BOSSES).forEach(d=>{const h=hashS(d.id),f=UFORCE[d.id]||{};take('u:'+d.id,d.ut,5,UPAL[d.id]||'gold',f.v!=null?f.v:h%4,(h>>>3)%4,f.v,{curved:!!f.curved,uq:true})});
-  GLITCH.forEach(g=>{SPEC['g:'+g.id]={t:g.wt,r:g.wr,pal:'cyber',v:hashS(g.id)%4,g:1,seed:hashS(g.id+'w'),gl:true}});
-  CAT.slice().sort((a,b)=>b.r-a.r).forEach(e=>{const h=hashS(e.c),pal=e.r===0?['wood','iron','rust'][e.t%3]:e.r===1?(e.name.startsWith('鉄')?'iron':e.name.startsWith('鋼')?'steel':'bronze'):['fire','ice','thunder','dark','holy'][e.el];
+  ALLE.forEach(d=>{const h=hashS(d.id),f=UFORCE[d.id]||{};take('u:'+d.id,d.ut,5,UPAL[d.id]||'gold',f.v!=null?f.v:h%4,(h>>>3)%4,f.v,{curved:!!f.curved,uq:true})});
+  EXPW.forEach(e=>{SPEC['g:'+e.id]={t:e.t,r:e.r,pal:'cyber',v:hashS(e.id)%4,g:1,seed:hashS(e.id+'w'),gl:true}});
+  CAT.slice().sort((a,b)=>b.r-a.r).forEach(e=>{const h=hashS(e.c),pal=e.pal?e.pal:e.r===0?['wood','iron','rust'][e.t%3]:e.r===1?(e.name.startsWith('鉄')?'iron':e.name.startsWith('鋼')?'steel':'bronze'):['fire','ice','thunder','dark','holy'][e.el];
     take('c:'+e.c,e.t,e.r,pal,h%4,(h>>>3)%4)});
 }
-function specKey(w){return w.gw?'x:'+(w.u?'u:'+w.u:w.c?'c:'+w.c:w.name==='旅立ちの短剣'?'s:starter':'i:'+w.id):w.g?'g:'+w.g:w.name==='旅立ちの短剣'?'s:starter':w.u?'u:'+w.u:w.c?'c:'+w.c:'i:'+w.id}
+function specKey(w){return w.god?'d:'+w.u:w.gw?'x:'+(w.u?'u:'+w.u:w.c?'c:'+w.c:w.name==='旅立ちの短剣'?'s:starter':'i:'+w.id):w.g?'g:'+w.g:w.name==='旅立ちの短剣'?'s:starter':w.u?'u:'+w.u:w.c?'c:'+w.c:'i:'+w.id}
 const mix=(a,b,k)=>a.map((x,i)=>Math.round(x*(1-k)+b[i]*k));
 function wSprite(w){
   if(!SPEC)buildSpecs();
   const key=specKey(w),ck=key+':'+w.r;if(SPR[ck])return SPR[ck];
-  let sp=SPEC[key];if(!sp&&key.startsWith('x:')){const b=SPEC[key.slice(2)];if(b)sp=SPEC[key]=Object.assign({},b,{gl:.65})}if(!sp){const h=hashS(key);sp={t:w.t,r:w.r,pal:['fire','ice','thunder','dark','holy','iron'][w.el??5],v:h%4,g:(h>>>3)%4,seed:h}}
-  const t=w.t,r=w.r,G=[16,20,24,32,40,48][r],R=mulb(sp.seed),P=PALS[sp.pal]||PALS.iron,M=P.m,GEM=P.g,V=sp.v,Gs=sp.g,uq=r===5;
+  let sp=SPEC[key];if(!sp&&key.startsWith('d:')){const b=SPEC['u:'+key.slice(2)];if(b){const pk='dv_'+b.pal,bp=PALS[b.pal]||PALS.gold;if(!PALS[pk])PALS[pk]={m:bp.m.map((c,i)=>mix(c,PALS.divine.m[i],.45)),g:bp.g};sp=SPEC[key]=Object.assign({},b,{pal:pk,seed:b.seed+7,gl:false})}}if(!sp&&key.startsWith('x:')){const b=SPEC[key.slice(2)];if(b)sp=SPEC[key]=Object.assign({},b,{gl:.65})}if(!sp){const h=hashS(key);sp={t:w.t,r:w.r,pal:['fire','ice','thunder','dark','holy','iron'][w.el??5],v:h%4,g:(h>>>3)%4,seed:h}}
+  const t=w.t,r=w.r,G=[16,20,24,32,40,48,56][r],R=mulb(sp.seed),P=PALS[sp.pal]||PALS.iron,M=P.m,GEM=P.g,V=sp.v,Gs=sp.g,uq=r>=5;
   const GU=sp.pal==='gold'?PALS.shadow.m:r>=4?GOLD:r>=2?IRON:BRONZE,GR=uq?[[60,22,34],[22,6,14]]:GRIPS[Math.floor(R()*GRIPS.length)],gem=r>=2,EDGE=mix(M[0],GEM,.55);
   const stripe=u=>(Math.floor(u*G*1.5)%2)?GR[0]:GR[1],shade=(Pp,q)=>q<-.4?Pp[0]:q>.45?Pp[2]:Pp[1];
   const big=t===1,gs=big?.27:.25,bw=(big?.075:.047)+R()*(big?.025:.015),gw=(big?.15:.11)+R()*.05,hl=.27+R()*.05,hw=.15+R()*.05;
@@ -1193,21 +1233,35 @@ function eSprite(d){
   if(d.nm){for(let i=0;i<P*P;i++){if(!a[i*4+3]||(a[i*4]===OUTC[0]&&a[i*4+1]===OUTC[1]))continue;const r=a[i*4],gg=a[i*4+1],b=a[i*4+2];a[i*4]=Math.min(255,b*.7+r*.5);a[i*4+1]=gg*.35;a[i*4+2]=Math.min(255,r*.6+gg*.6+40)}glitchPx(a,P,mulb(hashS(d.id)),.8)}
   g.putImageData(im,0,0);return ESPR[d.id]=c.toDataURL();
 }
-NORMALS.forEach((d,i)=>d.px=Math.round(12+i*52/(NORMALS.length-1)));BOSSES.forEach((d,i)=>d.px=Math.round(32+i*96/(BOSSES.length-1)));
+NORMALS.forEach((d,i)=>d.px=Math.round(12+i*52/(NORMALS.length-1)));CUTEN.forEach((d,i)=>d.px=Math.round(14+i*46/(CUTEN.length-1)));CUTEB.forEach((d,i)=>d.px=Math.round(40+i*80/(CUTEB.length-1)));BOSSES.forEach((d,i)=>d.px=Math.round(32+i*96/(BOSSES.length-1)));
 /* ===== ??? ===== */
 const GLITCH=[
- {id:'g1',e:'💧',n:'繝後Ν繧ｹ繝ｩ繧､繝',px:22,hp:8,flee:9,xm:10,xa:200,wn:'谺迚\uFFFD縺ｮ蜑｣',wt:0,wr:3,skn:'邨碁ｨ薙ｒ蝟ｰ繧峨≧',mexp:30000,gl:1},
- {id:'g2',e:'🌀',n:'縺ｯ縺舌ｌ繝昴う繝ｳ繧ｿ',px:26,hp:12,flee:8,xm:30,xa:1000,wn:'邨先匕縺ｮ譚\uFFFD',wt:5,wr:4,skn:'險俶\uFFFDｶ縺ｮ譁ｭ迚\uFFFD',mexp:100000,gl:1},
- {id:'g3',e:'🦠',e2:'👑',n:'繧ｪ繝ｼ繝舌\uFFFDｼ繝輔Ο繝ｼ邇\uFFFD',px:72,hp:28,flee:15,xm:100,xa:5000,wn:'譬ｸ縺ｮ螟ｧ蜑｣',wt:1,wr:5,skn:'縺ｬ繧九⊃',mexp:400000,gl:1,boss:1}];
+ {id:'g1',e:'💧',n:'繝後Ν繧ｹ繝ｩ繧､繝',px:22,hp:8,flee:9,xm:10,xa:200,drop:'e2',gl:1},
+ {id:'g2',e:'🌀',n:'縺ｯ縺舌ｌ繝昴う繝ｳ繧ｿ',px:26,hp:12,flee:8,xm:30,xa:1000,drop:'e3',gl:1},
+ {id:'g3',e:'🦠',e2:'👑',n:'繧ｪ繝ｼ繝舌\uFFFDｼ繝輔Ο繝ｼ邇\uFFFD',px:72,hp:28,flee:15,xm:100,xa:5000,drop:'e4',gl:1,boss:1}];
 const GLI=Object.fromEntries(GLITCH.map(g=>[g.id,g]));
-GLITCH.forEach(g=>{SK['g_'+g.id]={n:g.skn,uq:true,tr:{type:'mat'},ct:0,fx:[{t:'mat',v:g.mexp}]}});
+const EXPW=[
+ {id:'e0',r:0,t:0,wn:'邨碁ｨ薙\uFFFDｮ邊\uFFFD',skn:'縺｡縺\uFFFD縺輔↑險俶\uFFFDｶ',mexp:3000},
+ {id:'e1',r:1,t:4,wn:'邨碁ｨ薙\uFFFDｮ遐\uFFFD',skn:'縺九☆縺九↑險俶\uFFFDｶ',mexp:8000},
+ {id:'e2',r:2,t:0,wn:'谺迚\uFFFD縺ｮ蜑｣',skn:'邨碁ｨ薙ｒ蝟ｰ繧峨≧',mexp:20000},
+ {id:'e3',r:3,t:5,wn:'邨先匕縺ｮ譚\uFFFD',skn:'險俶\uFFFDｶ縺ｮ譁ｭ迚\uFFFD',mexp:60000},
+ {id:'e4',r:4,t:1,wn:'譬ｸ縺ｮ螟ｧ蜑｣',skn:'縺ｬ繧九⊃',mexp:200000}];
+const EXPI=Object.fromEntries(EXPW.map(e=>[e.id,e])),GMAP={g1:'e3',g2:'e4',g3:'e4'};
+EXPW.forEach(e=>{e.src=GLITCH.find(g=>g.drop===e.id)||null;SK['g_'+e.id]={n:e.skn,uq:true,tr:{type:'mat'},ct:0,fx:[{t:'mat',v:e.mexp}]}});
 function glPick(boss,dif){const r=Math.random();if(boss)return (dif==='hard'||dif==='nightmare')&&r<.015?GLI.g3:null;if(dif!=='easy'&&r<.006)return GLI.g2;return r<.026?GLI.g1:null}
 const GJ='繝繧縺螟蜑譁邨碁ｨ薙ｒ謨ｵ迚遘峨ｹｼｸﾞｮ\uFFFD';
 function garble(s,p){let h=hashS(s+'#'),o='';for(const c of s){h=Math.imul(h^c.charCodeAt(0),16777619)>>>0;o+=(h%1000)/1000<p?GJ[(h>>>10)%GJ.length]:c}if(o===s&&p>0&&s.length){const a=[...s],i=hashS(s)%a.length;a[i]=GJ[hashS(s+'!')%GJ.length];o=a.join('')}return o}
 const NME={};function nmE(d){return d.nm||d.gl?d:(NME[d.id]||(NME[d.id]=Object.assign({},d,{id:'n_'+d.id,n:garble(d.n,.5),nm:true,base:d})))}
+const GK='アルカディア,エクスカリオン,ヴァルハラ,セラフィム,グラム,ミストルティン,アイギス,ロンギヌス,ゲイボルグ,デュランダル,トリシューラ,ブリューナク,ケラウノス,ハルペー,カラドボルグ,アロンダイト,フラガラッハ,クラウソラス,グングニル,レーヴァテイン,ティルフィング,ダインスレイフ,アスカロン,カリバーン,ヴァジュラ,ガーンデーヴァ,シャルウル,アンサラー,ガラティーン,ジョワユーズ,オートクレール,フルンティング,ネイリング,ミョルニル,アガートラム,タスラム,ゲイジャルグ,クサナギ,アメノムラクモ,フツノミタマ,トツカ,コギツネマル,オニキリ,ドウジギリ,ミカヅキ,オオデンタ,ジュズマル,ソハヤ,アマテラス,ツクヨミ,スサノオ,イザナギ,イザナミ,ヤタノカガミ,ヤサカニ,ニルヴァーナ,ユグドラシル,オーディン,フレイヤ,ラグナロク,アポカリプス,ジェネシス,エデン,セレスティア,ルミナス,オーロラ,アストライア,ステラ,コスモス,セレネ,ヘリオス,アルテミス,アテナ,ヘカテー,ニュクス,エオス,イリス,テミス,ガイア,ウラノス,クロノス,ハイペリオン,テティス,ポラリス'.split(',');
+function godName(id){const i=ALLE.findIndex(d=>d.id===id),d=ALLE[i];return d?`真・${d.un}「${GK[i%GK.length]}」`:'？？？'}
+function isGodBase(t){return !!(t&&t.gw&&t.r===5&&t.u)}
+function evoNext(t){return isGodBase(t)?Object.assign({},t,{r:6,gw:0,god:1,name:godName(t.u)}):null}
+function decOpen(){return !!S.nm&&Object.keys(S.rec.dex).some(k=>k.startsWith('x:u:'))}
+function applyDec(){const o=decOpen();document.querySelectorAll('.decb').forEach(b=>b.hidden=!o);const ab=document.querySelector('.armbtns');if(ab)ab.classList.toggle('four',o);if(!o&&A&&A.tab==='evo')setTab('equip')}
+function evoMatOk(t,m){if(!t||!m||m.id===t.id||m.g||isEq(m.id)||m.fav)return false;return isGodBase(t)&&!m.gw&&!m.god&&m.r===5&&m.u===t.u&&m.lv>=RAR[5].cap}
 function gwify(w){w.gw=1;w.name=garble(w.name,.3);return w}
 function smOf(w){return RAR[w.r].sm*(w.gw?1.3:1)}
-function glMat(g,f){const w=makeW({t:g.wt,r:g.wr,f:f||1,name:g.wn,sk:'g_'+g.id,g:g.id});return w}
+function glMat(e,f){return makeW({t:e.t,r:e.r,f:f||1,name:e.wn,sk:'g_'+e.id,g:e.id})}
 function glitchPx(d,G,R,k){
   const src=new Uint8ClampedArray(d);
   for(let y=0;y<G;y++){if(R()<.35*k){const sh=Math.round((R()*2-1)*G*.16*k);for(let x=0;x<G;x++){const i=(y*G+x)*4,sx=x-sh;if(sx<0||sx>=G){d[i+3]=0;continue}const j=(y*G+sx)*4;d[i]=src[j];d[i+1]=src[j+1];d[i+2]=src[j+2];d[i+3]=src[j+3]}}}
@@ -1228,6 +1282,9 @@ for(let r=0;r<5;r++)TYPES.forEach((T,t)=>{const nv=r<2?1:2;for(let v=0;v<nv;v++)
   const el=r===0?5:(t*2+v+r)%5,pool=isDefT(t)?DEF_SK:OFF_SK,sk=pool[(t*7+v*5+r*3)%pool.length];
   const name=r===0?['木の','古びた','錆びた'][t%3]+T.n:r===1?['鉄の','鋼の','兵士の'][t%3]+T.n:r===2?`${ELEM[el].w[v]}の${T.n}`:r===3?`${EPICW[el][v]}の${T.n}`:`${LEGW[el][v]}${T.n}「${KANA[(t+v*3)%KANA.length]}」`;
   CAT.push({c:`c${r}_${t}_${v}`,t,r,el,name,sk})}});
+[[0,0,'おもちゃの剣','cream'],[0,6,'クッキーの盾','cream'],[0,5,'リボンの杖','pink'],[1,4,'うさみみの弓','pink'],[1,7,'キャンディの鎚','lavender'],[1,10,'ハートの護符','pink'],
+ [2,3,'いちごの槍','pink'],[2,9,'マカロンの籠手','mint'],[2,5,'ロリポップの杖','lavender'],[3,0,'ハートフルソード','pink'],[3,4,'シュガーボウ','sky'],[3,8,'パステルの大盾','lavender'],
+ [4,5,'プリンセスハート「エンジェラ」','pink'],[4,1,'スイートラビット「ミルフィ」','cream'],[4,7,'ドリームキャンディ「ロゼッタ」','lavender']].forEach(([r,t,name,pal],i)=>{const pool=isDefT(t)?DEF_SK:OFF_SK;CAT.push({c:'cu_'+i,t,r,el:5,name,sk:pool[(i*5+t)%pool.length],pal})});
 const CATI=Object.fromEntries(CAT.map(e=>[e.c,e]));
 /* unique skills: each unique has its own overpowered skill */
 const UARCH={
@@ -1248,18 +1305,21 @@ const USKN={slime:'粘液大爆発',worm:'千糸結界',bat:'吸血乱舞',rat:'
  ifrit:'灼熱地獄',kraken:'深海の大渦',shark:'鮫牙乱舞',jester:'道化の奇術',eye:'千眼の邪視',rhino:'鋼角突撃',drake:'竜鱗の加護',bear:'熊王の剛腕',ape:'巨猿乱打',wyvern:'飛竜の急降下',
  mgolem:'機神装甲',alien:'異界の光線',pdemon:'電脳バグ',frost:'絶対凍結',flame:'劫火の舞',volt:'万雷',tempest:'天嵐',shadow:'影縫い',crystal:'晶石の輝き',magma:'溶岩噴火',
  ogre:'鬼神の金棒',snail:'螺旋城壁',golem:'岩神の不動',turtle:'金剛不壊',vamp:'真祖の血宴',chimera:'獣王の咆哮',mino:'迷宮の暴君',delf:'翠星の流星雨',siren:'海歌の魅了',lich:'冥王の宣告',
- mammoth:'氷河の進軍',levia:'海神の怒り',nightmare:'悪夢の刻',kyubi:'九尾の狐火',demon:'魔界の門',dknight:'死神の鎌',whale:'深淵の歌',dragon:'龍神の咆哮',fallen:'堕天の審判',maou:'覇王の最終奥義'};
+ mammoth:'氷河の進軍',levia:'海神の怒り',nightmare:'悪夢の刻',kyubi:'九尾の狐火',demon:'魔界の門',dknight:'死神の鎌',whale:'深淵の歌',dragon:'龍神の咆哮',fallen:'堕天の審判',maou:'覇王の最終奥義',
+ bunny:'ぴょんぴょんダンス',chick:'ひよこ大行進',candy:'あまあまシャワー',kitten:'にゃんこパンチ',strawb:'ベリーベリーキス',hamster:'ほおぶくろガード',lolli:'ぐるぐるマジック',donut:'ドーナツスピン',heart:'ときめきビーム',teddy:'ぎゅっとハグ',ribbon:'リボンバインド',icecream:'とろけるブリザード',cupcake:'クリームウォール',sakura:'さくら吹雪',panda:'ころころローリング',starry:'きらきら流星群',
+ cake:'ハッピーバースデー',moonrab:'お月見ラッシュ',heartq:'ハートの女王の裁き',choco:'ショコラフォンデュ',shortcake:'いちごの祝福',rainbow:'にじいろの奇跡',dango:'三色だんご乱舞',swan:'白鳥の湖'};
 const UTYPE={crab:8,mgolem:8,snail:8,ghost:10,turtle:10,ape:9,bear:9};
 const UNAME={crab:'甲殻の大盾',mgolem:'機神の大盾',snail:'螺旋の大盾',ghost:'霊魂の護符',turtle:'金剛の護符',ape:'巨猿の籠手',bear:'熊王の籠手'};
 {const offA='ABDEFGHJK',defA='CIL';let oi=0,di=0;
- NORMALS.concat(BOSSES).forEach((d,i)=>{if(UTYPE[d.id]!=null)d.ut=UTYPE[d.id];if(UNAME[d.id])d.un=UNAME[d.id];
-  const boss=i>=NORMALS.length,ak=isDefT(d.ut)?defA[di++%3]:offA[oi++%offA.length],a=UARCH[ak],k='x_'+d.id,mul=boss?1.3:1;
+ ALLE.forEach((d,i)=>{if(UTYPE[d.id]!=null)d.ut=UTYPE[d.id];if(UNAME[d.id])d.un=UNAME[d.id];
+  const boss=ISB(d),ak=isDefT(d.ut)?defA[di++%3]:offA[oi++%offA.length],a=UARCH[ak],k='x_'+d.id,mul=boss?1.3:1;
   SK[k]={n:USKN[d.id],uq:true,tr:a.tr,ct:a.ct,fx:a.fx.map(f=>Object.assign({},f,f.t==='multi'?{n:Math.round(f.n*mul)}:f.t==='delay'||f.t==='ctcut'?{}:{v:f.v*mul}))};d.us=k})}
 function migrateW(w){
-  if(w.g){w.aff=[];w.sk='g_'+w.g;return}
+  if(w.gw&&!w.u){const e=EXPW[Math.min(4,w.r)];w.g=e.id;w.gw=0;w.c=null}
+  if(w.g){if(GMAP[w.g])w.g=GMAP[w.g];const e=EXPI[w.g];if(e){w.r=e.r;w.t=e.t;w.name=e.wn;w.lv=Math.min(w.lv,RAR[e.r].cap)}w.aff=[];w.sk='g_'+w.g;return}
   {const best={};w.aff.forEach(a=>{if(!best[a.k]||a.v>best[a.k].v)best[a.k]=a});w.aff=Object.values(best);
    const ns=RAR[w.r].slots;if(w.aff.length>ns)w.aff=w.aff.slice(0,ns);else if(w.aff.length<ns&&!w.evo)w.aff=w.aff.concat(genAff(ns-w.aff.length,isDefT(w.t),w.aff.map(a=>a.k)))}
-  if(w.u){const d=NORMALS.concat(BOSSES).find(x=>x.id===w.u);if(d)w.sk=d.us;return}
+  if(w.u){const d=ALLE.find(x=>x.id===w.u);if(d)w.sk=d.us;return}
   if(w.c&&CATI[w.c])return;
   const e=CAT.find(x=>x.t===w.t&&x.r===w.r&&x.c.endsWith('_'+(w.id%2)))||CAT.find(x=>x.t===w.t&&x.r===w.r)||CAT.find(x=>x.r===w.r);
   if(e){w.c=e.c;w.sk=e.sk;w.el=e.el;if(w.name!=='旅立ちの短剣')w.name=e.name}
@@ -1391,7 +1451,7 @@ function tokenize(kana){
 /* ===== save ===== */
 let S;
 function freshRec(){return{kills:0,hits:0,dmg:0,keys:0,maxCombo:0,bestKps:0,time:0,clears:0,uniq:[],dex:{}}}
-function dexKey(w){return w.g?'g:'+w.g:w.gw?'x:'+(w.u?'u:'+w.u:'c:'+w.c):w.u?'u:'+w.u:w.c?'c:'+w.c:`t${w.t}r${w.r}`}
+function dexKey(w){return w.god?'d:'+w.u:w.g?'g:'+w.g:w.gw?'x:'+(w.u?'u:'+w.u:'c:'+w.c):w.u?'u:'+w.u:w.c?'c:'+w.c:`t${w.t}r${w.r}`}
 function freshProg(){return{easy:{maxF:0,lastF:1},normal:{maxF:0,lastF:1},hard:{maxF:0,lastF:1},nightmare:{maxF:0,lastF:1}}}
 function fresh(){return{exp:0,inv:[],eq:[null,null,null,null,null],nid:1,diff:'normal',prog:freshProg(),rec:freshRec(),tut:{stage:'intro'},tseen:{}}}
 function PG(){return S.prog[S.diff]||S.prog.normal}
@@ -1414,19 +1474,19 @@ function rarW(f,boss,dif){dif=dif||'normal';const t=Math.min(1,Math.max(0,(f-1)/
   if(dif==='easy'){u=0;w[4]=0}if(dif==='normal')u=0;if(dif==='hard'){u=3;w=[w[0]*.6,w[1],w[2]*1.3,w[3]*1.7,w[4]*2.5]}if(dif==='nightmare'){u=4;w=[w[0]*.3,w[1]*.8,w[2]*1.3,w[3]*2,w[4]*3]}
   const sum=w.reduce((a,b)=>a+b,0);return w.map(x=>x/sum*(100-u)).concat(u)}
 function rollRarity(f,boss,dif){const w=rarW(f,boss,dif);let x=Math.random()*100;for(let i=5;i>=0;i--){if(x<w[i])return i;x-=w[i]}return 0}
-function rollWeapon(f,d,boss){const w=rollWeapon0(f,d.base||d,boss);if((B?B.diff:S.diff)==='nightmare')gwify(w);return w}
+function rollWeapon(f,d,boss){const b=d.base||d;if((B?B.diff:S.diff)==='nightmare'){const r=rollRarity(f,boss,'nightmare');if(r>=5)return gwify(makeW({t:b.ut,r:5,f,name:b.un,sk:b.us,u:b.id}));return glMat(EXPW[r],f)}return rollWeapon0(f,b,boss)}
 function rollWeapon0(f,d,boss){
   const r=rollRarity(f,boss,B?B.diff:S.diff);
   if(r===5)return makeW({t:d.ut,r:5,f,name:d.un,sk:d.us,u:d.id});
   const L=CAT.filter(e=>e.r===r),e=L[rand(L.length)];
   return makeW({t:e.t,r,f,el:e.el,name:e.name,sk:e.sk,c:e.c});
 }
-const WBASE=[8,16,30,55,95,160];
+const WBASE=[8,16,30,55,95,160,300];
 function wBase(w){if(w.g)return{atk:1,hp:1,def:1};const T=TYPES[w.t],b=WBASE[w.r]*(1+.025*(w.lv-1))*(w.gw?1.6:1);return{atk:Math.round(b*T.a),hp:Math.round(b*5*T.h),def:Math.round(b*.6*T.d)}}
-function affVal(w,a){return r1(a.v*(1+(a.k==='cr'||a.k==='cd'?.025:.015)*(w.lv-1))*(w.gw?1.25:1))}
+function affVal(w,a){return r1(a.v*(1+(a.k==='cr'||a.k==='cd'?.025:.015)*(w.lv-1))*(w.gw?1.25:w.god?1.4:1))}
 function affTxt(w,a){return `${AFFD[a.k].n}+${affVal(w,a)}%`}
 function needXP(w,L){return Math.floor(15*L*(1+w.r*.3))}
-function matExp(w){if(w.g)return GLI[w.g].mexp+Math.floor(w.tx*.5);return Math.floor(60*Math.pow(w.r+1,2))+Math.floor(w.tx*.5)}
+function matExp(w){if(w.g)return (EXPI[w.g]?EXPI[w.g].mexp:0)+Math.floor(w.tx*.5);return Math.floor(60*Math.pow(w.r+1,2))+Math.floor(w.tx*.5)}
 function byId(id){return S.inv.find(w=>w.id===id)}
 function isEq(id){return S.eq.includes(id)}
 function trText(tr){return{mat:'強化の素材にした時',win:`${tr.s}秒以内に${tr.n}回攻撃`,every:`${tr.n}回攻撃ごと`,hit:'被ダメージ時',crit:'クリティカル時',low:'HP50%以下で被弾時'}[tr.type]}
@@ -1474,7 +1534,7 @@ let screen='home';
 function show(name){
   screen=name;document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===name));
   if(name!=='battle'){B=null;W=null;if(typeof kbGlitch==='function'){kbGlitch(false);wordNoise(false);$('stage').classList.remove('gl','nm')}}if(typeof TIP!=='undefined'){TIP.classList.remove('on');TIP._id=null}if(name!=='battle'){$('alert').classList.remove('on')}closeCtx&&closeCtx();
-  if(name==='home')renderHome();if(name==='armory')renderArmory();if(name==='dex')renderDex();
+  if(name==='home'){renderHome();if(typeof tutDecHome==='function')tutDecHome()}if(name==='armory')renderArmory();if(name==='dex')renderDex();
   if(name!=='battle')playBgm(typeof nmUI==='function'&&nmUI()?'nm':'home');
 }
 function dropHTML(w){return `<div class="drop${w.r>=4?' big':''}" style="--rc:${RAR[w.r].c}">${w.r>=4?'<span class="gt">GET!!</span>':''}<span class="e">${wIcon(w)}</span><div><div class="n">${wName(w)}</div><div class="small">${RAR[w.r].n}・${SK[w.sk].n}</div></div></div>`}
@@ -1490,7 +1550,7 @@ function fmtTime(sec){const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60);ret
 let powShown=0;
 function countUp(el,to){const from=powShown,t0=performance.now();powShown=to;
   const step=t=>{const k=Math.min(1,(t-t0)/900),e=1-Math.pow(1-k,3);el.textContent=Math.round(from+(to-from)*e).toLocaleString('ja-JP');if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step)}
-function renderHome(){
+function renderHome(){if(typeof applyDec==='function')applyDec();
   const ri=rankInfo(),open=slotsOpen(ri.r),st=calcStats(),R=S.rec,tier=tierOf(ri.r);
   $('hXpTxt').textContent=`EXP ${ri.x.toLocaleString()} / ${ri.n.toLocaleString()}　次のランクまで ${(ri.n-ri.x).toLocaleString()}`;$('hXp').style.width=(ri.x/ri.n*100)+'%';
   const tt=TITLES.filter(t=>ri.r>=t[0]).pop(),nt=TITLES.find(t=>t[0]>ri.r);
@@ -1525,7 +1585,7 @@ $('hSlots').addEventListener('pointermove',e=>{if(TIP.classList.contains('on'))t
 $('hSlots').addEventListener('pointerleave',()=>{TIP.classList.remove('on');TIP._id=null});
 $('hSlots').addEventListener('click',e=>{const q=e.target.closest('[data-hslot]');if(!q)return;TIP.classList.remove('on');TIP._id=null;
   setTab('equip');A.slot=+q.dataset.hslot;A.sel=q.dataset.hid?+q.dataset.hid:null;A.hover=null;show('armory')});
-function floorInfo(f){const band=Math.min(BOSSES.length-1,Math.floor((f-1)/5)),start=Math.round(band*(NORMALS.length-4)/(BOSSES.length-1));return{band,pool:NORMALS.slice(start,start+4),boss:BOSSES[band]}}
+function floorInfo(f){const band=Math.min(BOSSES.length-1,Math.floor((f-1)/5)),start=Math.round(band*(NORMALS.length-4)/(BOSSES.length-1));return{band,pool:NORMALS.slice(start,start+4).concat([CUTEN[Math.round(band*(CUTEN.length-1)/(BOSSES.length-1))]]),boss:(f-1)%5===2?CUTEB[band%CUTEB.length]:BOSSES[band]}}
 function renderFInfo(){const fi=floorInfo(selF);
   $('fInfo').innerHTML=`＊ ${selF}層　${selF<=PG().maxF?'クリア済み':'未踏の層'}<br><span class="small">出現：${fi.pool.map(d=>S.diff==='nightmare'?nmE(d).n:d.n).join('・')}<br>ボス：${S.diff==='nightmare'?nmE(fi.boss).n:fi.boss.n}</span>`;
   $('goBtn').textContent=`${DIFF[S.diff].n} ${selF}層へ出撃`;}
@@ -1776,7 +1836,7 @@ function enemyDie(){
   const eg=$('eg');eg.className='';void eg.offsetWidth;eg.className='die';
   blog(`${en.d.n}を倒した！`,'dmg');se('kill');
   if(en.gl){$('stage').classList.remove('gl');kbGlitch(B.diff==='nightmare');if(B.diff!=='nightmare')$('stage').classList.remove('gl');if(!S.nm)S.nm=1;const g=en.d,xp=Math.floor((20*Math.pow(B.floor,1.3)*g.xm+g.xa)*DIFF[B.diff].exp);
-    S.exp+=xp;B.gxp+=xp;const w=glMat(g,B.floor);B.drops.push(w);save();pop('+'+fmt(xp)+' EXP','crit',50,Math.max(fxTop+6,30),30);
+    S.exp+=xp;B.gxp+=xp;const w=glMat(EXPI[g.drop],B.floor);B.drops.push(w);save();pop('+'+fmt(xp)+' EXP','crit',50,Math.max(fxTop+6,30),30);
     blog(`経験値を ${fmt(xp)} 獲得！`,'drop big','var(--sel)');setTimeout(()=>se('drop',w.r),250);blog(`★【${RAR[w.r].n}】${w.name}を手に入れた！`,'drop big',RAR[w.r].c);nextEnemy();return}
   if(Math.random()<(en.boss?1:.35)){const w=rollWeapon(B.floor,en.d,en.boss);B.drops.push(w);setTimeout(()=>se('drop',w.r),250);blog(`${w.r>=4?'★':''}【${RAR[w.r].n}】${w.name}を手に入れた！`,'drop'+(w.r>=4?' big':''),RAR[w.r].c)}
   nextEnemy();
@@ -1883,7 +1943,7 @@ const CL={db:null,uid:null,ready:false,pid:null,name:null,timer:null,writing:fal
 try{const ss=JSON.parse(localStorage.getItem('td_session')||'null');if(ss&&ss.pid){CL.pid=ss.pid;CL.name=ss.name}}catch(e){}
 function curKey(){return CL.pid?'td_save_'+CL.pid:SAVE_KEY}
 function pref(pid){return CL.db.doc(`data/users/${CL.uid}/p_${pid}`)}
-function adopt(d){S=Object.assign(fresh(),d);if(!d.tut)S.tut={stage:((d.exp||0)>0||(d.maxF||0)>0||(d.prog&&Object.values(d.prog).some(x=>x.maxF>0)))?'done':'intro'};if(!d.prog){S.prog=freshProg();S.prog.normal={maxF:d.maxF||0,lastF:d.lastF||1}}S.prog=Object.assign(freshProg(),S.prog);if(!DIFF[S.diff]||(S.diff==='nightmare'&&!S.nm))S.diff='normal';S.rec=Object.assign(freshRec(),d.rec||{});S.rec.dex=Object.assign({},S.rec.dex||{});S.inv.forEach(w=>{migrateW(w);if(w.u&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u);S.rec.dex[dexKey(w)]=1});S.rec.uniq.forEach(u=>S.rec.dex['u:'+u]=1)}
+function adopt(d){S=Object.assign(fresh(),d);if(!d.tut)S.tut={stage:((d.exp||0)>0||(d.maxF||0)>0||(d.prog&&Object.values(d.prog).some(x=>x.maxF>0)))?'done':'intro'};if(!d.prog){S.prog=freshProg();S.prog.normal={maxF:d.maxF||0,lastF:d.lastF||1}}S.prog=Object.assign(freshProg(),S.prog);if(!DIFF[S.diff]||(S.diff==='nightmare'&&!S.nm))S.diff='normal';S.rec=Object.assign(freshRec(),d.rec||{});S.rec.dex=Object.assign({},S.rec.dex||{});for(const k in GMAP)if(S.rec.dex['g:'+k])S.rec.dex['g:'+GMAP[k]]=1;S.inv.forEach(w=>{migrateW(w);if(w.u&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u);S.rec.dex[dexKey(w)]=1});S.rec.uniq.forEach(u=>S.rec.dex['u:'+u]=1)}
 function newGame(){S=fresh();const w=makeW({t:0,r:0,f:1,name:'旅立ちの短剣',sk:CATI.c0_0_0.sk,c:'c0_0_0'});S.inv.push(w);S.eq[0]=w.id;S.rec.dex[dexKey(w)]=1}
 function readLocal(key){try{const d=JSON.parse(localStorage.getItem(key));if(d&&Array.isArray(d.inv))return d}catch(e){}return null}
 async function hashPw(pass,salt){const enc=new TextEncoder(),k=await crypto.subtle.importKey('raw',enc.encode(pass),'PBKDF2',false,['deriveBits']);
@@ -2065,18 +2125,17 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='2.1.2-alpha';
+const VERSION='3.0.0-alpha';
 const CHANGELOG=[
- ['2.1.2-alpha',['チュートリアルの文章を漢字を使った読みやすい文章にし、漢字にふりがな（ルビ）を付けました','ホームポジションの説明で、指の名前をキーの色と同じ色で表示','横長の画面や解像度の低い画面で、バトル中の敵が装備武器と重ならないように、画面の高さに合わせて各UIの大きさを自動で調整']],
- ['2.1.1-alpha',['かんたん引き継ぎの表記を「受け取る」から「引き継ぐ」に変更','引き継ぎコード・ファイルの欄の名前を「引き継ぎ（レガシー）」に変更']],
- ['2.1.0-alpha',['かんたん引き継ぎを追加：「パスワードを発行」で8文字のパスワードを発行し、新しい端末でプレイヤー名とパスワードを入力するだけで続きを遊べるように（有効期限なし・一度引き継ぐと無効）','これまでの引き継ぎコード・ファイル保存は「引き継ぎ（レガシー）」としてそのまま使えます']]
+ ['3.0.0-alpha',['かわいい敵が登場！ウサギ・ハート・お菓子などの通常の敵16体と、ボス8体を追加（ボスは各5層ごとの3層目に出現）','追加した敵それぞれに、専用のユニーク武器と固有スキルを追加','かわいい武器を15種類追加（コモン〜レジェンダリー）','縺薙ｓ縺ｫ縺｡縺ｯ縲∫･槭↓縺ｪ縺｣縺溘ｍ\uFFFD\uFFFD','邨碁ｨ薙\uFFFDｮ蜑｣縺悟､峨ｏ縺｣縺溘ｈ\uFFFD','\uFFFD\uFFFD\uFFFD\uFFFD']]
 ];
 const DEX=[];
 CAT.forEach(e=>DEX.push({key:'c:'+e.c,t:e.t,r:e.r,cat:e}));
-NORMALS.concat(BOSSES).forEach((d,i)=>DEX.push({key:'u:'+d.id,t:d.ut,r:5,u:d.id,d,boss:i>=NORMALS.length}));
-DEX.slice().forEach(e=>DEX.push(Object.assign({},e,{key:'x:'+e.key,gw:true,nmh:true})));
-GLITCH.forEach(g=>DEX.push({key:'g:'+g.id,t:g.wt,r:g.wr,g:g.id,d:g,boss:!!g.boss,hid:true}));
-DEX.forEach((e,i)=>{e.w={id:700000+i,t:e.t,r:e.r,f:1,lv:1,xp:0,tx:0,el:e.cat?e.cat.el:5,u:e.u||null,c:e.cat?e.cat.c:null,g:e.g||null,gw:e.gw?1:0,aff:[],sk:e.g?'g_'+e.g:e.u?e.d.us:e.cat.sk,name:e.g?e.d.wn:e.u?e.d.un:e.cat.name};if(e.gw)e.w.name=garble(e.w.name,.3)});
+ALLE.forEach(d=>DEX.push({key:'u:'+d.id,t:d.ut,r:5,u:d.id,d,boss:ISB(d)}));
+DEX.filter(e=>e.u).forEach(e=>DEX.push(Object.assign({},e,{key:'x:'+e.key,gw:true,nmh:true})));
+ALLE.forEach(d=>DEX.push({key:'d:'+d.id,t:d.ut,r:6,u:d.id,d,boss:ISB(d),god:true,nmh:true}));
+EXPW.forEach(e=>DEX.push({key:'g:'+e.id,t:e.t,r:e.r,g:e.id,d:e.src,ex:e,boss:!!(e.src&&e.src.boss),hid:true}));
+DEX.forEach((e,i)=>{e.w={id:700000+i,t:e.t,r:e.r,f:1,lv:1,xp:0,tx:0,el:e.cat?e.cat.el:5,u:e.u||null,c:e.cat?e.cat.c:null,g:e.g||null,gw:e.gw?1:0,god:e.god?1:0,aff:[],sk:e.g?'g_'+e.g:e.u?e.d.us:e.cat.sk,name:e.g?e.ex.wn:e.god?godName(e.u):e.u?e.d.un:e.cat.name};if(e.gw)e.w.name=garble(e.w.name,.3)});
 function dexVis(){return DEX.filter(e=>(!e.hid||S.rec.dex[e.key])&&(!e.nmh||S.nm))}
 const DX={sel:null,hov:null,f:'all'};
 function floorsOf(id){const fl=[];for(let f=1;f<=100;f++){const fi=floorInfo(f);if(fi.boss.id===id||fi.pool.some(d=>d.id===id))fl.push(f)}
@@ -2085,11 +2144,16 @@ function dexPane(e){
   if(!e)return '<div class="tag">アイテム図鑑</div><div class="empty">アイテムにカーソルを合わせるか、タップして詳細を見る</div>';
   if(!S.rec.dex[e.key])return `<div class="tag">No.${dexVis().indexOf(e)+1}</div><div class="ph" style="--rc:var(--faint)"><span class="dem qm">？</span><div><div class="dn" style="color:var(--dim)">？？？</div><div class="dr">${RAR[e.r].n}</div></div></div><div class="empty">まだ入手していません</div>`;
   const w=e.w,R=RAR[e.r],T=TYPES[e.t],b1=wBase(w),bm=wBase(Object.assign({},w,{lv:R.cap}));
-  if(e.g){const sk=SK[w.sk];return `<div class="tag">No.${dexVis().indexOf(e)+1}</div><div class="ph" style="--rc:${R.c}"><span class="dem">${wIcon(w)}</span><div style="min-width:0"><div class="dn">${wName(w)}</div><div class="dr">${R.n}　${T.n}　最大Lv${R.cap}</div></div></div>
+  if(e.g){const sk=SK[w.sk],src=e.d;return `<div class="tag">No.${dexVis().indexOf(e)+1}</div><div class="ph" style="--rc:${R.c}"><span class="dem">${wIcon(w)}</span><div style="min-width:0"><div class="dn">${wName(w)}</div><div class="dr">${R.n}　${T.n}　最大Lv${R.cap}</div></div></div>
   <div class="pbody"><div><div class="psec">基礎ステータス</div><div class="rows"><span>攻撃</span><b>1</b><span>HP</span><b>1</b><span>防御</span><b>1</b></div><div class="psec">追加能力</div><div class="small" style="margin-top:4px">なし</div></div>
-  <div><div class="psec">ドロップする敵</div><div style="margin-top:4px"><span class="dxe"><img src="${eSprite(e.d)}" alt="">${e.boss?'<span class="bs">B縺SS</span>':''}${e.d.n}</span></div>
+  <div><div class="psec">ドロップする敵</div><div style="margin-top:4px">${src?`<span class="dxe"><img src="${eSprite(src)}" alt="">${src.boss?'<span class="bs">B縺SS</span>':''}${src.n}</span>`:'<span class="glt">\uFFFD\uFFFD\uFFFD</span>'}</div>
     <div class="psec">入手できる階層</div><div style="margin-top:4px" class="glt">蜈ｨ螻､</div><div class="psec">入手率の目安</div><div class="small glt" style="margin-top:4px">\uFFFDｼ\uFFFDｼ\uFFFDｼ</div></div></div>
   <div class="psec">スキル</div><div class="psk" style="margin-top:2px"><b>${sk.n}</b><span class="uqt">固有</span><br>${trText(sk.tr)}：${sk.fx.map(f=>fxText(f,1)).join('、')}</div>`}
+  if(e.god){const sk=SK[w.sk];return `<div class="tag">No.${dexVis().indexOf(e)+1}</div><div class="ph" style="--rc:${R.c}"><span class="dem">${wIcon(w)}</span><div style="min-width:0"><div class="dn godn">${wName(w)}</div><div class="dr">${R.n}　${T.n}　最大Lv${R.cap}</div></div></div>
+  <div class="pbody"><div><div class="psec">基礎ステータス（Lv1 → Lv${R.cap}）</div><div class="rows">${[['攻撃','atk'],['HP','hp'],['防御','def']].map(([n,k])=>`<span>${n}</span><b>${b1[k]?`${b1[k]} → ${bm[k]}`:'-'}</b>`).join('')}</div>
+    <div class="psec">追加能力</div><div class="small" style="margin-top:4px">${R.slots}枠</div></div>
+  <div><div class="psec">入手方法</div><div class="small" style="margin-top:4px">グリッチ版「${garble(e.d.un,.3)}」（Lv最大）に、通常版「${e.d.un}」（Lv最大）を素材にして進化させる</div></div></div>
+  <div class="psec">スキル</div><div class="psk" style="margin-top:2px"><b>${sk.n}</b><span class="uqt">固有</span>　CT${sk.ct}秒<br>${trText(sk.tr)}：${sk.fx.map(f=>fxText(f,smOf(w))).join('、')}</div>`}
   const sk=SK[e.w.sk];
   const rate=f=>rarW(f,false)[e.r];
   return `<div class="tag">No.${dexVis().indexOf(e)+1}</div><div class="ph" style="--rc:${R.c}"><span class="dem">${wIcon(w)}</span><div style="min-width:0"><div class="dn">${wName(w)}</div><div class="dr">${R.n}　${T.n}　最大Lv${R.cap}</div></div></div>
@@ -2102,7 +2166,7 @@ function dexPane(e){
 }
 function renderDex(){
   const V=dexVis(),got=V.filter(e=>S.rec.dex[e.key]).length;$('dexCnt').textContent=`${got} / ${V.length}`;
-  if(DX.f==='gw'&&!S.nm)DX.f='all';$('dfGw').hidden=!S.nm;$('dexFilt').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x.dataset.df===DX.f));const L=V.filter(e=>DX.f==='all'||(DX.f==='gw'?e.gw:!e.gw&&(DX.f==='uni'?e.u:DX.f==='def'?isDefT(e.t):!e.u)));
+  if((DX.f==='gw'||DX.f==='god')&&!S.nm)DX.f='all';$('dfGw').hidden=!S.nm;$('dfGod').hidden=!S.nm;$('dexFilt').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x.dataset.df===DX.f));const L=V.filter(e=>DX.f==='all'||(DX.f==='gw'?e.gw:DX.f==='god'?e.god:!e.gw&&!e.god&&(DX.f==='uni'?e.u:DX.f==='def'?isDefT(e.t):!e.u)));
   $('dexGrid').innerHTML=L.map(e=>{const g=S.rec.dex[e.key],i=V.indexOf(e);
     return `<button class="wc dxc ${g?'':'unk'} ${DX.sel===e.key?'sel':''}" data-dx="${e.key}" style="--rc:${g?RAR[e.r].c:'var(--faint)'}">${g?wIcon(e.w):'<span class="qm">？</span>'}<span class="lv">${i+1}</span></button>`}).join('');
   renderDexPane();
@@ -2141,23 +2205,26 @@ const TUT_STEPS={
   {sel:'[data-arm=equip]',t:'「{装備|そうび}」ボタンを{押|お}してみよう。',wait:1},
   {sel:'#invwrap',t:'ここが{持|も}っている{武器|ぶき}だよ。\n{武器|ぶき}を{押|お}すと{装備|そうび}できるよ。'},
   {sel:'#slots',t:'ここが{装備|そうび}スロット。\nランクが{上|あ}がるとスロットが{増|ふ}えて、{武器|ぶき}をたくさん{持|も}てるよ。'},
-  {sel:'#tabs',t:'{下|した}のボタンで「{強化|きょうか}」「{合成|ごうせい}」「{進化|しんか}」にも{行|い}けるよ。\n{初|はじ}めて{開|ひら}いた{時|とき}に{説明|せつめい}するね。'},
+  {sel:'#tabs',t:'{下|した}のボタンで「{強化|きょうか}」「{合成|ごうせい}」にも{行|い}けるよ。\n{初|はじ}めて{開|ひら}いた{時|とき}に{説明|せつめい}するね。'},
   {sel:'#armBack',t:'これで{遊|あそ}び{方|かた}はおしまい！\nこのまま{武器|ぶき}を{装備|そうび}してみよう。\n{終|お}わったらこのボタンで{拠点|きょてん}に{戻|もど}れるよ。',end:'done'}],
  enh:[
   {t:'ここは「{強化|きょうか}」。\n{武器|ぶき}のレベルを{上|あ}げて{強|つよ}くできるよ。'},
   {sel:'#invwrap',t:'まず{強|つよ}くしたい{武器|ぶき}（ベース）を{選|えら}ぼう。\nその{後|あと}、{他|ほか}の{武器|ぶき}を{押|お}すと「{素材|そざい}」になるよ。'},
   {sel:'.atop',t:'{選|えら}んだ{武器|ぶき}はここに{出|で}るよ。\n{素材|そざい}の{武器|ぶき}は{無|な}くなる{代|か}わりに{経験値|けいけんち}になるよ。\nレアな{武器|ぶき}ほどたくさんもらえるよ。'},
-  {t:'{装備中|そうびちゅう}の{武器|ぶき}と★お{気|き}に{入|い}りの{武器|ぶき}は{素材|そざい}にできないよ。\nレベルが{最大|さいだい}になったら「{進化|しんか}」できるよ。'}],
+  {t:'{装備中|そうびちゅう}の{武器|ぶき}と★お{気|き}に{入|い}りの{武器|ぶき}は{素材|そざい}にできないよ。'}],
  syn:[
   {t:'ここは「{合成|ごうせい}」。\n{武器|ぶき}に{付|つ}いている「{追加|ついか}{能力|のうりょく}」を{組|く}み{替|か}えられるよ。'},
   {sel:'#invwrap',t:'まず{能力|のうりょく}を{付|つ}けたい{武器|ぶき}（ベース）を{選|えら}んで、\n{次|つぎ}に{同|おな}じレアリティ（{同|おな}じ{色|いろ}）の{武器|ぶき}を{素材|そざい}に{選|えら}ぼう。'},
   {sel:'.atop',t:'{二|ふた}つの{武器|ぶき}の{能力|のうりょく}から{残|のこ}したいものを{選|えら}んで「{合成|ごうせい}」！\n{素材|そざい}の{武器|ぶき}は{無|な}くなるよ。'},
   {t:'コモン（{白|しろ}）の{武器|ぶき}には{追加|ついか}{能力|のうりょく}がないから{合成|ごうせい}できないよ。'}],
- evo:[
-  {t:'ここは「{進化|しんか}」。\n{武器|ぶき}のレアリティを1{段|だん}{上|あ}げられるよ。'},
-  {sel:'#invwrap',t:'レベルが{最大|さいだい}の{武器|ぶき}をベースに{選|えら}んで、\n{同|おな}じレアリティでレベル{最大|さいだい}の{武器|ぶき}を{素材|そざい}にしよう。'},
-  {sel:'.atop',t:'{進化|しんか}すると{攻撃|こうげき}・HP・{技|わざ}の{強|つよ}さ・{最大|さいだい}レベルが{上|あ}がって、\n{追加|ついか}{能力|のうりょく}の{枠|わく}も{増|ふ}えるよ。'},
-  {t:'{増|ふ}えた{枠|わく}は{空|から}っぽだから、「{合成|ごうせい}」で{能力|のうりょく}を{入|い}れてね。\nレジェンダリーとユニークは{進化|しんか}できないよ。'}]};
+ dec:[
+  {t:'ここは「デコード」。\n{壊|こわ}れたグリッチユニークの{真|しん}の{力|ちから}を{引|ひ}き{出|だ}す{場所|ばしょ}だよ。'},
+  {sel:'#invwrap',t:'まず、レベルが{最大|さいだい}のグリッチユニークをベースに{選|えら}ぼう。\n{次|つぎ}に、{同|おな}じ{敵|てき}の{通常|つうじょう}のユニーク（レベル{最大|さいだい}）を{素材|そざい}に{選|えら}ぶよ。'},
+  {sel:'.atop',t:'デコードすると、{真|しん}の{名前|なまえ}を{持|も}つ{虹色|にじいろ}のレアリティ「ゴッド」の{武器|ぶき}になるよ。\n{追加|ついか}{能力|のうりょく}はベースの{武器|ぶき}のものがそのまま{引|ひ}き{継|つ}がれるよ。'},
+  {t:'ゴッドは{追加|ついか}{能力|のうりょく}の{枠|わく}が1つ{増|ふ}えるから、「{合成|ごうせい}」で{埋|う}めよう。\n{素材|そざい}にした{通常|つうじょう}のユニークは{無|な}くなるから{気|き}をつけてね。'}],
+ decHome:[
+  {t:'{何|なに}かが{目覚|めざ}めたようだ……\n{拠点|きょてん}に{新|あたら}しい{機能|きのう}「デコード」が{現|あらわ}れたよ。'},
+  {sel:'.armbtns [data-arm=evo]',t:'「デコード」ボタンを{押|お}してみよう。',wait:1}]};
 function rubyText(t){return t.replace(/\{([^|{}]+)\|([^{}]+)\}/g,'<ruby>$1<rt>$2</rt></ruby>').replace(/\[\[(\d):([^\]]+)\]\]/g,'<span class="tc$1">$2</span>').replace(/\n/g,'<br>')}
 const RBD=Object.fromEntries('木:き|古:ふる|錆:さ|剣:けん|大剣:たいけん|斧:おの|槍:やり|弓:ゆみ|杖:つえ|盾:たて|鎚:つち|大盾:おおだて|籠手:こて|護符:ごふ|鉄:てつ|鋼:はがね|兵士:へいし|雷鳴:らいめい|冥府:めいふ|聖光:せいこう|烈火:れっか|氷牙:ひょうが|紫電:しでん|漆黒:しっこく|天照:あまてらす|紅蓮:ぐれん|蒼氷:そうひょう|冥王:めいおう|炎帝:えんてい|雪華:せっか|雷神:らいじん|黒曜:こくよう|焔魔:えんま|氷皇:ひょうおう|迅雷:じんらい|神聖:しんせい|灼熱王:しゃくねつおう|絶対零度:ぜったいれいど|轟雷:ごうらい|深淵:しんえん|黎明:れいめい|紅蓮神:ぐれんしん|蒼天:そうてん|天雷:てんらい|終焉:しゅうえん|粘液:ねんえき|短剣:たんけん|糸:いと|紡:つむ|吸血:きゅうけつ|牙剣:がけん|鼠王:そおう|爪斧:そうふ|毒沼:どくぬま|胞子:ほうし|魔杖:まじょう|絹糸:きぬいと|魔弓:まきゅう|女王蜂:じょおうばち|針槍:しんそう|月狼:げつろう|大剣:たいけん|蛇毒:じゃどく|魔槍:まそう|甲殻:こうかく|霊魂:れいこん|骨王:こつおう|不朽:ふきゅう|戦鎚:せんつい|死針:ししん|猪王:ちょおう|大斧:おおおの|夜梟:やきょう|巨人:きょじん|天翼:てんよく|鰐牙:がくが|曲刀:きょくとう|灼熱:しゃくねつ|深海:しんかい|三叉槍:さんさそう|鮫牙:こうが|道化:どうけ|千眼:せんがん|鋼角:こうかく|竜鱗:りゅうりん|熊王:ゆうおう|巨猿:きょえん|飛竜:ひりゅう|機神:きしん|異星:いせい|光線杖:こうせんじょう|電脳:でんのう|氷雪:ひょうせつ|劫火:ごうか|雷霆:らいてい|嵐神:らんしん|影:かげ|縫:ぬ|晶石:しょうせき|溶岩:ようがん|大鎚:おおづち|鬼王:きおう|金棒:かなぼう|螺旋:らせん|岩神:がんしん|金剛:こんごう|真紅:しんく|魔剣:まけん|獣王:じゅうおう|迷宮:めいきゅう|翠星:すいせい|神弓:しんきゅう|海歌:うみうた|氷河:ひょうが|海神:かいじん|悪夢:あくむ|角槍:つのやり|狐火:きつねび|魔界:まかい|死神:しにがみ|龍神剣:りゅうじんけん|黒翼:こくよく|聖剣:せいけん|覇王剣:はおうけん|旅立:たびだ'.split('|').map(x=>x.split(':'))),RBMAX=5;
 function rubyName(n){let o='',i=0;const a=[...n];while(i<a.length){let hit=0;for(let L=Math.min(RBMAX,a.length-i);L>0;L--){const k=a.slice(i,i+L).join('');if(RBD[k]){o+=`<ruby>${k}<rt>${RBD[k]}</rt></ruby>`;i+=L;hit=1;break}}if(!hit){o+=esc(a[i]);i++}}return o}
@@ -2228,7 +2295,8 @@ window.addEventListener('keydown',e=>{if(!TUT.on)return;const st=TUT.list[TUT.i]
 addEventListener('resize',()=>{if(TUT.on)tutPlace(true)});
 document.addEventListener('scroll',()=>{if(TUT.on)tutPlace(true)},{capture:true,passive:true});
 $('tutBtn').onclick=()=>{S.tseen={};tutSet('intro');show('home');setTimeout(()=>tutRun('intro'),150)};
-function tutTab(t){if(!['enh','syn','evo'].includes(t)||TUT.on||tutStage()!=='done')return;S.tseen=S.tseen||{};if(S.tseen[t])return;S.tseen[t]=1;save();setTimeout(()=>{if(!TUT.on&&screen==='armory'&&A.tab===t)tutRun(t)},250)}
+function tutTab(t){if(!['enh','syn','evo'].includes(t)||TUT.on||tutStage()!=='done')return;const k=t==='evo'?'dec':t;S.tseen=S.tseen||{};if(S.tseen[k])return;S.tseen[k]=1;save();setTimeout(()=>{if(!TUT.on&&screen==='armory'&&A.tab===t)tutRun(k)},250)}
+function tutDecHome(){if(screen!=='home'||TUT.on||tutStage()!=='done'||!decOpen())return;S.tseen=S.tseen||{};if(S.tseen.decHome)return;if($('modal').classList.contains('on'))return;S.tseen.decHome=1;save();setTimeout(()=>{if(!TUT.on&&screen==='home')tutRun('decHome')},450)}
 /* ===== nightmare UI ===== */
 const SUBTXT='TYPE DUNGEONS',NMTXT='NIGHTMARE MODE',NZC='繝繧縺螟蜑譁ｨ薙ｸｼ#%&?@\uFFFD';let NMT=0;
 function nmUI(){return S.diff==='nightmare'&&!!S.nm}
@@ -2246,9 +2314,9 @@ function tutAuto(){if(tutStage()==='intro'&&screen==='home'&&!$('modal').classLi
 
 /* ===== armory ===== */
 const A={tab:'equip',sel:null,hover:null,slot:0,target:null,mats:new Set(),synMat:null,pick:new Set(),
-  sort:'id',desc:true,fr:new Set([0,1,2,3,4,5]),ft:-1,fs:'',fa:''};
+  sort:'id',desc:true,fr:new Set([0,1,2,3,4,5,6]),ft:-1,fs:'',fa:''};
 const SORTS=[['id','入手順'],['fav','お気に入り'],['r','レアリティ'],['lv','レベル'],['atk','攻撃力'],['hp','HP'],['def','防御力'],['sk','スキル名'],...AFF.map(a=>['a:'+a.k,'追加:'+a.n])];
-const RCOL=['白','緑','青','紫','金','赤'];
+const RCOL=['白','緑','青','紫','金','赤','虹'];
 $('sSort').innerHTML=SORTS.map(([v,n])=>`<option value="${v}">${n}</option>`).join('');
 $('fType').innerHTML='<option value="-1">全種類</option>'+TYPES.map((t,i)=>`<option value="${i}">${t.e} ${t.n}</option>`).join('');
 $('fSkill').innerHTML='<option value="">全スキル</option>'+Object.entries(SK).filter(([k])=>!k.startsWith('g_')).map(([k,s])=>`<option value="${k}">${s.n}</option>`).join('');
@@ -2293,8 +2361,8 @@ $('armBack').onclick=()=>show('home');
 
 function renderTop(){
   const open=slotsOpen(rankInfo().r);if(A.slot>=open)A.slot=0;
-  $('atitle').textContent={equip:'装備',enh:'強化',syn:'合成',evo:'進化'}[A.tab];
-  $('aSub').textContent={equip:'クリックでメニュー／長押しか横に引いてスロットへドラッグ',enh:'武器を素材にしてレベルを上げる',syn:'同じレア度の武器と追加能力を組み替える',evo:'レベル最大の武器を、同じレア度のレベル最大の武器と合わせて1段階上のレア度へ進化'}[A.tab];
+  $('atitle').textContent={equip:'装備',enh:'強化',syn:'合成',evo:'デコード'}[A.tab];
+  $('aSub').textContent={equip:'クリックでメニュー／長押しか横に引いてスロットへドラッグ',enh:'武器を素材にしてレベルを上げる',syn:'同じレア度の武器と追加能力を組み替える',evo:'レベル最大のグリッチユニークと、対応する通常のユニーク（レベル最大）を組み合わせて真の力を引き出す'}[A.tab];
   const sl=$('slots');sl.style.display=A.tab==='equip'?'':'none';
   if(A.tab==='equip')sl.innerHTML=SLOT_R.map((v,i)=>{
     if(i>=open)return `<div class="slot lock">🔒<br>ランク${v}</div>`;
@@ -2317,14 +2385,17 @@ function renderTop(){
     R=hov&&hov.id!==A.target?paneHTML(hov,'カーソル中の武器',undefined,`<div class="prev">素材にすると +${matExp(hov)}EXP</div>`):'<div class="tag">素材</div><div class="empty">'+(t?'素材にする武器をタップ':'—')+'</div>';
   }else if(A.tab==='evo'){
     const t=byId(A.target),m=byId(A.evoMat);
-    if(t){const R0=RAR[t.r],R1=RAR[t.r+1],maxed=t.lv>=R0.cap,canTop=t.r<4;
-      const info=canTop?`<div class="prev">レアリティ ${R0.n} → <b class="up">${R1.n}</b><br>最大Lv ${R0.cap} → <b class="up">${R1.cap}</b>　追加能力の枠 ${R0.slots} → <b class="up">${R1.slots}</b>　スキル倍率 ×${R0.sm} → <b class="up">×${R1.sm}</b></div>`:'<div class="prev">これ以上 進化できません</div>';
-      L=paneHTML(t,canTop?'ベース（進化後の結果）':'ベース',undefined,info,canTop?Object.assign({},t,{r:t.r+1}):null);
-      mr=`<div class="mlab">素材${m?'<span class="small dz">（タップで外す）</span>':''}</div><div class="mats">${m?`<button class="wc mini" data-mid="${m.id}" style="--rc:${RAR[m.r].c}" title="${m.name}">${wIcon(m)}<span class="lv">Lv${m.lv}</span></button>`:`<span class="small">${canTop?`レベル最大（Lv${R0.cap}）の${R0.n}の武器を下の一覧からタップ`:'—'}</span>`}</div>`;
-      const need=!canTop?'':!maxed?`ベースのレベルを最大（Lv${R0.cap}）にすると進化できます（今 Lv${t.lv}）`:!m?'素材を選んでください':'';
-      ex=need?`<div class="small evoneed">${need}</div>`:'';
-      act=`<button class="btn pri" data-a="evo" ${canTop&&maxed&&m?'':'disabled'}>進化する</button><button class="btn danger" data-a="reset">ベースを選び直す</button>`;
-    }else L='<div class="tag">ベース</div><div class="empty">進化させる武器を選んでください（コモン〜エピック）</div>';
+    if(t){const nx=evoNext(t),gd=isGodBase(t),R0=RAR[t.r],R1=RAR[nx?nx.r:t.r],maxed=t.lv>=R0.cap,canTop=!!nx;
+      const info=canTop?`<div class="prev"><b class="godt">デコード</b>：真の名と真の力が解き放たれる<br>レアリティ ${R0.n} → <b class="up">${R1.n}</b><br>最大Lv ${R0.cap} → <b class="up">${R1.cap}</b>　追加能力の枠 ${R0.slots} → <b class="up">${R1.slots}</b>　スキル倍率 ×${R0.sm} → <b class="up">×${R1.sm}</b></div>`:`<div class="prev">${t.god?'デコード済みです':'この武器はデコードできません'}</div>`;
+      const prv=nx&&m&&A.pick.size?Object.assign({},nx,{aff:[...A.pick].map(k=>(k[0]==='b'?t.aff:m.aff)[+k.slice(1)])}):nx;
+      L=paneHTML(t,canTop?'ベース（デコード後の結果）':'ベース',undefined,info,prv);
+      mr=`<div class="mlab">素材${m?'<span class="small dz">（タップで外す）</span>':''}</div><div class="mats">${m?`<button class="wc mini" data-mid="${m.id}" style="--rc:${RAR[m.r].c}" title="${m.name}">${wIcon(m)}<span class="lv">Lv${m.lv}</span></button>`:`<span class="small">${!canTop?'—':gd?`レベル最大（Lv${R0.cap}）の通常版の同じユニーク武器を下の一覧からタップ`:`レベル最大（Lv${R0.cap}）の${R0.n}の武器を下の一覧からタップ`}</span>`}</div>`;
+      const need=!canTop?'':!maxed?`ベースのレベルを最大（Lv${R0.cap}）にするとデコードできます（今 Lv${t.lv}）`:!m?'素材を選んでください':'';
+      ex=need?`<div class="small evoneed">${need}</div>`:'';let dn=0;
+      if(canTop&&m){dn=synNeed(t,m,RAR[6].slots);const pool=[...t.aff.map((a,i)=>({key:'b'+i,a,src:'ベース'})),...m.aff.map((a,i)=>({key:'m'+i,a,src:'素材'}))];
+        ex+=`<div class="mlab">追加能力を${dn}つ選択（${A.pick.size}/${dn}）${dn<RAR[6].slots?`<span class="small">（種類が足りないため${dn}つ）</span>`:''}</div><div class="daff">${pool.map(p=>`<button class="chip ${A.pick.has(p.key)?'on':[...A.pick].some(q=>pool.find(x=>x.key===q).a.k===p.a.k)?'dis':''}" data-pick="${p.key}"><small>${p.src}</small>${AFFD[p.a.k].n}+${affVal(nx,p.a)}%</button>`).join('')}</div>`}
+      act=`<button class="btn pri" data-a="evo" ${canTop&&maxed&&m&&A.pick.size===dn?'':'disabled'}>デコードする</button><button class="btn danger" data-a="reset">ベースを選び直す</button>`;
+    }else L='<div class="tag">ベース</div><div class="empty">デコードするグリッチユニークを選んでください</div>';
     R=m?paneHTML(m,'素材（消費）'):hov&&hov.id!==A.target?paneHTML(hov,'カーソル中の武器'):'<div class="tag">素材</div><div class="empty">—</div>';
   }else{
     const t=byId(A.target),m=byId(A.synMat);
@@ -2350,13 +2421,13 @@ function renderInv(){
     if(A.tab==='syn'&&t&&!A.synMat&&w.id!==t.id&&(w.r!==t.r||isEq(w.id)))cls='dim';
     if(A.tab==='syn'&&!t&&w.r===0)cls='dim';
     if(A.tab==='enh'&&t&&w.id!==t.id&&isEq(w.id))cls='dim';
-    if(A.tab==='evo'&&t&&!A.evoMat&&w.id!==t.id&&(w.r!==t.r||w.lv<RAR[w.r].cap||isEq(w.id)))cls='dim';
-    if(A.tab==='evo'&&!t&&w.r>=4)cls='dim';
+    if(A.tab==='evo'&&t&&!A.evoMat&&w.id!==t.id&&!evoMatOk(t,w))cls='dim';
+    if(A.tab==='evo'&&!t&&!evoNext(w))cls='dim';
     const ck=(A.tab==='enh'&&A.mats.has(w.id))||(A.tab==='syn'&&A.synMat===w.id)||(A.tab==='evo'&&A.evoMat===w.id);
     return `<div class="wc ${cls}" data-id="${w.id}" style="--rc:${RAR[w.r].c}" title="${w.name}">${wIcon(w)}<span class="lv">Lv${w.lv}</span>${isEq(w.id)?'<span class="eb">E</span>':''}${w.fav?'<span class="fvb">★</span>':''}${ck?'<span class="ck">✓</span>':''}</div>`}).join('')
     ||'<div class="empty" style="grid-column:1/-1">条件に合う武器がありません</div>';
 }
-function renderArmory(){renderTop();renderInv()}
+function renderArmory(){applyDec();const gc=$('fRar').querySelector('[data-r="6"]');if(gc)gc.hidden=!S.nm;renderTop();renderInv()}
 
 function equipTo(id,i){const old=S.eq.indexOf(id);if(old>=0)S.eq[old]=null;S.eq[i]=id;A.slot=i;save();toast(`スロット${i+1}に装備しました`)}
 function closeCtx(){$('ctx').classList.remove('on')}
@@ -2371,7 +2442,7 @@ function openCtx(id,x,y,detail){armTipOff();
   items.push([w.fav?'☆ お気に入りを解除':'★ お気に入りに登録',()=>{w.fav=!w.fav;save();toast(w.fav?'お気に入りに登録しました':'お気に入りを解除しました')}]);
   items.push(['強化する',()=>{setTab('enh');A.target=id}]);
   if(w.r>0)items.push(['合成のベースにする',()=>{setTab('syn');A.target=id}]);
-  if(w.r<4)items.push(['進化のベースにする',()=>{setTab('evo');A.target=id}]);
+  if(isGodBase(w)&&decOpen())items.push(['デコードのベースにする',()=>{setTab('evo');A.target=id}]);
   if(!isEq(id)&&!w.fav)items.push(['捨てる',()=>{modal(`<h2>捨てる？</h2><p>「${w.name}」（${RAR[w.r].n} Lv${w.lv}）を捨てます。元に戻せません。</p>`,
     [{t:'やめる'},{t:'捨てる',danger:true,fn:()=>{S.inv=S.inv.filter(x=>x.id!==id);if(A.sel===id)A.sel=null;save();toast('捨てました');renderArmory()}}])}]);
   items.push(['閉じる',null]);
@@ -2392,15 +2463,15 @@ function tapCard(id,x,y,pt){
     else A.mats.add(id);
   }else if(A.tab==='evo'){
     const t=byId(A.target),cap=RAR[w.r].cap;
-    if(w.g&&id!==(t&&t.id)){toast('この武器は進化に使えません')}
-    else if(!t){if(w.r>=4)toast('レジェンダリーとユニークは これ以上進化できません');else A.target=id}
+    if(!t){if(w.g)toast('この武器はデコードに使えません');else if(!evoNext(w))toast(w.r>=6?'すでにデコード済みです':'デコードできるのはグリッチユニークだけです');else A.target=id}
     else if(id===t.id)return;
-    else if(A.evoMat===id)A.evoMat=null;
-    else if(w.r!==t.r)toast('同じレアリティの武器だけ素材にできます');
+    else if(A.evoMat===id){A.evoMat=null;A.pick.clear()}
+    else if(w.g)toast('この武器はデコードに使えません');
+    else if(isGodBase(t)&&(w.u!==t.u||w.gw||w.r!==5))toast('対応する通常版のユニーク武器だけ素材にできます');
     else if(w.lv<cap)toast(`素材もレベル最大（Lv${cap}）が必要です`);
     else if(isEq(id))toast('装備中の武器は素材にできません');
     else if(w.fav)toast('お気に入りの武器は素材にできません（解除すると使えます）');
-    else A.evoMat=id;
+    else{A.evoMat=id;A.pick=defPick(t,w,synNeed(t,w,RAR[6].slots),evoNext(t))}
   }else{
     const t=byId(A.target);
     if(w.g&&id!==(t&&t.id)){toast('この武器は合成に使えません')}
@@ -2411,15 +2482,17 @@ function tapCard(id,x,y,pt){
       if(w.r!==t.r)toast('同じレアリティの武器だけ素材にできます');
       else if(isEq(id))toast('装備中の武器は素材にできません');
       else if(w.fav)toast('お気に入りの武器は素材にできません（解除すると使えます）');
-      else{A.synMat=id;A.pick=new Set(t.aff.map((_,i)=>'b'+i))}
+      else{A.synMat=id;A.pick=defPick(t,w,synNeed(t,w),t)}
     }
   }
   renderArmory();
 }
 $('slots').onclick=e=>{const b=e.target.closest('[data-slot]');if(!b)return;const i=+b.dataset.slot;A.slot=i;renderTop();if(S.eq[i])openCtx(S.eq[i],e.clientX,e.clientY,e.pointerType&&e.pointerType!=='mouse')};
-$('matrow').onclick=e=>{const b=e.target.closest('[data-mid]');if(!b)return;const id=+b.dataset.mid;if(A.tab==='enh')A.mats.delete(id);else if(A.tab==='evo')A.evoMat=null;else{A.synMat=null;A.pick.clear()}renderArmory()};
-function synNeed(t,m){return Math.min(RAR[t.r].slots,new Set(t.aff.concat(m.aff).map(a=>a.k)).size)}
-$('extra').onclick=e=>{const b=e.target.closest('[data-pick]');if(!b)return;const k=b.dataset.pick,t=byId(A.target),mm=byId(A.synMat),n=synNeed(t,mm);
+$('matrow').onclick=e=>{const b=e.target.closest('[data-mid]');if(!b)return;const id=+b.dataset.mid;if(A.tab==='enh')A.mats.delete(id);else if(A.tab==='evo'){A.evoMat=null;A.pick.clear()}else{A.synMat=null;A.pick.clear()}renderArmory()};
+function defPick(t,m,n,ref){const best={};[...t.aff.map((a,i)=>({key:'b'+i,a})),...m.aff.map((a,i)=>({key:'m'+i,a}))].forEach(p=>{const v=affVal(ref,p.a);if(!best[p.a.k]||v>best[p.a.k].v)best[p.a.k]={key:p.key,v}});
+  let ks=[...new Set(t.aff.map(a=>a.k))];ks=ks.concat(Object.keys(best).filter(k=>!ks.includes(k)).sort((x,y)=>best[y].v-best[x].v)).slice(0,n);return new Set(ks.map(k=>best[k].key))}
+function synNeed(t,m,sl){return Math.min(sl==null?RAR[t.r].slots:sl,new Set(t.aff.concat(m.aff).map(a=>a.k)).size)}
+$('extra').onclick=e=>{const b=e.target.closest('[data-pick]');if(!b)return;const k=b.dataset.pick,t=byId(A.target),dc=A.tab==='evo',mm=byId(dc?A.evoMat:A.synMat),n=synNeed(t,mm,dc?RAR[6].slots:undefined);
   const aOf=key=>(key[0]==='b'?t.aff:mm.aff)[+key.slice(1)];
   if(A.pick.has(k))A.pick.delete(k);
   else if([...A.pick].some(q=>aOf(q).k===aOf(k).k))toast('同じ追加能力は1つまでしか付けられません');
@@ -2434,8 +2507,11 @@ $('actions').onclick=e=>{
   }else if(a==='reset'){A.target=null;A.mats.clear();A.synMat=null;A.evoMat=null;A.pick.clear()}
   else if(a==='unmat'){A.synMat=null;A.pick.clear()}
   else if(a==='evo'){
-    const t=byId(A.target),m=byId(A.evoMat);if(!t||!m||t.r>=4||t.lv<RAR[t.r].cap||m.lv<RAR[m.r].cap)return;
-    const from=RAR[t.r].n;t.r++;t.evo=(t.evo||0)+1;t.xp=0;S.inv=S.inv.filter(w=>w.id!==m.id);A.evoMat=null;save();se('evolve');toast(`進化しました　${from} → ${RAR[t.r].n}`);
+    const t=byId(A.target),m=byId(A.evoMat),nx=evoNext(t);if(!t||!m||!nx||t.lv<RAR[t.r].cap||!evoMatOk(t,m))return;
+    const picks=[...A.pick].map(k=>({...(k[0]==='b'?t.aff:m.aff)[+k.slice(1)]}));if(picks.length!==synNeed(t,m,RAR[6].slots))return;
+    modal(`<h2>デコードしますか？</h2><p>「${esc(t.name)}」をデコードして、真の力を引き出します。</p><p>素材の「${esc(m.name)}」（Lv${m.lv}）はなくなります。</p><p class="small">付ける追加能力：${picks.map(a=>AFFD[a.k].n).join('・')||'なし'}</p>`,[{t:'やめる'},{t:'デコードする',pri:true,fn:()=>{
+      if(!byId(t.id)||!byId(m.id))return;t.r=nx.r;t.gw=0;t.god=1;t.name=nx.name;t.aff=picks;t.xp=0;S.inv=S.inv.filter(w=>w.id!==m.id);A.evoMat=null;A.pick.clear();S.rec.dex[dexKey(t)]=1;save();se('evolve');renderArmory();
+      setTimeout(()=>se('drop',5),900);setTimeout(()=>modal(`<h2 class="godt">デコード完了</h2><div class="drops">${dropHTML(t)}</div><p>真の名が解き放たれた。</p>`,[{t:'閉じる',pri:true}]),30)}}]);
   }
   else if(a==='syn'){
     const t=byId(A.target),m=byId(A.synMat);
