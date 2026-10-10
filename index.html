@@ -1561,7 +1561,7 @@ function dexKey(w){return w.god?'d:'+w.u:w.g?'g:'+w.g:w.gw?'x:'+(w.u?'u:'+w.u:'c
 function freshProg(){return{easy:{maxF:0,lastF:1},normal:{maxF:0,lastF:1},hard:{maxF:0,lastF:1},nightmare:{maxF:0,lastF:1}}}
 function fresh(){return{exp:0,inv:[],eq:[null,null,null,null,null],nid:1,diff:'normal',prog:freshProg(),rec:freshRec(),tut:{stage:'intro'},tseen:{}}}
 function PG(){return S.prog[S.diff]||S.prog.normal}
-const DIFF={easy:{n:'イージー',c:'#3fa9ff',hp:.8,atk:.5,int:1.8,exp:1,desc:'キー入力に慣れていない人向け。1文字打つごとに攻撃でき、言葉を打ち終えるととどめの一撃。短い言葉が中心で、敵の攻撃もゆっくり・弱め。ユニーク武器は出ません。'},
+const DIFF={easy:{n:'イージー',c:'#3fa9ff',hp:.8,atk:.5,int:1.8,exp:1,desc:'キー入力に慣れていない人向け。1文字打つごとに攻撃でき、言葉を打ち終えるととどめの一撃。短い言葉が中心で、敵の攻撃もゆっくり・弱め。レジェンダリーやユニーク武器はめったに出ません。'},
  normal:{n:'ノーマル',c:'#22c55e',hp:1,atk:1,int:1.2,exp:1,desc:'標準の難易度。言葉は最大10文字まで。'},
  hard:{n:'ハード',c:'#ff3b3b',hp:1.5,atk:1.4,int:1.8,exp:1.5,desc:'長い言葉も出題。敵が強い代わりに、高レアリティとユニーク（3%）が出やすく、経験値1.5倍。'},
  nightmare:{n:'ナイトメア',c:'#b04dff',hp:2.4,atk:2.2,int:.72,exp:2.5,desc:''}};
@@ -1577,7 +1577,7 @@ function genAff(n,def,excl){const used=new Set(excl||[]),a=[];
     const d=P[rand(P.length)];used.add(d.k);a.push({k:d.k,v:r1(d.min+Math.random()*(d.max-d.min))})}return a}
 function makeW(o){return{id:S.nid++,t:o.t,r:o.r,f:o.f,lv:1,xp:0,tx:0,name:o.name,sk:o.sk,u:o.u||null,c:o.c||null,g:o.g||null,el:o.el??5,aff:o.g?[]:genAff(RAR[o.r].slots,isDefT(o.t))}}
 function rarW(f,boss,dif){dif=dif||'normal';const t=Math.min(1,Math.max(0,(f-1)/99)),L=(a,b)=>a+(b-a)*t;let u=boss?L(.6,1):L(.3,.9),w=[L(55,10),L(28,24),L(11,30),L(4.5,22),L(1.5,14)];
-  if(dif==='easy'){u=0;w[4]=0}if(dif==='normal')u=0;if(dif==='hard'){u=3;w=[w[0]*.6,w[1],w[2]*1.3,w[3]*1.7,w[4]*2.5]}if(dif==='nightmare'){u=4;w=[w[0]*.3,w[1]*.8,w[2]*1.3,w[3]*2,0];const lg=boss?L(8,12):L(6,9),s4=w.reduce((a,b)=>a+b,0);return w.slice(0,4).map(x=>x/s4*(100-u-lg)).concat(lg,u)}
+  if(dif==='easy'){u=boss?L(.3,1.2):L(.1,.4);w[4]*=.25}if(dif==='normal')u=boss?L(1,3):L(.4,1.5);if(dif==='hard'){u=3;w=[w[0]*.6,w[1],w[2]*1.3,w[3]*1.7,w[4]*2.5]}if(dif==='nightmare'){u=4;w=[w[0]*.3,w[1]*.8,w[2]*1.3,w[3]*2,0];const lg=boss?L(8,12):L(6,9),s4=w.reduce((a,b)=>a+b,0);return w.slice(0,4).map(x=>x/s4*(100-u-lg)).concat(lg,u)}
   const sum=w.reduce((a,b)=>a+b,0);return w.map(x=>x/sum*(100-u)).concat(u)}
 function rollRarity(f,boss,dif){const w=rarW(f,boss,dif);let x=Math.random()*100;for(let i=5;i>=0;i--){if(x<w[i])return i;x-=w[i]}return 0}
 function rollWeapon(f,d,boss){const b=d.base||d;if((B?B.diff:S.diff)==='nightmare'){const r=rollRarity(f,boss,'nightmare');if(r>=5)return gwify(makeW({t:b.ut,r:5,f,name:b.un,sk:b.us,u:b.id}));return glMat(EXPW[r],f)}return rollWeapon0(f,b,boss)}
@@ -2320,8 +2320,9 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='3.0.7-alpha';
+const VERSION='3.0.8-alpha';
 const CHANGELOG=[
+ ['3.0.8-alpha',['イージーでもレジェンダリーとユニーク武器が出るように（めったに出ません）','ノーマルでもユニーク武器が出るように（ハードより出にくめ）','どちらも深い層ほど、またボスほど出やすくなります']],
  ['3.0.7-alpha',['イージーでは、正しいキーを1つ打つごとに敵へダメージを与えるように。言葉を打ち終えると、とどめの一撃が出ます（1回の言葉で与える合計ダメージはこれまでとほぼ同じです）']],
  ['3.0.6-alpha',['「○秒以内に○回攻撃」「○回攻撃ごと」で発動するスキルが、連撃の追加攻撃も1回分として数えるように（発動しやすくなりました）','縺ｪ縺\uFFFD繝医Γ繧｢縺ｮ繝ｬ繧ｸ繧ｧ繝ｳ繝繝ｪ繝ｼ縺ｮ蜃ｺ迴ｾ邇\uFFFD繧剃ｸ九£縺ｾ縺励◆']],
  ['3.0.5-alpha',['称号を一新。称号にフレームと背景がつき、手に入れにくい称号ほど豪華に動くようになりました','ホームの称号をクリックすると、手に入れた称号から好きなものを選んでつけられるように。まだの称号は「？？？」と表示され、選ぶと入手方法がわかります','撃破数・コンボ・打鍵速度・プレイ時間・図鑑・各難易度の100層クリアなど、ランク以外で手に入る称号を追加','称号を手に入れたときに獲得演出が出るように','縺ｾ縺\uFFFD隕九〓遘ｰ蜿ｷ縺後←縺薙°縺ｫ逵\uFFFD縺｣縺ｦ縺\uFFFD繧九\uFFFD\uFFFD']],
@@ -2363,7 +2364,7 @@ function dexPane(e){
     <div class="psec">追加能力</div><div class="small" style="margin-top:4px">${R.slots?`${R.slots}枠（種類はランダム）`:'なし'}</div></div>
   <div><div class="psec">ドロップする敵</div><div style="margin-top:4px">${e.u?`<span class="dxe"><img src="${eSprite(e.gw?nmE(e.d):e.d)}" alt="">${e.boss?'<span class="bs">BOSS</span>':''}${e.gw?nmE(e.d).n:e.d.n}</span>`:'すべての敵'}</div>
     <div class="psec">入手できる階層</div><div style="margin-top:4px">${e.u?floorsOf(e.d.id):'1〜100層（深い層ほど高レアが出やすい）'}</div>
-    <div class="psec">入手率の目安</div><div class="small" style="margin-top:4px">${e.gw?'<span class="glt">\uFFFD\uFFFD\uFFFD</span>':e.u?`撃破時 約${(3*(e.boss?1:.35)).toFixed(2)}%（ハードのみ）`:`ドロップ時 1層 ${(rate(1)/CAT.filter(x=>x.r===e.r).length).toFixed(2)}% → 100層 ${(rate(100)/CAT.filter(x=>x.r===e.r).length).toFixed(2)}%`}</div></div></div>
+    <div class="psec">入手率の目安</div><div class="small" style="margin-top:4px">${e.gw?'<span class="glt">\uFFFD\uFFFD\uFFFD</span>':e.u?`撃破時の目安（1層→100層）<br>${['easy','normal','hard'].map(d=>{const k=e.boss?1:.35,g=f=>(rarW(f,!!e.boss,d)[5]*k).toFixed(2);return `${DIFF[d].n} ${g(1)}%→${g(100)}%`}).join('<br>')}`:`ドロップ時 1層 ${(rate(1)/CAT.filter(x=>x.r===e.r).length).toFixed(2)}% → 100層 ${(rate(100)/CAT.filter(x=>x.r===e.r).length).toFixed(2)}%`}</div></div></div>
   <div class="psec">スキル</div><div class="psk" style="margin-top:2px"><b>${sk.n}</b>${sk.uq?'<span class="uqt">固有</span>':''}${sk.ct?`　CT${sk.ct}秒`:''}<br>${trText(sk.tr)}：${sk.fx.map(f=>fxText(f,smOf(w))).join('、')}</div>`;
 }
 function renderDex(){
