@@ -773,6 +773,7 @@ body.abui .hero .rays{opacity:.25;filter:hue-rotate(240deg) brightness(.5)}
 body.abui #heroSub{color:#b48ae0;letter-spacing:.8em;text-shadow:0 0 10px #6a1aa8}
 body.abui .big.go{height:68px;border-color:#7a2bd6;color:#ecdcff;font-size:22px;background:radial-gradient(ellipse at 50% 120%,rgba(120,30,200,.45),rgba(0,0,0,.6) 70%);text-shadow:0 0 10px #b04dff;animation:abgo 3s ease-in-out infinite}
 @keyframes abgo{50%{box-shadow:0 0 22px rgba(150,40,240,.55),inset 0 0 18px rgba(150,40,240,.35)}}
+.abrun{margin:8px 0 2px;padding:6px 10px;border:2px solid #6a4cff;background:rgba(60,30,140,.35);color:#d9ccff;font-size:13px}.abrun b{color:#fff}.abrun .small{display:block;color:#b9a8ff}
 .abinfo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}.abinfo>div{border:2px solid #3a1060;padding:6px 10px;text-align:center}.abinfo b{display:block;font-size:24px;font-weight:400;color:#d9b8ff;text-shadow:0 0 8px #6a1aa8}.abinfo small{font-size:12px;margin-left:2px;color:var(--dim)}
 .abinfo b.abend{font-size:22px;letter-spacing:.2em;color:#d9b8ff;text-shadow:0 0 12px #7a2bd6;animation:abglow 2s ease-in-out infinite}@keyframes abglow{50%{text-shadow:0 0 18px #b04dff,0 0 4px #fff}}.abinfo b.abend small{display:block;font-size:10px;letter-spacing:.35em;margin:0 0 2px;color:#d9b8ff}
 .abtx{margin:8px 0 0;text-align:center;color:#9a80b8}
@@ -1950,14 +1951,14 @@ $('hSlots').addEventListener('pointerleave',()=>{TIP.classList.remove('on');TIP.
 $('hSlots').addEventListener('click',e=>{const q=e.target.closest('[data-hslot]');if(!q)return;TIP.classList.remove('on');TIP._id=null;
   setTab('equip');A.slot=+q.dataset.hslot;A.sel=q.dataset.hid?+q.dataset.hid:null;A.hover=null;show('armory')});
 function floorInfo(f){const band=Math.min(BOSSES.length-1,Math.floor((f-1)/5)),start=Math.round(band*(NORMALS.length-4)/(BOSSES.length-1));return{band,pool:NORMALS.slice(start,start+4).concat([CUTEN[Math.round(band*(CUTEN.length-1)/(BOSSES.length-1))]]),boss:(f-1)%5===2?CUTEB[band%CUTEB.length]:BOSSES[band]}}
-function renderFInfo(){if(abUI()){const pr=S.prog.abyss;$('fInfo').innerHTML=`<div class="abinfo"><div>${pr.maxF>=ABEND?'<b class="abend"><small>THE END OF ABYSS</small>深 淵 踏 破</b>':`<span class="small">最終到達地点</span><b>第${pr.maxF}層</b>`}</div><div><span class="small">深淵の支配者</span><b>${S.rec.lord||0}<small>体撃破</small></b></div></div><p class="small abtx">果てのない闇の底。倒れても、撤退しても、手にしたものは持ち帰れる。</p>`;$('goBtn').textContent='深淵へ潜る';return}
+function renderFInfo(){if(abUI()){const pr=S.prog.abyss;$('fInfo').innerHTML=`<div class="abinfo"><div>${pr.maxF>=ABEND?'<b class="abend"><small>THE END OF ABYSS</small>深 淵 踏 破</b>':`<span class="small">最終到達地点</span><b>第${pr.maxF}層</b>`}</div><div><span class="small">深淵の支配者</span><b>${S.rec.lord||0}<small>体撃破</small></b></div></div><p class="small abtx">果てのない闇の底。倒れても、踏破しても、手にしたものは持ち帰れる。一時撤退すれば、続きから潜れる。</p>`+(S.abRun?`<div class="abrun">一時撤退中：<b>第${S.abRun.f}層</b>から再開<span class="small">（保留中の武器 ${(S.abRun.drops||[]).length}本・経験値 +${fmt((S.abRun.axp||0)+(S.abRun.gxp||0))}）</span></div>`:'');$('goBtn').textContent=S.abRun?`第${S.abRun.f}層から再開`:'深淵へ潜る';return}
   const fi=floorInfo(selF);
   $('fInfo').innerHTML=`＊ ${selF}層　${selF<=PG().maxF?'クリア済み':'未踏の層'}<br><span class="small">出現：${fi.pool.map(d=>S.diff==='nightmare'?nmE(d).n:d.n).join('・')}<br>ボス：${S.diff==='nightmare'?nmE(fi.boss).n:fi.boss.n}</span>`;
   $('goBtn').textContent=`${DIFF[S.diff].n} ${selF}層へ出撃`;}
 $('diffSel').onclick=e=>{const b=e.target.closest('[data-diff]');if(!b||b.dataset.diff===S.diff)return;S.diff=b.dataset.diff;save();renderHome()};
 $('fgrid').onclick=e=>{const b=e.target.closest('[data-f]');if(!b||b.disabled)return;selF=+b.dataset.f;PG().lastF=selF;
   $('fgrid').querySelectorAll('.sel').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');renderFInfo()};
-$('goBtn').onclick=()=>abUI()?startFloor(1,{diff:'abyss'}):startFloor(selF);
+$('goBtn').onclick=()=>abUI()?(S.abRun?startFloor(S.abRun.f,{diff:'abyss',resume:1}):startFloor(1,{diff:'abyss'})):startFloor(selF);
 document.querySelectorAll('[data-arm]').forEach(b=>b.onclick=()=>{setTab(b.dataset.arm);A.target=null;show('armory');tutTab(b.dataset.arm)});
 
 /* ===== keyboard ===== */
@@ -1996,7 +1997,7 @@ function startFloor(f,opt){if(!document.querySelector('#stage .abvx')){const v=d
   if(dif==='abyss'&&!(opt&&opt.q))q=[abyssEnemy(f)];if(opt&&opt.q)q=opt.q;q=q.map(mp);kbGlitch(false);
   B={opt,abyss:dif==='abyss',axp:0,best0:(S.prog.abyss||{}).maxF||0,diff:(opt&&opt.diff)||S.diff,test:!!(opt&&opt.q),rank0:rankInfo().r,gxp:0,floor:f,q,qi:0,st,hp:st.hp,maxHp:st.hp,shield:0,combo:0,maxCombo:0,keys:0,miss:0,tt:0,chain:0,chainDmg:0,chainT:0,at:[],buffs:[],drops:[],active:false,enemy:null,lt:0,lastWord:null,
      ws:equipped().map(w=>({w,ct:0,cnt:0,el:null}))};
-  PG().lastF=f;lastStep=0;show('battle');mClear();mFocus();playBgm(bgmFor(false));$('stage').classList.toggle('nm',B.diff==='nightmare');$('stage').classList.toggle('ab',B.diff==='abyss');abKb(B.diff==='abyss');if(B.abyss){S.rec.abRuns=(S.rec.abRuns||0)+1;save()}wordNoise(B.diff==='nightmare');renderSnd();LOG.innerHTML='';for(const k in UI)delete UI[k];PARTS.length=0;chainShown=-1;fxCol=null;fxResize();$('pRank').textContent='RANK '+rankInfo().r;renderCombo();$('stage').style.setProperty('--scene',B.abyss?'radial-gradient(ellipse at 50% 38%,#1e0533 0,#0a0114 45%,#000 80%)':SCENES[band]);$('fx').innerHTML='';
+  PG().lastF=f;lastStep=0;show('battle');mClear();mFocus();playBgm(bgmFor(false));$('stage').classList.toggle('nm',B.diff==='nightmare');$('stage').classList.toggle('ab',B.diff==='abyss');abKb(B.diff==='abyss');if(B.abyss){const rr=opt&&opt.resume&&S.abRun;if(rr){B.drops=(rr.drops||[]).slice();B.axp=rr.axp||0;B.gxp=rr.gxp||0;B.best0=rr.best0||0;B.rank0=rr.rank0||B.rank0;B.resumed=1}else S.rec.abRuns=(S.rec.abRuns||0)+1;abPersist(f);save()}$('retreat').textContent=B.abyss?'一時撤退':'撤退';wordNoise(B.diff==='nightmare');renderSnd();LOG.innerHTML='';for(const k in UI)delete UI[k];PARTS.length=0;chainShown=-1;fxCol=null;fxResize();$('pRank').textContent='RANK '+rankInfo().r;renderCombo();$('stage').style.setProperty('--scene',B.abyss?'radial-gradient(ellipse at 50% 38%,#1e0533 0,#0a0114 45%,#000 80%)':SCENES[band]);$('fx').innerHTML='';
   $('wicons').innerHTML='';
   B.ws.forEach(e=>{const d=document.createElement('div');d.className='wi';d.style.setProperty('--rc',RAR[e.w.r].c);
     d.title=`${e.w.name}：${SK[e.w.sk].n}`;d.innerHTML=`${wIcon(e.w)}<span class="ct"></span>`;e.el=d;$('wicons').appendChild(d)});
@@ -2239,11 +2240,11 @@ function enemyDie(){
   const eg=$('eg');eg.className='';void eg.offsetWidth;eg.className='die';
   blog(`${en.d.n}を倒した！`,'dmg');se('kill');
   if(en.gl){$('stage').classList.remove('gl');kbGlitch(B.diff==='nightmare');if(B.diff!=='nightmare')$('stage').classList.remove('gl');if(!S.nm)S.nm=1;S.rec.gk=(S.rec.gk||0)+1;const g=en.d,xp=Math.floor((20*Math.pow(B.floor,1.3)*g.xm+g.xa)*DIFF[B.diff].exp*xpScale(B.floor,B.diff));
-    S.exp+=xp;B.gxp+=xp;const w=glMat(EXPI[g.drop],B.floor);B.drops.push(w);save();pop('+'+fmt(xp)+' EXP','crit',50,Math.max(fxTop+6,30),30);
+    if(!B.abyss)S.exp+=xp;B.gxp+=xp;const w=glMat(EXPI[g.drop],B.floor);B.drops.push(w);save();pop('+'+fmt(xp)+' EXP','crit',50,Math.max(fxTop+6,30),30);
     blog(`経験値を ${fmt(xp)} 獲得！`,'drop big','var(--sel)');setTimeout(()=>se('drop',w.r),250);blog(`★【${RAR[w.r].n}】${w.name}を手に入れた！`,'drop big',RAR[w.r].c);nextEnemy();return}
-  if(Math.random()<(en.boss?1:.35)){const w=B.abyss?abyssDrop(B.floor,en.lord?BOSSES[rand(BOSSES.length)]:en.d,en.boss):rollWeapon(B.floor,en.d,en.boss);B.drops.push(w);if(B.abyss)abKeep(w);setTimeout(()=>se('drop',w.r),250);blog(`${w.r>=4?'★':''}【${RAR[w.r].n}】${w.name}を手に入れた！`,'drop'+(w.r>=4?' big':''),RAR[w.r].c)}
-  if(B.abyss){const xp=Math.round(clearXP(B.floor,'abyss')*(en.lord?3:en.boss?.6:.2));S.exp+=xp;B.axp+=xp;pop('+'+fmt(xp)+' EXP','crit',50,Math.max(fxTop+6,30),22);
-    if(en.lord){S.rec.lord=(S.rec.lord||0)+1;const pct=en.fin?100:Math.min(30,3*Math.floor(B.floor/50));if(Math.random()*100<pct){const g=voidWeapon(en.fin?6:Math.max(0,Math.min(6,Math.floor(B.floor/100)-4)));B.drops.push(g);abKeep(g);setTimeout(()=>se('drop',6),400);blog(`◉【ゴッド】${g.name}を手に入れた！`,'drop big',RAR[6].c)}}save()}
+  if(Math.random()<(en.boss?1:.35)){const w=B.abyss?abyssDrop(B.floor,en.lord?BOSSES[rand(BOSSES.length)]:en.d,en.boss):rollWeapon(B.floor,en.d,en.boss);B.drops.push(w);setTimeout(()=>se('drop',w.r),250);blog(`${w.r>=4?'★':''}【${RAR[w.r].n}】${w.name}を手に入れた！`,'drop'+(w.r>=4?' big':''),RAR[w.r].c)}
+  if(B.abyss){const xp=Math.round(clearXP(B.floor,'abyss')*(en.lord?3:en.boss?.6:.2));B.axp+=xp;pop('+'+fmt(xp)+' EXP','crit',50,Math.max(fxTop+6,30),22);
+    if(en.lord){S.rec.lord=(S.rec.lord||0)+1;const pct=en.fin?100:Math.min(30,3*Math.floor(B.floor/50));if(Math.random()*100<pct){const g=voidWeapon(en.fin?6:Math.max(0,Math.min(6,Math.floor(B.floor/100)-4)));B.drops.push(g);setTimeout(()=>se('drop',6),400);blog(`◉【ゴッド】${g.name}を手に入れた！`,'drop big',RAR[6].c)}}if(!en.fin)abPersist(B.floor+1);save()}
   if(B.abyss&&en.fin){S.rec.abClear=(S.rec.abClear||0)+1;const pr=S.prog.abyss;pr.maxF=Math.max(pr.maxF,ABEND);save();const ref=B;setTimeout(()=>{if(B===ref)abyssEnd('clear')},1200);return}
   nextEnemy();
 }
@@ -2256,7 +2257,10 @@ function abyssDrop(f,d,boss){f=Math.min(100,f);const b=d.base||d;
   if(d.nm){const r=rollRarity(f,boss,'nightmare');return r>=5?gwify(makeW({t:b.ut,r:5,f,name:b.un,sk:b.us,u:b.id})):glMat(EXPW[r],f)}
   const r=rollRarity(f,boss,'hard');if(r===5)return makeW({t:b.ut,r:5,f,name:b.un,sk:b.us,u:b.id});const L=CAT.filter(e=>e.r===r),e=L[rand(L.length)];return makeW({t:e.t,r,f,el:e.el,name:e.name,sk:e.sk,c:e.c})}
 function abKeep(w){S.inv.push(w);S.rec.dex[dexKey(w)]=1;if(w.u&&!w.god&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)}
-function abyssEnd(kind){if(!B||B.ended)return;const b=B;b.ended=1;b.active=false;W=null;renderWord();kbGlitch(false);wordNoise(false);abKb(false);abEnd(false);playBgm(null);se(kind==='dead'?'lose':'clear');if(kind==='clear')setTimeout(()=>se('drop',6),500);commitRec();
+function abPersist(f){if(!B||!B.abyss||B.test)return;S.abRun={f,drops:B.drops,axp:B.axp,gxp:B.gxp,best0:B.best0,rank0:B.rank0}}
+function abSuspend(){if(!B||B.ended)return;const b=B;b.ended=1;b.active=false;W=null;renderWord();kbGlitch(false);wordNoise(false);abKb(false);abEnd(false);playBgm(null);commitRec();abPersist(b.floor);save();
+  modal(`<h2 class="rh2 abh">一時撤退</h2><p class="rline">次回の出撃は <b class="rxp">第${b.floor}層</b> から再開できます。<br>保留中の戦利品：武器 <b class="rxp">${b.drops.length}本</b>・経験値 <b class="rxp">+${fmt(b.axp+b.gxp)}</b></p><p class="small rline">戦利品は、再開したあと深淵に倒れるか、踏破したときにまとめて受け取れます。</p>`,[{t:'拠点へ',key:'f',pri:true,fn:()=>show('home')}])}
+function abyssEnd(kind){if(!B||B.ended)return;const b=B;b.ended=1;if(!b.test&&kind!=='retreat'){b.drops.forEach(abKeep);S.exp+=b.axp+b.gxp;S.abRun=null}b.active=false;W=null;renderWord();kbGlitch(false);wordNoise(false);abKb(false);abEnd(false);playBgm(null);se(kind==='dead'?'lose':'clear');if(kind==='clear')setTimeout(()=>se('drop',6),500);commitRec();
   const pr=S.prog.abyss,best=pr.maxF,nr=best>b.best0;save();const after=rankInfo().r,before=b.rank0||after,so=slotsOpen(before),sn=slotsOpen(after);
   let h=kind==='clear'?`<div class="abclr"><i></i><div class="small">THE END OF ABYSS</div><h2 class="rh2 abh">深 淵 踏 破</h2><p class="small">第999層を越え、深淵の支配者を討ち果たした。</p></div>`:`<h2 class="rh2 abh">${kind==='dead'?'深淵に呑まれた……':'深淵から帰還した'}</h2>`;
   if(after>before)h+=`<div class="rankup"><b>RANK UP!</b>　ランク ${before} → ${after}${sn>so?`<div class="small">装備スロットが${sn}つに増えました</div>`:''}</div>`;
@@ -2265,7 +2269,7 @@ function abyssEnd(kind){if(!B||B.ended)return;const b=B;b.ended=1;b.active=false
   h+=L.length?`<div class="mlab rlab">持ち帰った武器（${L.length}本）<span class="small">カーソルで詳細</span></div><div class="agrid">${L.map(w=>`<div class="agw" data-wid="${w.id}" style="--rc:${RAR[w.r].c}">${wIcon(w)}</div>`).join('')}</div>`:'<p class="small rline">持ち帰った武器はありません</p>';
   h+=statsHTML(true);
   modal(h,[{t:'拠点へ',key:'f',fn:()=>show('home')},{t:'もう一度潜る',key:' ',pri:true,fn:()=>startFloor(1,{diff:'abyss'})}])}
-function nextEnemy(){const ref=B,wasGl=B.enemy&&B.enemy.gl;setTimeout(()=>{if(B!==ref)return;if(B.abyss){const pr=S.prog.abyss;if(B.floor>pr.maxF)pr.maxF=B.floor;B.floor++;B.q.push(abyssEnemy(B.floor));save()}B.qi++;if(B.qi>=B.q.length)floorClear();
+function nextEnemy(){const ref=B,wasGl=B.enemy&&B.enemy.gl;setTimeout(()=>{if(B!==ref)return;if(B.abyss){const pr=S.prog.abyss;if(B.floor>pr.maxF)pr.maxF=B.floor;B.floor++;B.q.push(abyssEnemy(B.floor));abPersist(B.floor);save()}B.qi++;if(B.qi>=B.q.length)floorClear();
   else if(B.q[B.qi].boss){if(!B.abyss&&!B.glDone&&!B.test&&!B.q[B.qi].gl){const g=glPick(true,B.diff);if(g){B.glDone=1;B.q.splice(B.qi,0,{d:g,boss:true,gl:true})}}bossAlert()}
   else{if(wasGl)playBgm(bgmFor(false));spawn()}},750)}
 function glFlee(){const en=B.enemy;if(!en||en.dead)return;en.dead=true;B.active=false;W=null;renderWord();if(B.diff!=='nightmare')$('stage').classList.remove('gl');kbGlitch(B.diff==='nightmare');
@@ -2334,7 +2338,7 @@ function defeat(){if(B&&B.abyss)return abyssEnd('dead');
   modal(`<h2>力尽きた…</h2><p>${B.floor}層で倒れました。この層で拾った武器は失われます。</p>`+statsHTML()+`<p>武器を強化・合成して、もう一度挑もう。</p>`,[{t:'拠点へ',key:'f',fn:()=>show('home')},{t:'もう一度',key:' ',pri:true,fn:(f=>()=>startFloor(f,ro))(B.floor)}]);
 }
 $('retreat').onclick=()=>{if(!B||B.alerting)return;const was=B.active;B.active=false;
-  if(B.abyss)return modal('<h2>帰還する？</h2><p>ここまでに手に入れた武器と経験値は持ち帰れます。</p>',[{t:'続ける',fn:()=>{if(B&&was)B.active=true}},{t:'帰還する',pri:true,fn:()=>abyssEnd('retreat')}]);
+  if(B.abyss){if(B.ended||(B.enemy&&B.enemy.dead&&B.enemy.fin)){if(was)B.active=true;return}return modal(`<h2>一時撤退する？</h2><p>次回の出撃で、今いる第${B.floor}層から続きを始められます。</p><p class="small">ここまでの戦利品は保留になり、再開したあと倒れるか踏破したときに、まとめて受け取れます。</p>`,[{t:'続ける',fn:()=>{if(B&&was)B.active=true}},{t:'一時撤退',pri:true,fn:()=>abSuspend()}])}
   modal('<h2>撤退する？</h2><p>この層で拾った武器は持ち帰れません。</p>',[{t:'続ける',fn:()=>{if(B&&was)B.active=true}},{t:'撤退する',pri:true,fn:retreatResult}])};
 function retreatResult(){
   if(!B)return;const ro=B.opt;W=null;renderWord();commitRec();PG().lastF=B.floor;save();
@@ -2378,7 +2382,7 @@ const CL={db:null,uid:null,ready:false,pid:null,name:null,timer:null,writing:fal
 try{const ss=JSON.parse(localStorage.getItem('td_session')||'null');if(ss&&ss.pid){CL.pid=ss.pid;CL.name=ss.name}}catch(e){}
 function curKey(){return CL.pid?'td_save_'+CL.pid:SAVE_KEY}
 function pref(pid){return CL.db.doc(`data/users/${CL.uid}/p_${pid}`)}
-function adopt(d){S=Object.assign(fresh(),d);if(!d.tut)S.tut={stage:((d.exp||0)>0||(d.maxF||0)>0||(d.prog&&Object.values(d.prog).some(x=>x.maxF>0)))?'done':'intro'};if(!d.prog){S.prog=freshProg();S.prog.normal={maxF:d.maxF||0,lastF:d.lastF||1}}S.prog=Object.assign(freshProg(),S.prog);if(!DIFF[S.diff]||(S.diff==='nightmare'&&!S.nm))S.diff='normal';if(S.diff==='abyss'&&!(S.titles||[]).includes('xn100')&&!S.abOpen)S.diff='normal';S.rec=Object.assign(freshRec(),d.rec||{});S.rec.dex=Object.assign({},S.rec.dex||{});for(const k in GMAP)if(S.rec.dex['g:'+k])S.rec.dex['g:'+GMAP[k]]=1;S.inv.forEach(w=>{migrateW(w);if(w.u&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u);S.rec.dex[dexKey(w)]=1});S.rec.uniq.forEach(u=>S.rec.dex['u:'+u]=1)}
+function adopt(d){S=Object.assign(fresh(),d);if(!d.tut)S.tut={stage:((d.exp||0)>0||(d.maxF||0)>0||(d.prog&&Object.values(d.prog).some(x=>x.maxF>0)))?'done':'intro'};if(!d.prog){S.prog=freshProg();S.prog.normal={maxF:d.maxF||0,lastF:d.lastF||1}}S.prog=Object.assign(freshProg(),S.prog);if(!DIFF[S.diff]||(S.diff==='nightmare'&&!S.nm))S.diff='normal';if(S.diff==='abyss'&&!(S.titles||[]).includes('xn100')&&!S.abOpen)S.diff='normal';S.rec=Object.assign(freshRec(),d.rec||{});S.rec.dex=Object.assign({},S.rec.dex||{});for(const k in GMAP)if(S.rec.dex['g:'+k])S.rec.dex['g:'+GMAP[k]]=1;S.inv.forEach(w=>{migrateW(w);if(w.u&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u);S.rec.dex[dexKey(w)]=1});S.rec.uniq.forEach(u=>S.rec.dex['u:'+u]=1);if(S.abRun&&S.abRun.drops)S.abRun.drops.forEach(migrateW)}
 function newGame(){S=fresh();const w=makeW({t:0,r:0,f:1,name:'旅立ちの短剣',sk:CATI.c0_0_0.sk,c:'c0_0_0'});S.inv.push(w);S.eq[0]=w.id;S.rec.dex[dexKey(w)]=1}
 function readLocal(key){try{const d=JSON.parse(localStorage.getItem(key));if(d&&Array.isArray(d.inv))return d}catch(e){}return null}
 async function hashPw(pass,salt){const enc=new TextEncoder(),k=await crypto.subtle.importKey('raw',enc.encode(pass),'PBKDF2',false,['deriveBits']);
@@ -2560,10 +2564,10 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='2.0.6-beta';
+const VERSION='2.0.7-beta';
 function clogOpen(k){return k==='nm'?!!(S&&S.nm):k==='ab'?(typeof abOpen==='function'&&abOpen()):false}
 const CHANGELOG=[
- ['2.0.6-beta',['「○コンボごと」で発動するスキルの必要コンボ数を、最大16コンボまでに引き下げ（そのぶん一部のスキルの効果量を調整）']],['2.0.5-beta',["スキルの発動条件「ノーミスで○語」を廃止し、「○コンボごと」に統合（必要なコンボ数を大きく下げ、条件が厳しいぶん性能を高めに）", "すべてのユニーク武器に、ほかと被らない固有スキルを設定", "発動条件とCTがまったく同じスキルをなくし、完全な下位互換になるスキルがないように調整", "効果の多いスキルほど1つ1つの効果は控えめに、効果が1つだけのスキルほど強力に", "被ダメージ時に発動するスキルは、CTを長く・効果を控えめに統一", "新しいスキル効果「防御UP」（一定時間、受けるダメージを軽減）を追加", "新スキル「一閃」「疾風」「硬化」「不屈の構え」「受け流し」を追加", "追撃にも会心が出るように。追撃は連撃よりも合計ダメージが高くなるように調整", "連撃は、レアリティが上がると回数だけでなく1発の威力も上がるように", "スキル「連撃」（効果は追撃）の名前を「速攻」に変更"]],['2.0.4-beta',['サイトを開いたときや再読み込みしたときに、拠点のモードに合ったBGMが流れるように']],['2.0.3-beta',['ホーム画面の称号を、名前の下の行に固定して表示するように','ランクの王冠マークは、ランク999に到達したときだけ表示されるように']],
+ ['2.0.7-beta',[{t:'■■■モードの撤退を「一時撤退」に変更。中断した■から、次回続きを■■できるように',u:'アビスモードの撤退を「一時撤退」に変更。中断した層から、次回続きを再開できるように',k:'ab'},{t:'一時撤退中の■■■は保留になり、再開後に■れるか■■したときにまとめて受け取れるように',u:'一時撤退中の戦利品は保留になり、再開後に倒れるか踏破したときにまとめて受け取れるように',k:'ab'},{t:'一時撤退の■■も、引継ぎで■■に引き継がれるように',u:'一時撤退の状態も、引継ぎで別の端末に引き継がれるように',k:'ab'}]],['2.0.6-beta',['「○コンボごと」で発動するスキルの必要コンボ数を、最大16コンボまでに引き下げ（そのぶん一部のスキルの効果量を調整）']],['2.0.5-beta',["スキルの発動条件「ノーミスで○語」を廃止し、「○コンボごと」に統合（必要なコンボ数を大きく下げ、条件が厳しいぶん性能を高めに）", "すべてのユニーク武器に、ほかと被らない固有スキルを設定", "発動条件とCTがまったく同じスキルをなくし、完全な下位互換になるスキルがないように調整", "効果の多いスキルほど1つ1つの効果は控えめに、効果が1つだけのスキルほど強力に", "被ダメージ時に発動するスキルは、CTを長く・効果を控えめに統一", "新しいスキル効果「防御UP」（一定時間、受けるダメージを軽減）を追加", "新スキル「一閃」「疾風」「硬化」「不屈の構え」「受け流し」を追加", "追撃にも会心が出るように。追撃は連撃よりも合計ダメージが高くなるように調整", "連撃は、レアリティが上がると回数だけでなく1発の威力も上がるように", "スキル「連撃」（効果は追撃）の名前を「速攻」に変更"]],['2.0.4-beta',['サイトを開いたときや再読み込みしたときに、拠点のモードに合ったBGMが流れるように']],['2.0.3-beta',['ホーム画面の称号を、名前の下の行に固定して表示するように','ランクの王冠マークは、ランク999に到達したときだけ表示されるように']],
  ['2.0.2-beta',[{t:'■■■モードの拠点・■■の■■■戦・■■の■■に専用BGMを追加',u:'アビスモードの拠点画面・深淵の支配者戦・深淵の果ての決戦に専用BGMを追加',k:'ab'},{t:'“■■の■■”の決戦の演出を強化',u:'深淵の果ての決戦に、専用の背景と、出題の文字やキーが青い炎に包まれる演出を追加',k:'ab'},{t:'■■■■を果たした者の■■■拠点は、姿を変える',u:'深淵踏破後は、アビスの拠点画面が青い炎を基調としたテーマに変わるように',k:'ab'},{t:'とある称号の見た目を特別仕様に',u:'称号「深淵の果てに至りし者」の見た目を特別仕様に（燃え盛る青い炎）',k:'ab'},'更新情報で、解放したモードに関する伏せ字が読めるように']],
  ['2.0.1-beta',[{t:'■■■モードの■■■層以降の強さを調整し、“■■の■■”を設定。最強の装備と腕があれば、たどり着けるかもしれない――',u:'アビスモードの101層以降の強さを調整し、999層の先に“深淵の果て”を設定。最強の装備と腕があれば、たどり着けるかもしれない――',k:'ab'},'追加能力が理論値（最大値）のとき、詳細画面で数値を黄色で表示するように','武器一覧の「全スキル」の絞り込みに「経験値」を追加',{t:'■■■モードの最終到達地点の表示を調整',u:'アビスモードの最終到達地点の表示を調整（踏破後は「深淵踏破」と表示）',k:'ab'},{t:'■■■モードの深層の道中の敵を少し柔らかく調整',u:'アビスモード501層以降の、深淵の支配者以外の敵のHPを少しずつ下げるように（999層で半分）',k:'ab'},{t:'“■■の■■■”が落とす武器は、深い層ほど■■■■の追加能力が増えるように',u:'“深淵の支配者”が落とす武器は、500層から100層ごとに理論値の追加能力が1つずつ増えるように（深淵の果てでは確定ドロップ・すべて理論値）',k:'ab'},'シールドの上限を最大HPと同じに（下方修正）',{t:'■■■モードに■■■■■■も現れるように。倒した敵の種類によって、手に入る武器が変わります',u:'アビスモードにグリッチモンスターも現れるように。通常モンスターはハード、グリッチモンスターはナイトメアと同じドロップになります',k:'ab'},{t:'■■■モードの敵の攻撃力が、深く進むほど大きく伸びるように',u:'アビスモードの敵の攻撃力が、深く進むほど大きく伸びるように',k:'ab'}]],
  ['2.0.0-beta',[{t:'ついにバージョン2.0！ 新しいモード「■■■モード」を追加しました。ある■■を手にした者の前にだけ、■■が開きます',u:'ついにバージョン2.0！ 新しいモード「アビスモード」を追加しました。称号「悪夢を喰らう者」を手にした者の前にだけ、アビスゲートが開きます',k:'ab'},{t:'■■■モードは終わりのない無限のダンジョン。進むほど敵は強くなり、倒れても撤退しても、それまでに手に入れた武器と経験値は持ち帰れます',u:'アビスモードは終わりのない無限のダンジョン。進むほど敵は強くなり、倒れても撤退しても、それまでに手に入れた武器と経験値は持ち帰れます',k:'ab'},{t:'■■の奥、■■層ごとに“■■の■■■”が待つという。■%の確率で、見たこともない■■■武器を落とすらしい――',u:'深淵の奥、50層ごとに“深淵の支配者”が待つ。深く潜るほど高い確率で、専用のゴッド武器「深淵王杖「ヴォイド・レクイエム」」を落とす',k:'ab'},{t:'新しい称号を■つ追加',u:'新しい称号を4つ追加（深淵を覗く者／奈落の踏破者／深淵を統べる者／虚無の継承者）',k:'ab'},'リザルト画面で武器にカーソルを合わせると、その武器の詳細を確認できるように（スマホはタップ）','リザルト画面でドロップした武器が多いときは、アイコンを並べて表示し、その部分だけスクロールできるように']]
