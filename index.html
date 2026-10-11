@@ -645,6 +645,8 @@ body.nmui #home.burst .hscroll{transform:translateX(-5px) skewX(2deg);filter:hue
 .wc.mini::after{content:"×";position:absolute;top:-2px;right:2px;font-size:12px;color:var(--fg);z-index:7}
 .actions.sep{margin-top:6px;padding-top:12px;border-top:2px solid var(--faint)}
 #extra .daff{margin-top:2px;margin-bottom:6px}
+.wc img,.slot img,.ghost img{-webkit-user-drag:none;user-select:none}
+.dsplit{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:2px 0 6px}.dcol{min-width:0;border:2px dashed var(--dim);padding:6px}.dcol.on{border:2px solid var(--sel)}.dcol .dh{font-size:12px;color:var(--dim);margin-bottom:4px}.dcol.on .dh{color:var(--sel)}#extra .dcol .daff{margin:0;flex-direction:column;align-items:stretch}.dcol .chip{text-align:left;justify-content:flex-start}
 .wc .fvb{position:absolute;top:0;right:2px;font-size:12px;color:#ffd23a;z-index:6;text-shadow:0 1px 0 #000}
 .tools .favf{border-color:#ffd23a;color:#ffd23a;opacity:.4}
 .tools .favf.on{opacity:1}
@@ -722,6 +724,26 @@ body.nmui #home.burst .hscroll{transform:translateX(-5px) skewX(2deg);filter:hue
 .ttl.lock{--a:#555;color:#777;border-style:dashed}.ttl.lock>.tb{background:#16161b}
 .ttl.big{font-size:22px;padding:8px 26px}
 .ttl.big.s5,.ttl.big.s6,.ttl.big.sgod,.ttl.big.snm{padding:10px 28px}
+
+/* 最高位称号 */
+.ttl.smax{--a:#fff6c8;border:0;padding:6px 22px;color:#fff;letter-spacing:.14em;animation:tmaxg 3s linear infinite,tfloat 3s ease-in-out infinite}
+.ttl.smax::before{content:"";position:absolute;left:50%;top:50%;width:700px;height:700px;margin:-350px 0 0 -350px;z-index:-3;background:conic-gradient(#ffd43b,#fff,#ff5a5a,#ffd43b,#c77dff,#3fa9ff,#fff,#3dff6e,#ffd43b);animation:spin 1.6s linear infinite}
+.ttl.smax>.tb{inset:3px;border-radius:4px;z-index:-2;background:radial-gradient(1px 1px at 12% 30%,#fff,transparent),radial-gradient(1px 1px at 70% 70%,#fff,transparent),radial-gradient(1px 1px at 40% 80%,#ffe9a0,transparent),radial-gradient(1.5px 1.5px at 88% 25%,#fff,transparent),linear-gradient(120deg,#120a00,#2a1800 30%,#0a0614 55%,#22102e 80%,#120a00);background-size:100% 100%,100% 100%,100% 100%,100% 100%,300% 100%;animation:tmaxbg 6s linear infinite}
+.ttl.smax .tm1,.ttl.smax .tm2{position:absolute;inset:3px;border-radius:4px;z-index:-1;pointer-events:none}
+.ttl.smax .tm1{background:linear-gradient(100deg,transparent 30%,rgba(255,240,180,.55) 45%,rgba(255,255,255,.9) 50%,rgba(255,240,180,.55) 55%,transparent 70%);background-size:300% 100%;animation:barshine 1.8s linear infinite;mix-blend-mode:screen}
+.ttl.smax .tm2{box-shadow:inset 0 0 10px rgba(255,212,59,.8),inset 0 0 2px #fff}
+.ttl.smax>b{color:transparent;background:linear-gradient(90deg,#fff,#ffe9a0,#ffd43b,#fff,#ffb0f0,#b0e0ff,#fff);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;animation:tgold 2s linear infinite;filter:drop-shadow(0 0 4px rgba(255,212,59,.9)) drop-shadow(0 0 10px rgba(255,120,200,.5))}
+.ttl.smax>b em{-webkit-text-fill-color:#ffd43b;color:#ffd43b;font-size:.9em;display:inline-block;animation:tcrown 1.6s ease-in-out infinite}
+.ttl.smax .sp{width:5px;height:5px;box-shadow:0 0 8px 3px #ffd43b;animation-duration:1.2s}
+@keyframes tmaxg{0%,100%{box-shadow:0 0 14px #ffd43b,0 0 30px rgba(255,90,90,.6)}33%{box-shadow:0 0 18px #fff,0 0 34px rgba(63,169,255,.7)}66%{box-shadow:0 0 14px #ffd43b,0 0 34px rgba(199,125,255,.7)}}
+@keyframes tmaxbg{to{background-position:0 0,0 0,0 0,0 0,-300% 0}}
+@keyframes tfloat{50%{transform:translateY(-1px)}}
+@keyframes tcrown{50%{transform:translateY(-2px) scale(1.15)}}
+.ttl.big.smax{padding:12px 32px;font-size:26px}
+.tget.g8 .tgrays{opacity:.7;background:repeating-conic-gradient(#ffd43b 0 4deg,transparent 4deg 10deg,#fff 10deg 13deg,transparent 13deg 20deg,#ff5a5a 20deg 24deg,transparent 24deg 30deg,#c77dff 30deg 34deg,transparent 34deg 40deg);animation:spin 5s linear infinite,tfade 1s both}
+.tget.g8::after{content:"";position:absolute;inset:0;z-index:4;background:#fff;pointer-events:none;animation:tflash 1s .1s both}
+.tget.g8{background:radial-gradient(ellipse at 50% 55%,rgba(255,212,59,.35),transparent 65%)}
+.tget.g8 .tglab{color:#ffd43b;letter-spacing:4px;font-size:15px}
 /* 称号一覧 */
 .tinfo{min-height:52px;margin:6px 0 10px;padding:8px 10px;border-radius:6px;background:#15151c;border:1px solid #333;font-size:13px;text-align:left}
 .tinfo b{display:block;font-size:14px;margin-bottom:2px}
@@ -762,6 +784,7 @@ body.nmui #home.burst .hscroll{transform:translateX(-5px) skewX(2deg);filter:hue
 .rdrops .drop .e{width:32px;height:32px;flex:0 0 32px}.rdrops .drop .gt{font-size:11px;top:2px;right:4px}.nmbon .drop .e{width:36px;height:36px;flex:0 0 36px}.nmbon .drop{padding:4px 10px}
 #mbox:has(.rh2){max-height:94vh;padding:14px 18px}
 @keyframes nmbIn{from{transform:scale(.6);opacity:0}}@keyframes nmbGlow{50%{text-shadow:0 0 12px var(--sel)}}
+.nmhint{text-align:center;padding:6px 0}.nmhint h2{letter-spacing:6px;animation:tgl 1.8s steps(1) infinite}.nmhint p{margin:8px 0}
 .tmore{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:12px}
 .tmore .ttl{font-size:12px}
 
@@ -948,6 +971,8 @@ button.chip.dis{opacity:.3;text-decoration:line-through}
 .armbtns{container-type:inline-size}.armbtns.four .big{font-size:clamp(11px,4.2cqi,18px);letter-spacing:.02em;padding:0 2px;white-space:nowrap;overflow:hidden}
 #tabs{container-type:inline-size}#tabs button{min-width:0;white-space:nowrap;overflow:hidden;padding-left:2px;padding-right:2px;font-size:clamp(11px,3.5cqi,18px)}
 @media (max-width:560px){#tabs button{letter-spacing:0}}
+#tabs button.on::before{content:"▶";font-size:.6em;margin-right:2px;letter-spacing:0;vertical-align:.15em}
+.armbtns.four .big:hover::before,.armbtns.four .big:focus-visible::before{left:3px;font-size:.5em;top:50%;transform:translateY(-50%)}
 .wc.mini .lv{font-size:9px;letter-spacing:-.02em}
 .actions .btn{white-space:nowrap}
 .cmd button{min-width:0}
@@ -1382,17 +1407,17 @@ NORMALS.forEach((d,i)=>d.px=Math.round(12+i*52/(NORMALS.length-1)));CUTEN.forEac
 const GLITCH=[
  {id:'g1',e:'💧',n:'繝後Ν繧ｹ繝ｩ繧､繝',px:22,hp:8,flee:9,xm:10,xa:200,drop:'e2',gl:1},
  {id:'g2',e:'🌀',n:'縺ｯ縺舌ｌ繝昴う繝ｳ繧ｿ',px:26,hp:12,flee:8,xm:30,xa:1000,drop:'e3',gl:1},
- {id:'g3',e:'🦠',e2:'👑',n:'繧ｪ繝ｼ繝舌\uFFFDｼ繝輔Ο繝ｼ邇\uFFFD',px:72,hp:28,flee:15,xm:100,xa:5000,drop:'e4',gl:1,boss:1}];
+ {id:'g3',e:'🦠',e2:'👑',n:'繧ｪ繝ｼ繝舌\uFFFDｼ繝輔Ο繝ｼ繧ｭ繝ｳ繧ｰ',px:72,hp:28,flee:15,xm:100,xa:5000,drop:'e4',gl:1,boss:1}];
 const GLI=Object.fromEntries(GLITCH.map(g=>[g.id,g]));
 const EXPW=[
  {id:'e0',r:0,t:0,wn:'邨碁ｨ薙\uFFFDｮ邊\uFFFD',skn:'縺｡縺\uFFFD縺輔↑險俶\uFFFDｶ',mexp:3000},
  {id:'e1',r:1,t:4,wn:'邨碁ｨ薙\uFFFDｮ遐\uFFFD',skn:'縺九☆縺九↑險俶\uFFFDｶ',mexp:8000},
  {id:'e2',r:2,t:0,wn:'谺迚\uFFFD縺ｮ蜑｣',skn:'邨碁ｨ薙ｒ蝟ｰ繧峨≧',mexp:20000},
  {id:'e3',r:3,t:5,wn:'邨先匕縺ｮ譚\uFFFD',skn:'險俶\uFFFDｶ縺ｮ譁ｭ迚\uFFFD',mexp:60000},
- {id:'e4',r:4,t:1,wn:'譬ｸ縺ｮ螟ｧ蜑｣',skn:'縺ｬ繧九⊃',mexp:200000}];
+ {id:'e4',r:4,t:1,wn:'譬ｸ縺ｮ螟ｧ蜑｣',skn:'縺ｬ繧九⊃',mexp:120000}];
 const EXPI=Object.fromEntries(EXPW.map(e=>[e.id,e])),GMAP={g1:'e3',g2:'e4',g3:'e4'};
 EXPW.forEach(e=>{e.src=GLITCH.find(g=>g.drop===e.id)||null;SK['g_'+e.id]={n:e.skn,uq:true,tr:{type:'mat'},ct:0,fx:[{t:'mat',v:e.mexp}]}});
-function glPick(boss,dif){const r=Math.random();if(boss)return (dif==='hard'||dif==='nightmare')&&r<.015?GLI.g3:null;if(dif!=='easy'&&r<.006)return GLI.g2;return r<.026?GLI.g1:null}
+function glPick(boss,dif){const r=Math.random();if(boss)return (dif==='hard'||dif==='nightmare')&&r<.005?GLI.g3:null;if(dif!=='easy'){if(r<.01)return GLI.g2;return r<.03?GLI.g1:null}return r<.02?GLI.g1:null}
 const GJ='繝繧縺螟蜑譁邨碁ｨ薙ｒ謨ｵ迚遘峨ｹｼｸﾞｮ\uFFFD';
 function garble(s,p){let h=hashS(s+'#'),o='';for(const c of s){h=Math.imul(h^c.charCodeAt(0),16777619)>>>0;o+=(h%1000)/1000<p?GJ[(h>>>10)%GJ.length]:c}if(o===s&&p>0&&s.length){const a=[...s],i=hashS(s)%a.length;a[i]=GJ[hashS(s+'!')%GJ.length];o=a.join('')}return o}
 const NME={};function nmE(d){return d.nm||d.gl?d:(NME[d.id]||(NME[d.id]=Object.assign({},d,{id:'n_'+d.id,n:garble(d.n,.5),nm:true,base:d})))}
@@ -1615,8 +1640,8 @@ function genAff(n,def,excl){const used=new Set(excl||[]),a=[];
     const d=P[rand(P.length)];used.add(d.k);a.push({k:d.k,v:r1(d.min+Math.random()*(d.max-d.min))})}return a}
 function makeW(o){return{id:S.nid++,t:o.t,r:o.r,f:o.f,lv:1,xp:0,tx:0,name:o.name,sk:o.sk,u:o.u||null,c:o.c||null,g:o.g||null,el:o.el??5,aff:o.g?[]:genAff(RAR[o.r].slots,isDefT(o.t))}}
 function rarW(f,boss,dif){dif=dif||'normal';const t=Math.min(1,Math.max(0,(f-1)/99)),L=(a,b)=>a+(b-a)*t;let u=boss?L(.6,1):L(.3,.9),w=[L(55,10),L(28,24),L(11,30),L(4.5,22),L(1.5,14)];
-  if(dif==='easy'){u=boss?L(.3,1.2):L(.1,.4);w[4]*=.25}if(dif==='normal')u=boss?L(1,3):L(.4,1.5);if(dif==='hard'){u=3;w=[w[0]*.6,w[1],w[2]*1.3,w[3]*1.7,w[4]*2.5]}if(dif==='nightmare'){u=4;w=[w[0]*.3,w[1]*.8,w[2]*1.3,w[3]*2,0];const lg=boss?L(8,12):L(6,9),s4=w.reduce((a,b)=>a+b,0);return w.slice(0,4).map(x=>x/s4*(100-u-lg)).concat(lg,u)}
-  const sum=w.reduce((a,b)=>a+b,0);return w.map(x=>x/sum*(100-u)).concat(u)}
+  if(dif==='easy'){u=1;w[4]*=.25}if(dif==='normal')u=2;if(dif==='hard'){u=3;w=[w[0]*.6,w[1],w[2]*1.3,w[3]*1.7,w[4]*2.5]}if(dif==='nightmare'){u=3;w=[w[0]*.3,w[1]*.8,w[2]*1.3,w[3]*2,0];const lg=L(3,6),s4=w.reduce((a,b)=>a+b,0);return w.slice(0,4).map(x=>x/s4*(100-u-lg)).concat(lg,u)}
+  const sum=w.reduce((a,b)=>a+b,0);let o=w.map(x=>x/sum*(100-u));if(o[4]<u*1.5){const lg=u*1.5,s4=o.slice(0,4).reduce((a,b)=>a+b,0),k=(100-u-lg)/s4;o=o.slice(0,4).map(x=>x*k).concat(lg)}return o.concat(u)}
 function rollRarity(f,boss,dif,bo){let w=rarW(f,boss,dif);if(bo){const hi=w.map((x,i)=>i>=3?x*1.5:x),add=hi.slice(3).reduce((a,b)=>a+b,0)-w.slice(3).reduce((a,b)=>a+b,0),lo=w.slice(0,3).reduce((a,b)=>a+b,0),k=Math.max(0,lo-add)/lo;w=hi.map((x,i)=>i<3?x*k:x)}let x=Math.random()*100;for(let i=5;i>=0;i--){if(x<w[i])return i;x-=w[i]}return 0}
 function rollWeapon(f,d,boss,bo){const b=d.base||d;if((B?B.diff:S.diff)==='nightmare'){const r=rollRarity(f,boss,'nightmare',bo);if(r>=5)return gwify(makeW({t:b.ut,r:5,f,name:b.un,sk:b.us,u:b.id}));return glMat(EXPW[r],f)}return rollWeapon0(f,b,boss,bo)}
 function rollWeapon0(f,d,boss,bo){
@@ -1633,6 +1658,7 @@ function needXP(w,L){if(w.r>=6&&L>=100)return 200000;return Math.floor(15*L*(1+w
 function matExp(w){if(w.g)return (EXPI[w.g]?EXPI[w.g].mexp:0)+Math.floor(w.tx*.5);return Math.floor(60*Math.pow(w.r+1,2))+Math.floor(w.tx*.5)}
 function byId(id){return S.inv.find(w=>w.id===id)}
 function isEq(id){return S.eq.includes(id)}
+Object.values(SK).forEach(s=>{if(s.tr.type==='hit'&&!s.ct2){s.ct*=2;s.ct2=1}});
 function trText(tr){return{mat:'強化の素材にした時',win:`${tr.s}秒以内に${tr.n}回攻撃`,every:`${tr.n}回攻撃ごと`,combo:`${tr.n}コンボごと`,nomiss:`ノーミスで${tr.n}語打つごと`,kill:'敵を倒した時',hit:'被ダメージ時',crit:'クリティカル時',low:'HP50%以下で被弾時'}[tr.type]}
 function fxText(f,m){
   switch(f.t){
@@ -1651,7 +1677,7 @@ function fxText(f,m){
 
 /* ===== player ===== */
 function needR(r){return Math.floor(40*Math.pow(r,1.6))}
-function rankInfo(){let r=1,x=S.exp;while(x>=needR(r)){x-=needR(r);r++;}return{r,x,n:needR(r)}}
+const RMAX=999;function rankInfo(){let r=1,x=S.exp;while(r<RMAX&&x>=needR(r)){x-=needR(r);r++;}return{r,x:r>=RMAX?needR(r):x,n:needR(r),max:r>=RMAX}}
 const SLOT_R=[1,3,8,15,25];
 function slotsOpen(r){return SLOT_R.filter(v=>r>=v).length}
 function equipped(){const n=slotsOpen(rankInfo().r);return S.eq.slice(0,n).map(byId).filter(Boolean)}
@@ -1678,7 +1704,7 @@ let screen='home';
 function show(name){
   screen=name;document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===name));
   if(name!=='battle'){B=null;W=null;if(typeof kbGlitch==='function'){kbGlitch(false);wordNoise(false);$('stage').classList.remove('gl','nm')}}if(typeof TIP!=='undefined'){TIP.classList.remove('on');TIP._id=null}if(name!=='battle'){$('alert').classList.remove('on')}closeCtx&&closeCtx();
-  if(name==='home'){renderHome();if(typeof rwCheck==='function'&&rwCheck())return;if(typeof titleCheck==='function'&&titleCheck())return;if(typeof tutDecHome==='function')tutDecHome()}if(name==='armory')renderArmory();if(name==='dex')renderDex();
+  if(name==='home'){renderHome();if(typeof rwCheck==='function'&&rwCheck())return;if(typeof titleCheck==='function'&&titleCheck())return;if(typeof nmHint==='function'&&nmHint())return;if(typeof tutDecHome==='function')tutDecHome()}if(name==='armory')renderArmory();if(name==='dex')renderDex();
   if(name!=='battle')playBgm(typeof nmUI==='function'&&nmUI()?'nm':'home');
 }
 function dropHTML(w){return `<div class="drop${w.r>=4?' big':''}" style="--rc:${RAR[w.r].c}">${w.r>=4?'<span class="gt">GET!!</span>':''}<span class="e">${wIcon(w)}</span><div><div class="n">${wName(w)}</div><div class="small">${RAR[w.r].n}・${SK[w.sk].n}</div></div></div>`}
@@ -1688,11 +1714,11 @@ let selF=1;
 function maxSel(){return Math.min(100,PG().maxF+1)}
 
 /* ===== 称号 ===== */
-const TRK=[[1,'見習い冒険者',0],[3,'駆け出し剣士',0],[8,'熟練の戦士',1],[15,'迷宮探索者',1],[25,'歴戦の勇士',2],[40,'深層の覇者',3],[60,'伝説の勇者',4],[80,'百層の覇王',5],[100,'タイプの神',6]];
+const TRK=[[1,'見習い冒険者',0],[3,'駆け出し剣士',0],[8,'熟練の戦士',1],[15,'迷宮探索者',1],[25,'歴戦の勇士',2],[40,'深層の覇者',3],[60,'伝説の勇者',4],[80,'百層の覇王',5],[100,'タイプの神',6],[999,'天上天下唯我独打','max']];
 const TITLES=TRK.map(([r,n])=>[r,n]);
 function dexNorm(){const L=DEX.filter(e=>!e.hid&&!e.nmh);return[L.filter(e=>S.rec.dex[e.key]).length,L.length]}
 const P100=d=>S.prog[d]&&S.prog[d].maxF>=100;
-const TL=[...TRK.map(([r,n,t])=>({id:'r'+r,n,s:t,h:`ランク${r}に到達する`,c:()=>rankInfo().r>=r,rk:r})),
+const TL=[...TRK.map(([r,n,t])=>({id:'r'+r,n,s:t,lv:t==='max'?8:undefined,h:r===999?'ランク999（最大）に到達する':`ランク${r}に到達する`,c:()=>rankInfo().r>=r,rk:r})),
  {id:'c1',n:'はじめの一歩',s:0,h:'ダンジョンの層を初めてクリアする',c:()=>S.rec.clears>=1},
  {id:'k100',n:'魔物ハンター',s:1,h:'モンスターを合計100体倒す',c:()=>S.rec.kills>=100},
  {id:'k1000',n:'千体斬り',s:2,h:'モンスターを合計1,000体倒す',c:()=>S.rec.kills>=1000},
@@ -1712,7 +1738,6 @@ const TL=[...TRK.map(([r,n,t])=>({id:'r'+r,n,s:t,h:`ランク${r}に到達する
  {id:'e100',n:'やさしき覇者',s:2,h:'イージーの100層をクリアする',c:()=>P100('easy')},
  {id:'n100',n:'百層踏破者',s:3,h:'ノーマルの100層をクリアする',c:()=>P100('normal')},
  {id:'h100',n:'修羅の王',s:5,h:'ハードの100層をクリアする',c:()=>P100('hard')},
- {id:'xnt',n:'真夜中のタイピスト',s:3,hid:1,h:'深夜0時〜4時に層をクリアした',c:()=>!!(S.tx&&S.tx.night)},
  {id:'xgl',n:'ノイズの観測者',s:'gl',lv:4,hid:1,h:'グリッチモンスターを初めて倒した',c:()=>!!S.nm},
  {id:'xgk',n:'バグ狩り',s:'gl',lv:5,hid:1,h:'グリッチモンスターを10体倒した',c:()=>(S.rec.gk||0)>=10},
  {id:'xn1',n:'悪夢に囚われし者',s:'nm',lv:5,hid:1,h:'ナイトメアの層を初めてクリアした',c:()=>S.prog.nightmare&&S.prog.nightmare.maxF>=1},
@@ -1724,18 +1749,20 @@ $('hTitle').onclick=openTitles;
 const tLv=t=>t.lv!=null?t.lv:t.s;
 function tHas(t){return(S.titles||[]).includes(t.id)||(t.rk&&rankInfo().r>=t.rk)}
 function tCur(){const t=S.title&&TLM[S.title];if(t&&tHas(t))return t;const r=rankInfo().r;return TL.filter(x=>x.rk&&r>=x.rk).pop()||TL[0]}
-function ttlHTML(t,big){const s=t.s,lv=tLv(t),orn={3:'◆',4:'✦',5:'✧',6:'♛',gl:'▚',nm:'☾',god:'❖'}[s]||'';
-  let sp='';const ns=lv>=6?6:lv>=4?3:0;for(let i=0;i<ns;i++)sp+=`<i class="sp" style="--x:${8+i*84/Math.max(1,ns-1)|0}%;--y:${i%2?62:12}%;--d:${(i*.37%1.8).toFixed(2)}s"></i>`;
-  return `<span class="ttl s${s}${t.ult?' ult':''}${big?' big':''}"><i class="tb"></i>${sp}<b>${orn?`<em>${orn}</em>`:''}${esc(t.n)}${orn?`<em>${orn}</em>`:''}</b></span>`}
+function ttlHTML(t,big){const s=t.s,lv=tLv(t),orn={3:'◆',4:'✦',5:'✧',6:'♛',gl:'▚',nm:'☾',god:'❖',max:'♛'}[s]||'';
+  let sp='';const ns=lv>=8?10:lv>=6?6:lv>=4?3:0;for(let i=0;i<ns;i++)sp+=`<i class="sp" style="--x:${8+i*84/Math.max(1,ns-1)|0}%;--y:${i%2?62:12}%;--d:${(i*.37%1.8).toFixed(2)}s"></i>`;
+  return `<span class="ttl s${s}${t.ult?' ult':''}${big?' big':''}"><i class="tb"></i>${s==='max'?'<i class="tm1"></i><i class="tm2"></i>':''}${sp}<b>${orn?`<em>${orn}</em>`:''}${esc(t.n)}${orn?`<em>${orn}</em>`:''}</b></span>`}
 const TLOCK='<span class="ttl lock"><i class="tb"></i><b>？？？</b></span>';
+function nmHint(){if(!S||!S.nm||S.nmh||(typeof TUT!=='undefined'&&TUT.on)||tutStage()!=='done')return false;S.nmh=1;save();se('glitch');setTimeout(()=>se('glitch'),400);
+  modal(`<div class="nmhint"><h2 class="glt">……異変</h2><p>どこかで、何かが軋む音がした。</p><p>この迷宮の“外側”が、わずかに揺らいでいる。</p><p class="small">見慣れた名前の、すぐ下――。</p><p class="small glt">繧ｿ繧､繝医Ν縺ｫ隗ｦ繧後※縺ｿ繧\uFFFD</p></div>`,[{t:'……',pri:true,key:' ',fn:()=>{renderHome();if(typeof tutDecHome==='function')tutDecHome()}}]);return true}
 function titleCheck(){if(!S||!S.prog||(typeof TUT!=='undefined'&&TUT.on)||tutStage()!=='done')return false;S.titles=S.titles||[];const nw=[];
   TL.forEach(t=>{if(!S.titles.includes(t.id)){let ok=false;try{ok=t.c()}catch(e){}if(ok){S.titles.push(t.id);if(t.id!=='r1')nw.push(t)}}});
   if(!nw.length)return false;save();renderHome();titleGet(nw);return true}
-function titleGet(nw){nw=nw.slice().sort((a,b)=>tLv(b)-tLv(a));const t=nw[0],lv=tLv(t),gc=['#888','#3dff6e','#3fa9ff','#c77dff','#ffd43b','#ff3b3b','#ffeeb0'][typeof t.s==='number'?t.s:6];
-  let cf='';if(lv>=5){const C=['#ff5a5a','#ffd43b','#3dff6e','#3fa9ff','#c77dff','#fff'];for(let i=0;i<(lv>=6?28:14);i++)cf+=`<i class="cf" style="--x:${Math.random()*100|0}%;--c:${C[i%C.length]};--t:${(1.6+Math.random()*1.4).toFixed(2)}s;--d:${(Math.random()*1.5).toFixed(2)}s"></i>`}
+function titleGet(nw){nw=nw.slice().sort((a,b)=>tLv(b)-tLv(a));const t=nw[0],lv=tLv(t),gc=['#888','#3dff6e','#3fa9ff','#c77dff','#ffd43b','#ff3b3b','#ffeeb0'][typeof t.s==='number'?t.s:6]||'#ffeeb0';
+  let cf='';if(lv>=5){const C=['#ff5a5a','#ffd43b','#3dff6e','#3fa9ff','#c77dff','#fff'];for(let i=0;i<(lv>=8?48:lv>=6?28:14);i++)cf+=`<i class="cf" style="--x:${Math.random()*100|0}%;--c:${C[i%C.length]};--t:${(1.6+Math.random()*1.4).toFixed(2)}s;--d:${(Math.random()*1.5).toFixed(2)}s"></i>`}
   se('clear');if(lv>=3)setTimeout(()=>se('drop',Math.min(5,lv)),350);
-  modal(`<div class="tget g${lv}${t.s==='gl'?' gx':''}" style="--gc:${gc}"><i class="tgrays"></i>${cf}<div class="tglab">${t.hid?'★ 隠し称号 獲得 ★':'称号獲得'}</div>${ttlHTML(t,true)}<div class="tgd">${esc(t.h)}</div>${nw.length>1?`<div class="tmore">${nw.slice(1).map(x=>ttlHTML(x)).join('')}</div><div class="tgd">ほか ${nw.length-1}個の称号も獲得</div>`:''}</div><p class="small">ホームの称号をクリックすると変更できます</p>`,
-    [{t:'この称号をつける',fn:()=>{S.title=t.id;save();renderHome();if(typeof tutDecHome==='function')tutDecHome()}},{t:'閉じる',pri:true,key:' ',fn:()=>{renderHome();if(typeof tutDecHome==='function')tutDecHome()}}])}
+  modal(`<div class="tget g${lv}${t.s==='gl'||lv>=8?' gx':''}" style="--gc:${gc}"><i class="tgrays"></i>${cf}<div class="tglab">${lv>=8?'✠ 最 高 位 称 号 ✠':t.hid?'★ 隠し称号 獲得 ★':'称号獲得'}</div>${ttlHTML(t,true)}<div class="tgd">${esc(t.h)}</div>${nw.length>1?`<div class="tmore">${nw.slice(1).map(x=>ttlHTML(x)).join('')}</div><div class="tgd">ほか ${nw.length-1}個の称号も獲得</div>`:''}</div><p class="small">ホームの称号をクリックすると変更できます</p>`,
+    [{t:'この称号をつける',fn:()=>{S.title=t.id;save();renderHome();if(nmHint())return;if(typeof tutDecHome==='function')tutDecHome()}},{t:'閉じる',pri:true,key:' ',fn:()=>{renderHome();if(nmHint())return;if(typeof tutDecHome==='function')tutDecHome()}}])}
 function openTitles(){if(typeof TUT!=='undefined'&&TUT.on)return;S.titles=S.titles||[];const cur=tCur();
   const vis=TL.filter(t=>!t.hid||tHas(t)),got=TL.filter(t=>!t.hid&&tHas(t)).length,hg=TL.filter(t=>t.hid&&tHas(t)).length;
   modal(`<h2>称号</h2><div class="tcnt">獲得 ${got} / ${TL.filter(t=>!t.hid).length}${hg?`　隠し称号 ${hg}`:''}</div><div class="tinfo" id="tInfo"><b>いまの称号</b>${ttlHTML(cur)}<div class="small" style="margin-top:4px">${esc(cur.h)}</div></div>
@@ -1753,7 +1780,7 @@ function countUp(el,to){const from=powShown,t0=performance.now();powShown=to;
   const step=t=>{const k=Math.min(1,(t-t0)/900),e=1-Math.pow(1-k,3);el.textContent=Math.round(from+(to-from)*e).toLocaleString('ja-JP');if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step)}
 function renderHome(){if(typeof applyDec==='function')applyDec();
   const ri=rankInfo(),open=slotsOpen(ri.r),st=calcStats(),R=S.rec,tier=tierOf(ri.r);
-  $('hXpTxt').textContent=`EXP ${ri.x.toLocaleString()} / ${ri.n.toLocaleString()}　次のランクまで ${(ri.n-ri.x).toLocaleString()}`;$('hXp').style.width=(ri.x/ri.n*100)+'%';
+  $('hXpTxt').textContent=ri.max?'RANK MAX':`EXP ${ri.x.toLocaleString()} / ${ri.n.toLocaleString()}　次のランクまで ${(ri.n-ri.x).toLocaleString()}`;$('hXp').style.width=(ri.max?100:ri.x/ri.n*100)+'%';
   const nt=TITLES.find(t=>t[0]>ri.r);
   $('hTitle').innerHTML=`<span class="uname">${esc(CL.pid?CL.name:(S.pname||'ゲスト'))}</span>${ttlHTML(tCur())}<span class="tedit">変更</span>${nt?`<small>次のランク称号「${nt[1]}」はランク${nt[0]}</small>`:''}`;
   $('hcard').style.setProperty('--tc',`var(--r${Math.min(5,tierOf(ri.r))})`);const em=$('hEmb');em.className='emb t'+tier;
@@ -2121,7 +2148,7 @@ function floorClear(){
   commitRec();S.rec.clears++;const nmb=B.miss===0&&B.keys>0?rollWeapon(B.floor,floorInfo(B.floor).boss,true,true):null;if(nmb){B.drops.push(nmb);S.rec.nmc=(S.rec.nmc||0)+1}B.drops.forEach(w=>S.rec.dex[dexKey(w)]=1);playBgm(null);se('clear');B.drops.forEach(w=>{if(w.u&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)});
   kbGlitch(false);wordNoise(false);$('stage').classList.remove('gl');
   const f=B.floor,first=f>PG().maxF&&!B.test,xp=Math.floor(clearXP(f,B.diff)*(first?2:1)),before=B.rank0||rankInfo().r;
-  S.exp+=xp;if(first)PG().maxF=f;if(!B.test&&new Date().getHours()<4){S.tx=S.tx||{};S.tx.night=1}S.inv.push(...B.drops);if(!B.test)PG().lastF=Math.min(100,f+1);save();
+  S.exp+=xp;if(first)PG().maxF=f;S.inv.push(...B.drops);if(!B.test)PG().lastF=Math.min(100,f+1);save();
   const after=rankInfo().r,so=slotsOpen(before),sn=slotsOpen(after);
   let h=`<h2 class="rh2">${f}層 クリア</h2>`;
   if(f===100)h+='<p class="rline"><b>百層を制覇しました。</b></p>';
@@ -2364,8 +2391,9 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='1.0.1-beta';
+const VERSION='1.0.2-beta';
 const CHANGELOG=[
+ ['1.0.2-beta',['ユニーク武器のドロップ率を、全層一律でイージー1%・ノーマル2%・ハード3%に変更。レジェンダリーは常にユニークより出やすくなるよう、他のレアリティの確率も調整','最大ランクを999に。ランク999で手に入る、最高位の称号を追加','装備画面で、武器をドラッグして装備スロットに入れられるように。スロット同士のドラッグで入れ替え、一覧へドラッグで外せます','強化・合成で、選んだベースの武器をもう一度クリックすると選択を解除できるように','合成の追加能力選びを、左に「付ける能力」・右に「付けない能力」の2列表示に','武器の並べ替えに「スキルカテゴリ」「スキル発動条件」を追加（「スキル名」は削除）','称号「真夜中のタイピスト」を削除','武器一覧の「全スキル」の絞り込みを、スキルのカテゴリ・発動条件で絞り込む形に変更','被ダメージ時に発動するスキルのCTを2倍に（下方修正）','合成の「付けない能力」を能力の種類順に、同じ能力は数値の高い順に並べるように','装備画面の武器メニューに「スロットに装備」を常に表示。マウスではクリックでメニュー、引っぱるとドラッグになるように','繧ｰ繝ｪ繝\uFFFD繝√Δ繝ｳ繧ｹ繧ｿ繝ｼ縺ｮ蜃ｺ迴ｾ邇\uFFFD縺ｨ縲√Θ繝九\uFFFDｼ繧ｯ莉･螟悶\uFFFDｮ繝峨Ο繝\uFFFD繝励ｒ隱ｿ謨ｴ縺励∪縺励◆','縺ｪ縺ｫ縺九′縲∫岼繧定ｦ壹∪縺励◆']],
  ['1.0.1-beta',['ノーミスで層をクリアすると、ボーナスとして武器を1本追加でもらえるように。ボーナスの武器は通常のドロップよりも高レアリティが出やすくなっています（エピック以上が1.5倍）','「HP50%以下で被弾時」に発動していたスキルの発動条件を変更。鉄壁・不動などは「敵を倒した時」、狂化などは「50コンボごと」、大型のユニークスキルは「ノーミスで8語打つごと」に発動します','出題される言葉のローマ字を大文字で表示するように']],
  ['1.0.0-beta',['ついにベータ版スタート！これからもアップデートを続けていきます','検索エンジンやSNSでシェアしたときに、ゲームの紹介文と画像が表示されるように']],
 ];
@@ -2564,14 +2592,17 @@ function tutAuto(){if(tutStage()==='intro'&&screen==='home'&&!$('modal').classLi
 /* ===== armory ===== */
 const A={tab:'equip',sel:null,hover:null,slot:0,target:null,mats:new Set(),synMat:null,pick:new Set(),
   sort:'id',desc:true,fr:new Set([0,1,2,3,4,5,6]),ft:-1,fs:'',fa:''};
-const SORTS=[['id','入手順'],['fav','お気に入り'],['r','レアリティ'],['lv','レベル'],['atk','攻撃力'],['hp','HP'],['def','防御力'],['sk','スキル名'],...AFF.map(a=>['a:'+a.k,'追加:'+a.n])];
+const SORTS=[['id','入手順'],['fav','お気に入り'],['r','レアリティ'],['lv','レベル'],['atk','攻撃力'],['hp','HP'],['def','防御力'],['skc','スキルカテゴリ'],['skt','スキル発動条件'],...AFF.map(a=>['a:'+a.k,'追加:'+a.n])];
 const RCOL=['白','緑','青','紫','金','赤','虹'];
 $('sSort').innerHTML=SORTS.map(([v,n])=>`<option value="${v}">${n}</option>`).join('');
 $('fType').innerHTML='<option value="-1">全種類</option>'+TYPES.map((t,i)=>`<option value="${i}">${t.e} ${t.n}</option>`).join('');
-$('fSkill').innerHTML='<option value="">全スキル</option>'+Object.entries(SK).filter(([k])=>!k.startsWith('g_')).map(([k,s])=>`<option value="${k}">${s.n}</option>`).join('');
+const SKC=['dmg','multi','drain','heal','shield','atkbuf','critbuf','delay','ctcut','mat',''],SKT=['every','win','combo','nomiss','kill','crit','hit','low','mat'];
+{const CN={dmg:'追撃',multi:'連撃',drain:'吸収',heal:'回復',shield:'シールド',atkbuf:'攻撃UP',critbuf:'会心UP',delay:'時止め',ctcut:'CT短縮'},TN={every:'○回攻撃ごと',win:'○秒以内に○回攻撃',combo:'○コンボごと',nomiss:'ノーミスで○語',kill:'敵を倒した時',crit:'クリティカル時',hit:'被ダメージ時'},used=new Set(CAT.map(c=>c.sk).concat(ALLE.map(d=>d.us)));
+ const L=[...used].filter(k=>SK[k]).sort((a,b)=>SKC.indexOf(SK[a].fx[0].t)-SKC.indexOf(SK[b].fx[0].t)||SKT.indexOf(SK[a].tr.type)-SKT.indexOf(SK[b].tr.type)||SK[a].n.localeCompare(SK[b].n,'ja'));
+ $('fSkill').innerHTML='<option value="">全スキル</option><optgroup label="カテゴリで絞り込み">'+Object.entries(CN).map(([k,n])=>`<option value="c:${k}">${n}</option>`).join('')+'</optgroup><optgroup label="発動条件で絞り込み">'+Object.entries(TN).map(([k,n])=>`<option value="t:${k}">${n}</option>`).join('')+'</optgroup>'}
 $('fAff').innerHTML='<option value="">追加能力：すべて</option>'+AFF.map(a=>`<option value="${a.k}">${a.n}を持つ</option>`).join('');
 $('fRar').innerHTML=RAR.map((r,i)=>`<button class="rchip on" data-r="${i}" style="--rc:${r.c}" title="${r.n}">${RCOL[i]}</button>`).join('');
-$('sSort').onchange=e=>{A.sort=e.target.value;renderInv()};
+$('sSort').onchange=e=>{A.sort=e.target.value;if(A.sort==='skc'||A.sort==='skt'){A.desc=false;$('sOrd').textContent='昇順 ▲'}renderInv()};
 $('fFav').onclick=()=>{A.ffav=!A.ffav;$('fFav').classList.toggle('on',A.ffav);renderInv()};
 $('sOrd').onclick=()=>{A.desc=!A.desc;$('sOrd').textContent=A.desc?'降順 ▼':'昇順 ▲';renderInv()};
 $('fType').onchange=e=>{A.ft=+e.target.value;renderInv()};
@@ -2580,9 +2611,9 @@ $('fAff').onchange=e=>{A.fa=e.target.value;renderInv()};
 $('fRar').onclick=e=>{const b=e.target.closest('[data-r]');if(!b)return;const r=+b.dataset.r;A.fr.has(r)?A.fr.delete(r):A.fr.add(r);b.classList.toggle('on',A.fr.has(r));renderInv()};
 
 function affSum(w,k){return r1(w.aff.filter(a=>a.k===k).reduce((s,a)=>s+affVal(w,a),0))}
-function sortVal(w,k){if(k==='id')return w.id;if(k==='fav')return w.fav?1:0;if(k==='r')return w.r*1000+w.lv;if(k==='lv')return w.lv;if(k==='atk'||k==='hp'||k==='def')return wBase(w)[k];if(k==='sk')return SK[w.sk].n;return affSum(w,k.slice(2))}
+function sortVal(w,k){if(k==='id')return w.id;if(k==='fav')return w.fav?1:0;if(k==='r')return w.r*1000+w.lv;if(k==='lv')return w.lv;if(k==='atk'||k==='hp'||k==='def')return wBase(w)[k];if(k==='skc'){const f=SK[w.sk].fx[0];return SKC.indexOf(f?f.t:'')*100+SKC.indexOf((SK[w.sk].fx[1]||{}).t||'')}if(k==='skt'){const tr=SK[w.sk].tr;return SKT.indexOf(tr.type)*1000+(tr.n||0)*10+(tr.s||0)}return affSum(w,k.slice(2))}
 function invList(){
-  const L=S.inv.filter(w=>(!A.ffav||w.fav)&&A.fr.has(w.r)&&(A.ft<0||w.t===A.ft)&&(!A.fs||w.sk===A.fs)&&(!A.fa||w.aff.some(a=>a.k===A.fa)));
+  const L=S.inv.filter(w=>(!A.ffav||w.fav)&&A.fr.has(w.r)&&(A.ft<0||w.t===A.ft)&&(!A.fs||(A.fs.startsWith('c:')?SK[w.sk].fx.some(f=>f.t===A.fs.slice(2)):A.fs.startsWith('t:')?SK[w.sk].tr.type===A.fs.slice(2):w.sk===A.fs))&&(!A.fa||w.aff.some(a=>a.k===A.fa)));
   const k=A.sort,d=A.desc?-1:1;
   return L.sort((a,b)=>{const x=sortVal(a,k),y=sortVal(b,k);const c=typeof x==='string'?x.localeCompare(y,'ja'):x-y;return (c||a.id-b.id)*d});
 }
@@ -2642,7 +2673,7 @@ function renderTop(){
       const need=!canTop?'':!maxed?`ベースのレベルを最大（Lv${R0.cap}）にするとデコードできます（今 Lv${t.lv}）`:!m?'素材を選んでください':'';
       ex=need?`<div class="small evoneed">${need}</div>`:'';let dn=0;
       if(canTop&&m){dn=synNeed(t,m,RAR[6].slots);const pool=[...t.aff.map((a,i)=>({key:'b'+i,a,src:'ベース'})),...m.aff.map((a,i)=>({key:'m'+i,a,src:'素材'}))];
-        ex+=`<div class="mlab">追加能力を${dn}つ選択（${A.pick.size}/${dn}）${dn<RAR[6].slots?`<span class="small">（種類が足りないため${dn}つ）</span>`:''}</div><div class="daff">${pool.map(p=>`<button class="chip ${A.pick.has(p.key)?'on':[...A.pick].some(q=>pool.find(x=>x.key===q).a.k===p.a.k)?'dis':''}" data-pick="${p.key}"><small>${p.src}</small>${AFFD[p.a.k].n}+${affVal(nx,p.a)}%</button>`).join('')}</div>`}
+        ex+=`<div class="mlab">追加能力を${dn}つ選択（${A.pick.size}/${dn}）${dn<RAR[6].slots?`<span class="small">（種類が足りないため${dn}つ）</span>`:''}</div>${pickUI(pool,nx,dn)}`}
       act=`<button class="btn pri" data-a="evo" ${canTop&&maxed&&m&&A.pick.size===dn?'':'disabled'}>デコードする</button><button class="btn danger" data-a="reset">ベースを選び直す</button>`;
     }else L='<div class="tag">ベース</div><div class="empty">デコードするグリッチユニークを選んでください</div>';
     R=m?paneHTML(m,'素材（消費）'):hov&&hov.id!==A.target?paneHTML(hov,'カーソル中の武器'):'<div class="tag">素材</div><div class="empty">—</div>';
@@ -2653,13 +2684,15 @@ function renderTop(){
     R=m?paneHTML(Object.assign({},m,{lv:t.lv}),`素材（消費）・追加能力はベースのLv${t.lv}に換算`):hov&&hov.id!==A.target?paneHTML(hov,'カーソル中の武器'):`<div class="tag">素材</div><div class="empty">${t?`同じレア度（${RAR[t.r].n}）の武器をタップ`:'—'}</div>`;
     if(t)mr=`<div class="mlab">素材${m?'<span class="small dz">（タップで外す）</span>':''}</div><div class="mats">${m?`<button class="wc mini" data-mid="${m.id}" style="--rc:${RAR[m.r].c}" title="${m.name}">${wIcon(m)}<span class="lv">Lv${m.lv}</span></button>`:`<span class="small">同じレア度（${RAR[t.r].n}）の武器を下の一覧からタップ</span>`}</div>`;
     if(t&&m){const n=synNeed(t,m),pool=[...t.aff.map((a,i)=>({key:'b'+i,a,src:'ベース'})),...m.aff.map((a,i)=>({key:'m'+i,a,src:'素材'}))];
-      ex=`<div class="mlab">追加能力を${n}つ選択（${A.pick.size}/${n}）${n<RAR[t.r].slots?`<span class="small">（種類が足りないため${n}つ）</span>`:''}</div><div class="daff">${pool.map(p=>`<button class="chip ${A.pick.has(p.key)?'on':[...A.pick].some(q=>pool.find(x=>x.key===q).a.k===p.a.k)?'dis':''}" data-pick="${p.key}"><small>${p.src}</small>${AFFD[p.a.k].n}+${affVal(t,p.a)}%</button>`).join('')}</div>`;
+      ex=`<div class="mlab">追加能力を${n}つ選択（${A.pick.size}/${n}）${n<RAR[t.r].slots?`<span class="small">（種類が足りないため${n}つ）</span>`:''}</div>${pickUI(pool,t,n)}`;
       act=`<button class="btn pri" data-a="syn" ${A.pick.size===n?'':'disabled'}>合成する</button><button class="btn danger" data-a="reset">ベースを選び直す</button>`;
     }else if(t)act='<button class="btn danger" data-a="reset">ベースを選び直す</button>';
   }
   $('paneL').innerHTML=L;$('paneR').innerHTML=R;$('extra').innerHTML=ex;$('actions').innerHTML=act;
   const mrw=$('matrow');mrw.innerHTML=mr;mrw.style.display=mr?'':'none';$('actions').classList.toggle('sep',A.tab!=='equip');$('actions').style.display=act?'':'none';
 }
+function pickUI(pool,ref,n){const chip=p=>`<button class="chip ${A.pick.has(p.key)?'on':[...A.pick].some(q=>pool.find(x=>x.key===q).a.k===p.a.k)?'dis':''}" data-pick="${p.key}"><small>${p.src}</small>${AFFD[p.a.k].n}+${affVal(ref,p.a)}%</button>`,AO=k=>AFF.findIndex(a=>a.k===k),srt=L=>L.slice().sort((x,y)=>AO(x.a.k)-AO(y.a.k)||affVal(ref,y.a)-affVal(ref,x.a)),sel=srt(pool.filter(p=>A.pick.has(p.key))),un=srt(pool.filter(p=>!A.pick.has(p.key)));
+  return `<div class="dsplit"><div class="dcol on"><div class="dh">付ける能力 ${sel.length}/${n}</div><div class="daff">${sel.map(chip).join('')||'<span class="small">右から選んでください</span>'}</div></div><div class="dcol"><div class="dh">付けない能力</div><div class="daff">${un.map(chip).join('')||'<span class="small">—</span>'}</div></div></div>`}
 function renderInv(){
   const t=byId(A.target),L=invList();
   $('invHead').textContent=`${L.length} / ${S.inv.length}本`;
@@ -2678,16 +2711,14 @@ function renderInv(){
 }
 function renderArmory(){applyDec();const gc=$('fRar').querySelector('[data-r="6"]');if(gc)gc.hidden=!S.nm;renderTop();renderInv()}
 
-function equipTo(id,i){const old=S.eq.indexOf(id);if(old>=0)S.eq[old]=null;S.eq[i]=id;A.slot=i;save();toast(`スロット${i+1}に装備しました`)}
+function equipTo(id,i){const old=S.eq.indexOf(id),prev=S.eq[i];if(old===i)return;if(old>=0)S.eq[old]=prev||null;S.eq[i]=id;A.slot=i;save();toast(`スロット${i+1}に装備しました`)}
 function closeCtx(){$('ctx').classList.remove('on')}
 document.addEventListener('pointerdown',e=>{if(!e.target.closest('#ctx'))closeCtx()},true);
 function openCtx(id,x,y,detail){armTipOff();
   const w=byId(id),open=slotsOpen(rankInfo().r),ei=S.eq.indexOf(id),items=[];
+  if(ei!==A.slot)items.push([`スロット${A.slot+1}に装備`+(S.eq[A.slot]?'（入れ替え）':''),()=>equipTo(id,A.slot)]);
+  if(ei<0){const em=S.eq.slice(0,open).indexOf(null);if(em>=0&&em!==A.slot)items.push([`空きスロット（スロット${em+1}）に装備`,()=>equipTo(id,em)])}
   if(ei>=0&&ei<open)items.push([`外す（スロット${ei+1}）`,()=>{S.eq[ei]=null;save();toast('外しました')}]);
-  else{
-    items.push([`スロット${A.slot+1}に装備`+(S.eq[A.slot]?'（入れ替え）':''),()=>equipTo(id,A.slot)]);
-    const em=S.eq.slice(0,open).indexOf(null);if(em>=0&&em!==A.slot)items.push([`空きスロット（スロット${em+1}）に装備`,()=>equipTo(id,em)]);
-  }
   items.push([w.fav?'☆ お気に入りを解除':'★ お気に入りに登録',()=>{w.fav=!w.fav;save();toast(w.fav?'お気に入りに登録しました':'お気に入りを解除しました')}]);
   items.push(['強化する',()=>{setTab('enh');A.target=id}]);
   if(w.r>0)items.push(['合成のベースにする',()=>{setTab('syn');A.target=id}]);
@@ -2705,7 +2736,8 @@ function tapCard(id,x,y,pt){
   const w=byId(id);if(!w)return;
   if(A.tab==='enh'){
     if((!A.target||id===A.target)&&w.g){toast('この武器は強化できません（素材にはできます）');renderArmory();return}
-    if(!A.target||id===A.target){A.target=id;A.mats.clear()}
+    if(id===A.target){A.target=null;A.mats.clear()}
+    else if(!A.target){A.target=id;A.mats.clear()}
     else if(A.mats.has(id))A.mats.delete(id);
     else if(isEq(id))toast('装備中の武器は素材にできません');
     else if(w.fav)toast('お気に入りの武器は素材にできません（解除すると使えます）');
@@ -2713,7 +2745,7 @@ function tapCard(id,x,y,pt){
   }else if(A.tab==='evo'){
     const t=byId(A.target),cap=RAR[w.r].cap;
     if(!t){if(w.g)toast('この武器はデコードに使えません');else if(!evoNext(w))toast(w.r>=6?'すでにデコード済みです':'デコードできるのはグリッチユニークだけです');else A.target=id}
-    else if(id===t.id)return;
+    else if(id===t.id){A.target=null;A.evoMat=null;A.pick.clear()}
     else if(A.evoMat===id){A.evoMat=null;A.pick.clear()}
     else if(w.g)toast('この武器はデコードに使えません');
     else if(isGodBase(t)&&(w.u!==t.u||w.gw||w.r!==5))toast('対応する通常版のユニーク武器だけ素材にできます');
@@ -2725,7 +2757,7 @@ function tapCard(id,x,y,pt){
     const t=byId(A.target);
     if(w.g&&id!==(t&&t.id)){toast('この武器は合成に使えません')}
     else if(!t){if(w.r===0)toast('コモンには追加能力がないため合成できません');else A.target=id}
-    else if(id===t.id)return;
+    else if(id===t.id){A.target=null;A.synMat=null;A.pick.clear()}
     else if(A.synMat===id){A.synMat=null;A.pick.clear()}
     else if(!A.synMat){
       if(w.r!==t.r)toast('同じレアリティの武器だけ素材にできます');
@@ -2736,7 +2768,7 @@ function tapCard(id,x,y,pt){
   }
   renderArmory();
 }
-$('slots').onclick=e=>{const b=e.target.closest('[data-slot]');if(!b)return;const i=+b.dataset.slot;A.slot=i;renderTop();if(S.eq[i])openCtx(S.eq[i],e.clientX,e.clientY,e.pointerType&&e.pointerType!=='mouse')};
+$('slots').onclick=e=>{if(performance.now()-sdBlock<300)return;const b=e.target.closest('[data-slot]');if(!b)return;const i=+b.dataset.slot;A.slot=i;renderTop();if(S.eq[i])openCtx(S.eq[i],e.clientX,e.clientY,e.pointerType&&e.pointerType!=='mouse')};
 $('matrow').onclick=e=>{const b=e.target.closest('[data-mid]');if(!b)return;const id=+b.dataset.mid;if(A.tab==='enh')A.mats.delete(id);else if(A.tab==='evo'){A.evoMat=null;A.pick.clear()}else{A.synMat=null;A.pick.clear()}renderArmory()};
 function defPick(t,m,n,ref){const best={};[...t.aff.map((a,i)=>({key:'b'+i,a})),...m.aff.map((a,i)=>({key:'m'+i,a}))].forEach(p=>{const v=affVal(ref,p.a);if(!best[p.a.k]||v>best[p.a.k].v)best[p.a.k]={key:p.key,v}});
   let ks=[...new Set(t.aff.map(a=>a.k))];ks=ks.concat(Object.keys(best).filter(k=>!ks.includes(k)).sort((x,y)=>best[y].v-best[x].v)).slice(0,n);return new Set(ks.map(k=>best[k].key))}
@@ -2794,12 +2826,12 @@ IW.addEventListener('pointerdown',e=>{
   const card=e.target.closest('.wc');
   P={x:e.clientX,y:e.clientY,st:IW.scrollTop,card,mode:'pend',ly:e.clientY,lt:performance.now(),v:0};
   try{IW.setPointerCapture(e.pointerId)}catch(_){}
-  if(card&&A.tab==='equip'){const p=P;P.timer=setTimeout(()=>{if(P===p&&p.mode==='pend')startDrag(p.x,p.y)},320)}
+  if(card&&A.tab==='equip'&&e.pointerType!=='mouse'){const p=P;P.timer=setTimeout(()=>{if(P===p&&p.mode==='pend')startDrag(p.x,p.y)},320)}
 });
 IW.addEventListener('pointermove',e=>{
   if(!P)return;const dx=e.clientX-P.x,dy=e.clientY-P.y;
   if(P.mode==='pend'&&Math.hypot(dx,dy)>6){clearTimeout(P.timer);
-    if(P.card&&A.tab==='equip'&&Math.abs(dx)>Math.abs(dy)*1.2)startDrag(e.clientX,e.clientY);else P.mode='scroll'}
+    if(P.card&&A.tab==='equip'&&(e.pointerType==='mouse'||Math.abs(dx)>Math.abs(dy)*1.2))startDrag(e.clientX,e.clientY);else P.mode='scroll'}
   if(P.mode==='scroll'){IW.scrollTop=P.st-dy;const now=performance.now(),dt=now-P.lt;if(dt>0){P.v=(e.clientY-P.ly)/dt;P.ly=e.clientY;P.lt=now}}
   else if(P.mode==='drag')moveGhost(e.clientX,e.clientY);
 });
@@ -2811,12 +2843,19 @@ function endP(e,cancel){
 }
 IW.addEventListener('pointerup',e=>endP(e,false));
 IW.addEventListener('pointercancel',e=>endP(e,true));
+[IW,$('slots')].forEach(el=>el.addEventListener('dragstart',e=>e.preventDefault()));
+let SD=null,sdBlock=0;
+$('slots').addEventListener('pointerdown',e=>{if(A.tab!=='equip'||(e.pointerType==='mouse'&&e.button!==0))return;const b=e.target.closest('.slot.f[data-slot]');if(!b)return;const i=+b.dataset.slot;SD={x:e.clientX,y:e.clientY,from:i,id:S.eq[i],mode:'pend'};try{$('slots').setPointerCapture(e.pointerId)}catch(_){}});
+$('slots').addEventListener('pointermove',e=>{if(!SD)return;if(SD.mode==='pend'&&Math.hypot(e.clientX-SD.x,e.clientY-SD.y)>6){const w=byId(SD.id);if(!w){SD=null;return}SD.mode='drag';closeCtx();ghost=document.createElement('div');ghost.className='ghost';ghost.style.setProperty('--rc',RAR[w.r].c);ghost.innerHTML=wIcon(w);document.body.appendChild(ghost)}if(SD.mode==='drag')moveGhost(e.clientX,e.clientY)});
+function sdEnd(e,cancel){if(!SD)return;const d=SD;SD=null;if(d.mode!=='drag')return;sdBlock=performance.now();const s=cancel?null:slotAt(e.clientX,e.clientY);if(ghost){ghost.remove();ghost=null}document.querySelectorAll('.slot.drop').forEach(x=>x.classList.remove('drop'));
+  if(s&&+s.dataset.slot!==d.from)equipTo(d.id,+s.dataset.slot);else if(!s&&!cancel){const el=document.elementFromPoint(e.clientX,e.clientY);if(el&&el.closest('#invwrap')){S.eq[d.from]=null;save();toast('装備を外しました')}}renderArmory()}
+$('slots').addEventListener('pointerup',e=>sdEnd(e,false));$('slots').addEventListener('pointercancel',e=>sdEnd(e,true));
 function startDrag(x,y){
   const w=byId(+P.card.dataset.id);if(!w)return;P.mode='drag';P.wid=w.id;
   ghost=document.createElement('div');ghost.className='ghost';ghost.style.setProperty('--rc',RAR[w.r].c);ghost.innerHTML=wIcon(w);document.body.appendChild(ghost);
   P.card.classList.add('lift');A.sel=w.id;A.hover=null;renderTop();moveGhost(x,y);
 }
-function slotAt(x,y){const el=document.elementFromPoint(x,y);return el&&el.closest('[data-slot]')}
+function slotAt(x,y){if(ghost)ghost.style.display='none';const el=document.elementFromPoint(x,y);if(ghost)ghost.style.display='';return el&&el.closest('[data-slot]')}
 function moveGhost(x,y){if(!ghost)return;ghost.style.left=x+'px';ghost.style.top=y+'px';
   document.querySelectorAll('.slot.drop').forEach(s=>s.classList.remove('drop'));const s=slotAt(x,y);if(s)s.classList.add('drop')}
 function dropGhost(p,x,y,cancel){
