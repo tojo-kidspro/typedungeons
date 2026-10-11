@@ -1249,7 +1249,7 @@ const SK={
  might:{n:'剛力',tr:{type:'win',n:5,s:5},ct:12,fx:[{t:'atkbuf',v:30,dur:5}]},
  eagle:{n:'鷹の目',tr:{type:'every',n:7},ct:12,fx:[{t:'critbuf',v:25,dur:6}]},
  bless:{n:'祝福',tr:{type:'every',n:8},ct:14,fx:[{t:'heal',v:8},{t:'atkbuf',v:15,dur:5}]},
- rage:{n:'狂化',tr:{type:'combo',n:50},ct:20,fx:[{t:'atkbuf',v:40,dur:8}]},
+ rage:{n:'狂化',tr:{type:'combo',n:10},ct:20,fx:[{t:'atkbuf',v:40,dur:8}]},
  lifeblade:{n:'吸命剣',tr:{type:'crit'},ct:7,fx:[{t:'dmg',v:1.2},{t:'drain',v:60}]},
  haste:{n:'加速',tr:{type:'every',n:10},ct:15,fx:[{t:'ctcut',v:2}]},
  fort:{n:'堅守',tr:{type:'every',n:4},ct:10,fx:[{t:'shield',v:12}]},
@@ -1261,7 +1261,8 @@ const SK={
  u_immortal:{n:'不死の加護',tr:{type:'hit'},ct:18,fx:[{t:'heal',v:20},{t:'shield',v:10}]},
  u_sever:{n:'絶対切断',tr:{type:'every',n:6},ct:12,fx:[{t:'dmg',v:5}]},
  u_chrono:{n:'時空断絶',tr:{type:'win',n:8,s:10},ct:20,fx:[{t:'delay',v:5},{t:'multi',v:.4,n:15}]},
- u_frenzy:{n:'狂戦士の魂',tr:{type:'combo',n:50},ct:25,fx:[{t:'atkbuf',v:60,dur:8},{t:'heal',v:15}]}};
+ u_frenzy:{n:'狂戦士の魂',tr:{type:'combo',n:16},ct:25,fx:[{t:'atkbuf',v:60,dur:8},{t:'heal',v:15}]}};
+Object.assign(SK,{"rush":{"n":"速攻","tr":{"type":"win","n":4,"s":5},"ct":8,"fx":[{"t":"dmg","v":3.05}]},"every3":{"n":"会心撃","tr":{"type":"every","n":3},"ct":6,"fx":[{"t":"dmg","v":2.0}]},"thunder":{"n":"雷撃","tr":{"type":"crit"},"ct":7,"fx":[{"t":"dmg","v":2.8}]},"slash":{"n":"乱れ斬り","tr":{"type":"every","n":3},"ct":7,"fx":[{"t":"multi","v":0.29,"n":6}]},"meteor":{"n":"流星群","tr":{"type":"win","n":5,"s":6},"ct":12,"fx":[{"t":"multi","v":0.29,"n":12}]},"storm":{"n":"剣の嵐","tr":{"type":"hit"},"ct":14,"fx":[{"t":"multi","v":0.43,"n":6}]},"drain":{"n":"吸収","tr":{"type":"every","n":4},"ct":12,"fx":[{"t":"dmg","v":2.4},{"t":"drain","v":48}]},"lifeblade":{"n":"吸命剣","tr":{"type":"crit"},"ct":8,"fx":[{"t":"dmg","v":1.9},{"t":"drain","v":48}]},"might":{"n":"剛力","tr":{"type":"win","n":5,"s":5},"ct":12,"fx":[{"t":"atkbuf","v":25,"dur":7}]},"eagle":{"n":"鷹の目","tr":{"type":"every","n":7},"ct":12,"fx":[{"t":"critbuf","v":16,"dur":7}]},"focus":{"n":"集中","tr":{"type":"combo","n":12},"ct":16,"fx":[{"t":"critbuf","v":20,"dur":10}]},"rally":{"n":"鼓舞","tr":{"type":"every","n":5},"ct":15,"fx":[{"t":"atkbuf","v":20,"dur":9}]},"rage":{"n":"狂化","tr":{"type":"combo","n":10},"ct":18,"fx":[{"t":"atkbuf","v":25,"dur":11}]},"haste":{"n":"加速","tr":{"type":"every","n":10},"ct":15,"fx":[{"t":"ctcut","v":2.0}]},"stop":{"n":"時止め","tr":{"type":"win","n":6,"s":8},"ct":18,"fx":[{"t":"delay","v":2.7}]},"issen":{"n":"一閃","tr":{"type":"combo","n":8},"ct":9,"fx":[{"t":"dmg","v":3.85}]},"shippu":{"n":"疾風","tr":{"type":"combo","n":15},"ct":10,"fx":[{"t":"multi","v":0.42,"n":8}]},"guard":{"n":"守護の盾","tr":{"type":"hit"},"ct":9,"fx":[{"t":"shield","v":9.5}]},"wall":{"n":"鉄壁","tr":{"type":"kill"},"ct":20,"fx":[{"t":"defbuf","v":15,"dur":12}]},"heal":{"n":"癒しの光","tr":{"type":"hit"},"ct":15,"fx":[{"t":"heal","v":9.0}]},"regen":{"n":"再生","tr":{"type":"every","n":6},"ct":10,"fx":[{"t":"heal","v":8.0}]},"counter":{"n":"反撃","tr":{"type":"hit"},"ct":16,"fx":[{"t":"dmg","v":3.95}]},"bless":{"n":"祝福","tr":{"type":"every","n":8},"ct":14,"fx":[{"t":"heal","v":6.5},{"t":"atkbuf","v":12,"dur":8}]},"fort":{"n":"堅守","tr":{"type":"every","n":4},"ct":10,"fx":[{"t":"shield","v":14.0}]},"thorn":{"n":"茨の守り","tr":{"type":"hit"},"ct":10,"fx":[{"t":"shield","v":6.5},{"t":"dmg","v":1.5}]},"sanctu":{"n":"聖域","tr":{"type":"win","n":5,"s":5},"ct":13,"fx":[{"t":"heal","v":8.0},{"t":"shield","v":13.5}]},"iron":{"n":"不動","tr":{"type":"kill"},"ct":18,"fx":[{"t":"shield","v":28.0}]},"spirit":{"n":"闘気","tr":{"type":"hit"},"ct":12,"fx":[{"t":"atkbuf","v":9,"dur":7},{"t":"critbuf","v":7,"dur":7}]},"harden":{"n":"硬化","tr":{"type":"every","n":5},"ct":12,"fx":[{"t":"defbuf","v":14,"dur":7}]},"stance":{"n":"不屈の構え","tr":{"type":"combo","n":10},"ct":14,"fx":[{"t":"defbuf","v":11,"dur":8},{"t":"shield","v":15.5}]},"parry":{"n":"受け流し","tr":{"type":"hit"},"ct":11,"fx":[{"t":"defbuf","v":9,"dur":7}]}});
 const NSK=['rush','every3','counter','heal','rally','wall','thunder','stop','focus','drain','slash','meteor','storm','slash','meteor','regen','guard','might','eagle','bless','rage','lifeblade','haste','spirit'];
 const mk=a=>({id:a[0],e:a[1],n:a[2],un:a[3],ut:a[4],us:a[5]});
 const NORMALS=[
@@ -1566,33 +1567,21 @@ function glitchPx(d,G,R,k){
 }
 /* ===== weapon catalog (fixed skill per weapon) & unique skills ===== */
 const DEF_T=[6,8,10];const isDefT=t=>DEF_T.includes(t);
-const OFF_SK=['rush','every3','thunder','slash','meteor','storm','drain','lifeblade','might','eagle','focus','rally','rage','haste','stop'];
-const DEF_SK=['guard','wall','heal','regen','counter','bless','fort','thorn','sanctu','iron','spirit'];
+const OFF_SK=['rush','every3','thunder','slash','meteor','storm','drain','lifeblade','might','eagle','focus','rally','rage','haste','stop','issen','shippu'];
+const DEF_SK=['guard','wall','heal','regen','counter','bless','fort','thorn','sanctu','iron','spirit','harden','stance','parry'];
 const EPICW=[['炎帝','焔魔'],['氷皇','雪華'],['雷神','迅雷'],['冥王','黒曜'],['天照','聖光']];
 const LEGW=[['紅蓮神','灼熱王'],['絶対零度','蒼天'],['天雷','轟雷'],['深淵','終焉'],['神聖','黎明']];
 const CAT=[];
-for(let r=0;r<5;r++)TYPES.forEach((T,t)=>{const nv=r<2?1:2;for(let v=0;v<nv;v++){
-  const el=r===0?5:(t*2+v+r)%5,pool=isDefT(t)?DEF_SK:OFF_SK,sk=pool[(t*7+v*5+r*3)%pool.length];
+let SKOI=0,SKDI=0;for(let r=0;r<5;r++)TYPES.forEach((T,t)=>{const nv=r<2?1:2;for(let v=0;v<nv;v++){
+  const el=r===0?5:(t*2+v+r)%5,pool=isDefT(t)?DEF_SK:OFF_SK,sk=pool[(isDefT(t)?SKDI++:SKOI++)%pool.length];
   const name=r===0?['木の','古びた','錆びた'][t%3]+T.n:r===1?['鉄の','鋼の','兵士の'][t%3]+T.n:r===2?`${ELEM[el].w[v]}の${T.n}`:r===3?`${EPICW[el][v]}の${T.n}`:`${LEGW[el][v]}${T.n}「${KANA[(t+v*3)%KANA.length]}」`;
   CAT.push({c:`c${r}_${t}_${v}`,t,r,el,name,sk})}});
 [[0,0,'おもちゃの剣','cream'],[0,6,'クッキーの盾','cream'],[0,5,'リボンの杖','pink'],[1,4,'うさみみの弓','pink'],[1,7,'キャンディの鎚','lavender'],[1,10,'ハートの護符','pink'],
  [2,3,'いちごの槍','pink'],[2,9,'マカロンの籠手','mint'],[2,5,'ロリポップの杖','lavender'],[3,0,'ハートフルソード','pink'],[3,4,'シュガーボウ','sky'],[3,8,'パステルの大盾','lavender'],
- [4,5,'プリンセスハート「エンジェラ」','pink'],[4,1,'スイートラビット「ミルフィ」','cream'],[4,7,'ドリームキャンディ「ロゼッタ」','lavender']].forEach(([r,t,name,pal],i)=>{const pool=isDefT(t)?DEF_SK:OFF_SK;CAT.push({c:'cu_'+i,t,r,el:5,name,sk:pool[(i*5+t)%pool.length],pal})});
+ [4,5,'プリンセスハート「エンジェラ」','pink'],[4,1,'スイートラビット「ミルフィ」','cream'],[4,7,'ドリームキャンディ「ロゼッタ」','lavender']].forEach(([r,t,name,pal],i)=>{const pool=isDefT(t)?DEF_SK:OFF_SK;CAT.push({c:'cu_'+i,t,r,el:5,name,sk:pool[(isDefT(t)?SKDI++:SKOI++)%pool.length],pal})});
 const CATI=Object.fromEntries(CAT.map(e=>[e.c,e]));
 /* unique skills: each unique has its own overpowered skill */
-const UARCH={
- A:{tr:{type:'every',n:3},ct:6,fx:[{t:'multi',v:.5,n:30}]},
- B:{tr:{type:'every',n:5},ct:8,fx:[{t:'dmg',v:25}]},
- C:{tr:{type:'hit'},ct:10,fx:[{t:'heal',v:25},{t:'shield',v:30}]},
- D:{tr:{type:'win',n:4,s:4},ct:12,fx:[{t:'atkbuf',v:120,dur:6},{t:'critbuf',v:50,dur:6}]},
- E:{tr:{type:'every',n:6},ct:14,fx:[{t:'delay',v:6},{t:'multi',v:.6,n:20}]},
- F:{tr:{type:'every',n:2},ct:5,fx:[{t:'multi',v:.4,n:10},{t:'drain',v:60}]},
- G:{tr:{type:'hit'},ct:10,fx:[{t:'multi',v:.45,n:8}]},
- H:{tr:{type:'crit'},ct:5,fx:[{t:'multi',v:.7,n:20}]},
- I:{tr:{type:'nomiss',n:8},ct:20,fx:[{t:'shield',v:80},{t:'heal',v:50},{t:'atkbuf',v:80,dur:10}]},
- J:{tr:{type:'every',n:8},ct:12,fx:[{t:'ctcut',v:6},{t:'atkbuf',v:50,dur:8},{t:'critbuf',v:40,dur:8}]},
- K:{tr:{type:'win',n:10,s:8},ct:15,fx:[{t:'dmg',v:60}]},
- L:{tr:{type:'every',n:4},ct:8,fx:[{t:'shield',v:20},{t:'heal',v:10}]}};
+const USPEC={"slime":{"n":null,"tr":{"type":"every","n":5},"ct":8,"fx":[{"t":"dmg","v":25.0}]},"worm":{"n":null,"tr":{"type":"every","n":6},"ct":11,"fx":[{"t":"delay","v":3.0},{"t":"shield","v":23.0}]},"bat":{"n":null,"tr":{"type":"every","n":3},"ct":6,"fx":[{"t":"multi","v":0.8,"n":10},{"t":"drain","v":60}]},"rat":{"n":null,"tr":{"type":"combo","n":12},"ct":7,"fx":[{"t":"multi","v":1.31,"n":16}]},"toad":{"n":null,"tr":{"type":"every","n":4},"ct":9,"fx":[{"t":"multi","v":1.0,"n":12},{"t":"delay","v":2.4}]},"shroom":{"n":null,"tr":{"type":"every","n":7},"ct":14,"fx":[{"t":"heal","v":17.0},{"t":"atkbuf","v":94,"dur":8}]},"spider":{"n":null,"tr":{"type":"win","n":5,"s":6},"ct":13,"fx":[{"t":"delay","v":4.1},{"t":"dmg","v":27.5}]},"bee":{"n":null,"tr":{"type":"crit"},"ct":6,"fx":[{"t":"multi","v":1.19,"n":14}]},"wolf":{"n":null,"tr":{"type":"combo","n":14},"ct":12,"fx":[{"t":"atkbuf","v":127,"dur":7},{"t":"critbuf","v":30,"dur":15}]},"snake":{"n":null,"tr":{"type":"every","n":6},"ct":12,"fx":[{"t":"dmg","v":21.5},{"t":"delay","v":3.2}]},"crab":{"n":null,"tr":{"type":"hit"},"ct":12,"fx":[{"t":"shield","v":19.0},{"t":"defbuf","v":15,"dur":7}]},"ghost":{"n":null,"tr":{"type":"every","n":5},"ct":12,"fx":[{"t":"defbuf","v":21,"dur":7},{"t":"heal","v":14.5}]},"skel":{"n":null,"tr":{"type":"every","n":4},"ct":8,"fx":[{"t":"multi","v":0.99,"n":18}]},"zombie":{"n":null,"tr":{"type":"kill"},"ct":14,"fx":[{"t":"heal","v":19.0},{"t":"multi","v":2.13,"n":10}]},"scorp":{"n":null,"tr":{"type":"crit"},"ct":8,"fx":[{"t":"dmg","v":28.5}]},"boar":{"n":null,"tr":{"type":"win","n":3,"s":4},"ct":7,"fx":[{"t":"dmg","v":23.5}]},"owl":{"n":null,"tr":{"type":"every","n":6},"ct":10,"fx":[{"t":"critbuf","v":30,"dur":15}]},"troll":{"n":null,"tr":{"type":"every","n":8},"ct":13,"fx":[{"t":"shield","v":20.0},{"t":"heal","v":11.5},{"t":"defbuf","v":14,"dur":8}]},"griffon":{"n":null,"tr":{"type":"win","n":4,"s":4},"ct":9,"fx":[{"t":"multi","v":2.08,"n":12}]},"croc":{"n":null,"tr":{"type":"combo","n":16},"ct":9,"fx":[{"t":"dmg","v":22.5},{"t":"drain","v":60}]},"ifrit":{"n":null,"tr":{"type":"every","n":5},"ct":11,"fx":[{"t":"multi","v":1.02,"n":24}]},"kraken":{"n":null,"tr":{"type":"win","n":6,"s":7},"ct":14,"fx":[{"t":"multi","v":1.1,"n":20},{"t":"delay","v":4.5}]},"shark":{"n":null,"tr":{"type":"crit"},"ct":7,"fx":[{"t":"multi","v":1.13,"n":10},{"t":"drain","v":60}]},"jester":{"n":null,"tr":{"type":"every","n":7},"ct":12,"fx":[{"t":"ctcut","v":2.9},{"t":"critbuf","v":30,"dur":15}]},"eye":{"n":null,"tr":{"type":"every","n":4},"ct":12,"fx":[{"t":"delay","v":5.0}]},"rhino":{"n":null,"tr":{"type":"win","n":4,"s":6},"ct":10,"fx":[{"t":"dmg","v":19.5},{"t":"defbuf","v":22,"dur":6}]},"drake":{"n":null,"tr":{"type":"kill"},"ct":12,"fx":[{"t":"defbuf","v":21,"dur":8},{"t":"atkbuf","v":94,"dur":8}]},"bear":{"n":null,"tr":{"type":"combo","n":10},"ct":10,"fx":[{"t":"atkbuf","v":198,"dur":6}]},"ape":{"n":null,"tr":{"type":"every","n":3},"ct":7,"fx":[{"t":"multi","v":1.3,"n":12}]},"wyvern":{"n":null,"tr":{"type":"win","n":5,"s":5},"ct":10,"fx":[{"t":"dmg","v":37.5}]},"mgolem":{"n":null,"tr":{"type":"combo","n":12},"ct":13,"fx":[{"t":"shield","v":36.5},{"t":"defbuf","v":21,"dur":10}]},"alien":{"n":null,"tr":{"type":"every","n":6},"ct":9,"fx":[{"t":"dmg","v":18.0},{"t":"ctcut","v":2.4}]},"pdemon":{"n":null,"tr":{"type":"combo","n":8},"ct":8,"fx":[{"t":"multi","v":0.99,"n":14},{"t":"ctcut","v":2.5}]},"frost":{"n":null,"tr":{"type":"every","n":8},"ct":15,"fx":[{"t":"delay","v":4.0},{"t":"defbuf","v":20,"dur":9}]},"flame":{"n":null,"tr":{"type":"every","n":3},"ct":8,"fx":[{"t":"multi","v":0.67,"n":16},{"t":"atkbuf","v":86,"dur":5}]},"volt":{"n":null,"tr":{"type":"crit"},"ct":5,"fx":[{"t":"multi","v":1.81,"n":8}]},"tempest":{"n":null,"tr":{"type":"win","n":6,"s":6},"ct":12,"fx":[{"t":"multi","v":1.11,"n":18},{"t":"critbuf","v":30,"dur":15}]},"shadow":{"n":null,"tr":{"type":"crit"},"ct":11,"fx":[{"t":"delay","v":3.4},{"t":"dmg","v":22.5}]},"crystal":{"n":null,"tr":{"type":"every","n":9},"ct":14,"fx":[{"t":"critbuf","v":30,"dur":15},{"t":"atkbuf","v":90,"dur":9}]},"magma":{"n":null,"tr":{"type":"kill"},"ct":11,"fx":[{"t":"multi","v":1.44,"n":20}]},"bunny":{"n":null,"tr":{"type":"combo","n":9},"ct":9,"fx":[{"t":"atkbuf","v":127,"dur":5},{"t":"heal","v":14.0}]},"chick":{"n":null,"tr":{"type":"every","n":5},"ct":10,"fx":[{"t":"heal","v":12.0},{"t":"shield","v":21.0}]},"candy":{"n":null,"tr":{"type":"every","n":6},"ct":15,"fx":[{"t":"heal","v":18.0},{"t":"multi","v":2.0,"n":10}]},"kitten":{"n":null,"tr":{"type":"combo","n":11},"ct":6,"fx":[{"t":"dmg","v":24.0}]},"strawb":{"n":null,"tr":{"type":"every","n":4},"ct":7,"fx":[{"t":"dmg","v":12.5},{"t":"heal","v":8.5}]},"hamster":{"n":null,"tr":{"type":"hit"},"ct":8,"fx":[{"t":"shield","v":21.0}]},"lolli":{"n":null,"tr":{"type":"every","n":5},"ct":13,"fx":[{"t":"ctcut","v":3.1},{"t":"atkbuf","v":88,"dur":8}]},"donut":{"n":null,"tr":{"type":"win","n":4,"s":5},"ct":8,"fx":[{"t":"multi","v":1.02,"n":12},{"t":"drain","v":60}]},"heart":{"n":null,"tr":{"type":"crit"},"ct":10,"fx":[{"t":"dmg","v":20.5},{"t":"critbuf","v":30,"dur":15}]},"teddy":{"n":null,"tr":{"type":"hit"},"ct":11,"fx":[{"t":"heal","v":16.5}]},"ribbon":{"n":null,"tr":{"type":"combo","n":13},"ct":12,"fx":[{"t":"delay","v":4.4},{"t":"multi","v":2.71,"n":8}]},"icecream":{"n":null,"tr":{"type":"every","n":7},"ct":13,"fx":[{"t":"multi","v":1.08,"n":16},{"t":"delay","v":3.5}]},"cupcake":{"n":null,"tr":{"type":"every","n":6},"ct":13,"fx":[{"t":"shield","v":40.0}]},"sakura":{"n":null,"tr":{"type":"every","n":4},"ct":11,"fx":[{"t":"multi","v":0.87,"n":28}]},"panda":{"n":null,"tr":{"type":"win","n":5,"s":7},"ct":10,"fx":[{"t":"multi","v":1.05,"n":14},{"t":"defbuf","v":22,"dur":6}]},"starry":{"n":null,"tr":{"type":"combo","n":14},"ct":14,"fx":[{"t":"critbuf","v":30,"dur":15},{"t":"multi","v":2.55,"n":10}]},"ogre":{"n":null,"tr":{"type":"win","n":5,"s":6},"ct":14,"fx":[{"t":"dmg","v":38.0},{"t":"atkbuf","v":143,"dur":8}]},"snail":{"n":null,"tr":{"type":"kill"},"ct":15,"fx":[{"t":"defbuf","v":22,"dur":12},{"t":"shield","v":40.0}]},"golem":{"n":null,"tr":{"type":"hit"},"ct":14,"fx":[{"t":"defbuf","v":22,"dur":12}]},"turtle":{"n":null,"tr":{"type":"every","n":7},"ct":16,"fx":[{"t":"defbuf","v":18,"dur":10},{"t":"shield","v":31.5},{"t":"heal","v":18.0}]},"vamp":{"n":null,"tr":{"type":"every","n":5},"ct":9,"fx":[{"t":"multi","v":0.98,"n":16},{"t":"drain","v":60}]},"chimera":{"n":null,"tr":{"type":"combo","n":15},"ct":13,"fx":[{"t":"dmg","v":30.0},{"t":"atkbuf","v":113,"dur":8},{"t":"critbuf","v":30,"dur":15}]},"mino":{"n":null,"tr":{"type":"win","n":4,"s":5},"ct":11,"fx":[{"t":"dmg","v":49.5}]},"delf":{"n":null,"tr":{"type":"every","n":5},"ct":14,"fx":[{"t":"multi","v":1.35,"n":30}]},"siren":{"n":null,"tr":{"type":"every","n":8},"ct":14,"fx":[{"t":"delay","v":4.9},{"t":"critbuf","v":30,"dur":15}]},"lich":{"n":null,"tr":{"type":"every","n":10},"ct":20,"fx":[{"t":"dmg","v":78.0}]},"mammoth":{"n":null,"tr":{"type":"kill"},"ct":13,"fx":[{"t":"multi","v":1.86,"n":14},{"t":"delay","v":5.0}]},"levia":{"n":null,"tr":{"type":"win","n":6,"s":8},"ct":15,"fx":[{"t":"multi","v":2.03,"n":24}]},"nightmare":{"n":null,"tr":{"type":"combo","n":16},"ct":16,"fx":[{"t":"delay","v":5.0},{"t":"ctcut","v":5.0}]},"kyubi":{"n":null,"tr":{"type":"crit"},"ct":9,"fx":[{"t":"multi","v":2.02,"n":9},{"t":"atkbuf","v":123,"dur":6}]},"demon":{"n":null,"tr":{"type":"every","n":7},"ct":15,"fx":[{"t":"multi","v":1.3,"n":20},{"t":"critbuf","v":30,"dur":15}]},"dknight":{"n":null,"tr":{"type":"crit"},"ct":12,"fx":[{"t":"dmg","v":31.5},{"t":"drain","v":60}]},"whale":{"n":null,"tr":{"type":"every","n":9},"ct":16,"fx":[{"t":"heal","v":25.0},{"t":"delay","v":5.0}]},"dragon":{"n":null,"tr":{"type":"combo","n":16},"ct":15,"fx":[{"t":"dmg","v":49.0},{"t":"atkbuf","v":163,"dur":9}]},"fallen":{"n":null,"tr":{"type":"every","n":6},"ct":14,"fx":[{"t":"dmg","v":33.0},{"t":"critbuf","v":30,"dur":15}]},"maou":{"n":null,"tr":{"type":"combo","n":16},"ct":18,"fx":[{"t":"dmg","v":42.0},{"t":"multi","v":1.95,"n":16},{"t":"atkbuf","v":115,"dur":11}]},"cake":{"n":null,"tr":{"type":"kill"},"ct":10,"fx":[{"t":"atkbuf","v":120,"dur":7},{"t":"critbuf","v":30,"dur":15}]},"moonrab":{"n":null,"tr":{"type":"win","n":5,"s":5},"ct":9,"fx":[{"t":"multi","v":1.81,"n":18}]},"heartq":{"n":null,"tr":{"type":"crit"},"ct":14,"fx":[{"t":"dmg","v":36.5},{"t":"delay","v":5.0}]},"choco":{"n":null,"tr":{"type":"every","n":8},"ct":12,"fx":[{"t":"multi","v":1.65,"n":14},{"t":"heal","v":21.0}]},"shortcake":{"n":null,"tr":{"type":"combo","n":10},"ct":12,"fx":[{"t":"heal","v":17.5},{"t":"shield","v":31.0},{"t":"defbuf","v":22,"dur":8}]},"rainbow":{"n":null,"tr":{"type":"every","n":10},"ct":22,"fx":[{"t":"atkbuf","v":73,"dur":12},{"t":"critbuf","v":30,"dur":15},{"t":"ctcut","v":3.9},{"t":"heal","v":19.5}]},"dango":{"n":null,"tr":{"type":"every","n":3},"ct":9,"fx":[{"t":"multi","v":1.04,"n":15},{"t":"heal","v":14.0}]},"swan":{"n":null,"tr":{"type":"win","n":5,"s":6},"ct":16,"fx":[{"t":"heal","v":29.0},{"t":"defbuf","v":22,"dur":13}]}};
 const USKN={slime:'粘液大爆発',worm:'千糸結界',bat:'吸血乱舞',rat:'鼠算式連撃',toad:'猛毒の沼',shroom:'胞子の楽園',spider:'蜘蛛の巣地獄',bee:'女王蜂の号令',wolf:'満月の狂宴',snake:'蛇神の呪縛',
  crab:'甲殻要塞',ghost:'霊界の守護',skel:'骨王の行進',zombie:'不死の軍勢',scorp:'死針一閃',boar:'猪突猛進',owl:'夜梟の千里眼',troll:'巨人の守り',griffon:'天翼の嵐',croc:'鰐王の顎',
  ifrit:'灼熱地獄',kraken:'深海の大渦',shark:'鮫牙乱舞',jester:'道化の奇術',eye:'千眼の邪視',rhino:'鋼角突撃',drake:'竜鱗の加護',bear:'熊王の剛腕',ape:'巨猿乱打',wyvern:'飛竜の急降下',
@@ -1603,10 +1592,8 @@ const USKN={slime:'粘液大爆発',worm:'千糸結界',bat:'吸血乱舞',rat:'
  cake:'ハッピーバースデー',moonrab:'お月見ラッシュ',heartq:'ハートの女王の裁き',choco:'ショコラフォンデュ',shortcake:'いちごの祝福',rainbow:'にじいろの奇跡',dango:'三色だんご乱舞',swan:'白鳥の湖'};
 const UTYPE={crab:8,mgolem:8,snail:8,ghost:10,turtle:10,ape:9,bear:9};
 const UNAME={crab:'甲殻の大盾',mgolem:'機神の大盾',snail:'螺旋の大盾',ghost:'霊魂の護符',turtle:'金剛の護符',ape:'巨猿の籠手',bear:'熊王の籠手'};
-{const offA='ABDEFGHJK',defA='CIL';let oi=0,di=0;
- ALLE.forEach((d,i)=>{if(UTYPE[d.id]!=null)d.ut=UTYPE[d.id];if(UNAME[d.id])d.un=UNAME[d.id];
-  const boss=ISB(d),ak=isDefT(d.ut)?defA[di++%3]:offA[oi++%offA.length],a=UARCH[ak],k='x_'+d.id,mul=boss?1.3:1;
-  SK[k]={n:USKN[d.id],uq:true,tr:a.tr,ct:a.ct,fx:a.fx.map(f=>Object.assign({},f,f.t==='multi'?{n:Math.round(f.n*mul)}:f.t==='delay'||f.t==='ctcut'?{}:{v:f.v*mul}))};d.us=k})}
+ALLE.forEach(d=>{if(UTYPE[d.id]!=null)d.ut=UTYPE[d.id];if(UNAME[d.id])d.un=UNAME[d.id];
+  const a=USPEC[d.id],k='x_'+d.id;SK[k]={n:USKN[d.id],uq:true,tr:a.tr,ct:a.ct,fx:a.fx.map(f=>Object.assign({},f))};d.us=k});
 function migrateW(w){
   if(w.gw&&!w.u){const e=EXPW[Math.min(4,w.r)];w.g=e.id;w.gw=0;w.c=null}
   if(w.g){if(GMAP[w.g])w.g=GMAP[w.g];const e=EXPI[w.g];if(e){w.r=e.r;w.t=e.t;w.name=e.wn;w.lv=Math.min(w.lv,RAR[e.r].cap)}w.aff=[];w.sk='g_'+w.g;return}
@@ -1797,7 +1784,8 @@ function isEq(id){return S.eq.includes(id)}
 Object.values(SK).forEach(s=>{if(s.tr.type==='hit'&&!s.ct2){s.ct*=2;s.ct2=1}});
 SK.u_abyss={n:'虚無の葬送曲',uq:true,tr:{type:'every',n:4},ct:10,fx:[{t:'multi',v:.8,n:24},{t:'drain',v:40},{t:'delay',v:2}]};
 function voidWeapon(nm){const w=makeW({t:LORD.ut,r:6,f:1,name:LORD.un,sk:LORD.us,u:'abyss'});w.god=1;w.aff.forEach((a,i)=>{if(i<(nm||0))a.v=AFFD[a.k].max});return w}
-function trText(tr){return{mat:'強化の素材にした時',win:`${tr.s}秒以内に${tr.n}回攻撃`,every:`${tr.n}回攻撃ごと`,combo:`${tr.n}コンボごと`,nomiss:`ノーミスで${tr.n}語打つごと`,kill:'敵を倒した時',hit:'被ダメージ時',crit:'クリティカル時',low:'HP50%以下で被弾時'}[tr.type]}
+function trText(tr){return{mat:'強化の素材にした時',win:`${tr.s}秒以内に${tr.n}回攻撃`,every:`${tr.n}回攻撃ごと`,combo:`${tr.n}コンボごと`,kill:'敵を倒した時',hit:'被ダメージ時',crit:'クリティカル時',low:'HP50%以下で被弾時'}[tr.type]}
+function mhN(f,m){return Math.max(1,Math.round(f.n*(1+(m-1)*.6)))}
 function fxText(f,m){
   switch(f.t){
     case'dmg':return `攻撃力×${(f.v*m).toFixed(2)}の追撃`;
@@ -1805,11 +1793,12 @@ function fxText(f,m){
     case'shield':return `最大HPの${(f.v*m).toFixed(1)}%のシールド`;
     case'atkbuf':return `${f.dur}秒間 攻撃力+${Math.round(f.v*m)}%`;
     case'critbuf':return `${f.dur}秒間 クリ率+${Math.round(f.v*m)}%`;
+    case'defbuf':return `${f.dur}秒間 被ダメージ-${Math.round(f.v*m)}%`;
     case'delay':return `敵の行動を${(f.v*Math.sqrt(m)).toFixed(1)}秒停止`;
     case'drain':return `与えたダメージの${Math.round(f.v*m)}%を吸収`;
     case'ctcut':return `他の武器のCTを${(f.v*Math.sqrt(m)).toFixed(1)}秒短縮`;
     case'mat':return `経験値 +${f.v.toLocaleString()}`;
-    case'multi':return `攻撃力×${f.v}の${Math.round(f.n*(1+(m-1)*.6))}連撃`;
+    case'multi':{const n=mhN(f,m);return `攻撃力×${(f.v*m*f.n/n).toFixed(2)}の${n}連撃`}
   }
 }
 
@@ -2222,11 +2211,11 @@ function fire(e){
   const sk=SK[e.w.sk],m=smOf(e.w),fxs=skFx(sk);if(!fxs.length)return;e.ct=sk.ct*(1-B.st.ctr/100);let last=0;const parts=[];
   e.el.animate([{transform:'scale(1)'},{transform:'scale(1.25)'},{transform:'scale(1)'}],{duration:380,easing:'ease-out'});
   fxs.forEach(f=>{const v=f.v*m;
-    if(f.t==='dmg'){last=Math.round(curAtk()*v*(1+B.st.sp/100)*comboMul());hitEnemy({d:last,crit:false,skill:true});parts.push(`${fmt(last)}ダメージ`)}
-    else if(f.t==='multi'){const n=Math.round(f.n*(1+(m-1)*.6)),hits=rollHits(curAtk()*f.v*(1+B.st.sp/100)*comboMul(),n,true,.15);last=hits.reduce((a,h)=>a+h.d,0);schedule(hits,40);parts.push(`${n}連撃 ${fmt(last)}ダメージ`)}
+    if(f.t==='dmg'){const c=Math.random()*100<B.st.cr+buffSum('critbuf');last=Math.round(curAtk()*v*(1+B.st.sp/100)*comboMul()*(c?1+B.st.cd/100:1));hitEnemy({d:last,crit:c,skill:true});parts.push(`${c?'会心！':''}${fmt(last)}ダメージ`)}
+    else if(f.t==='multi'){const n=mhN(f,m),hits=rollHits(curAtk()*f.v*m*f.n/n*(1+B.st.sp/100)*comboMul(),n,true,.15);last=hits.reduce((a,h)=>a+h.d,0);schedule(hits,40);parts.push(`${n}連撃 ${fmt(last)}ダメージ`)}
     else if(f.t==='heal'){const a=heal(B.maxHp*v/100);if(a)parts.push(`HP${fmt(a)}回復`)}
     else if(f.t==='shield'){const a=Math.max(0,Math.min(Math.round(B.maxHp*v/100),B.maxHp-B.shield));B.shield+=a;parts.push(a?`シールド+${fmt(a)}`:'シールド上限')}
-    else if(f.t==='atkbuf'||f.t==='critbuf'){B.buffs.push({t:f.t,v,until:performance.now()+f.dur*1000});parts.push(`${f.t==='atkbuf'?'攻撃':'クリ率'}+${Math.round(v)}%`)}
+    else if(f.t==='atkbuf'||f.t==='critbuf'||f.t==='defbuf'){B.buffs.push({t:f.t,v,until:performance.now()+f.dur*1000});parts.push(f.t==='defbuf'?`被ダメージ-${Math.round(v)}%`:`${f.t==='atkbuf'?'攻撃':'クリ率'}+${Math.round(v)}%`)}
     else if(f.t==='delay'){const sec=f.v*Math.sqrt(m);if(B.enemy&&!B.enemy.dead)B.enemy.stun=Math.max(B.enemy.stun,sec);parts.push(`敵を${sec.toFixed(1)}秒停止`)}
     else if(f.t==='ctcut'){const sec=f.v*Math.sqrt(m);B.ws.forEach(o=>{if(o!==e)o.ct=Math.max(0,o.ct-sec)});parts.push(`CT${sec.toFixed(1)}秒短縮`)}
     else if(f.t==='drain'){const a=heal(last*v/100);if(a)parts.push(`HP${fmt(a)}吸収`)}
@@ -2237,7 +2226,7 @@ function fire(e){
 }
 function enemyHit(){
   
-  const en=B.enemy;let d=Math.max(1,Math.round(en.atk*(.9+Math.random()*.2)*100/(100+B.st.def)));
+  const en=B.enemy;let d=Math.max(1,Math.round(en.atk*(.9+Math.random()*.2)*100/(100+B.st.def)*(1-Math.min(75,buffSum('defbuf'))/100)));
   if(B.shield>0){const a=Math.min(B.shield,d);B.shield-=a;d-=a}
   B.hp-=d;const eg=$('eg');eg.className='';void eg.offsetWidth;eg.className='atk';
   const c=$('console');c.classList.remove('hurt');void c.offsetWidth;c.classList.add('hurt');
@@ -2379,8 +2368,8 @@ function loop(ts){
   setW($('psh'),'psh',Math.min(100,B.shield/B.maxHp*100).toFixed(1)+'%');
   setT($('phpTxt'),'phpTxt',`${Math.ceil(B.hp)}/${B.maxHp}`+(B.shield>0?` +${B.shield}`:''));
   B.ws.forEach((e,i)=>{const cool=e.ct>0,v=cool?String(Math.ceil(e.ct)):'';if(e.cs!==cool){e.cs=cool;e.el.classList.toggle('cool',cool)}if(e.cv!==v){e.cv=v;e.el.lastChild.textContent=v}});
-  const ab=buffSum('atkbuf'),cb=buffSum('critbuf');
-  setH($('buffs'),'buffs',(ab?`<span>攻撃+${Math.round(ab)}%</span>`:'')+(cb?`<span>クリ率+${Math.round(cb)}%</span>`:'')+(en&&en.stun>0?`<span>敵停止 ${en.stun.toFixed(1)}s</span>`:''));
+  const ab=buffSum('atkbuf'),cb=buffSum('critbuf'),db=Math.min(75,buffSum('defbuf'));
+  setH($('buffs'),'buffs',(ab?`<span>攻撃+${Math.round(ab)}%</span>`:'')+(cb?`<span>クリ率+${Math.round(cb)}%</span>`:'')+(db?`<span>被ダメ-${Math.round(db)}%</span>`:'')+(en&&en.stun>0?`<span>敵停止 ${en.stun.toFixed(1)}s</span>`:''));
 }
 requestAnimationFrame(loop);
 
@@ -2571,10 +2560,10 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='2.0.4-beta';
+const VERSION='2.0.6-beta';
 function clogOpen(k){return k==='nm'?!!(S&&S.nm):k==='ab'?(typeof abOpen==='function'&&abOpen()):false}
 const CHANGELOG=[
- ['2.0.4-beta',['サイトを開いたときや再読み込みしたときに、拠点のモードに合ったBGMが流れるように']],['2.0.3-beta',['ホーム画面の称号を、名前の下の行に固定して表示するように','ランクの王冠マークは、ランク999に到達したときだけ表示されるように']],
+ ['2.0.6-beta',['「○コンボごと」で発動するスキルの必要コンボ数を、最大16コンボまでに引き下げ（そのぶん一部のスキルの効果量を調整）']],['2.0.5-beta',["スキルの発動条件「ノーミスで○語」を廃止し、「○コンボごと」に統合（必要なコンボ数を大きく下げ、条件が厳しいぶん性能を高めに）", "すべてのユニーク武器に、ほかと被らない固有スキルを設定", "発動条件とCTがまったく同じスキルをなくし、完全な下位互換になるスキルがないように調整", "効果の多いスキルほど1つ1つの効果は控えめに、効果が1つだけのスキルほど強力に", "被ダメージ時に発動するスキルは、CTを長く・効果を控えめに統一", "新しいスキル効果「防御UP」（一定時間、受けるダメージを軽減）を追加", "新スキル「一閃」「疾風」「硬化」「不屈の構え」「受け流し」を追加", "追撃にも会心が出るように。追撃は連撃よりも合計ダメージが高くなるように調整", "連撃は、レアリティが上がると回数だけでなく1発の威力も上がるように", "スキル「連撃」（効果は追撃）の名前を「速攻」に変更"]],['2.0.4-beta',['サイトを開いたときや再読み込みしたときに、拠点のモードに合ったBGMが流れるように']],['2.0.3-beta',['ホーム画面の称号を、名前の下の行に固定して表示するように','ランクの王冠マークは、ランク999に到達したときだけ表示されるように']],
  ['2.0.2-beta',[{t:'■■■モードの拠点・■■の■■■戦・■■の■■に専用BGMを追加',u:'アビスモードの拠点画面・深淵の支配者戦・深淵の果ての決戦に専用BGMを追加',k:'ab'},{t:'“■■の■■”の決戦の演出を強化',u:'深淵の果ての決戦に、専用の背景と、出題の文字やキーが青い炎に包まれる演出を追加',k:'ab'},{t:'■■■■を果たした者の■■■拠点は、姿を変える',u:'深淵踏破後は、アビスの拠点画面が青い炎を基調としたテーマに変わるように',k:'ab'},{t:'とある称号の見た目を特別仕様に',u:'称号「深淵の果てに至りし者」の見た目を特別仕様に（燃え盛る青い炎）',k:'ab'},'更新情報で、解放したモードに関する伏せ字が読めるように']],
  ['2.0.1-beta',[{t:'■■■モードの■■■層以降の強さを調整し、“■■の■■”を設定。最強の装備と腕があれば、たどり着けるかもしれない――',u:'アビスモードの101層以降の強さを調整し、999層の先に“深淵の果て”を設定。最強の装備と腕があれば、たどり着けるかもしれない――',k:'ab'},'追加能力が理論値（最大値）のとき、詳細画面で数値を黄色で表示するように','武器一覧の「全スキル」の絞り込みに「経験値」を追加',{t:'■■■モードの最終到達地点の表示を調整',u:'アビスモードの最終到達地点の表示を調整（踏破後は「深淵踏破」と表示）',k:'ab'},{t:'■■■モードの深層の道中の敵を少し柔らかく調整',u:'アビスモード501層以降の、深淵の支配者以外の敵のHPを少しずつ下げるように（999層で半分）',k:'ab'},{t:'“■■の■■■”が落とす武器は、深い層ほど■■■■の追加能力が増えるように',u:'“深淵の支配者”が落とす武器は、500層から100層ごとに理論値の追加能力が1つずつ増えるように（深淵の果てでは確定ドロップ・すべて理論値）',k:'ab'},'シールドの上限を最大HPと同じに（下方修正）',{t:'■■■モードに■■■■■■も現れるように。倒した敵の種類によって、手に入る武器が変わります',u:'アビスモードにグリッチモンスターも現れるように。通常モンスターはハード、グリッチモンスターはナイトメアと同じドロップになります',k:'ab'},{t:'■■■モードの敵の攻撃力が、深く進むほど大きく伸びるように',u:'アビスモードの敵の攻撃力が、深く進むほど大きく伸びるように',k:'ab'}]],
  ['2.0.0-beta',[{t:'ついにバージョン2.0！ 新しいモード「■■■モード」を追加しました。ある■■を手にした者の前にだけ、■■が開きます',u:'ついにバージョン2.0！ 新しいモード「アビスモード」を追加しました。称号「悪夢を喰らう者」を手にした者の前にだけ、アビスゲートが開きます',k:'ab'},{t:'■■■モードは終わりのない無限のダンジョン。進むほど敵は強くなり、倒れても撤退しても、それまでに手に入れた武器と経験値は持ち帰れます',u:'アビスモードは終わりのない無限のダンジョン。進むほど敵は強くなり、倒れても撤退しても、それまでに手に入れた武器と経験値は持ち帰れます',k:'ab'},{t:'■■の奥、■■層ごとに“■■の■■■”が待つという。■%の確率で、見たこともない■■■武器を落とすらしい――',u:'深淵の奥、50層ごとに“深淵の支配者”が待つ。深く潜るほど高い確率で、専用のゴッド武器「深淵王杖「ヴォイド・レクイエム」」を落とす',k:'ab'},{t:'新しい称号を■つ追加',u:'新しい称号を4つ追加（深淵を覗く者／奈落の踏破者／深淵を統べる者／虚無の継承者）',k:'ab'},'リザルト画面で武器にカーソルを合わせると、その武器の詳細を確認できるように（スマホはタップ）','リザルト画面でドロップした武器が多いときは、アイコンを並べて表示し、その部分だけスクロールできるように']]
@@ -2785,8 +2774,8 @@ const SORTS=[['id','入手順'],['fav','お気に入り'],['r','レアリティ'
 const RCOL=['白','緑','青','紫','金','赤','虹'];
 $('sSort').innerHTML=SORTS.map(([v,n])=>`<option value="${v}">${n}</option>`).join('');
 $('fType').innerHTML='<option value="-1">全種類</option>'+TYPES.map((t,i)=>`<option value="${i}">${t.e} ${t.n}</option>`).join('');
-const SKC=['dmg','multi','drain','heal','shield','atkbuf','critbuf','delay','ctcut','mat',''],SKT=['every','win','combo','nomiss','kill','crit','hit','low','mat'];
-{const CN={dmg:'追撃',multi:'連撃',drain:'吸収',heal:'回復',shield:'シールド',atkbuf:'攻撃UP',critbuf:'会心UP',delay:'時止め',ctcut:'CT短縮',mat:'経験値'},TN={every:'○回攻撃ごと',win:'○秒以内に○回攻撃',combo:'○コンボごと',nomiss:'ノーミスで○語',kill:'敵を倒した時',crit:'クリティカル時',hit:'被ダメージ時'},used=new Set(CAT.map(c=>c.sk).concat(ALLE.map(d=>d.us)));
+const SKC=['dmg','multi','drain','heal','shield','atkbuf','critbuf','defbuf','delay','ctcut','mat',''],SKT=['every','win','combo','kill','crit','hit','low','mat'];
+{const CN={dmg:'追撃',multi:'連撃',drain:'吸収',heal:'回復',shield:'シールド',atkbuf:'攻撃UP',critbuf:'会心UP',defbuf:'防御UP',delay:'時止め',ctcut:'CT短縮',mat:'経験値'},TN={every:'○回攻撃ごと',win:'○秒以内に○回攻撃',combo:'○コンボごと',kill:'敵を倒した時',crit:'クリティカル時',hit:'被ダメージ時'},used=new Set(CAT.map(c=>c.sk).concat(ALLE.map(d=>d.us)));
  const L=[...used].filter(k=>SK[k]).sort((a,b)=>SKC.indexOf(SK[a].fx[0].t)-SKC.indexOf(SK[b].fx[0].t)||SKT.indexOf(SK[a].tr.type)-SKT.indexOf(SK[b].tr.type)||SK[a].n.localeCompare(SK[b].n,'ja'));
  $('fSkill').innerHTML='<option value="">全スキル</option><optgroup label="カテゴリで絞り込み">'+Object.entries(CN).map(([k,n])=>`<option value="c:${k}">${n}</option>`).join('')+'</optgroup><optgroup label="発動条件で絞り込み">'+Object.entries(TN).map(([k,n])=>`<option value="t:${k}">${n}</option>`).join('')+'</optgroup>'}
 $('fAff').innerHTML='<option value="">追加能力：すべて</option>'+AFF.map(a=>`<option value="${a.k}">${a.n}を持つ</option>`).join('');
