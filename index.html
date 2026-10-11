@@ -66,6 +66,8 @@ button:focus-visible{outline:2px dashed var(--sel);outline-offset:3px}
 .fc.sel{background:var(--sel);border-color:var(--sel);color:#000;animation:none}
 .fc:disabled{cursor:default}
 .finfo{margin-top:12px;font-size:14px;line-height:1.7}
+.rcol{width:100%;max-width:520px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.gocard .big.go{margin-top:0}.gocard .finfo{margin-top:8px}
 .statgrid{margin-top:12px;padding-top:12px;border-top:2px solid var(--faint)}
 @keyframes blink{50%{opacity:.3}}
 .hero{text-align:center;padding:18px 0 6px}
@@ -110,7 +112,7 @@ button:focus-visible{outline:2px dashed var(--sel);outline-offset:3px}
 .wkana{font-size:clamp(24px,6.6vw,36px);line-height:1.3;word-break:break-all}
 .wkana .d{color:var(--faint)}
 .wkana .c{color:var(--sel)}
-.wroma{font-size:clamp(15px,4vw,20px);letter-spacing:.12em;word-break:break-all;margin-top:4px;color:var(--dim)}
+.wroma{text-transform:uppercase;font-size:clamp(15px,4vw,20px);letter-spacing:.12em;word-break:break-all;margin-top:4px;color:var(--dim)}
 .wroma .d{color:var(--faint)}
 .wroma .c{color:var(--fg)}
 .enemy-wrap{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding-bottom:8px}
@@ -746,6 +748,20 @@ body.nmui #home.burst .hscroll{transform:translateX(-5px) skewX(2deg);filter:hue
 @keyframes tshake{25%{transform:translate(-3px,1px)}50%{transform:translate(3px,-1px)}75%{transform:translate(-1px,2px)}}
 .tget .tglab,.tget .tgd{position:relative;z-index:2;display:inline-block;background:rgba(8,8,14,.8);padding:2px 12px;border-radius:12px}
 .tget .ttl.big{display:flex;width:fit-content;margin:0 auto}
+.nmbon{position:relative;margin:4px 0 10px;padding:8px 10px;border:2px solid var(--sel);border-radius:8px;background:linear-gradient(180deg,rgba(255,225,74,.16),rgba(255,225,74,.03));box-shadow:0 0 18px rgba(255,225,74,.25);animation:nmbIn .6s cubic-bezier(.2,1.5,.4,1) both}
+.nmbon .nmt{font-size:16px;color:var(--sel);letter-spacing:4px;margin-bottom:2px;animation:nmbGlow 1.6s ease-in-out infinite}
+.nmbon .drop{margin-top:6px}
+.rh2{margin-bottom:6px}
+.rline{margin:4px 0 8px}.rxp{color:var(--sel);font-size:18px;font-weight:400}
+.rankup{margin:4px 0 8px;padding:6px 10px;border:2px solid var(--sel);color:var(--fg);text-align:center;animation:nmbIn .5s cubic-bezier(.2,1.5,.4,1) both}.rankup b{color:var(--sel);letter-spacing:3px;font-weight:400;animation:nmbGlow 1.2s ease-in-out infinite}
+.rlab{margin-top:4px}
+.rdrops{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:5px;margin:6px 0 8px}
+.rdrops .drop{padding:3px 8px;gap:6px;min-width:0}.rdrops .drop.big{grid-column:1 / -1}
+.rdrops .drop .n{font-size:13px;line-height:1.3;overflow-wrap:anywhere}.rdrops .drop .small{font-size:11px;line-height:1.3}
+.rstats.rsc{margin:8px 0 4px;gap:6px}.rstats.rsc div{padding:3px 2px;gap:0}.rstats.rsc b{font-size:18px}.rstats.rsc .small{font-size:11px;line-height:1.3}
+.rdrops .drop .e{width:32px;height:32px;flex:0 0 32px}.rdrops .drop .gt{font-size:11px;top:2px;right:4px}.nmbon .drop .e{width:36px;height:36px;flex:0 0 36px}.nmbon .drop{padding:4px 10px}
+#mbox:has(.rh2){max-height:94vh;padding:14px 18px}
+@keyframes nmbIn{from{transform:scale(.6);opacity:0}}@keyframes nmbGlow{50%{text-shadow:0 0 12px var(--sel)}}
 .tmore{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:12px}
 .tmore .ttl{font-size:12px}
 
@@ -970,12 +986,16 @@ button.chip.dis{opacity:.3;text-decoration:line-through}
       </div>
       <div class="armbtns"><button class="big" data-arm="equip">装備</button><button class="big" data-arm="enh">強化</button><button class="big" data-arm="syn">合成</button><button class="big decb" data-arm="evo" hidden>デコード</button></div>
     </div>
+    <div class="rcol">
+    <div class="card gocard">
+      <button class="big go" id="goBtn">出撃</button>
+      <div class="finfo" id="fInfo"></div>
+    </div>
     <div class="card">
       <div class="diffsel" id="diffSel"><button data-diff="easy" style="--dc:#3fa9ff">イージー</button><button data-diff="normal" style="--dc:#22c55e">ノーマル</button><button data-diff="hard" style="--dc:#ff3b3b">ハード</button><button data-diff="nightmare" class="nmb" style="--dc:#b04dff" hidden>ナイトメア</button></div>
       <div class="fhead"><span>階層を選ぶ</span><span class="small">最高到達 <span id="hMax">0</span>層</span></div>
       <div class="fgrid" id="fgrid"></div>
-      <div class="finfo" id="fInfo"></div>
-      <button class="big go" id="goBtn">出撃</button>
+    </div>
     </div>
     <p class="small hnote"><span id="verTxt"></span>　<button class="linkb" id="clogBtn">更新情報</button>　<button class="linkb" id="tutBtn">あそびかた</button></p>
   </div>
@@ -1071,7 +1091,7 @@ const SK={
  counter:{n:'反撃',tr:{type:'hit'},ct:14,fx:[{t:'dmg',v:1.2}]},
  heal:{n:'癒しの光',tr:{type:'hit'},ct:15,fx:[{t:'heal',v:10}]},
  rally:{n:'鼓舞',tr:{type:'every',n:5},ct:15,fx:[{t:'atkbuf',v:20,dur:6}]},
- wall:{n:'鉄壁',tr:{type:'low'},ct:20,fx:[{t:'shield',v:15}]},
+ wall:{n:'鉄壁',tr:{type:'kill'},ct:20,fx:[{t:'shield',v:15}]},
  thunder:{n:'雷撃',tr:{type:'crit'},ct:7,fx:[{t:'dmg',v:1.8}]},
  stop:{n:'時止め',tr:{type:'win',n:6,s:8},ct:18,fx:[{t:'delay',v:3}]},
  focus:{n:'集中',tr:{type:'every',n:10},ct:20,fx:[{t:'critbuf',v:30,dur:5}]},
@@ -1084,8 +1104,8 @@ const SK={
  u_blessing:{n:'女神の祝福',tr:{type:'win',n:6,s:6},ct:18,fx:[{t:'atkbuf',v:40,dur:8},{t:'critbuf',v:25,dur:8}]},
  u_vamp:{n:'吸血の宴',tr:{type:'every',n:3},ct:8,fx:[{t:'multi',v:.5,n:6},{t:'drain',v:40}]},
  u_berserk:{n:'怒髪天',tr:{type:'hit'},ct:12,fx:[{t:'atkbuf',v:50,dur:6},{t:'multi',v:.3,n:6}]},
- u_aegis:{n:'絶対防壁',tr:{type:'low'},ct:16,fx:[{t:'shield',v:40},{t:'heal',v:10}]},
- u_phoenix:{n:'不死鳥の炎',tr:{type:'low'},ct:24,fx:[{t:'heal',v:40},{t:'atkbuf',v:30,dur:10}]},
+ u_aegis:{n:'絶対防壁',tr:{type:'kill'},ct:16,fx:[{t:'shield',v:40},{t:'heal',v:10}]},
+ u_phoenix:{n:'不死鳥の炎',tr:{type:'kill'},ct:24,fx:[{t:'heal',v:40},{t:'atkbuf',v:30,dur:10}]},
  u_storm:{n:'天雷の嵐',tr:{type:'crit'},ct:8,fx:[{t:'multi',v:.5,n:12}]},
  u_haste:{n:'神速',tr:{type:'every',n:8},ct:12,fx:[{t:'ctcut',v:3},{t:'critbuf',v:30,dur:6}]},
  regen:{n:'再生',tr:{type:'every',n:6},ct:10,fx:[{t:'heal',v:6}]},
@@ -1093,19 +1113,19 @@ const SK={
  might:{n:'剛力',tr:{type:'win',n:5,s:5},ct:12,fx:[{t:'atkbuf',v:30,dur:5}]},
  eagle:{n:'鷹の目',tr:{type:'every',n:7},ct:12,fx:[{t:'critbuf',v:25,dur:6}]},
  bless:{n:'祝福',tr:{type:'every',n:8},ct:14,fx:[{t:'heal',v:8},{t:'atkbuf',v:15,dur:5}]},
- rage:{n:'狂化',tr:{type:'low'},ct:20,fx:[{t:'atkbuf',v:40,dur:8}]},
+ rage:{n:'狂化',tr:{type:'combo',n:50},ct:20,fx:[{t:'atkbuf',v:40,dur:8}]},
  lifeblade:{n:'吸命剣',tr:{type:'crit'},ct:7,fx:[{t:'dmg',v:1.2},{t:'drain',v:60}]},
  haste:{n:'加速',tr:{type:'every',n:10},ct:15,fx:[{t:'ctcut',v:2}]},
  fort:{n:'堅守',tr:{type:'every',n:4},ct:10,fx:[{t:'shield',v:12}]},
  thorn:{n:'茨の守り',tr:{type:'hit'},ct:10,fx:[{t:'shield',v:8},{t:'dmg',v:.6}]},
  sanctu:{n:'聖域',tr:{type:'win',n:5,s:5},ct:12,fx:[{t:'heal',v:6},{t:'shield',v:6}]},
- iron:{n:'不動',tr:{type:'low'},ct:18,fx:[{t:'shield',v:30}]},
+ iron:{n:'不動',tr:{type:'kill'},ct:18,fx:[{t:'shield',v:30}]},
  spirit:{n:'闘気',tr:{type:'hit'},ct:12,fx:[{t:'atkbuf',v:15,dur:5},{t:'critbuf',v:15,dur:5}]},
  u_thousand:{n:'千刃乱舞',tr:{type:'every',n:4},ct:9,fx:[{t:'multi',v:.3,n:25}]},
  u_immortal:{n:'不死の加護',tr:{type:'hit'},ct:18,fx:[{t:'heal',v:20},{t:'shield',v:10}]},
  u_sever:{n:'絶対切断',tr:{type:'every',n:6},ct:12,fx:[{t:'dmg',v:5}]},
  u_chrono:{n:'時空断絶',tr:{type:'win',n:8,s:10},ct:20,fx:[{t:'delay',v:5},{t:'multi',v:.4,n:15}]},
- u_frenzy:{n:'狂戦士の魂',tr:{type:'low'},ct:25,fx:[{t:'atkbuf',v:60,dur:8},{t:'heal',v:15}]}};
+ u_frenzy:{n:'狂戦士の魂',tr:{type:'combo',n:50},ct:25,fx:[{t:'atkbuf',v:60,dur:8},{t:'heal',v:15}]}};
 const NSK=['rush','every3','counter','heal','rally','wall','thunder','stop','focus','drain','slash','meteor','storm','slash','meteor','regen','guard','might','eagle','bless','rage','lifeblade','haste','spirit'];
 const mk=a=>({id:a[0],e:a[1],n:a[2],un:a[3],ut:a[4],us:a[5]});
 const NORMALS=[
@@ -1420,7 +1440,7 @@ const UARCH={
  F:{tr:{type:'every',n:2},ct:5,fx:[{t:'multi',v:.4,n:10},{t:'drain',v:60}]},
  G:{tr:{type:'hit'},ct:10,fx:[{t:'multi',v:.45,n:8}]},
  H:{tr:{type:'crit'},ct:5,fx:[{t:'multi',v:.7,n:20}]},
- I:{tr:{type:'low'},ct:20,fx:[{t:'shield',v:80},{t:'heal',v:50},{t:'atkbuf',v:80,dur:10}]},
+ I:{tr:{type:'nomiss',n:8},ct:20,fx:[{t:'shield',v:80},{t:'heal',v:50},{t:'atkbuf',v:80,dur:10}]},
  J:{tr:{type:'every',n:8},ct:12,fx:[{t:'ctcut',v:6},{t:'atkbuf',v:50,dur:8},{t:'critbuf',v:40,dur:8}]},
  K:{tr:{type:'win',n:10,s:8},ct:15,fx:[{t:'dmg',v:60}]},
  L:{tr:{type:'every',n:4},ct:8,fx:[{t:'shield',v:20},{t:'heal',v:10}]}};
@@ -1597,10 +1617,10 @@ function makeW(o){return{id:S.nid++,t:o.t,r:o.r,f:o.f,lv:1,xp:0,tx:0,name:o.name
 function rarW(f,boss,dif){dif=dif||'normal';const t=Math.min(1,Math.max(0,(f-1)/99)),L=(a,b)=>a+(b-a)*t;let u=boss?L(.6,1):L(.3,.9),w=[L(55,10),L(28,24),L(11,30),L(4.5,22),L(1.5,14)];
   if(dif==='easy'){u=boss?L(.3,1.2):L(.1,.4);w[4]*=.25}if(dif==='normal')u=boss?L(1,3):L(.4,1.5);if(dif==='hard'){u=3;w=[w[0]*.6,w[1],w[2]*1.3,w[3]*1.7,w[4]*2.5]}if(dif==='nightmare'){u=4;w=[w[0]*.3,w[1]*.8,w[2]*1.3,w[3]*2,0];const lg=boss?L(8,12):L(6,9),s4=w.reduce((a,b)=>a+b,0);return w.slice(0,4).map(x=>x/s4*(100-u-lg)).concat(lg,u)}
   const sum=w.reduce((a,b)=>a+b,0);return w.map(x=>x/sum*(100-u)).concat(u)}
-function rollRarity(f,boss,dif){const w=rarW(f,boss,dif);let x=Math.random()*100;for(let i=5;i>=0;i--){if(x<w[i])return i;x-=w[i]}return 0}
-function rollWeapon(f,d,boss){const b=d.base||d;if((B?B.diff:S.diff)==='nightmare'){const r=rollRarity(f,boss,'nightmare');if(r>=5)return gwify(makeW({t:b.ut,r:5,f,name:b.un,sk:b.us,u:b.id}));return glMat(EXPW[r],f)}return rollWeapon0(f,b,boss)}
-function rollWeapon0(f,d,boss){
-  const r=rollRarity(f,boss,B?B.diff:S.diff);
+function rollRarity(f,boss,dif,bo){let w=rarW(f,boss,dif);if(bo){const hi=w.map((x,i)=>i>=3?x*1.5:x),add=hi.slice(3).reduce((a,b)=>a+b,0)-w.slice(3).reduce((a,b)=>a+b,0),lo=w.slice(0,3).reduce((a,b)=>a+b,0),k=Math.max(0,lo-add)/lo;w=hi.map((x,i)=>i<3?x*k:x)}let x=Math.random()*100;for(let i=5;i>=0;i--){if(x<w[i])return i;x-=w[i]}return 0}
+function rollWeapon(f,d,boss,bo){const b=d.base||d;if((B?B.diff:S.diff)==='nightmare'){const r=rollRarity(f,boss,'nightmare',bo);if(r>=5)return gwify(makeW({t:b.ut,r:5,f,name:b.un,sk:b.us,u:b.id}));return glMat(EXPW[r],f)}return rollWeapon0(f,b,boss,bo)}
+function rollWeapon0(f,d,boss,bo){
+  const r=rollRarity(f,boss,B?B.diff:S.diff,bo);
   if(r===5)return makeW({t:d.ut,r:5,f,name:d.un,sk:d.us,u:d.id});
   const L=CAT.filter(e=>e.r===r),e=L[rand(L.length)];
   return makeW({t:e.t,r,f,el:e.el,name:e.name,sk:e.sk,c:e.c});
@@ -1613,7 +1633,7 @@ function needXP(w,L){if(w.r>=6&&L>=100)return 200000;return Math.floor(15*L*(1+w
 function matExp(w){if(w.g)return (EXPI[w.g]?EXPI[w.g].mexp:0)+Math.floor(w.tx*.5);return Math.floor(60*Math.pow(w.r+1,2))+Math.floor(w.tx*.5)}
 function byId(id){return S.inv.find(w=>w.id===id)}
 function isEq(id){return S.eq.includes(id)}
-function trText(tr){return{mat:'強化の素材にした時',win:`${tr.s}秒以内に${tr.n}回攻撃`,every:`${tr.n}回攻撃ごと`,hit:'被ダメージ時',crit:'クリティカル時',low:'HP50%以下で被弾時'}[tr.type]}
+function trText(tr){return{mat:'強化の素材にした時',win:`${tr.s}秒以内に${tr.n}回攻撃`,every:`${tr.n}回攻撃ごと`,combo:`${tr.n}コンボごと`,nomiss:`ノーミスで${tr.n}語打つごと`,kill:'敵を倒した時',hit:'被ダメージ時',crit:'クリティカル時',low:'HP50%以下で被弾時'}[tr.type]}
 function fxText(f,m){
   switch(f.t){
     case'dmg':return `攻撃力×${(f.v*m).toFixed(2)}の追撃`;
@@ -1876,13 +1896,13 @@ function typeKey(k){
   if(!B||!B.active||!W)return;
   const t=W.toks[W.idx],nb=W.buf+k;
   if(t.c.some(c=>c.startsWith(nb))){
-    se('key');W.buf=nb;B.combo++;B.keys++;B.maxCombo=Math.max(B.maxCombo,B.combo);flashKey(k,true);
+    se('key');W.buf=nb;B.combo++;B.keys++;B.maxCombo=Math.max(B.maxCombo,B.combo);flashKey(k,true);trig('combo');
     if(chipOn()){W.chip=1;const h=rollHits(curAtk()*.12*comboMul(),1,false,.1)[0];h.chip=1;hitEnemy(h);if(!W||!B.active){renderCombo();return}}
     if(t.c.includes(nb)&&!t.c.some(c=>c!==nb&&c.startsWith(nb)))advance();
     if(W)renderWord();return;
   }
   if(W.buf&&t.c.includes(W.buf)){advance();if(W)typeKey(k);return}
-  se('miss');B.combo=0;B.miss++;flashKey(k,false);renderCombo();const wd=$('word');wd.classList.remove('shake');void wd.offsetWidth;wd.classList.add('shake');renderWord();
+  se('miss');B.combo=0;B.miss++;missReset();flashKey(k,false);renderCombo();const wd=$('word');wd.classList.remove('shake');void wd.offsetWidth;wd.classList.add('shake');renderWord();
 }
 /* ===== スマホ入力 ===== */
 const MOBILE=/[?&]mobile=1/.test(location.search)||(matchMedia('(pointer:coarse)').matches&&!matchMedia('(hover:hover)').matches);
@@ -1891,7 +1911,7 @@ function landFit(){const vw=innerWidth,vh=innerHeight,upright=MOBILE&&window.scr
 addEventListener('resize',landFit);landFit();
 const MI={used:0,comp:false,flush:false},mIn=$('mIn');
 function hira(v){return v.replace(/[\u30a1-\u30f6]/g,c=>String.fromCharCode(c.charCodeAt(0)-0x60)).replace(/\s/g,'')}
-function mMiss(){if(!B||!W)return;se('miss');B.combo=0;B.miss++;renderCombo();const wd=$('word');wd.classList.remove('shake');void wd.offsetWidth;wd.classList.add('shake');const m=$('mWrap');m.classList.remove('ng');void m.offsetWidth;m.classList.add('ng');renderWord()}
+function mMiss(){if(!B||!W)return;se('miss');B.combo=0;B.miss++;missReset();renderCombo();const wd=$('word');wd.classList.remove('shake');void wd.offsetWidth;wd.classList.add('shake');const m=$('mWrap');m.classList.remove('ng');void m.offsetWidth;m.classList.add('ng');renderWord()}
 function applyTok(){const t=W.toks[W.idx],i0=W.idx,w0=W,c=t.c.find(x=>x.startsWith(W.buf))||t.c[0];for(const ch of c.slice(W.buf.length)){typeKey(ch);if(W!==w0||!W||W.idx!==i0)return}if(W===w0&&W.idx===i0&&t.c.includes(W.buf))advance()}
 function mClear(){mIn.value='';MI.used=0;$('mWrap').classList.remove('okp','bad')}
 function remKana(){return W.toks.slice(W.idx).map(t=>t.k).join('')}
@@ -1911,7 +1931,7 @@ mIn.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing&&e.keyCode
 function mFocus(){if(MOBILE&&screen==='battle'){try{mIn.focus({preventScroll:true})}catch(e){mIn.focus()}}}
 $('stage').addEventListener('click',()=>mFocus());
 if(window.visualViewport){const vv=window.visualViewport,fit=()=>{if(!MOBILE)return;document.documentElement.style.setProperty('--app-h',vv.height+'px');window.scrollTo(0,0)};vv.addEventListener('resize',fit);vv.addEventListener('scroll',fit);fit()}
-function advance(){W.done.push(W.buf);W.idx++;W.buf='';if(W.idx>=W.toks.length){const len=[...W.kana].length,ch=W.chip;W=null;playerAttack(len,ch);if(B&&B.active)nextWord();else renderWord();}}
+function advance(){W.done.push(W.buf);W.idx++;W.buf='';if(W.idx>=W.toks.length){const len=[...W.kana].length,ch=W.chip;W=null;trig('word');if(B&&B.active)playerAttack(len,ch);if(B&&B.active)nextWord();else renderWord();}}
 function comboMul(){return Math.min(3,1+Math.floor(B.combo/10)*.1)}
 function buffSum(t){return B.buffs.filter(b=>b.t===t).reduce((s,b)=>s+b.v,0)}
 function curAtk(){return B.st.atk*(1+buffSum('atkbuf')/100)}
@@ -2001,6 +2021,8 @@ function blog(txt,cls,rc){
   d._t=setTimeout(()=>expireLog(d),3400);
 }
 function expireLog(d){if(d._x)return;d._x=1;clearTimeout(d._t);d.animate([{opacity:1,transform:'translateY(0)'},{opacity:0,transform:'translateY(-8px)'}],{duration:350,easing:'ease-in',fill:'forwards'}).onfinish=()=>d.remove()}
+function missReset(){if(B)B.ws.forEach(e=>{e.nm=0;e.pend=0})}
+function trigKill(){if(!B)return;B.ws.forEach(e=>{if(SK[e.w.sk].tr.type==='kill'&&e.ct<=0)fire(e)})}
 function trig(kind,an){an=an||1;
   if(!B||!B.active)return;const now=performance.now();
   B.ws.forEach(e=>{
@@ -2008,7 +2030,9 @@ function trig(kind,an){an=an||1;
     if(kind==='attack'){
       if(tr.type==='every'){e.cnt+=an;if(e.cnt>=tr.n&&e.ct<=0){e.cnt=0;fire(e)}}
       else if(tr.type==='win'&&e.ct<=0&&B.at.filter(t=>now-t<=tr.s*1000).length>=tr.n)fire(e);
-    }else if(kind==='crit'){if(tr.type==='crit'&&e.ct<=0)fire(e)}
+    }else if(kind==='combo'){if(tr.type==='combo'){if(B.combo>0&&B.combo%tr.n===0)e.pend=1;if(e.pend&&e.ct<=0){e.pend=0;fire(e)}}}
+    else if(kind==='word'){if(tr.type==='nomiss'){e.nm=(e.nm||0)+1;if(e.nm>=tr.n&&e.ct<=0){e.nm=0;fire(e)}}}
+    else if(kind==='crit'){if(tr.type==='crit'&&e.ct<=0)fire(e)}
     else if(kind==='hit'){
       if(tr.type==='hit'&&e.ct<=0)fire(e);
       else if(tr.type==='low'&&e.ct<=0&&B.hp<B.maxHp*.5)fire(e);
@@ -2045,7 +2069,7 @@ function enemyHit(){
   trig('hit');
 }
 function enemyDie(){
-  const en=B.enemy;en.dead=true;B.active=false;W=null;renderWord();S.rec.kills++;
+  const en=B.enemy;en.dead=true;B.active=false;W=null;renderWord();S.rec.kills++;trigKill();
   const eg=$('eg');eg.className='';void eg.offsetWidth;eg.className='die';
   blog(`${en.d.n}を倒した！`,'dmg');se('kill');
   if(en.gl){$('stage').classList.remove('gl');kbGlitch(B.diff==='nightmare');if(B.diff!=='nightmare')$('stage').classList.remove('gl');if(!S.nm)S.nm=1;S.rec.gk=(S.rec.gk||0)+1;const g=en.d,xp=Math.floor((20*Math.pow(B.floor,1.3)*g.xm+g.xa)*DIFF[B.diff].exp*xpScale(B.floor,B.diff));
@@ -2085,25 +2109,27 @@ function bossAlert(){
   a.classList.remove('on');void a.offsetWidth;a.classList.add('on');playBgm(null);se(gl?'glitch':'alert');
   const ref=B;setTimeout(()=>{a.classList.remove('on');if(B===ref){B.alerting=false;spawn()}},2400);
 }
-function statsHTML(){
+function statsHTML(c){
   const tot=B.keys+B.miss,rate=tot?B.miss/tot*100:0,kps=B.tt>0?B.keys/B.tt:0;
-  return `<div class="rstats"><div><span class="small">タイプ速度</span><b>${kps.toFixed(2)}</b><span class="small">打/秒</span></div>
+  return `<div class="rstats${c?' rsc':''}"><div><span class="small">タイプ速度</span><b>${kps.toFixed(2)}</b><span class="small">打/秒</span></div>
   <div><span class="small">ミスタイプ</span><b>${B.miss}回</b><span class="small">${tot}打中（${rate.toFixed(1)}%）</span></div>
   <div><span class="small">最大コンボ</span><b>${B.maxCombo}</b><span class="small">×${Math.min(3,1+Math.floor(B.maxCombo/10)*.1).toFixed(1)}</span></div></div>`;
 }
 function commitRec(){if(!B||B.committed)return;B.committed=true;const R=S.rec;R.keys+=B.keys;R.time+=B.tt;R.maxCombo=Math.max(R.maxCombo,B.maxCombo);
   if(B.keys>=30&&B.tt>0)R.bestKps=Math.max(R.bestKps,B.keys/B.tt)}
 function floorClear(){
-  commitRec();S.rec.clears++;B.drops.forEach(w=>S.rec.dex[dexKey(w)]=1);playBgm(null);se('clear');B.drops.forEach(w=>{if(w.u&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)});
+  commitRec();S.rec.clears++;const nmb=B.miss===0&&B.keys>0?rollWeapon(B.floor,floorInfo(B.floor).boss,true,true):null;if(nmb){B.drops.push(nmb);S.rec.nmc=(S.rec.nmc||0)+1}B.drops.forEach(w=>S.rec.dex[dexKey(w)]=1);playBgm(null);se('clear');B.drops.forEach(w=>{if(w.u&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)});
   kbGlitch(false);wordNoise(false);$('stage').classList.remove('gl');
   const f=B.floor,first=f>PG().maxF&&!B.test,xp=Math.floor(clearXP(f,B.diff)*(first?2:1)),before=B.rank0||rankInfo().r;
   S.exp+=xp;if(first)PG().maxF=f;if(!B.test&&new Date().getHours()<4){S.tx=S.tx||{};S.tx.night=1}S.inv.push(...B.drops);if(!B.test)PG().lastF=Math.min(100,f+1);save();
   const after=rankInfo().r,so=slotsOpen(before),sn=slotsOpen(after);
-  let h=`<h2>${f}層 クリア</h2><p>経験値 +${xp}${first?'（初回ボーナス×2）':''}</p>${B.gxp?`<p>経験値 +${fmt(B.gxp)}<span class="glt">（繧ｨ繝ｩ繝ｼ）</span></p>`:''}`+statsHTML();
-  if(after>before)h+=`<p><b>ランク ${before} → ${after}</b></p>`;
-  if(sn>so)h+=`<p><b>装備スロットが${sn}つに増えました</b></p>`;
-  h+=B.drops.length?`<div class="drops">${B.drops.slice().sort((a,b)=>b.r-a.r).map(dropHTML).join('')}</div>`:'<p class="small">武器のドロップはありませんでした</p>';
-  if(f===100)h+='<p><b>百層を制覇しました。</b></p>';
+  let h=`<h2 class="rh2">${f}層 クリア</h2>`;
+  if(f===100)h+='<p class="rline"><b>百層を制覇しました。</b></p>';
+  if(after>before)h+=`<div class="rankup"><b>RANK UP!</b>　ランク ${before} → ${after}${sn>so?`<div class="small">装備スロットが${sn}つに増えました</div>`:''}</div>`;
+  h+=`<p class="rline">経験値 <b class="rxp">+${fmt(xp)}</b>${first?'<span class="small">（初回ボーナス×2）</span>':''}${B.gxp?`<br>経験値 <b class="rxp">+${fmt(B.gxp)}</b><span class="glt">（繧ｨ繝ｩ繝ｼ）</span>`:''}</p>`;
+  const nd=B.drops.filter(w=>w!==nmb);if(nmb){h+=`<div class="nmbon" style="--rc:${RAR[nmb.r].c}"><div class="nmt">★ ノーミスボーナス ★</div>${dropHTML(nmb)}</div>`;setTimeout(()=>se('drop',Math.max(3,nmb.r)),350)}
+  h+=nd.length?`<div class="mlab rlab">ドロップした武器（${nd.length}本）</div><div class="drops rdrops">${nd.slice().sort((a,b)=>b.r-a.r).map(dropHTML).join('')}</div>`:'<p class="small rline">武器のドロップはありませんでした</p>';
+  h+=statsHTML(true);
   const ro=B.opt,b=[{t:'拠点へ',key:'f',fn:()=>show('home')},{t:'もう一度',key:' ',fn:()=>startFloor(f,ro)}];if(f<100&&!B.test)b.push({t:'次の層へ',key:'j',pri:true,fn:()=>startFloor(f+1)});
   if(tutStage()==='waitclear'){tutSet('post');b.length=0;b.push({t:'拠点へ もどる',key:'f',pri:true,fn:()=>{show('home');setTimeout(()=>tutRun('post'),350)}})}
   modal(h,b);
@@ -2338,8 +2364,9 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='1.0.0-beta';
+const VERSION='1.0.1-beta';
 const CHANGELOG=[
+ ['1.0.1-beta',['ノーミスで層をクリアすると、ボーナスとして武器を1本追加でもらえるように。ボーナスの武器は通常のドロップよりも高レアリティが出やすくなっています（エピック以上が1.5倍）','「HP50%以下で被弾時」に発動していたスキルの発動条件を変更。鉄壁・不動などは「敵を倒した時」、狂化などは「50コンボごと」、大型のユニークスキルは「ノーミスで8語打つごと」に発動します','出題される言葉のローマ字を大文字で表示するように']],
  ['1.0.0-beta',['ついにベータ版スタート！これからもアップデートを続けていきます','検索エンジンやSNSでシェアしたときに、ゲームの紹介文と画像が表示されるように']],
 ];
 const DEX=[];
