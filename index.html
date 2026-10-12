@@ -1223,49 +1223,8 @@ const AFF=[
  {k:'atk',n:'攻撃力',min:3,max:8},{k:'hp',n:'HP',min:4,max:10},{k:'def',n:'防御力',min:4,max:10},
  {k:'cr',n:'クリ率',min:2,max:6},{k:'cd',n:'クリダメ',min:10,max:25},{k:'ctr',n:'CT軽減',min:3,max:8},{k:'mh',n:'連撃率',min:5,max:15},{k:'sp',n:'スキル威力',min:5,max:12}];
 const AFFD=Object.fromEntries(AFF.map(a=>[a.k,a]));
-const SK={
- rush:{n:'連撃',tr:{type:'win',n:4,s:5},ct:8,fx:[{t:'dmg',v:1.5}]},
- every3:{n:'会心撃',tr:{type:'every',n:3},ct:6,fx:[{t:'dmg',v:2}]},
- counter:{n:'反撃',tr:{type:'hit'},ct:14,fx:[{t:'dmg',v:1.2}]},
- heal:{n:'癒しの光',tr:{type:'hit'},ct:15,fx:[{t:'heal',v:10}]},
- rally:{n:'鼓舞',tr:{type:'every',n:5},ct:15,fx:[{t:'atkbuf',v:20,dur:6}]},
- wall:{n:'鉄壁',tr:{type:'kill'},ct:20,fx:[{t:'shield',v:15}]},
- thunder:{n:'雷撃',tr:{type:'crit'},ct:7,fx:[{t:'dmg',v:1.8}]},
- stop:{n:'時止め',tr:{type:'win',n:6,s:8},ct:18,fx:[{t:'delay',v:3}]},
- focus:{n:'集中',tr:{type:'every',n:10},ct:20,fx:[{t:'critbuf',v:30,dur:5}]},
- drain:{n:'吸収',tr:{type:'every',n:4},ct:12,fx:[{t:'dmg',v:1.2},{t:'drain',v:50}]},
- u_roar:{n:'龍神の咆哮',tr:{type:'win',n:3,s:3},ct:10,fx:[{t:'multi',v:.7,n:8}]},
- slash:{n:'乱れ斬り',tr:{type:'every',n:3},ct:7,fx:[{t:'multi',v:.45,n:6}]},
- meteor:{n:'流星群',tr:{type:'win',n:5,s:6},ct:12,fx:[{t:'multi',v:.35,n:12}]},
- storm:{n:'剣の嵐',tr:{type:'hit'},ct:14,fx:[{t:'multi',v:.25,n:6}]},
- u_sanct:{n:'聖域の祈り',tr:{type:'every',n:5},ct:14,fx:[{t:'heal',v:12},{t:'shield',v:12}]},
- u_blessing:{n:'女神の祝福',tr:{type:'win',n:6,s:6},ct:18,fx:[{t:'atkbuf',v:40,dur:8},{t:'critbuf',v:25,dur:8}]},
- u_vamp:{n:'吸血の宴',tr:{type:'every',n:3},ct:8,fx:[{t:'multi',v:.5,n:6},{t:'drain',v:40}]},
- u_berserk:{n:'怒髪天',tr:{type:'hit'},ct:12,fx:[{t:'atkbuf',v:50,dur:6},{t:'multi',v:.3,n:6}]},
- u_aegis:{n:'絶対防壁',tr:{type:'kill'},ct:16,fx:[{t:'shield',v:40},{t:'heal',v:10}]},
- u_phoenix:{n:'不死鳥の炎',tr:{type:'kill'},ct:24,fx:[{t:'heal',v:40},{t:'atkbuf',v:30,dur:10}]},
- u_storm:{n:'天雷の嵐',tr:{type:'crit'},ct:8,fx:[{t:'multi',v:.5,n:12}]},
- u_haste:{n:'神速',tr:{type:'every',n:8},ct:12,fx:[{t:'ctcut',v:3},{t:'critbuf',v:30,dur:6}]},
- regen:{n:'再生',tr:{type:'every',n:6},ct:10,fx:[{t:'heal',v:6}]},
- guard:{n:'守護の盾',tr:{type:'hit'},ct:9,fx:[{t:'shield',v:10}]},
- might:{n:'剛力',tr:{type:'win',n:5,s:5},ct:12,fx:[{t:'atkbuf',v:30,dur:5}]},
- eagle:{n:'鷹の目',tr:{type:'every',n:7},ct:12,fx:[{t:'critbuf',v:25,dur:6}]},
- bless:{n:'祝福',tr:{type:'every',n:8},ct:14,fx:[{t:'heal',v:8},{t:'atkbuf',v:15,dur:5}]},
- rage:{n:'狂化',tr:{type:'combo',n:10},ct:20,fx:[{t:'atkbuf',v:40,dur:8}]},
- lifeblade:{n:'吸命剣',tr:{type:'crit'},ct:7,fx:[{t:'dmg',v:1.2},{t:'drain',v:60}]},
- haste:{n:'加速',tr:{type:'every',n:10},ct:15,fx:[{t:'ctcut',v:2}]},
- fort:{n:'堅守',tr:{type:'every',n:4},ct:10,fx:[{t:'shield',v:12}]},
- thorn:{n:'茨の守り',tr:{type:'hit'},ct:10,fx:[{t:'shield',v:8},{t:'dmg',v:.6}]},
- sanctu:{n:'聖域',tr:{type:'win',n:5,s:5},ct:12,fx:[{t:'heal',v:6},{t:'shield',v:6}]},
- iron:{n:'不動',tr:{type:'kill'},ct:18,fx:[{t:'shield',v:30}]},
- spirit:{n:'闘気',tr:{type:'hit'},ct:12,fx:[{t:'atkbuf',v:15,dur:5},{t:'critbuf',v:15,dur:5}]},
- u_thousand:{n:'千刃乱舞',tr:{type:'every',n:4},ct:9,fx:[{t:'multi',v:.3,n:25}]},
- u_immortal:{n:'不死の加護',tr:{type:'hit'},ct:18,fx:[{t:'heal',v:20},{t:'shield',v:10}]},
- u_sever:{n:'絶対切断',tr:{type:'every',n:6},ct:12,fx:[{t:'dmg',v:5}]},
- u_chrono:{n:'時空断絶',tr:{type:'win',n:8,s:10},ct:20,fx:[{t:'delay',v:5},{t:'multi',v:.4,n:15}]},
- u_frenzy:{n:'狂戦士の魂',tr:{type:'combo',n:16},ct:25,fx:[{t:'atkbuf',v:60,dur:8},{t:'heal',v:15}]}};
+const SK={};
 Object.assign(SK,{"rush":{"n":"速攻","tr":{"type":"win","n":4,"s":5},"ct":8,"fx":[{"t":"dmg","v":3.05}]},"every3":{"n":"会心撃","tr":{"type":"every","n":3},"ct":6,"fx":[{"t":"dmg","v":2.0}]},"thunder":{"n":"雷撃","tr":{"type":"crit"},"ct":7,"fx":[{"t":"dmg","v":2.8}]},"slash":{"n":"乱れ斬り","tr":{"type":"every","n":3},"ct":7,"fx":[{"t":"multi","v":0.29,"n":6}]},"meteor":{"n":"流星群","tr":{"type":"win","n":5,"s":6},"ct":12,"fx":[{"t":"multi","v":0.29,"n":12}]},"storm":{"n":"剣の嵐","tr":{"type":"hit"},"ct":14,"fx":[{"t":"multi","v":0.43,"n":6}]},"drain":{"n":"吸収","tr":{"type":"every","n":4},"ct":12,"fx":[{"t":"dmg","v":2.4},{"t":"drain","v":48}]},"lifeblade":{"n":"吸命剣","tr":{"type":"crit"},"ct":8,"fx":[{"t":"dmg","v":1.9},{"t":"drain","v":48}]},"might":{"n":"剛力","tr":{"type":"win","n":5,"s":5},"ct":12,"fx":[{"t":"atkbuf","v":25,"dur":7}]},"eagle":{"n":"鷹の目","tr":{"type":"every","n":7},"ct":12,"fx":[{"t":"critbuf","v":16,"dur":7}]},"focus":{"n":"集中","tr":{"type":"combo","n":12},"ct":16,"fx":[{"t":"critbuf","v":20,"dur":10}]},"rally":{"n":"鼓舞","tr":{"type":"every","n":5},"ct":15,"fx":[{"t":"atkbuf","v":20,"dur":9}]},"rage":{"n":"狂化","tr":{"type":"combo","n":10},"ct":18,"fx":[{"t":"atkbuf","v":25,"dur":11}]},"haste":{"n":"加速","tr":{"type":"every","n":10},"ct":15,"fx":[{"t":"ctcut","v":2.0}]},"stop":{"n":"時止め","tr":{"type":"win","n":6,"s":8},"ct":18,"fx":[{"t":"delay","v":2.7}]},"issen":{"n":"一閃","tr":{"type":"combo","n":8},"ct":9,"fx":[{"t":"dmg","v":3.85}]},"shippu":{"n":"疾風","tr":{"type":"combo","n":15},"ct":10,"fx":[{"t":"multi","v":0.42,"n":8}]},"guard":{"n":"守護の盾","tr":{"type":"hit"},"ct":9,"fx":[{"t":"shield","v":9.5}]},"wall":{"n":"鉄壁","tr":{"type":"kill"},"ct":20,"fx":[{"t":"defbuf","v":15,"dur":12}]},"heal":{"n":"癒しの光","tr":{"type":"hit"},"ct":15,"fx":[{"t":"heal","v":9.0}]},"regen":{"n":"再生","tr":{"type":"every","n":6},"ct":10,"fx":[{"t":"heal","v":8.0}]},"counter":{"n":"反撃","tr":{"type":"hit"},"ct":16,"fx":[{"t":"dmg","v":3.95}]},"bless":{"n":"祝福","tr":{"type":"every","n":8},"ct":14,"fx":[{"t":"heal","v":6.5},{"t":"atkbuf","v":12,"dur":8}]},"fort":{"n":"堅守","tr":{"type":"every","n":4},"ct":10,"fx":[{"t":"shield","v":14.0}]},"thorn":{"n":"茨の守り","tr":{"type":"hit"},"ct":10,"fx":[{"t":"shield","v":6.5},{"t":"dmg","v":1.5}]},"sanctu":{"n":"聖域","tr":{"type":"win","n":5,"s":5},"ct":13,"fx":[{"t":"heal","v":8.0},{"t":"shield","v":13.5}]},"iron":{"n":"不動","tr":{"type":"kill"},"ct":18,"fx":[{"t":"shield","v":28.0}]},"spirit":{"n":"闘気","tr":{"type":"hit"},"ct":12,"fx":[{"t":"atkbuf","v":9,"dur":7},{"t":"critbuf","v":7,"dur":7}]},"harden":{"n":"硬化","tr":{"type":"every","n":5},"ct":12,"fx":[{"t":"defbuf","v":14,"dur":7}]},"stance":{"n":"不屈の構え","tr":{"type":"combo","n":10},"ct":14,"fx":[{"t":"defbuf","v":11,"dur":8},{"t":"shield","v":15.5}]},"parry":{"n":"受け流し","tr":{"type":"hit"},"ct":11,"fx":[{"t":"defbuf","v":9,"dur":7}]}});
-const NSK=['rush','every3','counter','heal','rally','wall','thunder','stop','focus','drain','slash','meteor','storm','slash','meteor','regen','guard','might','eagle','bless','rage','lifeblade','haste','spirit'];
 const mk=a=>({id:a[0],e:a[1],n:a[2],un:a[3],ut:a[4],us:a[5]});
 const NORMALS=[
  ['slime','🦠','スライム','粘液の短剣',0,'u_sever'],['worm','🐛','キャタピラー','糸紡ぎの杖',5,'u_sanct'],
@@ -1786,7 +1745,7 @@ function isEq(id){return S.eq.includes(id)}
 Object.values(SK).forEach(s=>{if(s.tr.type==='hit'&&!s.ct2){s.ct*=2;s.ct2=1}});
 SK.u_abyss={n:'虚無の葬送曲',uq:true,tr:{type:'every',n:4},ct:10,fx:[{t:'multi',v:.8,n:24},{t:'drain',v:40},{t:'delay',v:2}]};
 function voidWeapon(nm){const w=makeW({t:LORD.ut,r:6,f:1,name:LORD.un,sk:LORD.us,u:'abyss'});w.god=1;w.aff.forEach((a,i)=>{if(i<(nm||0))a.v=AFFD[a.k].max});return w}
-function trText(tr){return{mat:'強化の素材にした時',win:`${tr.s}秒以内に${tr.n}回攻撃`,every:`${tr.n}回攻撃ごと`,combo:`${tr.n}コンボごと`,kill:'敵を倒した時',hit:'被ダメージ時',crit:'クリティカル時',low:'HP50%以下で被弾時'}[tr.type]}
+function trText(tr){return{mat:'強化の素材にした時',win:`${tr.s}秒以内に${tr.n}回攻撃`,every:`${tr.n}回攻撃ごと`,combo:`${tr.n}コンボごと`,kill:'敵を倒した時',hit:'被ダメージ時',crit:'クリティカル時'}[tr.type]}
 function mhN(f,m){return Math.max(1,Math.round(f.n*(1+(m-1)*.6)))}
 function fxText(f,m){
   switch(f.t){
@@ -1952,7 +1911,7 @@ $('hSlots').addEventListener('pointerleave',()=>{TIP.classList.remove('on');TIP.
 $('hSlots').addEventListener('click',e=>{const q=e.target.closest('[data-hslot]');if(!q)return;TIP.classList.remove('on');TIP._id=null;
   setTab('equip');A.slot=+q.dataset.hslot;A.sel=q.dataset.hid?+q.dataset.hid:null;A.hover=null;show('armory')});
 function floorInfo(f){const band=Math.min(BOSSES.length-1,Math.floor((f-1)/5)),start=Math.round(band*(NORMALS.length-4)/(BOSSES.length-1));return{band,pool:NORMALS.slice(start,start+4).concat([CUTEN[Math.round(band*(CUTEN.length-1)/(BOSSES.length-1))]]),boss:(f-1)%5===2?CUTEB[band%CUTEB.length]:BOSSES[band]}}
-function renderFInfo(){if(abUI()){const pr=S.prog.abyss;$('fInfo').innerHTML=`<div class="abinfo"><div>${pr.maxF>=ABEND?'<b class="abend"><small>THE END OF ABYSS</small>深 淵 踏 破</b>':`<span class="small">最終到達地点</span><b>第${pr.maxF}層</b>`}</div><div><span class="small">深淵の支配者</span><b>${S.rec.lord||0}<small>体撃破</small></b></div></div><p class="small abtx">果てのない闇の底。倒れても、踏破しても、手にしたものは持ち帰れる。一時撤退すれば、続きから潜れる。</p>`+(S.abRun?`<div class="abrun">一時撤退中：<b>第${S.abRun.f}層</b>から再開<span class="small">（保留中の武器 ${(S.abRun.drops||[]).length}本・経験値 +${fmt((S.abRun.axp||0)+(S.abRun.gxp||0))}）</span></div>`:'');$('goBtn').textContent=S.abRun?`第${S.abRun.f}層から再開`:'深淵へ潜る';return}
+function renderFInfo(){if(abUI()){const pr=S.prog.abyss;$('fInfo').innerHTML=`<div class="abinfo"><div>${pr.maxF>=ABEND?'<b class="abend"><small>THE END OF ABYSS</small>深 淵 踏 破</b>':`<span class="small">最終到達地点</span><b>第${pr.maxF}層</b>`}</div><div><span class="small">深淵の支配者</span><b>${S.rec.lord||0}<small>体撃破</small></b></div></div><p class="small abtx">果てのない闇の底。倒れても、踏破しても、一時撤退しても、手にしたものは持ち帰れる。一時撤退すれば、続きから潜れる。</p>`+(S.abRun?`<div class="abrun">一時撤退中：<b>第${S.abRun.f}層</b>から再開${(S.abRun.drops||[]).length||S.abRun.axp||S.abRun.gxp?`<span class="small">（未受け取りの武器 ${(S.abRun.drops||[]).length}本・経験値 +${fmt((S.abRun.axp||0)+(S.abRun.gxp||0))}）</span>`:''}</div>`:'');$('goBtn').textContent=S.abRun?`第${S.abRun.f}層から再開`:'深淵へ潜る';return}
   const fi=floorInfo(selF);
   $('fInfo').innerHTML=`＊ ${selF}層　${selF<=PG().maxF?'クリア済み':'未踏の層'}<br><span class="small">出現：${fi.pool.map(d=>S.diff==='nightmare'?nmE(d).n:d.n).join('・')}<br>ボス：${S.diff==='nightmare'?nmE(fi.boss).n:fi.boss.n}</span>`;
   $('goBtn').textContent=`${DIFF[S.diff].n} ${selF}層へ出撃`;}
@@ -1999,7 +1958,7 @@ function startFloor(f,opt){if(!document.querySelector('#stage .abvx')){const v=d
   if(dif==='abyss'&&!(opt&&opt.q))q=[abyssEnemy(f)];if(opt&&opt.q)q=opt.q;q=q.map(mp);kbGlitch(false);
   B={opt,abyss:dif==='abyss',axp:0,best0:(S.prog.abyss||{}).maxF||0,diff:(opt&&opt.diff)||S.diff,test:!!(opt&&opt.q),rank0:rankInfo().r,gxp:0,floor:f,q,qi:0,st,hp:st.hp,maxHp:st.hp,shield:0,combo:0,maxCombo:0,keys:0,miss:0,tt:0,chain:0,chainDmg:0,chainT:0,at:[],buffs:[],drops:[],active:false,enemy:null,lt:0,lastWord:null,
      ws:equipped().map(w=>({w,ct:0,cnt:0,el:null}))};
-  PG().lastF=f;lastStep=0;show('battle');mClear();mFocus();playBgm(bgmFor(false));$('stage').classList.toggle('nm',B.diff==='nightmare');$('stage').classList.toggle('ab',B.diff==='abyss');abKb(B.diff==='abyss');if(B.abyss){const rr=opt&&opt.resume&&S.abRun;if(rr){B.drops=(rr.drops||[]).slice();B.axp=rr.axp||0;B.gxp=rr.gxp||0;B.best0=rr.best0||0;B.rank0=rr.rank0||B.rank0;B.resumed=1}else S.rec.abRuns=(S.rec.abRuns||0)+1;abPersist(f);save()}$('retreat').textContent=B.abyss?'一時撤退':'撤退';wordNoise(B.diff==='nightmare');renderSnd();LOG.innerHTML='';for(const k in UI)delete UI[k];PARTS.length=0;chainShown=-1;fxCol=null;fxResize();$('pRank').textContent='RANK '+rankInfo().r;renderCombo();$('stage').style.setProperty('--scene',B.abyss?'radial-gradient(ellipse at 50% 38%,#1e0533 0,#0a0114 45%,#000 80%)':SCENES[band]);$('fx').innerHTML='';
+  PG().lastF=f;lastStep=0;show('battle');mClear();mFocus();playBgm(bgmFor(false));$('stage').classList.toggle('nm',B.diff==='nightmare');$('stage').classList.toggle('ab',B.diff==='abyss');abKb(B.diff==='abyss');if(B.abyss){const rr=opt&&opt.resume&&S.abRun;if(rr){B.drops=(rr.drops||[]).slice();B.axp=rr.axp||0;B.gxp=rr.gxp||0;B.best0=rr.best0||0;B.rank0=rr.rank0||B.rank0;B.resumed=1;if(rr.hpR>0)B.hp=Math.max(1,Math.round(B.maxHp*rr.hpR));abPersist(f)}else S.rec.abRuns=(S.rec.abRuns||0)+1;save()}$('retreat').textContent=B.abyss?'一時撤退':'撤退';wordNoise(B.diff==='nightmare');renderSnd();LOG.innerHTML='';for(const k in UI)delete UI[k];PARTS.length=0;chainShown=-1;fxCol=null;fxResize();$('pRank').textContent='RANK '+rankInfo().r;renderCombo();$('stage').style.setProperty('--scene',B.abyss?'radial-gradient(ellipse at 50% 38%,#1e0533 0,#0a0114 45%,#000 80%)':SCENES[band]);$('fx').innerHTML='';
   $('wicons').innerHTML='';
   B.ws.forEach(e=>{const d=document.createElement('div');d.className='wi';d.style.setProperty('--rc',RAR[e.w.r].c);
     d.title=`${e.w.name}：${SK[e.w.sk].n}`;d.innerHTML=`${wIcon(e.w)}<span class="ct"></span>`;e.el=d;$('wicons').appendChild(d)});
@@ -2009,7 +1968,7 @@ function startFloor(f,opt){if(!document.querySelector('#stage .abvx')){const v=d
 function countdown(ref){const el=$('cdown');let n=3;
   const tick=()=>{if(B!==ref){el.className='cdown';return}
     if(n>0){el.textContent=n;el.className='cdown';void el.offsetWidth;el.className='cdown on';se('cd');n--;setTimeout(tick,1000)}
-    else{el.textContent='START!';el.className='cdown';void el.offsetWidth;el.className='cdown on go';se('go');B.alerting=false;B.active=true;nextWord();setTimeout(()=>{if(el.textContent==='START!')el.className='cdown'},700)}};
+    else{el.textContent='START!';el.className='cdown';void el.offsetWidth;el.className='cdown on go';se('go');B.alerting=false;B.active=!B.paused;nextWord();setTimeout(()=>{if(el.textContent==='START!')el.className='cdown'},700)}};
   tick()}
 function spawn(){
   let it=B.q[B.qi];
@@ -2021,7 +1980,7 @@ function spawn(){
   $('enemy').classList.toggle('boss',it.boss);fitEnemy();
   $('ename').innerHTML=(it.boss?`<span class="bs">${gl?'B縺SS':'BOSS'}</span>`:'')+it.d.n;
   $('floorLbl').innerHTML=B.abyss?`<span class="dtag" style="--dc:${DIFF.abyss.c}">アビス</span>${B.floor>=ABEND?'深淵の果て':`第${B.floor}層`}${B.floor>=ABEND?'':B.floor%50===0?'　◉':B.floor%5===0?'　BOSS':''}`:`<span class="dtag" style="--dc:${DIFF[B.diff].c}">${DIFF[B.diff].n}</span>${B.floor}層　${gl||nmB?'繧\uFFFD/\uFFFDｼ':`${B.qi+1}/${B.q.length}`}`;
-  B.active=true;nextWord();abEnd(!!it.fin);if(B.abyss&&!it.boss&&!gl&&!nmB)playBgm(bgmFor(false));if(nmB&&!gl){playBgm(null);se('glitch')}else if(gl){playBgm(null);se('glitch');blog('\uFFFD\uFFFD 繧ｨ繝ｩ繝ｼ縺檎匱逕溘＠縺ｾ縺励◆ \uFFFD\uFFFD','gl')}else if(it.boss)playBgm(bgmFor(true));requestAnimationFrame(()=>{measureEnemy();fxLayout()});
+  B.active=!B.paused;nextWord();abEnd(!!it.fin);if(B.abyss&&!it.boss&&!gl&&!nmB)playBgm(bgmFor(false));if(nmB&&!gl){playBgm(null);se('glitch')}else if(gl){playBgm(null);se('glitch');blog('\uFFFD\uFFFD 繧ｨ繝ｩ繝ｼ縺檎匱逕溘＠縺ｾ縺励◆ \uFFFD\uFFFD','gl')}else if(it.boss)playBgm(bgmFor(true));requestAnimationFrame(()=>{measureEnemy();fxLayout()});
 }
 function wordBand(){
   const f=B.diff==='nightmare'||B.diff==='abyss'?Math.max(50,B.floor):B.floor,boss=B.enemy&&B.enemy.boss,rr=Math.random(),dif=B.diff;let lo,hi;
@@ -2094,7 +2053,7 @@ mIn.addEventListener('compositionstart',()=>{MI.comp=true});
 mIn.addEventListener('compositionend',()=>{MI.comp=false;mFeedback()});
 mIn.addEventListener('input',()=>mFeedback());
 $('mForm').addEventListener('submit',e=>{e.preventDefault();if(MI.comp)return;mSubmit()});
-mIn.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing&&e.keyCode!==229){e.preventDefault();MI.comp=false;mSubmit()}e.stopPropagation()});
+mIn.addEventListener('keydown',e=>{if(e.key===' '&&!e.isComposing&&e.keyCode!==229&&!mIn.value&&!e.repeat&&screen==='battle'&&B&&B.active&&!B.over&&!$('modal').classList.contains('on')){e.preventDefault();e.stopPropagation();$('retreat').onclick();return}if(e.key==='Enter'&&!e.isComposing&&e.keyCode!==229){e.preventDefault();MI.comp=false;mSubmit()}e.stopPropagation()});
 function mFocus(){if(MOBILE&&screen==='battle'){try{mIn.focus({preventScroll:true})}catch(e){mIn.focus()}}}
 $('stage').addEventListener('click',()=>mFocus());
 if(window.visualViewport){const vv=window.visualViewport,fit=()=>{if(!MOBILE)return;document.documentElement.style.setProperty('--app-h',vv.height+'px');window.scrollTo(0,0)};vv.addEventListener('resize',fit);vv.addEventListener('scroll',fit);fit()}
@@ -2163,6 +2122,7 @@ function drawFx(dt){
 }
 let lastHitAnim=0,lastQuake=0,chainDirty=false;
 function hitEnemy(h){
+  if(!B||B.over)return;if(B.paused){(B.held=B.held||[]).push(h);return}
   const en=B&&B.enemy;if(!en||en.dead)return;
   
   if(en.gl&&!window.DEVOP){const d=h.skill?(h.crit?1:0):(h.crit?2:1);if(!d){pop('MISS','',Math.max(8,Math.min(92,ER.x+(Math.random()-.5)*30)),Math.max(fxTop,ER.y),18);return}h=Object.assign({},h,{d})}
@@ -2189,7 +2149,7 @@ function blog(txt,cls,rc){
   d._t=setTimeout(()=>expireLog(d),3400);
 }
 function expireLog(d){if(d._x)return;d._x=1;clearTimeout(d._t);d.animate([{opacity:1,transform:'translateY(0)'},{opacity:0,transform:'translateY(-8px)'}],{duration:350,easing:'ease-in',fill:'forwards'}).onfinish=()=>d.remove()}
-function missReset(){if(B)B.ws.forEach(e=>{e.nm=0;e.pend=0})}
+function missReset(){if(B)B.ws.forEach(e=>{e.pend=0})}
 function trigKill(){if(!B)return;B.ws.forEach(e=>{if(SK[e.w.sk].tr.type==='kill'&&e.ct<=0)fire(e)})}
 function trig(kind,an){an=an||1;
   if(!B||!B.active)return;const now=performance.now();
@@ -2199,17 +2159,15 @@ function trig(kind,an){an=an||1;
       if(tr.type==='every'){e.cnt+=an;if(e.cnt>=tr.n&&e.ct<=0){e.cnt=0;fire(e)}}
       else if(tr.type==='win'&&e.ct<=0&&B.at.filter(t=>now-t<=tr.s*1000).length>=tr.n)fire(e);
     }else if(kind==='combo'){if(tr.type==='combo'){if(B.combo>0&&B.combo%tr.n===0)e.pend=1;if(e.pend&&e.ct<=0){e.pend=0;fire(e)}}}
-    else if(kind==='word'){if(tr.type==='nomiss'){e.nm=(e.nm||0)+1;if(e.nm>=tr.n&&e.ct<=0){e.nm=0;fire(e)}}}
     else if(kind==='crit'){if(tr.type==='crit'&&e.ct<=0)fire(e)}
     else if(kind==='hit'){
       if(tr.type==='hit'&&e.ct<=0)fire(e);
-      else if(tr.type==='low'&&e.ct<=0&&B.hp<B.maxHp*.5)fire(e);
     }
   });
 }
 const OFFX=['dmg','multi','drain'];
 function idleNow(){return !B.at.length||performance.now()-B.at[B.at.length-1]>5000}
-function skFx(sk){return (sk.tr.type==='hit'||sk.tr.type==='low')&&idleNow()?sk.fx.filter(f=>!OFFX.includes(f.t)):sk.fx}
+function skFx(sk){return sk.tr.type==='hit'&&idleNow()?sk.fx.filter(f=>!OFFX.includes(f.t)):sk.fx}
 function fire(e){
   const sk=SK[e.w.sk],m=smOf(e.w),fxs=skFx(sk);if(!fxs.length)return;e.ct=sk.ct*(1-B.st.ctr/100);let last=0;const parts=[];
   e.el.animate([{transform:'scale(1)'},{transform:'scale(1.25)'},{transform:'scale(1)'}],{duration:380,easing:'ease-out'});
@@ -2218,7 +2176,7 @@ function fire(e){
     else if(f.t==='multi'){const n=mhN(f,m),hits=rollHits(curAtk()*f.v*m*f.n/n*(1+B.st.sp/100)*comboMul(),n,true,.15);last=hits.reduce((a,h)=>a+h.d,0);schedule(hits,40);parts.push(`${n}連撃 ${fmt(last)}ダメージ`)}
     else if(f.t==='heal'){const a=heal(B.maxHp*v/100);if(a)parts.push(`HP${fmt(a)}回復`)}
     else if(f.t==='shield'){const a=Math.max(0,Math.min(Math.round(B.maxHp*v/100),B.maxHp-B.shield));B.shield+=a;parts.push(a?`シールド+${fmt(a)}`:'シールド上限')}
-    else if(f.t==='atkbuf'||f.t==='critbuf'||f.t==='defbuf'){B.buffs.push({t:f.t,v,until:performance.now()+f.dur*1000});parts.push(f.t==='defbuf'?`被ダメージ-${Math.round(v)}%`:`${f.t==='atkbuf'?'攻撃':'クリ率'}+${Math.round(v)}%`)}
+    else if(f.t==='atkbuf'||f.t==='critbuf'||f.t==='defbuf'){const ob=B.buffs.find(x=>x.src===e&&x.t===f.t);if(ob){ob.rem+=f.dur;ob.v=Math.max(ob.v,v)}else B.buffs.push({t:f.t,v,rem:f.dur,src:e});parts.push(f.t==='defbuf'?`被ダメージ-${Math.round(v)}%`:`${f.t==='atkbuf'?'攻撃':'クリ率'}+${Math.round(v)}%`)}
     else if(f.t==='delay'){const sec=Math.min(6,f.v*Math.sqrt(m));if(B.enemy&&!B.enemy.dead)B.enemy.stun=Math.max(B.enemy.stun,sec);parts.push(`敵を${sec.toFixed(1)}秒停止`)}
     else if(f.t==='ctcut'){const sec=f.v*Math.sqrt(m);B.ws.forEach(o=>{if(o!==e)o.ct=Math.max(0,o.ct-sec)});parts.push(`CT${sec.toFixed(1)}秒短縮`)}
     else if(f.t==='drain'){const a=heal(last*v/100);if(a)parts.push(`HP${fmt(a)}吸収`)}
@@ -2259,19 +2217,18 @@ function abyssDrop(f,d,boss){f=Math.min(100,f);const b=d.base||d;
   if(d.nm){const r=rollRarity(f,boss,'nightmare');return r>=5?gwify(makeW({t:b.ut,r:5,f,name:b.un,sk:b.us,u:b.id})):glMat(EXPW[r],f)}
   const r=rollRarity(f,boss,'hard');if(r===5)return makeW({t:b.ut,r:5,f,name:b.un,sk:b.us,u:b.id});const L=CAT.filter(e=>e.r===r),e=L[rand(L.length)];return makeW({t:e.t,r,f,el:e.el,name:e.name,sk:e.sk,c:e.c})}
 function abKeep(w){S.inv.push(w);S.rec.dex[dexKey(w)]=1;if(w.u&&!w.god&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)}
-function abPersist(f){if(!B||!B.abyss||B.test)return;S.abRun={f,drops:B.drops,axp:B.axp,gxp:B.gxp,best0:B.best0,rank0:B.rank0}}
-function abSuspend(){if(!B||B.ended)return;const b=B;b.ended=1;b.active=false;W=null;renderWord();kbGlitch(false);wordNoise(false);abKb(false);abEnd(false);playBgm(null);commitRec();abPersist(b.floor);save();
-  modal(`<h2 class="rh2 abh">一時撤退</h2><p class="rline">次回の出撃は <b class="rxp">第${b.floor}層</b> から再開できます。<br>保留中の戦利品：武器 <b class="rxp">${b.drops.length}本</b>・経験値 <b class="rxp">+${fmt(b.axp+b.gxp)}</b></p><p class="small rline">戦利品は、再開したあと深淵に倒れるか、踏破したときにまとめて受け取れます。</p>`,[{t:'拠点へ',key:'f',pri:true,fn:()=>show('home')}])}
-function abyssEnd(kind){if(!B||B.ended)return;const b=B;b.ended=1;if(!b.test&&kind!=='retreat'){b.drops.forEach(abKeep);S.exp+=b.axp+b.gxp;S.abRun=null}b.active=false;W=null;renderWord();kbGlitch(false);wordNoise(false);abKb(false);abEnd(false);playBgm(null);se(kind==='dead'?'lose':'clear');if(kind==='clear')setTimeout(()=>se('drop',6),500);commitRec();
+function abPersist(f){if(!B||!B.abyss||B.test)return;S.abRun={f,drops:B.drops,axp:B.axp,gxp:B.gxp,best0:B.best0,rank0:B.rank0,hpR:Math.max(0,Math.min(1,B.hp/B.maxHp))}}
+function abSuspend(){abyssEnd('suspend')}
+function abyssEnd(kind){if(!B||B.ended)return;const b=B;b.ended=1;b.over=1;if(!b.test){b.drops.forEach(abKeep);S.exp+=b.axp+b.gxp;S.abRun=kind==='suspend'?{f:b.floor,drops:[],axp:0,gxp:0,best0:S.prog.abyss.maxF,rank0:rankInfo().r,hpR:Math.max(0,Math.min(1,b.hp/b.maxHp))}:null}b.active=false;W=null;renderWord();kbGlitch(false);wordNoise(false);abKb(false);abEnd(false);playBgm(null);se(kind==='dead'?'lose':'clear');if(kind==='clear')setTimeout(()=>se('drop',6),500);commitRec();
   const pr=S.prog.abyss,best=pr.maxF,nr=best>b.best0;save();const after=rankInfo().r,before=b.rank0||after,so=slotsOpen(before),sn=slotsOpen(after);
-  let h=kind==='clear'?`<div class="abclr"><i></i><div class="small">THE END OF ABYSS</div><h2 class="rh2 abh">深 淵 踏 破</h2><p class="small">第999層を越え、深淵の支配者を討ち果たした。</p></div>`:`<h2 class="rh2 abh">${kind==='dead'?'深淵に呑まれた……':'深淵から帰還した'}</h2>`;
+  let h=kind==='clear'?`<div class="abclr"><i></i><div class="small">THE END OF ABYSS</div><h2 class="rh2 abh">深 淵 踏 破</h2><p class="small">第999層を越え、深淵の支配者を討ち果たした。</p></div>`:`<h2 class="rh2 abh">${kind==='dead'?'深淵に呑まれた……':kind==='suspend'?'一時撤退':'深淵から帰還した'}</h2>`+(kind==='suspend'?`<p class="rline">次回は <b class="rxp">第${b.floor}層</b> から続きを始められます</p>`:'');
   if(after>before)h+=`<div class="rankup"><b>RANK UP!</b>　ランク ${before} → ${after}${sn>so?`<div class="small">装備スロットが${sn}つに増えました</div>`:''}</div>`;
-  h+=`<p class="rline">到達 <b class="rxp">${b.floor>=ABEND?'深淵の果て':`第${b.floor}層`}</b>${nr?'<span class="abnew">NEW RECORD</span>':''}<span class="small">（最高記録 ${best>=ABEND?'深淵の果て':`第${best}層`}）</span><br>経験値 <b class="rxp">+${fmt(b.axp+b.gxp)}</b></p>`;
+  const fl=n=>n>=ABEND?'深淵の果て':n>0?`第${n}層`:'記録なし',cl=kind==='clear'?ABEND:b.floor-1;h+=`<p class="rline">踏破 <b class="rxp">${fl(cl)}</b>${nr?'<span class="abnew">NEW RECORD</span>':''}<span class="small">（最高記録 ${fl(best)}）</span><br>経験値 <b class="rxp">+${fmt(b.axp+b.gxp)}</b></p>`;
   const L=b.drops.slice().sort((x,y)=>y.r-x.r||(y.god?1:0)-(x.god?1:0));
   h+=L.length?`<div class="mlab rlab">持ち帰った武器（${L.length}本）<span class="small">カーソルで詳細</span></div><div class="agrid">${L.map(w=>`<div class="agw" data-wid="${w.id}" style="--rc:${RAR[w.r].c}">${wIcon(w)}</div>`).join('')}</div>`:'<p class="small rline">持ち帰った武器はありません</p>';
   h+=statsHTML(true);
-  modal(h,[{t:'拠点へ',key:'f',fn:()=>show('home')},{t:'もう一度潜る',key:' ',pri:true,fn:()=>startFloor(1,{diff:'abyss'})}])}
-function nextEnemy(){const ref=B,wasGl=B.enemy&&B.enemy.gl;setTimeout(()=>{if(B!==ref)return;if(B.abyss){const pr=S.prog.abyss;if(B.floor>pr.maxF)pr.maxF=B.floor;B.floor++;B.q.push(abyssEnemy(B.floor));abPersist(B.floor);save()}B.qi++;if(B.qi>=B.q.length)floorClear();
+  modal(h,[{t:'拠点へ',key:'f',fn:()=>show('home')},kind==='suspend'?{t:'続きから潜る',key:' ',pri:true,fn:()=>startFloor(b.floor,{diff:'abyss',resume:1})}:{t:'もう一度潜る',key:' ',pri:true,fn:()=>startFloor(1,{diff:'abyss'})}])}
+function nextEnemy(){const ref=B,wasGl=B.enemy&&B.enemy.gl;setTimeout(()=>{if(B!==ref||B.over)return;if(B.abyss){const pr=S.prog.abyss;if(B.floor>pr.maxF)pr.maxF=B.floor;B.floor++;B.q.push(abyssEnemy(B.floor));abPersist(B.floor);save()}B.qi++;if(B.qi>=B.q.length)floorClear();
   else if(B.q[B.qi].boss){if(!B.abyss&&!B.glDone&&!B.test&&!B.q[B.qi].gl){const g=glPick(true,B.diff);if(g){B.glDone=1;B.q.splice(B.qi,0,{d:g,boss:true,gl:true})}}bossAlert()}
   else{if(wasGl)playBgm(bgmFor(false));spawn()}},750)}
 function glFlee(){const en=B.enemy;if(!en||en.dead)return;en.dead=true;B.active=false;W=null;renderWord();if(B.diff!=='nightmare')$('stage').classList.remove('gl');kbGlitch(B.diff==='nightmare');
@@ -2335,15 +2292,16 @@ function floorClear(){
   if(tutStage()==='waitclear'){tutSet('post');b.length=0;b.push({t:'拠点へ もどる',key:'f',pri:true,fn:()=>{show('home');setTimeout(()=>tutRun('post'),350)}})}
   modal(h,b);
 }
-function defeat(){if(B&&B.abyss)return abyssEnd('dead');
+function defeat(){if(B&&B.abyss)return abyssEnd('dead');if(!B||B.over)return;B.over=1;
   const ro=B.opt;kbGlitch(false);wordNoise(false);$('stage').classList.remove('gl');B.active=false;W=null;renderWord();playBgm(null);se('lose');commitRec();save();
   modal(`<h2>力尽きた…</h2><p>${B.floor}層で倒れました。この層で拾った武器は失われます。</p>`+statsHTML()+`<p>武器を強化・合成して、もう一度挑もう。</p>`,[{t:'拠点へ',key:'f',fn:()=>show('home')},{t:'もう一度',key:' ',pri:true,fn:(f=>()=>startFloor(f,ro))(B.floor)}]);
 }
-$('retreat').onclick=()=>{if(!B||B.alerting)return;const was=B.active;B.active=false;
-  if(B.abyss){if(B.ended||(B.enemy&&B.enemy.dead&&B.enemy.fin)){if(was)B.active=true;return}return modal(`<h2>一時撤退する？</h2><p>次回の出撃で、今いる第${B.floor}層から続きを始められます。</p><p class="small">ここまでの戦利品は保留になり、再開したあと倒れるか踏破したときに、まとめて受け取れます。</p>`,[{t:'一時撤退',key:'f',fn:()=>abSuspend()},{t:'続ける',key:' ',pri:true,fn:()=>{if(B&&was)B.active=true}}])}
-  modal('<h2>撤退する？</h2><p>この層で拾った武器は持ち帰れません。</p>',[{t:'撤退する',key:'f',fn:retreatResult},{t:'続ける',key:' ',pri:true,fn:()=>{if(B&&was)B.active=true}}])};
+function unpause(){if(!B||B.over)return;B.paused=false;if(B.enemy&&!B.enemy.dead&&!B.alerting)B.active=true;const hs=B.held||[];B.held=[];hs.forEach(hitEnemy)}
+$('retreat').onclick=()=>{if(!B||B.alerting||B.over)return;const was=B.active;B.active=false;B.paused=true;
+  if(B.abyss){if(B.ended||(B.enemy&&B.enemy.dead&&B.enemy.fin)){B.paused=false;if(was)B.active=true;return}return modal(`<h2>一時撤退する？</h2><p>ここまでの戦利品を受け取って中断します。次回の出撃で、今いる第${B.floor}層から続きを始められます。</p>`,[{t:'一時撤退',key:'f',fn:()=>abSuspend()},{t:'続ける',key:' ',pri:true,fn:unpause}])}
+  modal('<h2>撤退する？</h2><p>この層で拾った武器は持ち帰れません。</p>',[{t:'撤退する',key:'f',fn:retreatResult},{t:'続ける',key:' ',pri:true,fn:unpause}])};
 function retreatResult(){
-  if(!B)return;const ro=B.opt;W=null;renderWord();commitRec();PG().lastF=B.floor;save();
+  if(!B)return;B.over=1;const ro=B.opt;W=null;renderWord();commitRec();PG().lastF=B.floor;save();
   let h=`<h2>${B.floor}層から撤退</h2><p class="small">${B.qi}/${B.q.length}体を撃破</p>`+statsHTML();
   h+='<div class="drops"><div class="drop" style="--rc:var(--line)"><span class="small">ドロップ</span><b>なし</b></div></div>';
   modal(h,[{t:'拠点へ',key:'f',fn:()=>show('home')},{t:'もう一度',key:' ',pri:true,fn:(f=>()=>startFloor(f,ro))(B.floor)}]);
@@ -2361,7 +2319,7 @@ function loop(ts){
   if(B.active){
     B.tt+=dt;
     B.ws.forEach(e=>{if(e.ct>0)e.ct=Math.max(0,e.ct-dt)});
-    const now=performance.now();if(B.buffs.length)B.buffs=B.buffs.filter(b=>b.until>now);
+    if(B.buffs.length){B.buffs.forEach(b=>b.rem-=dt);B.buffs=B.buffs.filter(b=>b.rem>0)}
     const en=B.enemy;if(en&&!en.dead){if(en.stun>0)en.stun-=dt;else{en.timer+=dt;if(en.timer>=en.int){en.timer=0;if(en.gl)glFlee();else enemyHit()}}}
   }
   if(!B)return;
@@ -2384,7 +2342,7 @@ const CL={db:null,uid:null,ready:false,pid:null,name:null,timer:null,writing:fal
 try{const ss=JSON.parse(localStorage.getItem('td_session')||'null');if(ss&&ss.pid){CL.pid=ss.pid;CL.name=ss.name}}catch(e){}
 function curKey(){return CL.pid?'td_save_'+CL.pid:SAVE_KEY}
 function pref(pid){return CL.db.doc(`data/users/${CL.uid}/p_${pid}`)}
-function adopt(d){S=Object.assign(fresh(),d);if(!d.tut)S.tut={stage:((d.exp||0)>0||(d.maxF||0)>0||(d.prog&&Object.values(d.prog).some(x=>x.maxF>0)))?'done':'intro'};if(!d.prog){S.prog=freshProg();S.prog.normal={maxF:d.maxF||0,lastF:d.lastF||1}}S.prog=Object.assign(freshProg(),S.prog);if(!DIFF[S.diff]||(S.diff==='nightmare'&&!S.nm))S.diff='normal';if(S.diff==='abyss'&&!(S.titles||[]).includes('xn100')&&!S.abOpen)S.diff='normal';S.rec=Object.assign(freshRec(),d.rec||{});S.rec.dex=Object.assign({},S.rec.dex||{});for(const k in GMAP)if(S.rec.dex['g:'+k])S.rec.dex['g:'+GMAP[k]]=1;S.inv.forEach(w=>{migrateW(w);if(w.u&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u);S.rec.dex[dexKey(w)]=1});S.rec.uniq.forEach(u=>S.rec.dex['u:'+u]=1);if(S.abRun&&S.abRun.drops)S.abRun.drops.forEach(migrateW)}
+function adopt(d){S=Object.assign(fresh(),d);if(!d.tut)S.tut={stage:((d.exp||0)>0||(d.maxF||0)>0||(d.prog&&Object.values(d.prog).some(x=>x.maxF>0)))?'done':'intro'};if(!d.prog){S.prog=freshProg();S.prog.normal={maxF:d.maxF||0,lastF:d.lastF||1}}S.prog=Object.assign(freshProg(),S.prog);if(!DIFF[S.diff]||(S.diff==='nightmare'&&!S.nm))S.diff='normal';if(S.diff==='abyss'&&!(S.titles||[]).includes('xn100')&&!S.abOpen)S.diff='normal';S.rec=Object.assign(freshRec(),d.rec||{});S.rec.dex=Object.assign({},S.rec.dex||{});for(const k in GMAP)if(S.rec.dex['g:'+k])S.rec.dex['g:'+GMAP[k]]=1;S.inv.forEach(w=>{migrateW(w);if(w.u&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u);S.rec.dex[dexKey(w)]=1});S.rec.uniq.forEach(u=>S.rec.dex['u:'+u]=1);if(S.abRun&&S.abRun.drops)S.abRun.drops.forEach(migrateW);S.inv.concat(S.abRun&&S.abRun.drops||[]).forEach(w=>{if(!SK[w.sk])w.sk=isDefT(w.t)?'guard':'rush';const ct=capTotal(w);if((w.tx||0)>ct)w.tx=ct})}
 function newGame(){S=fresh();const w=makeW({t:0,r:0,f:1,name:'旅立ちの短剣',sk:CATI.c0_0_0.sk,c:'c0_0_0'});S.inv.push(w);S.eq[0]=w.id;S.rec.dex[dexKey(w)]=1}
 function readLocal(key){try{const d=JSON.parse(localStorage.getItem(key));if(d&&Array.isArray(d.inv))return d}catch(e){}return null}
 async function hashPw(pass,salt){const enc=new TextEncoder(),k=await crypto.subtle.importKey('raw',enc.encode(pass),'PBKDF2',false,['deriveBits']);
@@ -2566,10 +2524,10 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='2.0.16-beta';
+const VERSION='2.0.18-beta';
 function clogOpen(k){return k==='nm'?!!(S&&S.nm):k==='ab'?(typeof abOpen==='function'&&abOpen()):false}
 const CHANGELOG=[
- ['2.0.16-beta',['強化画面の武器の詳細にも、上限を超えて失われる経験値を赤字で表示するように']],['2.0.15-beta',['レベル上限を超える経験値で強化しようとしたとき、失われる量を確認画面で表示するように']],['2.0.14-beta',['武器の強化で、レベル上限を超えた経験値は蓄積されないように（強化画面に失われる量を表示）']],['2.0.13-beta',[{t:'■■■■武器の圧縮にレベル上限を設定（上限を超えた■■■は蓄えられない）',u:'経験値武器の圧縮にレベル上限を設定（上限を超えた経験値は蓄えられない）',k:'nm'}]],['2.0.12-beta',[{t:'■■■■武器を強化の対象にできるように。素材を■■■■■■で、たくさんの素材を1本にまとめられる',u:'経験値武器を強化の対象にできるように。素材の経験値をそのまま蓄えるので、たくさんの素材を1本にまとめられる',k:'nm'},{t:'■■■■武器に蓄えた経験値は、素材にしたときに全額引き継がれる',u:'経験値武器に蓄えた経験値は、素材にしたときに全額引き継がれる',k:'nm'}]],['2.0.11-beta',['装備画面で、装備中の武器をクリックしたときにメニューが開かないことがある不具合を修正']],['2.0.10-beta',['ポーズ画面の見出しを「撤退する？」に戻す']],['2.0.9-beta',['バトル中にスペースキーでポーズ画面を開けるように','ポーズ画面のボタンの並びを「撤退｜続ける」に変更。Fキーで撤退、スペースキーで続ける']],['2.0.8-beta',['「敵を倒した時」に発動するスキルの効果を、回復・シールド・攻撃UP・会心UP・防御UP・CT短縮のみに統一（当てはまらなかった武器は発動条件または効果を変更）','時止めの効果時間を最大6秒までに']],['2.0.7-beta',[{t:'■■■モードの撤退を「一時撤退」に変更。中断した■から、次回続きを■■できるように',u:'アビスモードの撤退を「一時撤退」に変更。中断した層から、次回続きを再開できるように',k:'ab'},{t:'一時撤退中の■■■は保留になり、再開後に■れるか■■したときにまとめて受け取れるように',u:'一時撤退中の戦利品は保留になり、再開後に倒れるか踏破したときにまとめて受け取れるように',k:'ab'},{t:'一時撤退の■■も、引継ぎで■■に引き継がれるように',u:'一時撤退の状態も、引継ぎで別の端末に引き継がれるように',k:'ab'}]],['2.0.6-beta',['「○コンボごと」で発動するスキルの必要コンボ数を、最大16コンボまでに引き下げ（そのぶん一部のスキルの効果量を調整）']],['2.0.5-beta',["スキルの発動条件「ノーミスで○語」を廃止し、「○コンボごと」に統合（必要なコンボ数を大きく下げ、条件が厳しいぶん性能を高めに）", "すべてのユニーク武器に、ほかと被らない固有スキルを設定", "発動条件とCTがまったく同じスキルをなくし、完全な下位互換になるスキルがないように調整", "効果の多いスキルほど1つ1つの効果は控えめに、効果が1つだけのスキルほど強力に", "被ダメージ時に発動するスキルは、CTを長く・効果を控えめに統一", "新しいスキル効果「防御UP」（一定時間、受けるダメージを軽減）を追加", "新スキル「一閃」「疾風」「硬化」「不屈の構え」「受け流し」を追加", "追撃にも会心が出るように。追撃は連撃よりも合計ダメージが高くなるように調整", "連撃は、レアリティが上がると回数だけでなく1発の威力も上がるように", "スキル「連撃」（効果は追撃）の名前を「速攻」に変更"]],['2.0.4-beta',['サイトを開いたときや再読み込みしたときに、拠点のモードに合ったBGMが流れるように']],['2.0.3-beta',['ホーム画面の称号を、名前の下の行に固定して表示するように','ランクの王冠マークは、ランク999に到達したときだけ表示されるように']],
+ ['2.0.18-beta',[{t:'一時撤退したときに、そこまでの■■■を受け取れるように（結果画面から、そのまま続きに潜ることも可能）',u:'アビスで一時撤退したときに、そこまでの戦利品を受け取れるように（結果画面から、そのまま続きに潜ることも可能）',k:'ab'}]],['2.0.17-beta',['倒れた後や撤退した後に、残っていた攻撃で敵を倒してクリア扱いになることがある不具合を修正','ポーズ中に敵を倒すと、ポーズ画面のままバトルが再開してしまう不具合を修正（ポーズ中の攻撃は再開時に当たるように）','同じ武器のバフが重なっていたのを、効果時間の延長に変更','バフの効果時間が、ポーズ中・ボス出現の演出中・敵の入れ替わり中に減らないように','スマホに外付けキーボードをつないでいるときも、スペースキーでポーズできるように','強化の効果音は、レベルが上がったときだけ鳴るように','レベル上限を超えて蓄積されていた経験値を、上限までに修正',{t:'一時撤退して再開したとき、HPが全回復しないように（撤退時の残りHPの割合で再開）',u:'アビスで一時撤退して再開したとき、HPが全回復しないように（撤退時の残りHPの割合で再開）',k:'ab'},{t:'■■■の結果画面の層表示を、踏破した層数の表示に変更',u:'アビスの結果画面の層表示を、踏破した層数の表示に変更（1層目で倒れた場合は「記録なし」）',k:'ab'},{t:'■■■に潜った直後は、まだ中断データを作らないように',u:'アビスに潜った直後は、1体倒すまで中断データを作らないように',k:'ab'}]],['2.0.16-beta',['強化画面の武器の詳細にも、上限を超えて失われる経験値を赤字で表示するように']],['2.0.15-beta',['レベル上限を超える経験値で強化しようとしたとき、失われる量を確認画面で表示するように']],['2.0.14-beta',['武器の強化で、レベル上限を超えた経験値は蓄積されないように（強化画面に失われる量を表示）']],['2.0.13-beta',[{t:'■■■■武器の圧縮にレベル上限を設定（上限を超えた■■■は蓄えられない）',u:'経験値武器の圧縮にレベル上限を設定（上限を超えた経験値は蓄えられない）',k:'nm'}]],['2.0.12-beta',[{t:'■■■■武器を強化の対象にできるように。素材を■■■■■■で、たくさんの素材を1本にまとめられる',u:'経験値武器を強化の対象にできるように。素材の経験値をそのまま蓄えるので、たくさんの素材を1本にまとめられる',k:'nm'},{t:'■■■■武器に蓄えた経験値は、素材にしたときに全額引き継がれる',u:'経験値武器に蓄えた経験値は、素材にしたときに全額引き継がれる',k:'nm'}]],['2.0.11-beta',['装備画面で、装備中の武器をクリックしたときにメニューが開かないことがある不具合を修正']],['2.0.10-beta',['ポーズ画面の見出しを「撤退する？」に戻す']],['2.0.9-beta',['バトル中にスペースキーでポーズ画面を開けるように','ポーズ画面のボタンの並びを「撤退｜続ける」に変更。Fキーで撤退、スペースキーで続ける']],['2.0.8-beta',['「敵を倒した時」に発動するスキルの効果を、回復・シールド・攻撃UP・会心UP・防御UP・CT短縮のみに統一（当てはまらなかった武器は発動条件または効果を変更）','時止めの効果時間を最大6秒までに']],['2.0.7-beta',[{t:'■■■モードの撤退を「一時撤退」に変更。中断した■から、次回続きを■■できるように',u:'アビスモードの撤退を「一時撤退」に変更。中断した層から、次回続きを再開できるように',k:'ab'},{t:'一時撤退中の■■■は保留になり、再開後に■れるか■■したときにまとめて受け取れるように',u:'一時撤退中の戦利品は保留になり、再開後に倒れるか踏破したときにまとめて受け取れるように',k:'ab'},{t:'一時撤退の■■も、引継ぎで■■に引き継がれるように',u:'一時撤退の状態も、引継ぎで別の端末に引き継がれるように',k:'ab'}]],['2.0.6-beta',['「○コンボごと」で発動するスキルの必要コンボ数を、最大16コンボまでに引き下げ（そのぶん一部のスキルの効果量を調整）']],['2.0.5-beta',["スキルの発動条件「ノーミスで○語」を廃止し、「○コンボごと」に統合（必要なコンボ数を大きく下げ、条件が厳しいぶん性能を高めに）", "すべてのユニーク武器に、ほかと被らない固有スキルを設定", "発動条件とCTがまったく同じスキルをなくし、完全な下位互換になるスキルがないように調整", "効果の多いスキルほど1つ1つの効果は控えめに、効果が1つだけのスキルほど強力に", "被ダメージ時に発動するスキルは、CTを長く・効果を控えめに統一", "新しいスキル効果「防御UP」（一定時間、受けるダメージを軽減）を追加", "新スキル「一閃」「疾風」「硬化」「不屈の構え」「受け流し」を追加", "追撃にも会心が出るように。追撃は連撃よりも合計ダメージが高くなるように調整", "連撃は、レアリティが上がると回数だけでなく1発の威力も上がるように", "スキル「連撃」（効果は追撃）の名前を「速攻」に変更"]],['2.0.4-beta',['サイトを開いたときや再読み込みしたときに、拠点のモードに合ったBGMが流れるように']],['2.0.3-beta',['ホーム画面の称号を、名前の下の行に固定して表示するように','ランクの王冠マークは、ランク999に到達したときだけ表示されるように']],
  ['2.0.2-beta',[{t:'■■■モードの拠点・■■の■■■戦・■■の■■に専用BGMを追加',u:'アビスモードの拠点画面・深淵の支配者戦・深淵の果ての決戦に専用BGMを追加',k:'ab'},{t:'“■■の■■”の決戦の演出を強化',u:'深淵の果ての決戦に、専用の背景と、出題の文字やキーが青い炎に包まれる演出を追加',k:'ab'},{t:'■■■■を果たした者の■■■拠点は、姿を変える',u:'深淵踏破後は、アビスの拠点画面が青い炎を基調としたテーマに変わるように',k:'ab'},{t:'とある称号の見た目を特別仕様に',u:'称号「深淵の果てに至りし者」の見た目を特別仕様に（燃え盛る青い炎）',k:'ab'},'更新情報で、解放したモードに関する伏せ字が読めるように']],
  ['2.0.1-beta',[{t:'■■■モードの■■■層以降の強さを調整し、“■■の■■”を設定。最強の装備と腕があれば、たどり着けるかもしれない――',u:'アビスモードの101層以降の強さを調整し、999層の先に“深淵の果て”を設定。最強の装備と腕があれば、たどり着けるかもしれない――',k:'ab'},'追加能力が理論値（最大値）のとき、詳細画面で数値を黄色で表示するように','武器一覧の「全スキル」の絞り込みに「経験値」を追加',{t:'■■■モードの最終到達地点の表示を調整',u:'アビスモードの最終到達地点の表示を調整（踏破後は「深淵踏破」と表示）',k:'ab'},{t:'■■■モードの深層の道中の敵を少し柔らかく調整',u:'アビスモード501層以降の、深淵の支配者以外の敵のHPを少しずつ下げるように（999層で半分）',k:'ab'},{t:'“■■の■■■”が落とす武器は、深い層ほど■■■■の追加能力が増えるように',u:'“深淵の支配者”が落とす武器は、500層から100層ごとに理論値の追加能力が1つずつ増えるように（深淵の果てでは確定ドロップ・すべて理論値）',k:'ab'},'シールドの上限を最大HPと同じに（下方修正）',{t:'■■■モードに■■■■■■も現れるように。倒した敵の種類によって、手に入る武器が変わります',u:'アビスモードにグリッチモンスターも現れるように。通常モンスターはハード、グリッチモンスターはナイトメアと同じドロップになります',k:'ab'},{t:'■■■モードの敵の攻撃力が、深く進むほど大きく伸びるように',u:'アビスモードの敵の攻撃力が、深く進むほど大きく伸びるように',k:'ab'}]],
  ['2.0.0-beta',[{t:'ついにバージョン2.0！ 新しいモード「■■■モード」を追加しました。ある■■を手にした者の前にだけ、■■が開きます',u:'ついにバージョン2.0！ 新しいモード「アビスモード」を追加しました。称号「悪夢を喰らう者」を手にした者の前にだけ、アビスゲートが開きます',k:'ab'},{t:'■■■モードは終わりのない無限のダンジョン。進むほど敵は強くなり、倒れても撤退しても、それまでに手に入れた武器と経験値は持ち帰れます',u:'アビスモードは終わりのない無限のダンジョン。進むほど敵は強くなり、倒れても撤退しても、それまでに手に入れた武器と経験値は持ち帰れます',k:'ab'},{t:'■■の奥、■■層ごとに“■■の■■■”が待つという。■%の確率で、見たこともない■■■武器を落とすらしい――',u:'深淵の奥、50層ごとに“深淵の支配者”が待つ。深く潜るほど高い確率で、専用のゴッド武器「深淵王杖「ヴォイド・レクイエム」」を落とす',k:'ab'},{t:'新しい称号を■つ追加',u:'新しい称号を4つ追加（深淵を覗く者／奈落の踏破者／深淵を統べる者／虚無の継承者）',k:'ab'},'リザルト画面で武器にカーソルを合わせると、その武器の詳細を確認できるように（スマホはタップ）','リザルト画面でドロップした武器が多いときは、アイコンを並べて表示し、その部分だけスクロールできるように']]
@@ -2780,7 +2738,7 @@ const SORTS=[['id','入手順'],['fav','お気に入り'],['r','レアリティ'
 const RCOL=['白','緑','青','紫','金','赤','虹'];
 $('sSort').innerHTML=SORTS.map(([v,n])=>`<option value="${v}">${n}</option>`).join('');
 $('fType').innerHTML='<option value="-1">全種類</option>'+TYPES.map((t,i)=>`<option value="${i}">${t.e} ${t.n}</option>`).join('');
-const SKC=['dmg','multi','drain','heal','shield','atkbuf','critbuf','defbuf','delay','ctcut','mat',''],SKT=['every','win','combo','kill','crit','hit','low','mat'];
+const SKC=['dmg','multi','drain','heal','shield','atkbuf','critbuf','defbuf','delay','ctcut','mat',''],SKT=['every','win','combo','kill','crit','hit','mat'];
 {const CN={dmg:'追撃',multi:'連撃',drain:'吸収',heal:'回復',shield:'シールド',atkbuf:'攻撃UP',critbuf:'会心UP',defbuf:'防御UP',delay:'時止め',ctcut:'CT短縮',mat:'経験値'},TN={every:'○回攻撃ごと',win:'○秒以内に○回攻撃',combo:'○コンボごと',kill:'敵を倒した時',crit:'クリティカル時',hit:'被ダメージ時'},used=new Set(CAT.map(c=>c.sk).concat(ALLE.map(d=>d.us)));
  const L=[...used].filter(k=>SK[k]).sort((a,b)=>SKC.indexOf(SK[a].fx[0].t)-SKC.indexOf(SK[b].fx[0].t)||SKT.indexOf(SK[a].tr.type)-SKT.indexOf(SK[b].tr.type)||SK[a].n.localeCompare(SK[b].n,'ja'));
  $('fSkill').innerHTML='<option value="">全スキル</option><optgroup label="カテゴリで絞り込み">'+Object.entries(CN).map(([k,n])=>`<option value="c:${k}">${n}</option>`).join('')+'</optgroup><optgroup label="発動条件で絞り込み">'+Object.entries(TN).map(([k,n])=>`<option value="t:${k}">${n}</option>`).join('')+'</optgroup>'}
@@ -2817,6 +2775,7 @@ function paneHTML(w,tag,cmp,extra,aft){
   <div class="psec">スキル</div>
   <div class="psk" style="margin-top:2px"><b>${sk.n}</b>${sk.uq?'<span class="uqt">固有</span>':''}${sk.ct?`　CT${sk.ct}秒`:''}<br>${trText(sk.tr)}：${sk.fx.map(f=>f.t==='mat'?`経験値 +${matExp(w).toLocaleString()}`:fxText(f,smOf(w))).join('、')}</div>${extra||''}`;
 }
+function capTotal(w){const cap=RAR[w.r].cap;let r=0;for(let l=1;l<cap;l++)r+=needXP(w,l);return r}
 function capRemain(w){const cap=RAR[w.r].cap;let r=-(w.xp||0);for(let l=w.lv;l<cap;l++)r+=needXP(w,l);return Math.max(0,r)}
 function simLv(w,g){let lv=w.lv,xp=w.xp+g;const cap=RAR[w.r].cap;while(lv<cap&&xp>=needXP(w,lv)){xp-=needXP(w,lv);lv++}return lv}
 function setTab(t){A.tab=t;A.target=null;A.mats.clear();A.synMat=null;A.evoMat=null;A.pick.clear();A.hover=null;
@@ -2969,9 +2928,9 @@ $('actions').onclick=e=>{
   else if(a==='enh'){
     const t=byId(A.target),mats=[...A.mats].map(byId).filter(Boolean),g=mats.reduce((s,m)=>s+matExp(m),0),from=t.lv,cap=RAR[t.r].cap;
     if(!b.dataset.ok&&t.lv<cap&&g>capRemain(t)){const lb=t.g?'圧縮':'強化';modal(`<h2>${lb}しますか？</h2><p>上限を超えた ${fmt(g-capRemain(t))}EXP は失われます。</p>`,[{t:'やめる',key:'f'},{t:lb+'する',key:' ',pri:true,fn:()=>{b.dataset.ok=1;b.click()}}]);return}
-    if(t.g){if(t.lv>=cap)return;const b0=matExp(t),ad=Math.min(g,capRemain(t));t.xp+=ad;t.tx=(t.tx||0)+ad;while(t.lv<cap&&t.xp>=needXP(t,t.lv)){t.xp-=needXP(t,t.lv);t.lv++}if(t.lv>=cap)t.xp=0;S.inv=S.inv.filter(w=>!A.mats.has(w.id));A.mats.clear();save();se('enhance',t.lv-from);toast(`圧縮しました　Lv${from} → ${t.lv}　素材経験値 ${fmt(b0)} → ${fmt(matExp(t))}`)}else{
+    if(t.g){if(t.lv>=cap)return;const b0=matExp(t),ad=Math.min(g,capRemain(t));t.xp+=ad;t.tx=(t.tx||0)+ad;while(t.lv<cap&&t.xp>=needXP(t,t.lv)){t.xp-=needXP(t,t.lv);t.lv++}if(t.lv>=cap)t.xp=0;S.inv=S.inv.filter(w=>!A.mats.has(w.id));A.mats.clear();save();if(t.lv>from)se('enhance',t.lv-from);toast(`圧縮しました　Lv${from} → ${t.lv}　素材経験値 ${fmt(b0)} → ${fmt(matExp(t))}`)}else{
     if(t.lv>=cap)return;const ad=Math.min(g,capRemain(t));t.xp+=ad;t.tx+=ad;while(t.lv<cap&&t.xp>=needXP(t,t.lv)){t.xp-=needXP(t,t.lv);t.lv++}if(t.lv>=cap)t.xp=0;
-    S.inv=S.inv.filter(w=>!A.mats.has(w.id));A.mats.clear();save();se('enhance',t.lv-from);toast(`強化しました　Lv${from} → ${t.lv}`)}
+    S.inv=S.inv.filter(w=>!A.mats.has(w.id));A.mats.clear();save();if(t.lv>from)se('enhance',t.lv-from);toast(`強化しました　Lv${from} → ${t.lv}`)}
   }else if(a==='reset'){A.target=null;A.mats.clear();A.synMat=null;A.evoMat=null;A.pick.clear()}
   else if(a==='unmat'){A.synMat=null;A.pick.clear()}
   else if(a==='evo'){
