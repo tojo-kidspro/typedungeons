@@ -265,6 +265,9 @@ button.chip.on{border-color:var(--sel);color:var(--sel)}
 .wc .ck{position:absolute;inset:0;background:color-mix(in srgb,var(--bg) 70%,transparent);display:grid;place-items:center;color:var(--sel);font-size:26px}
 .wc.sel{outline:3px solid var(--sel);outline-offset:2px}
 .wc.dim{opacity:.22}
+#inv .wc{content-visibility:auto;contain-intrinsic-size:auto 64px auto 64px}
+#inv .wc.sel{outline:none;box-shadow:inset 0 0 0 3px var(--sel),0 0 0 1px var(--sel)}
+.wc.hl{box-shadow:inset 0 0 0 3px #4dd2ff;background:rgba(77,210,255,.14)}
 
 /* ---------- modal / toast ---------- */
 .modal{position:fixed;inset:0;background:color-mix(in srgb,var(--bg) 82%,transparent);display:none;place-items:center;z-index:50;padding:20px}
@@ -1770,7 +1773,7 @@ const SLOT_R=[1,3,8,15,25];
 function slotsOpen(r){return SLOT_R.filter(v=>r>=v).length}
 function equipped(){const n=slotsOpen(rankInfo().r);return S.eq.slice(0,n).map(byId).filter(Boolean)}
 function calcStats(){
-  const rk=rankInfo().r-1,s={hp:100+rk*10,atk:10+rk*2,def:5+rk*.8,cr:5+rk*.15,cd:50+rk*1.2,ctr:0,sp:0,mh:0};let hp=0,atk=0,def=0;
+  const rk=rankInfo().r-1,s={hp:100+rk*10,atk:10+rk*2,def:5+rk*.8,cr:5+rk*70/998,cd:50+rk*1.2,ctr:0,sp:0,mh:0};let hp=0,atk=0,def=0;
   equipped().forEach(w=>{const b=wBase(w);s.hp+=b.hp;s.atk+=b.atk;s.def+=b.def;
     w.aff.forEach(a=>{const v=affVal(w,a);if(a.k==='atk')atk+=v;else if(a.k==='hp')hp+=v;else if(a.k==='def')def+=v;else s[a.k]+=v;});});
   s.hp=Math.round(s.hp*(1+hp/100));s.atk=Math.round(s.atk*(1+atk/100));s.def=Math.round(s.def*(1+def/100));
@@ -2213,9 +2216,11 @@ const ABEND=1000;
 function abyssEnemy(f){const R=Math.random(),pk=a=>a[rand(a.length)],gv=d=>Math.random()<.5?nmE(d):d;if(f>=ABEND)return{d:LORD,boss:true,lord:true,fin:true};if(f%50===0)return{d:LORD,boss:true,lord:true};
   if(f%5===0)return R<.005?{d:GLI.g3,boss:true,gl:true}:{d:gv(pk(BOSSES.concat(CUTEB))),boss:true};
   return R<.01?{d:GLI.g2,boss:false,gl:true}:R<.03?{d:GLI.g1,boss:false,gl:true}:{d:gv(pk(NORMALS.concat(CUTEN))),boss:false}}
-function abyssDrop(f,d,boss){f=Math.min(100,f);const b=d.base||d;
-  if(d.nm){const r=rollRarity(f,boss,'nightmare');return r>=5?gwify(makeW({t:b.ut,r:5,f,name:b.un,sk:b.us,u:b.id})):glMat(EXPW[r],f)}
-  const r=rollRarity(f,boss,'hard');if(r===5)return makeW({t:b.ut,r:5,f,name:b.un,sk:b.us,u:b.id});const L=CAT.filter(e=>e.r===r),e=L[rand(L.length)];return makeW({t:e.t,r,f,el:e.el,name:e.name,sk:e.sk,c:e.c})}
+function abU(f){f=Math.max(1,Math.min(f,999));return f<=500?3+3*(f-1)/499:6+6*(f-500)/499}
+function abRoll(f,boss,tbl){const w=rarW(Math.min(100,f),boss,tbl),u=abU(f),s0=w.slice(0,5).reduce((a,b)=>a+b,0),ww=w.slice(0,5).map(x=>x/s0*(100-u)).concat(u);let x=Math.random()*100;for(let i=5;i>=0;i--){if(x<ww[i])return i;x-=ww[i]}return 0}
+function abyssDrop(f0,d,boss){const f=Math.min(100,f0),b=d.base||d;
+  if(d.nm){const r=abRoll(f0,boss,'nightmare');return r>=5?gwify(makeW({t:b.ut,r:5,f,name:b.un,sk:b.us,u:b.id})):glMat(EXPW[r],f)}
+  const r=abRoll(f0,boss,'hard');if(r===5)return makeW({t:b.ut,r:5,f,name:b.un,sk:b.us,u:b.id});const L=CAT.filter(e=>e.r===r),e=L[rand(L.length)];return makeW({t:e.t,r,f,el:e.el,name:e.name,sk:e.sk,c:e.c})}
 function abKeep(w){S.inv.push(w);S.rec.dex[dexKey(w)]=1;if(w.u&&!w.god&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)}
 function abPersist(f){if(!B||!B.abyss||B.test)return;S.abRun={f,drops:B.drops,axp:B.axp,gxp:B.gxp,best0:B.best0,rank0:B.rank0,hpR:Math.max(0,Math.min(1,B.hp/B.maxHp))}}
 function abSuspend(){abyssEnd('suspend')}
@@ -2524,10 +2529,10 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='2.0.18-beta';
+const VERSION='2.0.20-beta';
 function clogOpen(k){return k==='nm'?!!(S&&S.nm):k==='ab'?(typeof abOpen==='function'&&abOpen()):false}
 const CHANGELOG=[
- ['2.0.18-beta',[{t:'一時撤退したときに、そこまでの■■■を受け取れるように（結果画面から、そのまま続きに潜ることも可能）',u:'アビスで一時撤退したときに、そこまでの戦利品を受け取れるように（結果画面から、そのまま続きに潜ることも可能）',k:'ab'}]],['2.0.17-beta',['倒れた後や撤退した後に、残っていた攻撃で敵を倒してクリア扱いになることがある不具合を修正','ポーズ中に敵を倒すと、ポーズ画面のままバトルが再開してしまう不具合を修正（ポーズ中の攻撃は再開時に当たるように）','同じ武器のバフが重なっていたのを、効果時間の延長に変更','バフの効果時間が、ポーズ中・ボス出現の演出中・敵の入れ替わり中に減らないように','スマホに外付けキーボードをつないでいるときも、スペースキーでポーズできるように','強化の効果音は、レベルが上がったときだけ鳴るように','レベル上限を超えて蓄積されていた経験値を、上限までに修正',{t:'一時撤退して再開したとき、HPが全回復しないように（撤退時の残りHPの割合で再開）',u:'アビスで一時撤退して再開したとき、HPが全回復しないように（撤退時の残りHPの割合で再開）',k:'ab'},{t:'■■■の結果画面の層表示を、踏破した層数の表示に変更',u:'アビスの結果画面の層表示を、踏破した層数の表示に変更（1層目で倒れた場合は「記録なし」）',k:'ab'},{t:'■■■に潜った直後は、まだ中断データを作らないように',u:'アビスに潜った直後は、1体倒すまで中断データを作らないように',k:'ab'}]],['2.0.16-beta',['強化画面の武器の詳細にも、上限を超えて失われる経験値を赤字で表示するように']],['2.0.15-beta',['レベル上限を超える経験値で強化しようとしたとき、失われる量を確認画面で表示するように']],['2.0.14-beta',['武器の強化で、レベル上限を超えた経験値は蓄積されないように（強化画面に失われる量を表示）']],['2.0.13-beta',[{t:'■■■■武器の圧縮にレベル上限を設定（上限を超えた■■■は蓄えられない）',u:'経験値武器の圧縮にレベル上限を設定（上限を超えた経験値は蓄えられない）',k:'nm'}]],['2.0.12-beta',[{t:'■■■■武器を強化の対象にできるように。素材を■■■■■■で、たくさんの素材を1本にまとめられる',u:'経験値武器を強化の対象にできるように。素材の経験値をそのまま蓄えるので、たくさんの素材を1本にまとめられる',k:'nm'},{t:'■■■■武器に蓄えた経験値は、素材にしたときに全額引き継がれる',u:'経験値武器に蓄えた経験値は、素材にしたときに全額引き継がれる',k:'nm'}]],['2.0.11-beta',['装備画面で、装備中の武器をクリックしたときにメニューが開かないことがある不具合を修正']],['2.0.10-beta',['ポーズ画面の見出しを「撤退する？」に戻す']],['2.0.9-beta',['バトル中にスペースキーでポーズ画面を開けるように','ポーズ画面のボタンの並びを「撤退｜続ける」に変更。Fキーで撤退、スペースキーで続ける']],['2.0.8-beta',['「敵を倒した時」に発動するスキルの効果を、回復・シールド・攻撃UP・会心UP・防御UP・CT短縮のみに統一（当てはまらなかった武器は発動条件または効果を変更）','時止めの効果時間を最大6秒までに']],['2.0.7-beta',[{t:'■■■モードの撤退を「一時撤退」に変更。中断した■から、次回続きを■■できるように',u:'アビスモードの撤退を「一時撤退」に変更。中断した層から、次回続きを再開できるように',k:'ab'},{t:'一時撤退中の■■■は保留になり、再開後に■れるか■■したときにまとめて受け取れるように',u:'一時撤退中の戦利品は保留になり、再開後に倒れるか踏破したときにまとめて受け取れるように',k:'ab'},{t:'一時撤退の■■も、引継ぎで■■に引き継がれるように',u:'一時撤退の状態も、引継ぎで別の端末に引き継がれるように',k:'ab'}]],['2.0.6-beta',['「○コンボごと」で発動するスキルの必要コンボ数を、最大16コンボまでに引き下げ（そのぶん一部のスキルの効果量を調整）']],['2.0.5-beta',["スキルの発動条件「ノーミスで○語」を廃止し、「○コンボごと」に統合（必要なコンボ数を大きく下げ、条件が厳しいぶん性能を高めに）", "すべてのユニーク武器に、ほかと被らない固有スキルを設定", "発動条件とCTがまったく同じスキルをなくし、完全な下位互換になるスキルがないように調整", "効果の多いスキルほど1つ1つの効果は控えめに、効果が1つだけのスキルほど強力に", "被ダメージ時に発動するスキルは、CTを長く・効果を控えめに統一", "新しいスキル効果「防御UP」（一定時間、受けるダメージを軽減）を追加", "新スキル「一閃」「疾風」「硬化」「不屈の構え」「受け流し」を追加", "追撃にも会心が出るように。追撃は連撃よりも合計ダメージが高くなるように調整", "連撃は、レアリティが上がると回数だけでなく1発の威力も上がるように", "スキル「連撃」（効果は追撃）の名前を「速攻」に変更"]],['2.0.4-beta',['サイトを開いたときや再読み込みしたときに、拠点のモードに合ったBGMが流れるように']],['2.0.3-beta',['ホーム画面の称号を、名前の下の行に固定して表示するように','ランクの王冠マークは、ランク999に到達したときだけ表示されるように']],
+ ['2.0.20-beta',[{t:'■■■でユニーク武器が出る確率を、深い層ほど高く（1〜500層で3%→6%、501〜999層で→12%）',u:'アビスでユニーク武器が出る確率を、深い層ほど高く（1〜500層で3%→6%、501〜999層で→12%）',k:'ab'}]],['2.0.19-beta',['武器をたくさん持っているときの装備・強化・合成画面の動作を軽く（クリック時は変わったカードだけ更新、画面外のカードは描画しない）','ランクによるクリ率の上昇量を調整（ランク999で75%）',{t:'■■■画面では■■■■武器だけを表示するように',u:'デコード画面ではユニーク武器だけを表示するように',k:'nm'},{t:'■■■画面でベースを選ぶと、対応する素材を■■■が足りなくてもハイライト表示するように',u:'デコード画面でベースを選ぶと、対応する素材をレベルが足りなくてもハイライト表示するように',k:'nm'}]],['2.0.18-beta',[{t:'一時撤退したときに、そこまでの■■■を受け取れるように（結果画面から、そのまま続きに潜ることも可能）',u:'アビスで一時撤退したときに、そこまでの戦利品を受け取れるように（結果画面から、そのまま続きに潜ることも可能）',k:'ab'}]],['2.0.17-beta',['倒れた後や撤退した後に、残っていた攻撃で敵を倒してクリア扱いになることがある不具合を修正','ポーズ中に敵を倒すと、ポーズ画面のままバトルが再開してしまう不具合を修正（ポーズ中の攻撃は再開時に当たるように）','同じ武器のバフが重なっていたのを、効果時間の延長に変更','バフの効果時間が、ポーズ中・ボス出現の演出中・敵の入れ替わり中に減らないように','スマホに外付けキーボードをつないでいるときも、スペースキーでポーズできるように','強化の効果音は、レベルが上がったときだけ鳴るように','レベル上限を超えて蓄積されていた経験値を、上限までに修正',{t:'一時撤退して再開したとき、HPが全回復しないように（撤退時の残りHPの割合で再開）',u:'アビスで一時撤退して再開したとき、HPが全回復しないように（撤退時の残りHPの割合で再開）',k:'ab'},{t:'■■■の結果画面の層表示を、踏破した層数の表示に変更',u:'アビスの結果画面の層表示を、踏破した層数の表示に変更（1層目で倒れた場合は「記録なし」）',k:'ab'},{t:'■■■に潜った直後は、まだ中断データを作らないように',u:'アビスに潜った直後は、1体倒すまで中断データを作らないように',k:'ab'}]],['2.0.16-beta',['強化画面の武器の詳細にも、上限を超えて失われる経験値を赤字で表示するように']],['2.0.15-beta',['レベル上限を超える経験値で強化しようとしたとき、失われる量を確認画面で表示するように']],['2.0.14-beta',['武器の強化で、レベル上限を超えた経験値は蓄積されないように（強化画面に失われる量を表示）']],['2.0.13-beta',[{t:'■■■■武器の圧縮にレベル上限を設定（上限を超えた■■■は蓄えられない）',u:'経験値武器の圧縮にレベル上限を設定（上限を超えた経験値は蓄えられない）',k:'nm'}]],['2.0.12-beta',[{t:'■■■■武器を強化の対象にできるように。素材を■■■■■■で、たくさんの素材を1本にまとめられる',u:'経験値武器を強化の対象にできるように。素材の経験値をそのまま蓄えるので、たくさんの素材を1本にまとめられる',k:'nm'},{t:'■■■■武器に蓄えた経験値は、素材にしたときに全額引き継がれる',u:'経験値武器に蓄えた経験値は、素材にしたときに全額引き継がれる',k:'nm'}]],['2.0.11-beta',['装備画面で、装備中の武器をクリックしたときにメニューが開かないことがある不具合を修正']],['2.0.10-beta',['ポーズ画面の見出しを「撤退する？」に戻す']],['2.0.9-beta',['バトル中にスペースキーでポーズ画面を開けるように','ポーズ画面のボタンの並びを「撤退｜続ける」に変更。Fキーで撤退、スペースキーで続ける']],['2.0.8-beta',['「敵を倒した時」に発動するスキルの効果を、回復・シールド・攻撃UP・会心UP・防御UP・CT短縮のみに統一（当てはまらなかった武器は発動条件または効果を変更）','時止めの効果時間を最大6秒までに']],['2.0.7-beta',[{t:'■■■モードの撤退を「一時撤退」に変更。中断した■から、次回続きを■■できるように',u:'アビスモードの撤退を「一時撤退」に変更。中断した層から、次回続きを再開できるように',k:'ab'},{t:'一時撤退中の■■■は保留になり、再開後に■れるか■■したときにまとめて受け取れるように',u:'一時撤退中の戦利品は保留になり、再開後に倒れるか踏破したときにまとめて受け取れるように',k:'ab'},{t:'一時撤退の■■も、引継ぎで■■に引き継がれるように',u:'一時撤退の状態も、引継ぎで別の端末に引き継がれるように',k:'ab'}]],['2.0.6-beta',['「○コンボごと」で発動するスキルの必要コンボ数を、最大16コンボまでに引き下げ（そのぶん一部のスキルの効果量を調整）']],['2.0.5-beta',["スキルの発動条件「ノーミスで○語」を廃止し、「○コンボごと」に統合（必要なコンボ数を大きく下げ、条件が厳しいぶん性能を高めに）", "すべてのユニーク武器に、ほかと被らない固有スキルを設定", "発動条件とCTがまったく同じスキルをなくし、完全な下位互換になるスキルがないように調整", "効果の多いスキルほど1つ1つの効果は控えめに、効果が1つだけのスキルほど強力に", "被ダメージ時に発動するスキルは、CTを長く・効果を控えめに統一", "新しいスキル効果「防御UP」（一定時間、受けるダメージを軽減）を追加", "新スキル「一閃」「疾風」「硬化」「不屈の構え」「受け流し」を追加", "追撃にも会心が出るように。追撃は連撃よりも合計ダメージが高くなるように調整", "連撃は、レアリティが上がると回数だけでなく1発の威力も上がるように", "スキル「連撃」（効果は追撃）の名前を「速攻」に変更"]],['2.0.4-beta',['サイトを開いたときや再読み込みしたときに、拠点のモードに合ったBGMが流れるように']],['2.0.3-beta',['ホーム画面の称号を、名前の下の行に固定して表示するように','ランクの王冠マークは、ランク999に到達したときだけ表示されるように']],
  ['2.0.2-beta',[{t:'■■■モードの拠点・■■の■■■戦・■■の■■に専用BGMを追加',u:'アビスモードの拠点画面・深淵の支配者戦・深淵の果ての決戦に専用BGMを追加',k:'ab'},{t:'“■■の■■”の決戦の演出を強化',u:'深淵の果ての決戦に、専用の背景と、出題の文字やキーが青い炎に包まれる演出を追加',k:'ab'},{t:'■■■■を果たした者の■■■拠点は、姿を変える',u:'深淵踏破後は、アビスの拠点画面が青い炎を基調としたテーマに変わるように',k:'ab'},{t:'とある称号の見た目を特別仕様に',u:'称号「深淵の果てに至りし者」の見た目を特別仕様に（燃え盛る青い炎）',k:'ab'},'更新情報で、解放したモードに関する伏せ字が読めるように']],
  ['2.0.1-beta',[{t:'■■■モードの■■■層以降の強さを調整し、“■■の■■”を設定。最強の装備と腕があれば、たどり着けるかもしれない――',u:'アビスモードの101層以降の強さを調整し、999層の先に“深淵の果て”を設定。最強の装備と腕があれば、たどり着けるかもしれない――',k:'ab'},'追加能力が理論値（最大値）のとき、詳細画面で数値を黄色で表示するように','武器一覧の「全スキル」の絞り込みに「経験値」を追加',{t:'■■■モードの最終到達地点の表示を調整',u:'アビスモードの最終到達地点の表示を調整（踏破後は「深淵踏破」と表示）',k:'ab'},{t:'■■■モードの深層の道中の敵を少し柔らかく調整',u:'アビスモード501層以降の、深淵の支配者以外の敵のHPを少しずつ下げるように（999層で半分）',k:'ab'},{t:'“■■の■■■”が落とす武器は、深い層ほど■■■■の追加能力が増えるように',u:'“深淵の支配者”が落とす武器は、500層から100層ごとに理論値の追加能力が1つずつ増えるように（深淵の果てでは確定ドロップ・すべて理論値）',k:'ab'},'シールドの上限を最大HPと同じに（下方修正）',{t:'■■■モードに■■■■■■も現れるように。倒した敵の種類によって、手に入る武器が変わります',u:'アビスモードにグリッチモンスターも現れるように。通常モンスターはハード、グリッチモンスターはナイトメアと同じドロップになります',k:'ab'},{t:'■■■モードの敵の攻撃力が、深く進むほど大きく伸びるように',u:'アビスモードの敵の攻撃力が、深く進むほど大きく伸びるように',k:'ab'}]],
  ['2.0.0-beta',[{t:'ついにバージョン2.0！ 新しいモード「■■■モード」を追加しました。ある■■を手にした者の前にだけ、■■が開きます',u:'ついにバージョン2.0！ 新しいモード「アビスモード」を追加しました。称号「悪夢を喰らう者」を手にした者の前にだけ、アビスゲートが開きます',k:'ab'},{t:'■■■モードは終わりのない無限のダンジョン。進むほど敵は強くなり、倒れても撤退しても、それまでに手に入れた武器と経験値は持ち帰れます',u:'アビスモードは終わりのない無限のダンジョン。進むほど敵は強くなり、倒れても撤退しても、それまでに手に入れた武器と経験値は持ち帰れます',k:'ab'},{t:'■■の奥、■■層ごとに“■■の■■■”が待つという。■%の確率で、見たこともない■■■武器を落とすらしい――',u:'深淵の奥、50層ごとに“深淵の支配者”が待つ。深く潜るほど高い確率で、専用のゴッド武器「深淵王杖「ヴォイド・レクイエム」」を落とす',k:'ab'},{t:'新しい称号を■つ追加',u:'新しい称号を4つ追加（深淵を覗く者／奈落の踏破者／深淵を統べる者／虚無の継承者）',k:'ab'},'リザルト画面で武器にカーソルを合わせると、その武器の詳細を確認できるように（スマホはタップ）','リザルト画面でドロップした武器が多いときは、アイコンを並べて表示し、その部分だけスクロールできるように']]
@@ -2755,7 +2760,7 @@ $('fRar').onclick=e=>{const b=e.target.closest('[data-r]');if(!b)return;const r=
 function affSum(w,k){return r1(w.aff.filter(a=>a.k===k).reduce((s,a)=>s+affVal(w,a),0))}
 function sortVal(w,k){if(k==='id')return w.id;if(k==='fav')return w.fav?1:0;if(k==='r')return w.r*1000+w.lv;if(k==='lv')return w.lv;if(k==='atk'||k==='hp'||k==='def')return wBase(w)[k];if(k==='skc'){const f=SK[w.sk].fx[0];return SKC.indexOf(f?f.t:'')*100+SKC.indexOf((SK[w.sk].fx[1]||{}).t||'')}if(k==='skt'){const tr=SK[w.sk].tr;return SKT.indexOf(tr.type)*1000+(tr.n||0)*10+(tr.s||0)}return affSum(w,k.slice(2))}
 function invList(){
-  const L=S.inv.filter(w=>(!A.ffav||w.fav)&&A.fr.has(w.r)&&(A.ft<0||w.t===A.ft)&&(!A.fs||(A.fs.startsWith('c:')?SK[w.sk].fx.some(f=>f.t===A.fs.slice(2)):A.fs.startsWith('t:')?SK[w.sk].tr.type===A.fs.slice(2):w.sk===A.fs))&&(!A.fa||w.aff.some(a=>a.k===A.fa)));
+  const L=S.inv.filter(w=>(A.tab!=='evo'||(w.r===5&&!w.g))&&(!A.ffav||w.fav)&&A.fr.has(w.r)&&(A.ft<0||w.t===A.ft)&&(!A.fs||(A.fs.startsWith('c:')?SK[w.sk].fx.some(f=>f.t===A.fs.slice(2)):A.fs.startsWith('t:')?SK[w.sk].tr.type===A.fs.slice(2):w.sk===A.fs))&&(!A.fa||w.aff.some(a=>a.k===A.fa)));
   const k=A.sort,d=A.desc?-1:1;
   return L.sort((a,b)=>{const x=sortVal(a,k),y=sortVal(b,k);const c=typeof x==='string'?x.localeCompare(y,'ja'):x-y;return (c||a.id-b.id)*d});
 }
@@ -2838,21 +2843,29 @@ function renderTop(){
 }
 function pickUI(pool,ref,n){const chip=p=>`<button class="chip ${A.pick.has(p.key)?'on':[...A.pick].some(q=>pool.find(x=>x.key===q).a.k===p.a.k)?'dis':''}" data-pick="${p.key}"><small>${p.src}</small>${p.a.v>=AFFD[p.a.k].max?'<b class="amx" title="理論値">★</b>':''}${AFFD[p.a.k].n}+${affVal(ref,p.a)}%</button>`,AO=k=>AFF.findIndex(a=>a.k===k),srt=L=>L.slice().sort((x,y)=>AO(x.a.k)-AO(y.a.k)||affVal(ref,y.a)-affVal(ref,x.a)),sel=srt(pool.filter(p=>A.pick.has(p.key))),un=srt(pool.filter(p=>!A.pick.has(p.key)));
   return `<div class="dsplit"><div class="dcol on"><div class="dh">付ける能力 ${sel.length}/${n}</div><div class="daff">${sel.map(chip).join('')||'<span class="small">右から選んでください</span>'}</div></div><div class="dcol"><div class="dh">付けない能力</div><div class="daff">${un.map(chip).join('')||'<span class="small">—</span>'}</div></div></div>`}
+function cardState(w,t){
+  let cls='';
+  if(A.tab==='equip'&&A.sel===w.id)cls='sel';
+  if(A.tab!=='equip'&&A.target===w.id)cls='sel';
+  if(A.tab==='syn'&&t&&!A.synMat&&w.id!==t.id&&(w.r!==t.r||isEq(w.id)))cls='dim';
+  if(A.tab==='syn'&&!t&&w.r===0)cls='dim';
+  if(A.tab==='enh'&&t&&w.id!==t.id&&isEq(w.id))cls='dim';
+  if(A.tab==='evo'&&t&&!A.evoMat&&w.id!==t.id)cls=isGodBase(t)&&!w.gw&&!w.god&&w.r===5&&w.u===t.u?'hl':'dim';
+  if(A.tab==='evo'&&!t&&!evoNext(w))cls='dim';
+  const ck=(A.tab==='enh'&&A.mats.has(w.id))||(A.tab==='syn'&&A.synMat===w.id)||(A.tab==='evo'&&A.evoMat===w.id),eq=isEq(w.id);
+  return {cls,k:[cls,w.lv,eq?1:0,w.fav?1:0,ck?1:0,w.r,w.gw?1:0,w.god?1:0,w.name].join('|'),eq,ck}}
+function cardInner(w,st){return `${wIcon(w)}<span class="lv">Lv${w.lv}</span>${st.eq?'<span class="eb">E</span>':''}${w.fav?'<span class="fvb">★</span>':''}${st.ck?'<span class="ck">✓</span>':''}`}
 function renderInv(){
-  const t=byId(A.target),L=invList();
+  const t=byId(A.target),L=invList(),box=$('inv'),sig=L.map(w=>w.id).join(',');
   $('invHead').textContent=`${L.length} / ${S.inv.length}本`;
-  $('inv').innerHTML=L.map(w=>{
-    let cls='';
-    if(A.tab==='equip'&&A.sel===w.id)cls='sel';
-    if(A.tab!=='equip'&&A.target===w.id)cls='sel';
-    if(A.tab==='syn'&&t&&!A.synMat&&w.id!==t.id&&(w.r!==t.r||isEq(w.id)))cls='dim';
-    if(A.tab==='syn'&&!t&&w.r===0)cls='dim';
-    if(A.tab==='enh'&&t&&w.id!==t.id&&isEq(w.id))cls='dim';
-    if(A.tab==='evo'&&t&&!A.evoMat&&w.id!==t.id&&!evoMatOk(t,w))cls='dim';
-    if(A.tab==='evo'&&!t&&!evoNext(w))cls='dim';
-    const ck=(A.tab==='enh'&&A.mats.has(w.id))||(A.tab==='syn'&&A.synMat===w.id)||(A.tab==='evo'&&A.evoMat===w.id);
-    return `<div class="wc ${cls}" data-id="${w.id}" style="--rc:${RAR[w.r].c}" title="${w.name}">${wIcon(w)}<span class="lv">Lv${w.lv}</span>${isEq(w.id)?'<span class="eb">E</span>':''}${w.fav?'<span class="fvb">★</span>':''}${ck?'<span class="ck">✓</span>':''}</div>`}).join('')
+  if(L.length&&box._sig===sig&&box.children.length===L.length){
+    const els=box.children;
+    for(let i=0;i<L.length;i++){const w=L[i],el=els[i],st=cardState(w,t);if(el._k===st.k)continue;el._k=st.k;el.className='wc '+st.cls;el.style.setProperty('--rc',RAR[w.r].c);el.title=w.name;el.innerHTML=cardInner(w,st)}
+    return}
+  const sts=L.map(w=>cardState(w,t));
+  box.innerHTML=L.map((w,i)=>`<div class="wc ${sts[i].cls}" data-id="${w.id}" style="--rc:${RAR[w.r].c}" title="${w.name}">${cardInner(w,sts[i])}</div>`).join('')
     ||'<div class="empty" style="grid-column:1/-1">条件に合う武器がありません</div>';
+  box._sig=L.length?sig:null;if(L.length){const els=box.children;for(let i=0;i<L.length;i++)els[i]._k=sts[i].k}
 }
 function renderArmory(){applyDec();const gc=$('fRar').querySelector('[data-r="6"]');if(gc)gc.hidden=!S.nm;renderTop();renderInv()}
 
