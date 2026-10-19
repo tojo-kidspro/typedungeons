@@ -916,8 +916,12 @@ body.abdone .abgate b{background:#cfe9ff;box-shadow:0 0 6px #3fa9ff}
 .xcode{height:72px;font-size:12px;font-family:ui-monospace,monospace;resize:vertical;word-break:break-all}
 
 /* ---------- v1.0.3 ---------- */
-.armbtns{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.armbtns{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;margin-bottom:12px}
 .armbtns .big{margin-top:0;height:50px;font-size:18px}
+#heroSub.nmfocus{position:relative;cursor:pointer;outline:3px solid #ff3b7a;outline-offset:6px;animation:nmfoc 1.1s ease-in-out infinite}
+#heroSub.nmfocus::after{content:'▲ CLICK';position:absolute;left:50%;top:calc(100% + 14px);transform:translateX(-50%);font-size:13px;letter-spacing:.2em;color:#ff3b7a;text-shadow:0 0 8px #ff3b7a;white-space:nowrap;animation:nmfa 1.1s ease-in-out infinite;pointer-events:none}
+@keyframes nmfoc{0%,100%{outline-color:#ff3b7a;box-shadow:0 0 0 0 rgba(255,59,122,.6)}50%{outline-color:#b04dff;box-shadow:0 0 22px 6px rgba(176,77,255,.55)}}
+@keyframes nmfa{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-5px)}}
 .dexlink{width:100%;text-align:left;cursor:pointer;padding:0}
 .dexlink span{color:var(--sel)!important;width:110px!important;white-space:nowrap}
 .prog span{width:110px}
@@ -1120,13 +1124,13 @@ button.chip.dis{opacity:.3;text-decoration:line-through}
         </div>
       </div>
       <div class="hsec"><div class="hlab">装備中の武器<span class="small" id="hSlotTxt"></span></div><div class="heqs" id="hSlots"></div></div>
+      <div class="armbtns"><button class="big" data-arm="equip">装備</button><button class="big" data-arm="enh">強化</button><button class="big" data-arm="syn">合成</button><button class="big decb" data-arm="evo" hidden>デコード</button></div>
       <div class="statgrid" id="hStats"></div>
       <div class="hsec"><div class="hlab">冒険の記録</div>
         <div class="prog"><span>踏破</span><div class="pbar"><i id="hProg"></i></div><b id="hProgT"></b></div>
         <button class="prog dexlink" id="dexLink"><span>アイテム図鑑 ▶</span><div class="pbar u"><i id="hUni"></i></div><b id="hUniT"></b></button>
         <div class="recs" id="hRec"></div>
       </div>
-      <div class="armbtns"><button class="big" data-arm="equip">装備</button><button class="big" data-arm="enh">強化</button><button class="big" data-arm="syn">合成</button><button class="big decb" data-arm="evo" hidden>デコード</button></div>
     </div>
     <div class="rcol">
     <div class="card gocard">
@@ -1507,7 +1511,8 @@ const EXPW=[
  {id:'e4',r:4,t:1,wn:'譬ｸ縺ｮ螟ｧ蜑｣',skn:'縺ｬ繧九⊃',mexp:120000}];
 const EXPI=Object.fromEntries(EXPW.map(e=>[e.id,e])),GMAP={g1:'e3',g2:'e4',g3:'e4'};
 EXPW.forEach(e=>{e.src=GLITCH.find(g=>g.drop===e.id)||null;SK['g_'+e.id]={n:e.skn,uq:true,tr:{type:'mat'},ct:0,fx:[{t:'mat',v:e.mexp}]}});
-function glPick(boss,dif){const r=Math.random();if(boss)return (dif==='hard'||dif==='nightmare')&&r<.005?GLI.g3:null;if(dif!=='easy'){if(r<.01)return GLI.g2;return r<.03?GLI.g1:null}return r<.02?GLI.g1:null}
+function glForced(){return !!(S&&!S.nm&&!(S.rec.gk>0)&&B&&!B.test&&!B.abyss&&(S.glReq||(B.diff==='hard'&&B.floor===100)))}
+function glPick(boss,dif){if(!boss&&glForced())return GLI.g1;const r=Math.random();if(boss)return (dif==='hard'||dif==='nightmare')&&r<.005?GLI.g3:null;if(dif!=='easy'){if(r<.01)return GLI.g2;return r<.03?GLI.g1:null}return r<.02?GLI.g1:null}
 const GJ='繝繧縺螟蜑譁邨碁ｨ薙ｒ謨ｵ迚遘峨ｹｼｸﾞｮ\uFFFD';
 function garble(s,p){let h=hashS(s+'#'),o='';for(const c of s){h=Math.imul(h^c.charCodeAt(0),16777619)>>>0;o+=(h%1000)/1000<p?GJ[(h>>>10)%GJ.length]:c}if(o===s&&p>0&&s.length){const a=[...s],i=hashS(s)%a.length;a[i]=GJ[hashS(s+'!')%GJ.length];o=a.join('')}return o}
 const NME={};function nmE(d){return d.nm||d.gl?d:(NME[d.id]||(NME[d.id]=Object.assign({},d,{id:'n_'+d.id,n:garble(d.n,.5),nm:true,base:d})))}
@@ -1855,7 +1860,7 @@ function ttlHTML(t,big){const s=t.s,lv=tLv(t),orn={3:'◆',4:'✦',5:'✧',6:'�
   const fl='<em class="bfl"><i></i><i></i><i></i></em>',o1=s==='end'?fl:orn?`<em>${orn}</em>`:'';return `<span class="ttl s${s}${t.ult?' ult':''}${big?' big':''}"><i class="tb"></i>${s==='max'?'<i class="tm1"></i><i class="tm2"></i>':''}${s==='end'?'<i class="te1"></i>':''}${sp}<b>${o1}${esc(t.n)}${o1}</b></span>`}
 const TLOCK='<span class="ttl lock"><i class="tb"></i><b>？？？</b></span>';
 function nmHint(){if(!S||!S.nm||S.nmh||(typeof TUT!=='undefined'&&TUT.on)||tutStage()!=='done')return false;S.nmh=1;save();se('glitch');setTimeout(()=>se('glitch'),400);
-  modal(`<div class="nmhint"><h2 class="glt">……異変</h2><p>どこかで、何かが軋む音がした。</p><p>この迷宮の“外側”が、わずかに揺らいでいる。</p><p class="small">見慣れた名前の、すぐ下――。</p><p class="small glt">繧ｿ繧､繝医Ν縺ｫ隗ｦ繧後※縺ｿ繧\uFFFD</p></div>`,[{t:'……',pri:true,key:' ',fn:()=>{renderHome();if(typeof tutDecHome==='function')tutDecHome()}}]);return true}
+  modal(`<div class="nmhint"><h2 class="glt">……異変</h2><p>どこかで、何かが軋む音がした。</p><p>この迷宮の“外側”が、わずかに揺らいでいる。</p><p class="small">見慣れた名前の、すぐ下――。</p><p class="small glt">繧ｿ繧､繝医Ν縺ｫ隗ｦ繧後※縺ｿ繧\uFFFD</p></div>`,[{t:'……',pri:true,key:' ',fn:()=>{S.nmfx=1;save();renderHome();if(typeof tutDecHome==='function')tutDecHome();const sb=$('heroSub');if(sb)sb.scrollIntoView({block:'center',behavior:'smooth'})}}]);return true}
 function titleCheck(){if(!S||!S.prog||(typeof TUT!=='undefined'&&TUT.on)||tutStage()!=='done')return false;S.titles=S.titles||[];const nw=[];
   TL.forEach(t=>{if(!S.titles.includes(t.id)){let ok=false;try{ok=t.c()}catch(e){}if(ok){S.titles.push(t.id);if(t.id!=='r1')nw.push(t)}}});
   if(!nw.length)return false;save();renderHome();titleGet(nw);return true}
@@ -2203,7 +2208,7 @@ function enemyDie(){
   const en=B.enemy;en.dead=true;B.active=false;W=null;renderWord();S.rec.kills++;trigKill();
   const eg=$('eg');eg.className='';void eg.offsetWidth;eg.className='die';
   blog(`${en.d.n}を倒した！`,'dmg');se('kill');
-  if(en.gl){$('stage').classList.remove('gl');kbGlitch(B.diff==='nightmare');if(B.diff!=='nightmare')$('stage').classList.remove('gl');if(!S.nm)S.nm=1;S.rec.gk=(S.rec.gk||0)+1;const g=en.d,xp=Math.floor((20*Math.pow(B.floor,1.3)*g.xm+g.xa)*DIFF[B.diff].exp*xpScale(B.floor,B.diff));
+  if(en.gl){$('stage').classList.remove('gl');kbGlitch(B.diff==='nightmare');if(B.diff!=='nightmare')$('stage').classList.remove('gl');if(!S.nm)S.nm=1;S.glReq=0;S.rec.gk=(S.rec.gk||0)+1;const g=en.d,xp=Math.floor((20*Math.pow(B.floor,1.3)*g.xm+g.xa)*DIFF[B.diff].exp*xpScale(B.floor,B.diff));
     if(!B.abyss)S.exp+=xp;B.gxp+=xp;const w=glMat(EXPI[g.drop],B.floor);B.drops.push(w);save();pop('+'+fmt(xp)+' EXP','crit',50,Math.max(fxTop+6,30),30);
     blog(`経験値を ${fmt(xp)} 獲得！`,'drop big','var(--sel)');setTimeout(()=>se('drop',w.r),250);blog(`★【${RAR[w.r].n}】${w.name}を手に入れた！`,'drop big',RAR[w.r].c);nextEnemy();return}
   if(Math.random()<(en.boss?1:.35)){const w=B.abyss?abyssDrop(B.floor,en.lord?BOSSES[rand(BOSSES.length)]:en.d,en.boss):rollWeapon(B.floor,en.d,en.boss);B.drops.push(w);setTimeout(()=>se('drop',w.r),250);blog(`${w.r>=4?'★':''}【${RAR[w.r].n}】${w.name}を手に入れた！`,'drop'+(w.r>=4?' big':''),RAR[w.r].c)}
@@ -2282,7 +2287,7 @@ function statsHTML(c){
 function commitRec(){if(!B||B.committed)return;B.committed=true;const R=S.rec;R.keys+=B.keys;R.time+=B.tt;R.maxCombo=Math.max(R.maxCombo,B.maxCombo);
   if(B.keys>=30&&B.tt>0)R.bestKps=Math.max(R.bestKps,B.keys/B.tt)}
 function floorClear(){
-  commitRec();S.rec.clears++;const nmb=B.miss===0&&B.keys>0?rollWeapon(B.floor,floorInfo(B.floor).boss,true,true):null;if(nmb){B.drops.push(nmb);S.rec.nmc=(S.rec.nmc||0)+1}B.drops.forEach(w=>S.rec.dex[dexKey(w)]=1);playBgm(null);se('clear');B.drops.forEach(w=>{if(w.u&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)});
+  commitRec();S.rec.clears++;if(!B.test&&B.diff==='hard'&&B.floor===100&&!S.nm&&!(S.rec.gk>0))S.glReq=1;const nmb=B.miss===0&&B.keys>0?rollWeapon(B.floor,floorInfo(B.floor).boss,true,true):null;if(nmb){B.drops.push(nmb);S.rec.nmc=(S.rec.nmc||0)+1}B.drops.forEach(w=>S.rec.dex[dexKey(w)]=1);playBgm(null);se('clear');B.drops.forEach(w=>{if(w.u&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)});
   kbGlitch(false);wordNoise(false);$('stage').classList.remove('gl');
   const f=B.floor,first=f>PG().maxF&&!B.test,xp=Math.floor(clearXP(f,B.diff)*(first?2:1)),before=B.rank0||rankInfo().r;
   S.exp+=xp;if(first)PG().maxF=f;S.inv.push(...B.drops);if(!B.test)PG().lastF=Math.min(100,f+1);save();
@@ -2530,10 +2535,10 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='2.1.0-beta';
+const VERSION='2.2.0-beta';
 function clogOpen(k){return k==='nm'?!!(S&&S.nm):k==='ab'?(typeof abOpen==='function'&&abOpen()):false}
 const CHANGELOG=[
- ['2.1.0-beta',['同じ名前や同じ二つ名を持つ武器がないように、武器の名前を見直し（エピック・レジェンダリーの一部の名前が変わります）']]
+ ['2.2.0-beta',['拠点画面の「装備・強化・合成」ボタンを、装備中の武器のすぐ下に移動（その下にステータス）',{t:'ハード100層で、まだ■■■■モンスターを倒したことがない場合は、必ず■■■■モンスターが出現するように',u:'ハード100層で、まだグリッチモンスターを倒したことがない場合は、必ずグリッチモンスターが出現するように',k:'nm'},{t:'■■■■モンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',u:'グリッチモンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',k:'nm'},{t:'■■■■モードへのヒントのあと、切り替えの場所が分かりやすく光るように',u:'ナイトメアモードへのヒントのあと、切り替えの場所（タイトル下の文字）が分かりやすく光るように',k:'nm'}]]
 ];
 const DEX=[];
 CAT.forEach(e=>DEX.push({key:'c:'+e.c,t:e.t,r:e.r,cat:e}));
@@ -2713,8 +2718,8 @@ const SUBTXT='TYPE DUNGEONS',NMTXT='NIGHTMARE MODE',NZC='繝繧縺螟蜑譁ｨ�
 function nmUI(){return S.diff==='nightmare'&&!!S.nm}
 function abOpen(){return !!S&&((S.titles||[]).includes('xn100')||!!S.abOpen)}
 function abUI(){return !!S&&S.diff==='abyss'&&abOpen()}
-function applyNmUI(){const on=nmUI(),ab=abUI(),sb=$('heroSub');document.body.classList.toggle('nmui',on);document.body.classList.toggle('abui',ab);document.body.classList.toggle('abdone',ab&&S.prog.abyss&&S.prog.abyss.maxF>=ABEND);sb.classList.toggle('subgl',!!S.nm&&!ab);sb.dataset.t=ab?'ABYSS':on?NMTXT:SUBTXT;sb.textContent=sb.dataset.t}
-function nmToggle(){if(NMT||!S.nm||abUI())return;NMT=1;const h=$('home'),to=!nmUI();playBgm(null);
+function applyNmUI(){const on=nmUI(),ab=abUI(),sb=$('heroSub');document.body.classList.toggle('nmui',on);document.body.classList.toggle('abui',ab);document.body.classList.toggle('abdone',ab&&S.prog.abyss&&S.prog.abyss.maxF>=ABEND);sb.classList.toggle('subgl',!!S.nm&&!ab);sb.classList.toggle('nmfocus',!!S.nm&&!!S.nmfx&&!ab);sb.dataset.t=ab?'ABYSS':on?NMTXT:SUBTXT;sb.textContent=sb.dataset.t}
+function nmToggle(){if(NMT||!S.nm||abUI())return;NMT=1;if(S.nmfx){S.nmfx=0;save();$('heroSub').classList.remove('nmfocus')}const h=$('home'),to=!nmUI();playBgm(null);
   [0,280,620,980].forEach(t=>setTimeout(()=>se('glitch'),t));h.classList.add(to?'nmin':'nmout');
   setTimeout(()=>{if(to){if(S.diff!=='nightmare')S.pdiff=S.diff;S.diff='nightmare'}else S.diff=S.pdiff&&S.pdiff!=='nightmare'?S.pdiff:'hard';save();renderHome();playBgm(to?'nm':'home')},950);
   setTimeout(()=>{h.classList.remove('nmin','nmout');NMT=0},1800)}
