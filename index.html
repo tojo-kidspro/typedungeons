@@ -1105,7 +1105,7 @@ button.chip.dis{opacity:.3;text-decoration:line-through}
 <div id="app">
 
 <section id="home" class="screen active">
-  <div class="sndbar"><button data-snd="bgm"></button><button data-snd="se"></button><button id="xferBtn" class="accb">引き継ぎ</button><button id="accBtn" class="accb"></button></div>
+  <div class="sndbar"><button data-snd="bgm"></button><button data-snd="se"></button><button id="srlBtn" class="accb" hidden>シリアル</button><button id="xferBtn" class="accb">引き継ぎ</button><button id="accBtn" class="accb"></button></div>
   <div class="hscroll">
     <div class="hero" id="hero">
       <div class="rays"></div>
@@ -2535,10 +2535,10 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='2.2.0-beta';
+const VERSION='2.2.2-beta';
 function clogOpen(k){return k==='nm'?!!(S&&S.nm):k==='ab'?(typeof abOpen==='function'&&abOpen()):false}
 const CHANGELOG=[
- ['2.2.0-beta',['拠点画面の「装備・強化・合成」ボタンを、装備中の武器のすぐ下に移動（その下にステータス）',{t:'ハード100層で、まだ■■■■モンスターを倒したことがない場合は、必ず■■■■モンスターが出現するように',u:'ハード100層で、まだグリッチモンスターを倒したことがない場合は、必ずグリッチモンスターが出現するように',k:'nm'},{t:'■■■■モンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',u:'グリッチモンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',k:'nm'},{t:'■■■■モードへのヒントのあと、切り替えの場所が分かりやすく光るように',u:'ナイトメアモードへのヒントのあと、切り替えの場所（タイトル下の文字）が分かりやすく光るように',k:'nm'}]]
+ ['2.2.2-beta',['シリアルコード入力を使えるように']],['2.2.1-beta',['シリアルコード入力を追加（配布されたコードで報酬の武器を受け取れます）']],['2.2.0-beta',['拠点画面の「装備・強化・合成」ボタンを、装備中の武器のすぐ下に移動（その下にステータス）',{t:'ハード100層で、まだ■■■■モンスターを倒したことがない場合は、必ず■■■■モンスターが出現するように',u:'ハード100層で、まだグリッチモンスターを倒したことがない場合は、必ずグリッチモンスターが出現するように',k:'nm'},{t:'■■■■モンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',u:'グリッチモンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',k:'nm'},{t:'■■■■モードへのヒントのあと、切り替えの場所が分かりやすく光るように',u:'ナイトメアモードへのヒントのあと、切り替えの場所（タイトル下の文字）が分かりやすく光るように',k:'nm'}]]
 ];
 const DEX=[];
 CAT.forEach(e=>DEX.push({key:'c:'+e.c,t:e.t,r:e.r,cat:e}));
@@ -2548,6 +2548,34 @@ ALLE.forEach(d=>DEX.push({key:'d:'+d.id,t:d.ut,r:6,u:d.id,d,boss:ISB(d),god:true
 DEX.push({key:'d:abyss',t:LORD.ut,r:6,u:'abyss',d:LORD,boss:true,god:true,nmh:true,hid:true});
 EXPW.forEach(e=>DEX.push({key:'g:'+e.id,t:e.t,r:e.r,g:e.id,d:e.src,ex:e,boss:!!(e.src&&e.src.boss),hid:true}));
 DEX.forEach((e,i)=>{e.w={id:700000+i,t:e.t,r:e.r,f:1,lv:1,xp:0,tx:0,el:e.cat?e.cat.el:5,u:e.u||null,c:e.cat?e.cat.c:null,g:e.g||null,gw:e.gw?1:0,god:e.god?1:0,aff:[],sk:e.g?'g_'+e.g:e.u?e.d.us:e.cat.sk,name:e.g?e.ex.wn:e.god?godName(e.u):e.u?e.d.un:e.cat.name};if(e.gw)e.w.name=garble(e.w.name,.3)});
+/* ===== serial code (Firestore) ===== */
+const SERIAL_FB={apiKey:FB.key,projectId:FB.project};
+function srlOn(){return !!(SERIAL_FB.apiKey&&SERIAL_FB.projectId)}
+function srlNorm(c){return (c||'').toUpperCase().replace(/[^0-9A-Z]/g,'')}
+async function srlHash(c){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('TDSERIAL:'+srlNorm(c)));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+function wFromKey(k,o){const en=DEX.find(x=>x.key===k);if(!en)return null;let w;o=o||{};
+  if(en.g)w=glMat(EXPI[en.g],1);else if(en.god){w=k==='d:abyss'?voidWeapon(0):makeW({t:en.t,r:6,f:1,name:godName(en.u),sk:en.d.us,u:en.u});w.god=1}
+  else if(en.u){w=makeW({t:en.t,r:5,f:1,name:en.d.un,sk:en.d.us,u:en.u});if(en.gw)gwify(w)}else w=makeW({t:en.t,r:en.r,f:1,name:en.cat.name,sk:en.cat.sk,c:en.cat.c,el:en.cat.el});
+  const cap=RAR[w.r].cap;if(o.lv==='max')w.lv=cap;else if(o.lv>1)w.lv=Math.min(cap,Math.floor(o.lv));if(o.aff==='max')w.aff.forEach(a=>a.v=AFFD[a.k].max);return w}
+async function srlRedeem(code){
+  const c=srlNorm(code);if(c.length<8)throw new Error('コードの形式が正しくありません');
+  const h=await srlHash(c),base=`https://firestore.googleapis.com/v1/projects/${SERIAL_FB.projectId}/databases/(default)/documents`,name=`projects/${SERIAL_FB.projectId}/databases/(default)/documents/serials/${h}`;
+  const g=await fetch(`${base}/serials/${h}?key=${SERIAL_FB.apiKey}`);if(g.status===404)throw new Error('このコードは無効か、すでに使われています');if(!g.ok)throw new Error('通信に失敗しました（'+g.status+'）');
+  const doc=await g.json();let rw;try{rw=JSON.parse(doc.fields.r.stringValue)}catch(e){throw new Error('コードのデータが壊れています')}
+  S.srl=S.srl||[];if(rw.cid&&S.srl.includes(rw.cid))throw new Error('この配布の報酬は、このアカウントですでに受け取っています');
+  const d=await fetch(`${base}:commit?key=${SERIAL_FB.apiKey}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({writes:[{delete:name,currentDocument:{exists:true}}]})});
+  if(!d.ok)throw new Error(d.status===400||d.status===404||d.status===409?'このコードはすでに使われています':'通信に失敗しました（'+d.status+'）');
+  const got=(rw.w||[]).map(x=>{const w=wFromKey(x.k,x);if(w){S.inv.push(w);S.rec.dex[dexKey(w)]=1;if(w.u&&!w.god&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)}return w}).filter(Boolean);
+  if(rw.cid)S.srl.push(rw.cid);save();return {rw,got}}
+function showSerial(){accBox(`<h2>シリアルコード</h2><p class="small">配布されたシリアルコードを入力すると、報酬を受け取れます。<br>コードは1回だけ使えます。</p><input class="inp" id="srlIn" placeholder="TD-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false" style="width:100%;text-transform:uppercase;letter-spacing:.08em"><p class="small" id="srlMsg" style="min-height:1.4em"></p><div class="mbtns"><button class="btn" data-srl="close">閉じる</button><button class="btn pri" data-srl="go">受け取る</button></div>`);setTimeout(()=>{const i=$('srlIn');if(i)i.focus()},50)}
+$('mbox').addEventListener('click',async e=>{const b=e.target.closest('[data-srl]');if(!b)return;const a=b.dataset.srl;
+  if(a==='close'){$('modal').classList.remove('on');renderHome();return}
+  if(a==='go'){if(b.disabled)return;const m=$('srlMsg');b.disabled=true;m.textContent='確認しています…';
+    try{const {rw,got}=await srlRedeem($('srlIn').value);se('drop',Math.max(...got.map(w=>w.r),0));
+      modal(`<h2>報酬を受け取りました！</h2>${rw.msg?`<p>${String(rw.msg).replace(/[<>&]/g,'')}</p>`:''}<div class="drops">${got.map(w=>dropHTML(w)).join('')}</div>`,[{t:'OK',key:' ',pri:true,fn:()=>renderHome()}])}
+    catch(err){m.textContent=err.message||'受け取れませんでした';b.disabled=false}}});
+$('mbox').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='srlIn'){const b=$('mbox').querySelector('[data-srl=go]');if(b)b.click()}});
+$('srlBtn').onclick=()=>showSerial();$('srlBtn').hidden=!srlOn();
 function dexVis(){return DEX.filter(e=>(!e.hid||S.rec.dex[e.key])&&(!e.nmh||S.nm))}
 const DX={sel:null,hov:null,f:'all'};
 function floorsOf(id){const fl=[];for(let f=1;f<=100;f++){const fi=floorInfo(f);if(fi.boss.id===id||fi.pool.some(d=>d.id===id))fl.push(f)}
