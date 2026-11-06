@@ -2227,7 +2227,7 @@ function abRoll(f,boss,tbl){const w=rarW(Math.min(100,f),boss,tbl),u=abU(f),s0=w
 function abyssDrop(f0,d,boss){const f=Math.min(100,f0),b=d.base||d;
   if(d.nm){const r=abRoll(f0,boss,'nightmare');return r>=5?gwify(makeW({t:b.ut,r:5,f,name:b.un,sk:b.us,u:b.id})):glMat(EXPW[r],f)}
   const r=abRoll(f0,boss,'hard');if(r===5)return makeW({t:b.ut,r:5,f,name:b.un,sk:b.us,u:b.id});const L=CAT.filter(e=>e.r===r),e=L[rand(L.length)];return makeW({t:e.t,r,f,el:e.el,name:e.name,sk:e.sk,c:e.c})}
-function abKeep(w){S.inv.push(w);S.rec.dex[dexKey(w)]=1;if(w.u&&!w.god&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)}
+function abKeep(w){S.inv.push(w);S.rec.dex[dexKey(w)]=1;if(w.u&&!w.god&&!w.gw&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)}
 function abPersist(f){if(!B||!B.abyss||B.test)return;S.abRun={f,drops:B.drops,axp:B.axp,gxp:B.gxp,best0:B.best0,rank0:B.rank0,hpR:Math.max(0,Math.min(1,B.hp/B.maxHp))}}
 function abSuspend(){abyssEnd('suspend')}
 function abyssEnd(kind){if(!B||B.ended)return;const b=B;b.ended=1;b.over=1;if(!b.test){b.drops.forEach(abKeep);S.exp+=b.axp+b.gxp;S.abRun=kind==='suspend'?{f:b.floor,drops:[],axp:0,gxp:0,best0:S.prog.abyss.maxF,rank0:rankInfo().r,hpR:Math.max(0,Math.min(1,b.hp/b.maxHp))}:null}b.active=false;W=null;renderWord();kbGlitch(false);wordNoise(false);abKb(false);abEnd(false);playBgm(null);se(kind==='dead'?'lose':'clear');if(kind==='clear')setTimeout(()=>se('drop',6),500);commitRec();
@@ -2287,7 +2287,7 @@ function statsHTML(c){
 function commitRec(){if(!B||B.committed)return;B.committed=true;const R=S.rec;R.keys+=B.keys;R.time+=B.tt;R.maxCombo=Math.max(R.maxCombo,B.maxCombo);
   if(B.keys>=30&&B.tt>0)R.bestKps=Math.max(R.bestKps,B.keys/B.tt)}
 function floorClear(){
-  commitRec();S.rec.clears++;if(!B.test&&B.diff==='hard'&&B.floor===100&&!S.nm&&!(S.rec.gk>0))S.glReq=1;const nmb=B.miss===0&&B.keys>0?rollWeapon(B.floor,floorInfo(B.floor).boss,true,true):null;if(nmb){B.drops.push(nmb);S.rec.nmc=(S.rec.nmc||0)+1}B.drops.forEach(w=>S.rec.dex[dexKey(w)]=1);playBgm(null);se('clear');B.drops.forEach(w=>{if(w.u&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)});
+  commitRec();S.rec.clears++;if(!B.test&&B.diff==='hard'&&B.floor===100&&!S.nm&&!(S.rec.gk>0))S.glReq=1;const nmb=B.miss===0&&B.keys>0?rollWeapon(B.floor,floorInfo(B.floor).boss,true,true):null;if(nmb){B.drops.push(nmb);S.rec.nmc=(S.rec.nmc||0)+1}B.drops.forEach(w=>S.rec.dex[dexKey(w)]=1);playBgm(null);se('clear');B.drops.forEach(w=>{if(w.u&&!w.god&&!w.gw&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)});
   kbGlitch(false);wordNoise(false);$('stage').classList.remove('gl');
   const f=B.floor,first=f>PG().maxF&&!B.test,xp=Math.floor(clearXP(f,B.diff)*(first?2:1)),before=B.rank0||rankInfo().r;
   S.exp+=xp;if(first)PG().maxF=f;S.inv.push(...B.drops);if(!B.test)PG().lastF=Math.min(100,f+1);save();
@@ -2353,7 +2353,7 @@ const CL={db:null,uid:null,ready:false,pid:null,name:null,timer:null,writing:fal
 try{const ss=JSON.parse(localStorage.getItem('td_session')||'null');if(ss&&ss.pid){CL.pid=ss.pid;CL.name=ss.name}}catch(e){}
 function curKey(){return CL.pid?'td_save_'+CL.pid:SAVE_KEY}
 function pref(pid){return CL.db.doc(`data/users/${CL.uid}/p_${pid}`)}
-function adopt(d){S=Object.assign(fresh(),d);if(!d.tut)S.tut={stage:((d.exp||0)>0||(d.maxF||0)>0||(d.prog&&Object.values(d.prog).some(x=>x.maxF>0)))?'done':'intro'};if(!d.prog){S.prog=freshProg();S.prog.normal={maxF:d.maxF||0,lastF:d.lastF||1}}S.prog=Object.assign(freshProg(),S.prog);if(!DIFF[S.diff]||(S.diff==='nightmare'&&!S.nm))S.diff='normal';if(S.diff==='abyss'&&!(S.titles||[]).includes('xn100')&&!S.abOpen)S.diff='normal';S.rec=Object.assign(freshRec(),d.rec||{});S.rec.dex=Object.assign({},S.rec.dex||{});for(const k in GMAP)if(S.rec.dex['g:'+k])S.rec.dex['g:'+GMAP[k]]=1;S.inv.forEach(w=>{migrateW(w);if(w.u&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u);S.rec.dex[dexKey(w)]=1});S.rec.uniq.forEach(u=>S.rec.dex['u:'+u]=1);if(S.abRun&&S.abRun.drops)S.abRun.drops.forEach(migrateW);S.inv.concat(S.abRun&&S.abRun.drops||[]).forEach(w=>{if(!SK[w.sk])w.sk=isDefT(w.t)?'guard':'rush';const ct=capTotal(w);if((w.tx||0)>ct)w.tx=ct})}
+function adopt(d){S=Object.assign(fresh(),d);if(!d.tut)S.tut={stage:((d.exp||0)>0||(d.maxF||0)>0||(d.prog&&Object.values(d.prog).some(x=>x.maxF>0)))?'done':'intro'};if(!d.prog){S.prog=freshProg();S.prog.normal={maxF:d.maxF||0,lastF:d.lastF||1}}S.prog=Object.assign(freshProg(),S.prog);if(!DIFF[S.diff]||(S.diff==='nightmare'&&!S.nm))S.diff='normal';if(S.diff==='abyss'&&!(S.titles||[]).includes('xn100')&&!S.abOpen)S.diff='normal';S.rec=Object.assign(freshRec(),d.rec||{});S.rec.dex=Object.assign({},S.rec.dex||{});for(const k in GMAP)if(S.rec.dex['g:'+k])S.rec.dex['g:'+GMAP[k]]=1;S.inv.forEach(w=>{migrateW(w);if(w.u&&!w.god&&!w.gw&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u);S.rec.dex[dexKey(w)]=1});S.rec.uniq.forEach(u=>S.rec.dex['u:'+u]=1);if(S.abRun&&S.abRun.drops)S.abRun.drops.forEach(migrateW);S.inv.concat(S.abRun&&S.abRun.drops||[]).forEach(w=>{if(!SK[w.sk])w.sk=isDefT(w.t)?'guard':'rush';const ct=capTotal(w);if((w.tx||0)>ct)w.tx=ct})}
 function newGame(){S=fresh();const w=makeW({t:0,r:0,f:1,name:'旅立ちの短剣',sk:CATI.c0_0_0.sk,c:'c0_0_0'});S.inv.push(w);S.eq[0]=w.id;S.rec.dex[dexKey(w)]=1}
 function readLocal(key){try{const d=JSON.parse(localStorage.getItem(key));if(d&&Array.isArray(d.inv))return d}catch(e){}return null}
 async function hashPw(pass,salt){const enc=new TextEncoder(),k=await crypto.subtle.importKey('raw',enc.encode(pass),'PBKDF2',false,['deriveBits']);
@@ -2535,10 +2535,10 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='2.2.2-beta';
+const VERSION='2.2.3-beta';
 function clogOpen(k){return k==='nm'?!!(S&&S.nm):k==='ab'?(typeof abOpen==='function'&&abOpen()):false}
 const CHANGELOG=[
- ['2.2.2-beta',['シリアルコード入力を使えるように']],['2.2.1-beta',['シリアルコード入力を追加（配布されたコードで報酬の武器を受け取れます）']],['2.2.0-beta',['拠点画面の「装備・強化・合成」ボタンを、装備中の武器のすぐ下に移動（その下にステータス）',{t:'ハード100層で、まだ■■■■モンスターを倒したことがない場合は、必ず■■■■モンスターが出現するように',u:'ハード100層で、まだグリッチモンスターを倒したことがない場合は、必ずグリッチモンスターが出現するように',k:'nm'},{t:'■■■■モンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',u:'グリッチモンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',k:'nm'},{t:'■■■■モードへのヒントのあと、切り替えの場所が分かりやすく光るように',u:'ナイトメアモードへのヒントのあと、切り替えの場所（タイトル下の文字）が分かりやすく光るように',k:'nm'}]]
+ ['2.2.3-beta',[{t:'■■■■武器を手に入れたとき、対応する通常のユニークまで図鑑に登録されていた不具合を修正',u:'グリッチ武器を手に入れたとき、対応する通常のユニークまで図鑑に登録されていた不具合を修正',k:'nm'}]],['2.2.2-beta',['シリアルコード入力を使えるように']],['2.2.1-beta',['シリアルコード入力を追加（配布されたコードで報酬の武器を受け取れます）']],['2.2.0-beta',['拠点画面の「装備・強化・合成」ボタンを、装備中の武器のすぐ下に移動（その下にステータス）',{t:'ハード100層で、まだ■■■■モンスターを倒したことがない場合は、必ず■■■■モンスターが出現するように',u:'ハード100層で、まだグリッチモンスターを倒したことがない場合は、必ずグリッチモンスターが出現するように',k:'nm'},{t:'■■■■モンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',u:'グリッチモンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',k:'nm'},{t:'■■■■モードへのヒントのあと、切り替えの場所が分かりやすく光るように',u:'ナイトメアモードへのヒントのあと、切り替えの場所（タイトル下の文字）が分かりやすく光るように',k:'nm'}]]
 ];
 const DEX=[];
 CAT.forEach(e=>DEX.push({key:'c:'+e.c,t:e.t,r:e.r,cat:e}));
@@ -2565,7 +2565,7 @@ async function srlRedeem(code){
   S.srl=S.srl||[];if(rw.cid&&S.srl.includes(rw.cid))throw new Error('この配布の報酬は、このアカウントですでに受け取っています');
   const d=await fetch(`${base}:commit?key=${SERIAL_FB.apiKey}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({writes:[{delete:name,currentDocument:{exists:true}}]})});
   if(!d.ok)throw new Error(d.status===400||d.status===404||d.status===409?'このコードはすでに使われています':'通信に失敗しました（'+d.status+'）');
-  const got=(rw.w||[]).map(x=>{const w=wFromKey(x.k,x);if(w){S.inv.push(w);S.rec.dex[dexKey(w)]=1;if(w.u&&!w.god&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)}return w}).filter(Boolean);
+  const got=(rw.w||[]).map(x=>{const w=wFromKey(x.k,x);if(w){S.inv.push(w);S.rec.dex[dexKey(w)]=1;if(w.u&&!w.god&&!w.gw&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)}return w}).filter(Boolean);
   if(rw.cid)S.srl.push(rw.cid);save();return {rw,got}}
 function showSerial(){accBox(`<h2>シリアルコード</h2><p class="small">配布されたシリアルコードを入力すると、報酬を受け取れます。<br>コードは1回だけ使えます。</p><input class="inp" id="srlIn" placeholder="TD-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false" style="width:100%;text-transform:uppercase;letter-spacing:.08em"><p class="small" id="srlMsg" style="min-height:1.4em"></p><div class="mbtns"><button class="btn" data-srl="close">閉じる</button><button class="btn pri" data-srl="go">受け取る</button></div>`);setTimeout(()=>{const i=$('srlIn');if(i)i.focus()},50)}
 $('mbox').addEventListener('click',async e=>{const b=e.target.closest('[data-srl]');if(!b)return;const a=b.dataset.srl;
@@ -2763,7 +2763,7 @@ function rwCheck(){if(!S||!S.prog||(typeof TUT!=='undefined'&&TUT.on)||tutStage(
   if(S.nm&&S.prog.nightmare&&S.prog.nightmare.maxF>=100&&!S.rw.nightmare){S.rw.nightmare=1;got.push([gwify(rwUnique()),`${DIFF.nightmare.n} 100層クリア特典`])}
   if(['easy','normal','hard','nightmare'].every(d=>S.prog[d]&&S.prog[d].maxF>=100)&&!S.rw.all){S.rw.all=1;const a=rwUnique(),b=gwify(makeW({t:a.t,r:5,f:100,name:a.name,sk:a.sk,u:a.u}));got.push([a,'全難易度 制覇特典'],[b,'全難易度 制覇特典']);msg='<p>すべての難易度の100層を制覇した証。対応する2本の武器が手に入った。</p>'}
   if(!got.length)return false;
-  got.forEach(([w])=>{S.inv.push(w);S.rec.dex[dexKey(w)]=1;if(w.u&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)});save();renderHome();se('clear');setTimeout(()=>se('drop',5),300);
+  got.forEach(([w])=>{S.inv.push(w);S.rec.dex[dexKey(w)]=1;if(w.u&&!w.god&&!w.gw&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)});save();renderHome();se('clear');setTimeout(()=>se('drop',5),300);
   modal(`<h2>クリア特典</h2><p>百層を制覇した報酬を受け取った！</p>${msg}<div class="drops">${got.map(([w,l])=>`<div class="small rwl">${l}</div>${dropHTML(w)}`).join('')}</div>`,[{t:'閉じる',pri:true,fn:()=>{renderHome();if(titleCheck())return;if(typeof tutDecHome==='function')tutDecHome()}}]);return true}
 function tutAuto(){if(tutStage()==='intro'&&screen==='home'&&!$('modal').classList.contains('on'))tutRun('intro')}
 
