@@ -1919,10 +1919,11 @@ $('hSlots').addEventListener('pointermove',e=>{if(TIP.classList.contains('on'))t
 $('hSlots').addEventListener('pointerleave',()=>{TIP.classList.remove('on');TIP._id=null});
 $('hSlots').addEventListener('click',e=>{const q=e.target.closest('[data-hslot]');if(!q)return;TIP.classList.remove('on');TIP._id=null;
   setTab('equip');A.slot=+q.dataset.hslot;A.sel=q.dataset.hid?+q.dataset.hid:null;A.hover=null;show('armory')});
-function floorInfo(f){const band=Math.min(BOSSES.length-1,Math.floor((f-1)/5)),start=Math.round(band*(NORMALS.length-4)/(BOSSES.length-1));return{band,pool:NORMALS.slice(start,start+4).concat([CUTEN[Math.round(band*(CUTEN.length-1)/(BOSSES.length-1))]]),boss:(f-1)%5===2?CUTEB[band%CUTEB.length]:BOSSES[band]}}
+function floorInfo(f){const band=Math.min(BOSSES.length-1,Math.floor((f-1)/5)),start=Math.round(band*(NORMALS.length-4)/(BOSSES.length-1)),pool=NORMALS.slice(start,start+4).concat([CUTEN[Math.round(band*(CUTEN.length-1)/(BOSSES.length-1))]]),n=3+Math.floor(f/25),o=(f-1)%pool.length,mobs=[];for(let i=0;i<n;i++)mobs.push(pool[(o+i)%pool.length]);
+  return{band,pool:[...new Set(mobs)],mobs,boss:(f-1)%5===2?CUTEB[band%CUTEB.length]:BOSSES[band]}}
 function renderFInfo(){if(abUI()){const pr=S.prog.abyss;$('fInfo').innerHTML=`<div class="abinfo"><div>${pr.maxF>=ABEND?'<b class="abend"><small>THE END OF ABYSS</small>深 淵 踏 破</b>':`<span class="small">最終到達地点</span><b>第${pr.maxF}層</b>`}</div><div><span class="small">深淵の支配者</span><b>${S.rec.lord||0}<small>体撃破</small></b></div></div><p class="small abtx">果てのない闇の底。倒れても、踏破しても、一時撤退しても、手にしたものは持ち帰れる。一時撤退すれば、続きから潜れる。</p>`+(S.abRun?`<div class="abrun">一時撤退中：<b>第${S.abRun.f}層</b>から再開${(S.abRun.drops||[]).length||S.abRun.axp||S.abRun.gxp?`<span class="small">（未受け取りの武器 ${(S.abRun.drops||[]).length}本・経験値 +${fmt((S.abRun.axp||0)+(S.abRun.gxp||0))}）</span>`:''}</div>`:'');$('goBtn').textContent=S.abRun?`第${S.abRun.f}層から再開`:'深淵へ潜る';return}
   const fi=floorInfo(selF);
-  $('fInfo').innerHTML=`＊ ${selF}層　${selF<=PG().maxF?'クリア済み':'未踏の層'}<br><span class="small">出現：${fi.pool.map(d=>S.diff==='nightmare'?nmE(d).n:d.n).join('・')}<br>ボス：${S.diff==='nightmare'?nmE(fi.boss).n:fi.boss.n}</span>`;
+  $('fInfo').innerHTML=`＊ ${selF}層　${selF<=PG().maxF?'クリア済み':'未踏の層'}<br><span class="small">出現：${fi.pool.map(d=>{const c=fi.mobs.filter(x=>x===d).length;return (S.diff==='nightmare'?nmE(d).n:d.n)+(c>1?'×'+c:'')}).join('・')}<br>ボス：${S.diff==='nightmare'?nmE(fi.boss).n:fi.boss.n}</span>`;
   $('goBtn').textContent=`${DIFF[S.diff].n} ${selF}層へ出撃`;}
 $('diffSel').onclick=e=>{const b=e.target.closest('[data-diff]');if(!b||b.dataset.diff===S.diff)return;S.diff=b.dataset.diff;save();renderHome()};
 $('fgrid').onclick=e=>{const b=e.target.closest('[data-f]');if(!b||b.disabled)return;selF=+b.dataset.f;PG().lastF=selF;
@@ -1963,7 +1964,7 @@ function enemyStats(f,boss){const d=B&&B.diff||'normal',D=DIFF[d]||DIFF.normal,T
 function startFloor(f,opt){if(!document.querySelector('#stage .abvx')){const v=document.createElement('div');v.className='abvx';$('stage').prepend(v)}
   const st=calcStats(),fi=floorInfo(f),band=fi.band%10,pool=fi.pool;
   const dif=(opt&&opt.diff)||S.diff,mp=it=>it.gl||dif!=='nightmare'?it:Object.assign({},it,{d:nmE(it.d)});
-  let q=[];const n=3+Math.floor(f/25);for(let i=0;i<n;i++)q.push({d:pool[rand(pool.length)],boss:false});q.push({d:fi.boss,boss:true});
+  let q=fi.mobs.map(d=>({d,boss:false}));for(let i=q.length-1;i>0;i--){const j=rand(i+1);[q[i],q[j]]=[q[j],q[i]]}q.push({d:fi.boss,boss:true});
   if(dif==='abyss'&&!(opt&&opt.q))q=[abyssEnemy(f)];if(opt&&opt.q)q=opt.q;q=q.map(mp);kbGlitch(false);
   B={opt,abyss:dif==='abyss',axp:0,best0:(S.prog.abyss||{}).maxF||0,diff:(opt&&opt.diff)||S.diff,test:!!(opt&&opt.q),rank0:rankInfo().r,gxp:0,floor:f,q,qi:0,st,hp:st.hp,maxHp:st.hp,shield:0,combo:0,maxCombo:0,keys:0,miss:0,tt:0,chain:0,chainDmg:0,chainT:0,at:[],buffs:[],drops:[],active:false,enemy:null,lt:0,lastWord:null,
      ws:equipped().map(w=>({w,ct:0,cnt:0,el:null}))};
@@ -2535,10 +2536,10 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='2.2.3-beta';
+const VERSION='2.2.4-beta';
 function clogOpen(k){return k==='nm'?!!(S&&S.nm):k==='ab'?(typeof abOpen==='function'&&abOpen()):false}
 const CHANGELOG=[
- ['2.2.3-beta',[{t:'■■■■武器を手に入れたとき、対応する通常のユニークまで図鑑に登録されていた不具合を修正',u:'グリッチ武器を手に入れたとき、対応する通常のユニークまで図鑑に登録されていた不具合を修正',k:'nm'}]],['2.2.2-beta',['シリアルコード入力を使えるように']],['2.2.1-beta',['シリアルコード入力を追加（配布されたコードで報酬の武器を受け取れます）']],['2.2.0-beta',['拠点画面の「装備・強化・合成」ボタンを、装備中の武器のすぐ下に移動（その下にステータス）',{t:'ハード100層で、まだ■■■■モンスターを倒したことがない場合は、必ず■■■■モンスターが出現するように',u:'ハード100層で、まだグリッチモンスターを倒したことがない場合は、必ずグリッチモンスターが出現するように',k:'nm'},{t:'■■■■モンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',u:'グリッチモンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',k:'nm'},{t:'■■■■モードへのヒントのあと、切り替えの場所が分かりやすく光るように',u:'ナイトメアモードへのヒントのあと、切り替えの場所（タイトル下の文字）が分かりやすく光るように',k:'nm'}]]
+ ['2.2.4-beta',['各層に出現する雑魚モンスターを固定に（出現する順番はランダム）。狙ったモンスターのいる層を選んで周回できるように']],['2.2.3-beta',[{t:'■■■■武器を手に入れたとき、対応する通常のユニークまで図鑑に登録されていた不具合を修正',u:'グリッチ武器を手に入れたとき、対応する通常のユニークまで図鑑に登録されていた不具合を修正',k:'nm'}]],['2.2.2-beta',['シリアルコード入力を使えるように']],['2.2.1-beta',['シリアルコード入力を追加（配布されたコードで報酬の武器を受け取れます）']],['2.2.0-beta',['拠点画面の「装備・強化・合成」ボタンを、装備中の武器のすぐ下に移動（その下にステータス）',{t:'ハード100層で、まだ■■■■モンスターを倒したことがない場合は、必ず■■■■モンスターが出現するように',u:'ハード100層で、まだグリッチモンスターを倒したことがない場合は、必ずグリッチモンスターが出現するように',k:'nm'},{t:'■■■■モンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',u:'グリッチモンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',k:'nm'},{t:'■■■■モードへのヒントのあと、切り替えの場所が分かりやすく光るように',u:'ナイトメアモードへのヒントのあと、切り替えの場所（タイトル下の文字）が分かりやすく光るように',k:'nm'}]]
 ];
 const DEX=[];
 CAT.forEach(e=>DEX.push({key:'c:'+e.c,t:e.t,r:e.r,cat:e}));
