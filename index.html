@@ -2632,10 +2632,10 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='2.2.10-beta';
+const VERSION='2.2.11-beta';
 function clogOpen(k){return k==='nm'?!!(S&&S.nm):k==='ab'?(typeof abOpen==='function'&&abOpen()):false}
 const CHANGELOG=[
- ['2.2.10-beta',['ガチャのユニークの提供割合を3%に','ガチャの10連ボタンを廃止（1回と、最大100連の連続ガチャ）',{t:'ガチャの■■■■ユニークの提供割合を3%に',u:'ガチャのグリッチユニークの提供割合を3%に',k:'nm'},'シリアルコード限定の武器を追加','シリアルコードでガチャポイントも受け取れるように']],['2.2.9-beta',['ガチャで出た武器のカードを正方形に',{t:'■■■で手に入るガチャポイントを大幅に増加（深い層ほど多く、100層までで約1,000GP）',u:'アビスで手に入るガチャポイントを大幅に増加（深い層ほど多く、100層までで約1,000GP）',k:'ab'}]],['2.2.8-beta',['ガチャの提供割合を変更（ユニーク 1%）',{t:'ガチャの■■■■ユニークの提供割合を 1% に',u:'ガチャのグリッチユニークの提供割合を 1% に（ユニークとは別枠）',k:'nm'}]],['2.2.7-beta',['ガチャの結果画面に、ユニーク確定までの残り回数を表示（ユニークが出た場合はリセットされたことも表示）']],['2.2.6-beta',['ガチャのユニーク確定（天井）を300回に変更']],['2.2.5-beta',['ガチャを追加（1回・10連・最大100連）。層をクリアするとガチャポイントがもらえます','ガチャは10連ごとにレア以上が1つ確定、150回以内にユニーク確定']],['2.2.4-beta',['各層に出現する雑魚モンスターを固定に（出現する順番はランダム）。狙ったモンスターのいる層を選んで周回できるように']],['2.2.3-beta',[{t:'■■■■武器を手に入れたとき、対応する通常のユニークまで図鑑に登録されていた不具合を修正',u:'グリッチ武器を手に入れたとき、対応する通常のユニークまで図鑑に登録されていた不具合を修正',k:'nm'}]],['2.2.2-beta',['シリアルコード入力を使えるように']],['2.2.1-beta',['シリアルコード入力を追加（配布されたコードで報酬の武器を受け取れます）']],['2.2.0-beta',['拠点画面の「装備・強化・合成」ボタンを、装備中の武器のすぐ下に移動（その下にステータス）',{t:'ハード100層で、まだ■■■■モンスターを倒したことがない場合は、必ず■■■■モンスターが出現するように',u:'ハード100層で、まだグリッチモンスターを倒したことがない場合は、必ずグリッチモンスターが出現するように',k:'nm'},{t:'■■■■モンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',u:'グリッチモンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',k:'nm'},{t:'■■■■モードへのヒントのあと、切り替えの場所が分かりやすく光るように',u:'ナイトメアモードへのヒントのあと、切り替えの場所（タイトル下の文字）が分かりやすく光るように',k:'nm'}]]
+ ['2.2.11-beta',['古いバージョンのままシリアルコードを入力すると、報酬が入らないのに受け取り済みになる不具合を修正（該当する人は、もう一度入力すると受け取れます）']],['2.2.10-beta',['ガチャのユニークの提供割合を3%に','ガチャの10連ボタンを廃止（1回と、最大100連の連続ガチャ）',{t:'ガチャの■■■■ユニークの提供割合を3%に',u:'ガチャのグリッチユニークの提供割合を3%に',k:'nm'},'シリアルコード限定の武器を追加','シリアルコードでガチャポイントも受け取れるように']],['2.2.9-beta',['ガチャで出た武器のカードを正方形に',{t:'■■■で手に入るガチャポイントを大幅に増加（深い層ほど多く、100層までで約1,000GP）',u:'アビスで手に入るガチャポイントを大幅に増加（深い層ほど多く、100層までで約1,000GP）',k:'ab'}]],['2.2.8-beta',['ガチャの提供割合を変更（ユニーク 1%）',{t:'ガチャの■■■■ユニークの提供割合を 1% に',u:'ガチャのグリッチユニークの提供割合を 1% に（ユニークとは別枠）',k:'nm'}]],['2.2.7-beta',['ガチャの結果画面に、ユニーク確定までの残り回数を表示（ユニークが出た場合はリセットされたことも表示）']],['2.2.6-beta',['ガチャのユニーク確定（天井）を300回に変更']],['2.2.5-beta',['ガチャを追加（1回・10連・最大100連）。層をクリアするとガチャポイントがもらえます','ガチャは10連ごとにレア以上が1つ確定、150回以内にユニーク確定']],['2.2.4-beta',['各層に出現する雑魚モンスターを固定に（出現する順番はランダム）。狙ったモンスターのいる層を選んで周回できるように']],['2.2.3-beta',[{t:'■■■■武器を手に入れたとき、対応する通常のユニークまで図鑑に登録されていた不具合を修正',u:'グリッチ武器を手に入れたとき、対応する通常のユニークまで図鑑に登録されていた不具合を修正',k:'nm'}]],['2.2.2-beta',['シリアルコード入力を使えるように']],['2.2.1-beta',['シリアルコード入力を追加（配布されたコードで報酬の武器を受け取れます）']],['2.2.0-beta',['拠点画面の「装備・強化・合成」ボタンを、装備中の武器のすぐ下に移動（その下にステータス）',{t:'ハード100層で、まだ■■■■モンスターを倒したことがない場合は、必ず■■■■モンスターが出現するように',u:'ハード100層で、まだグリッチモンスターを倒したことがない場合は、必ずグリッチモンスターが出現するように',k:'nm'},{t:'■■■■モンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',u:'グリッチモンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',k:'nm'},{t:'■■■■モードへのヒントのあと、切り替えの場所が分かりやすく光るように',u:'ナイトメアモードへのヒントのあと、切り替えの場所（タイトル下の文字）が分かりやすく光るように',k:'nm'}]]
 ];
 const DEX=[];
 CAT.forEach(e=>DEX.push({key:'c:'+e.c,t:e.t,r:e.r,cat:e}));
@@ -2646,7 +2646,9 @@ DEX.push({key:'d:abyss',t:LORD.ut,r:6,u:'abyss',d:LORD,boss:true,god:true,nmh:tr
 EXPW.forEach(e=>DEX.push({key:'g:'+e.id,t:e.t,r:e.r,g:e.id,d:e.src,ex:e,boss:!!(e.src&&e.src.boss),hid:true}));
 DEX.forEach((e,i)=>{e.w={id:700000+i,t:e.t,r:e.r,f:1,lv:1,xp:0,tx:0,el:e.cat?e.cat.el:5,u:e.u||null,c:e.cat?e.cat.c:null,g:e.g||null,gw:e.gw?1:0,god:e.god?1:0,aff:[],sk:e.g?'g_'+e.g:e.u?e.d.us:e.cat.sk,name:e.g?e.ex.wn:e.god?godName(e.u):e.u?e.d.un:e.cat.name};if(e.gw)e.w.name=garble(e.w.name,.3)});
 /* ===== serial code (Firestore) ===== */
-const SERIAL_FB={apiKey:FB.key,projectId:FB.project};
+const SERIAL_FB={apiKey:FB.key,projectId:FB.project},SRL_LV=2;
+/* 古い版で「受け取り済み」だけ記録され、報酬が入らなかった配布を受け取り直せるようにする */
+function srlRepair(){if(!S.srl||!S.srl.length)return;const ok=S.srlOk||{},broken={origin_gift_2026:()=>!S.inv.some(w=>w.o==='origin')&&!(S.eq||[]).some(id=>{const w=S.inv.find(x=>x.id===id);return w&&w.o})};S.srl=S.srl.filter(c=>!(broken[c]&&!ok[c]&&broken[c]()))}
 function srlOn(){return !!(SERIAL_FB.apiKey&&SERIAL_FB.projectId)}
 function srlNorm(c){return (c||'').toUpperCase().replace(/[^0-9A-Z]/g,'')}
 async function srlHash(c){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('TDSERIAL:'+srlNorm(c)));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
@@ -2661,11 +2663,12 @@ async function srlRedeem(code){
   const doc=await g.json();let rw;try{rw=JSON.parse(doc.fields.r.stringValue)}catch(e){throw new Error('コードのデータが壊れています')}
   S.srl=S.srl||[];if(rw.cid&&S.srl.includes(rw.cid))throw new Error('この配布の報酬は、このアカウントですでに受け取っています');
   if(rw.multi&&!rw.cid)throw new Error('コードのデータが壊れています');
+  if((rw.need||0)>SRL_LV||(rw.w||[]).some(x=>!wFromKey(x.k,{})))throw new Error('ゲームが古いバージョンです。ページを再読み込みしてから、もう一度入力してください');
   if(!rw.multi){const d=await fetch(`${base}:commit?key=${SERIAL_FB.apiKey}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({writes:[{delete:name,currentDocument:{exists:true}}]})});
   if(!d.ok)throw new Error(d.status===400||d.status===404||d.status===409?'このコードはすでに使われています':'通信に失敗しました（'+d.status+'）')}
   const got=(rw.w||[]).map(x=>{const w=wFromKey(x.k,x);if(w){S.inv.push(w);S.rec.dex[dexKey(w)]=1;if(w.u&&!w.god&&!w.gw&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)}return w}).filter(Boolean);
   const gp=Math.max(0,Math.floor(+rw.gp||0));if(gp)S.gp=(S.gp||0)+gp;
-  if(rw.cid)S.srl.push(rw.cid);save();return {rw,got,gp}}
+  if(rw.cid){S.srl.push(rw.cid);S.srlOk=S.srlOk||{};S.srlOk[rw.cid]=VERSION}save();return {rw,got,gp}}
 function showSerial(){accBox(`<h2>シリアルコード</h2><p class="small">配布されたシリアルコードを入力すると、報酬を受け取れます。<br>コードは1回だけ使えます。</p><input class="inp" id="srlIn" placeholder="TD-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false" style="width:100%;text-transform:uppercase;letter-spacing:.08em"><p class="small" id="srlMsg" style="min-height:1.4em"></p><div class="mbtns"><button class="btn" data-srl="close">閉じる</button><button class="btn pri" data-srl="go">受け取る</button></div>`);setTimeout(()=>{const i=$('srlIn');if(i)i.focus()},50)}
 $('mbox').addEventListener('click',async e=>{const b=e.target.closest('[data-srl]');if(!b)return;const a=b.dataset.srl;
   if(a==='close'){$('modal').classList.remove('on');renderHome();return}
@@ -2674,7 +2677,7 @@ $('mbox').addEventListener('click',async e=>{const b=e.target.closest('[data-srl
       modal(`<h2>報酬を受け取りました！</h2>${rw.msg?`<p>${String(rw.msg).replace(/[<>&]/g,'')}</p>`:''}${gp?`<p class="rline">ガチャポイント <b class="rgp">◆+${fmt(gp)}</b></p>`:''}${got.length?`<div class="drops">${got.map(w=>dropHTML(w)).join('')}</div>`:''}`,[{t:'OK',key:' ',pri:true,fn:()=>renderHome()}])}
     catch(err){m.textContent=err.message||'受け取れませんでした';b.disabled=false}}});
 $('mbox').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='srlIn'){const b=$('mbox').querySelector('[data-srl=go]');if(b)b.click()}});
-$('srlBtn').onclick=()=>showSerial();$('srlBtn').hidden=!srlOn();
+$('srlBtn').onclick=()=>{srlRepair();showSerial()};$('srlBtn').hidden=!srlOn();
 /* ===== ガチャ ===== */
 const GC={cost:50,rates:[38,28,18,10,4.5,3],gl:3,pity:300,col:['#ffffff','#3dff6e','#3fa9ff','#c77dff','#ffd43b','#ff3b3b','#ff2a6d'],nm:['コモン','アンコモン','レア','エピック','レジェンダリー','ユニーク','グリッチ']};
 const GDM={easy:.6,normal:1,hard:1.6,nightmare:2.2};
