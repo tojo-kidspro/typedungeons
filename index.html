@@ -1431,11 +1431,11 @@ function buildSpecs(){
   CAT.slice().sort((a,b)=>b.r-a.r).forEach(e=>{const h=hashS(e.c),pal=e.pal?e.pal:e.r===0?['wood','iron','rust'][e.t%3]:e.r===1?(e.name.startsWith('鉄')?'iron':e.name.startsWith('鋼')?'steel':'bronze'):['fire','ice','thunder','dark','holy'][e.el];
     take('c:'+e.c,e.t,e.r,pal,h%4,(h>>>3)%4)});
 }
-function specKey(w){return w.god?'d:'+w.u:w.gw?'x:'+(w.u?'u:'+w.u:w.c?'c:'+w.c:w.name==='旅立ちの短剣'?'s:starter':'i:'+w.id):w.g?'g:'+w.g:w.name==='旅立ちの短剣'?'s:starter':w.u?'u:'+w.u:w.c?'c:'+w.c:'i:'+w.id}
+function specKey(w){return w.o?'o:'+w.o:w.god?'d:'+w.u:w.gw?'x:'+(w.u?'u:'+w.u:w.c?'c:'+w.c:w.name==='旅立ちの短剣'?'s:starter':'i:'+w.id):w.g?'g:'+w.g:w.name==='旅立ちの短剣'?'s:starter':w.u?'u:'+w.u:w.c?'c:'+w.c:'i:'+w.id}
 const mix=(a,b,k)=>a.map((x,i)=>Math.round(x*(1-k)+b[i]*k));
 function wSprite(w){
   if(!SPEC)buildSpecs();
-  const key=specKey(w),ck=key+':'+w.r;if(SPR[ck])return SPR[ck];if(key==='d:abyss'&&!SPEC[key]){if(!PALS.void)PALS.void={m:[[214,170,255],[104,40,170],[24,6,44]],g:[170,70,255]};SPEC[key]={t:LORD.ut,r:6,pal:'void',v:3,g:2,seed:hashS('void-requiem')}}
+  const key=specKey(w),ck=key+':'+w.r;if(SPR[ck])return SPR[ck];if(key==='o:origin'&&!SPEC[key]){if(!PALS.origin)PALS.origin={m:[[255,255,240],[150,220,255],[30,60,120]],g:[255,215,90]};SPEC[key]={t:0,r:6,pal:'origin',v:3,g:2,seed:hashS('the-origin')}}if(key==='d:abyss'&&!SPEC[key]){if(!PALS.void)PALS.void={m:[[214,170,255],[104,40,170],[24,6,44]],g:[170,70,255]};SPEC[key]={t:LORD.ut,r:6,pal:'void',v:3,g:2,seed:hashS('void-requiem')}}
   let sp=SPEC[key];if(!sp&&key.startsWith('d:')){const b=SPEC['u:'+key.slice(2)];if(b){const pk='dv_'+b.pal,bp=PALS[b.pal]||PALS.gold;if(!PALS[pk])PALS[pk]={m:bp.m.map((c,i)=>mix(c,PALS.divine.m[i],.45)),g:bp.g};sp=SPEC[key]=Object.assign({},b,{pal:pk,seed:b.seed+7,gl:false})}}if(!sp&&key.startsWith('x:')){const b=SPEC[key.slice(2)];if(b)sp=SPEC[key]=Object.assign({},b,{gl:.65})}if(!sp){const h=hashS(key);sp={t:w.t,r:w.r,pal:['fire','ice','thunder','dark','holy','iron'][w.el??5],v:h%4,g:(h>>>3)%4,seed:h}}
   const t=w.t,r=w.r,G=[16,20,24,32,40,48,56][r],R=mulb(sp.seed),P=PALS[sp.pal]||PALS.iron,M=P.m,GEM=P.g,V=sp.v,Gs=sp.g,uq=r>=5;
   const GU=sp.pal==='gold'?PALS.shadow.m:r>=4?GOLD:r>=2?IRON:BRONZE,GR=uq?[[60,22,34],[22,6,14]]:GRIPS[Math.floor(R()*GRIPS.length)],gem=r>=2,EDGE=mix(M[0],GEM,.55);
@@ -1656,7 +1656,11 @@ const UTYPE={crab:8,mgolem:8,snail:8,ghost:10,turtle:10,ape:9,bear:9};
 const UNAME={crab:'甲殻の大盾',mgolem:'機神の大盾',snail:'螺旋の大盾',ghost:'霊魂の護符',turtle:'金剛の護符',ape:'巨猿の籠手',bear:'熊王の籠手'};
 ALLE.forEach(d=>{if(UTYPE[d.id]!=null)d.ut=UTYPE[d.id];if(UNAME[d.id])d.un=UNAME[d.id];
   const a=USPEC[d.id],k='x_'+d.id;SK[k]={n:USKN[d.id],uq:true,tr:a.tr,ct:a.ct,fx:a.fx.map(f=>Object.assign({},f))};d.us=k});
+SK.x_origin={n:'始まりの誓い',uq:true,tr:{type:'every',n:3},ct:10,fx:[{t:'defbuf',v:20,dur:6},{t:'multi',v:1.11,n:12}]};
+const ORIGIN={name:'餞別の剣「ジ・オリジン」',t:0,sk:'x_origin'};
+function makeOrigin(){const w=makeW({t:ORIGIN.t,r:6,f:1,name:ORIGIN.name,sk:ORIGIN.sk});w.o='origin';w.god=1;return w}
 function migrateW(w){
+  if(w.o){w.sk=ORIGIN.sk;w.name=ORIGIN.name;w.t=ORIGIN.t;w.r=6;w.god=1;w.u=null;w.c=null;return}
   if(w.gw&&!w.u){const e=EXPW[Math.min(4,w.r)];w.g=e.id;w.gw=0;w.c=null}
   if(w.g){if(GMAP[w.g])w.g=GMAP[w.g];const e=EXPI[w.g];if(e){w.r=e.r;w.t=e.t;w.name=e.wn;w.lv=Math.min(w.lv,RAR[e.r].cap)}w.aff=[];w.sk='g_'+w.g;return}
   {const best={};w.aff.forEach(a=>{if(!best[a.k]||a.v>best[a.k].v)best[a.k]=a});w.aff=Object.values(best);
@@ -1804,7 +1808,7 @@ function tokenize(kana){
 /* ===== save ===== */
 let S;
 function freshRec(){return{kills:0,hits:0,dmg:0,keys:0,maxCombo:0,bestKps:0,time:0,clears:0,uniq:[],dex:{}}}
-function dexKey(w){return w.god?'d:'+w.u:w.g?'g:'+w.g:w.gw?'x:'+(w.u?'u:'+w.u:'c:'+w.c):w.u?'u:'+w.u:w.c?'c:'+w.c:`t${w.t}r${w.r}`}
+function dexKey(w){return w.o?'o:'+w.o:w.god?'d:'+w.u:w.g?'g:'+w.g:w.gw?'x:'+(w.u?'u:'+w.u:'c:'+w.c):w.u?'u:'+w.u:w.c?'c:'+w.c:`t${w.t}r${w.r}`}
 function freshProg(){return{easy:{maxF:0,lastF:1},normal:{maxF:0,lastF:1},hard:{maxF:0,lastF:1},nightmare:{maxF:0,lastF:1},abyss:{maxF:0,lastF:1}}}
 function fresh(){return{exp:0,inv:[],eq:[null,null,null,null,null],nid:1,diff:'normal',prog:freshProg(),rec:freshRec(),tut:{stage:'intro'},tseen:{}}}
 function PG(){return S.prog[S.diff]||S.prog.normal}
@@ -2628,10 +2632,10 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='2.2.9-beta';
+const VERSION='2.2.10-beta';
 function clogOpen(k){return k==='nm'?!!(S&&S.nm):k==='ab'?(typeof abOpen==='function'&&abOpen()):false}
 const CHANGELOG=[
- ['2.2.9-beta',['ガチャで出た武器のカードを正方形に',{t:'■■■で手に入るガチャポイントを大幅に増加（深い層ほど多く、100層までで約1,000GP）',u:'アビスで手に入るガチャポイントを大幅に増加（深い層ほど多く、100層までで約1,000GP）',k:'ab'}]],['2.2.8-beta',['ガチャの提供割合を変更（ユニーク 1%）',{t:'ガチャの■■■■ユニークの提供割合を 1% に',u:'ガチャのグリッチユニークの提供割合を 1% に（ユニークとは別枠）',k:'nm'}]],['2.2.7-beta',['ガチャの結果画面に、ユニーク確定までの残り回数を表示（ユニークが出た場合はリセットされたことも表示）']],['2.2.6-beta',['ガチャのユニーク確定（天井）を300回に変更']],['2.2.5-beta',['ガチャを追加（1回・10連・最大100連）。層をクリアするとガチャポイントがもらえます','ガチャは10連ごとにレア以上が1つ確定、150回以内にユニーク確定']],['2.2.4-beta',['各層に出現する雑魚モンスターを固定に（出現する順番はランダム）。狙ったモンスターのいる層を選んで周回できるように']],['2.2.3-beta',[{t:'■■■■武器を手に入れたとき、対応する通常のユニークまで図鑑に登録されていた不具合を修正',u:'グリッチ武器を手に入れたとき、対応する通常のユニークまで図鑑に登録されていた不具合を修正',k:'nm'}]],['2.2.2-beta',['シリアルコード入力を使えるように']],['2.2.1-beta',['シリアルコード入力を追加（配布されたコードで報酬の武器を受け取れます）']],['2.2.0-beta',['拠点画面の「装備・強化・合成」ボタンを、装備中の武器のすぐ下に移動（その下にステータス）',{t:'ハード100層で、まだ■■■■モンスターを倒したことがない場合は、必ず■■■■モンスターが出現するように',u:'ハード100層で、まだグリッチモンスターを倒したことがない場合は、必ずグリッチモンスターが出現するように',k:'nm'},{t:'■■■■モンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',u:'グリッチモンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',k:'nm'},{t:'■■■■モードへのヒントのあと、切り替えの場所が分かりやすく光るように',u:'ナイトメアモードへのヒントのあと、切り替えの場所（タイトル下の文字）が分かりやすく光るように',k:'nm'}]]
+ ['2.2.10-beta',['ガチャのユニークの提供割合を3%に','ガチャの10連ボタンを廃止（1回と、最大100連の連続ガチャ）',{t:'ガチャの■■■■ユニークの提供割合を3%に',u:'ガチャのグリッチユニークの提供割合を3%に',k:'nm'},'シリアルコード限定の武器を追加','シリアルコードでガチャポイントも受け取れるように']],['2.2.9-beta',['ガチャで出た武器のカードを正方形に',{t:'■■■で手に入るガチャポイントを大幅に増加（深い層ほど多く、100層までで約1,000GP）',u:'アビスで手に入るガチャポイントを大幅に増加（深い層ほど多く、100層までで約1,000GP）',k:'ab'}]],['2.2.8-beta',['ガチャの提供割合を変更（ユニーク 1%）',{t:'ガチャの■■■■ユニークの提供割合を 1% に',u:'ガチャのグリッチユニークの提供割合を 1% に（ユニークとは別枠）',k:'nm'}]],['2.2.7-beta',['ガチャの結果画面に、ユニーク確定までの残り回数を表示（ユニークが出た場合はリセットされたことも表示）']],['2.2.6-beta',['ガチャのユニーク確定（天井）を300回に変更']],['2.2.5-beta',['ガチャを追加（1回・10連・最大100連）。層をクリアするとガチャポイントがもらえます','ガチャは10連ごとにレア以上が1つ確定、150回以内にユニーク確定']],['2.2.4-beta',['各層に出現する雑魚モンスターを固定に（出現する順番はランダム）。狙ったモンスターのいる層を選んで周回できるように']],['2.2.3-beta',[{t:'■■■■武器を手に入れたとき、対応する通常のユニークまで図鑑に登録されていた不具合を修正',u:'グリッチ武器を手に入れたとき、対応する通常のユニークまで図鑑に登録されていた不具合を修正',k:'nm'}]],['2.2.2-beta',['シリアルコード入力を使えるように']],['2.2.1-beta',['シリアルコード入力を追加（配布されたコードで報酬の武器を受け取れます）']],['2.2.0-beta',['拠点画面の「装備・強化・合成」ボタンを、装備中の武器のすぐ下に移動（その下にステータス）',{t:'ハード100層で、まだ■■■■モンスターを倒したことがない場合は、必ず■■■■モンスターが出現するように',u:'ハード100層で、まだグリッチモンスターを倒したことがない場合は、必ずグリッチモンスターが出現するように',k:'nm'},{t:'■■■■モンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',u:'グリッチモンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',k:'nm'},{t:'■■■■モードへのヒントのあと、切り替えの場所が分かりやすく光るように',u:'ナイトメアモードへのヒントのあと、切り替えの場所（タイトル下の文字）が分かりやすく光るように',k:'nm'}]]
 ];
 const DEX=[];
 CAT.forEach(e=>DEX.push({key:'c:'+e.c,t:e.t,r:e.r,cat:e}));
@@ -2646,7 +2650,7 @@ const SERIAL_FB={apiKey:FB.key,projectId:FB.project};
 function srlOn(){return !!(SERIAL_FB.apiKey&&SERIAL_FB.projectId)}
 function srlNorm(c){return (c||'').toUpperCase().replace(/[^0-9A-Z]/g,'')}
 async function srlHash(c){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('TDSERIAL:'+srlNorm(c)));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
-function wFromKey(k,o){const en=DEX.find(x=>x.key===k);if(!en)return null;let w;o=o||{};
+function wFromKey(k,o){o=o||{};if(k==='o:origin'){const w=makeOrigin();if(o.lv>1)w.lv=Math.min(RAR[6].cap,Math.floor(o.lv));if(o.aff==='max')w.aff.forEach(a=>a.v=AFFD[a.k].max);return w}const en=DEX.find(x=>x.key===k);if(!en)return null;let w;
   if(en.g)w=glMat(EXPI[en.g],1);else if(en.god){w=k==='d:abyss'?voidWeapon(0):makeW({t:en.t,r:6,f:1,name:godName(en.u),sk:en.d.us,u:en.u});w.god=1}
   else if(en.u){w=makeW({t:en.t,r:5,f:1,name:en.d.un,sk:en.d.us,u:en.u});if(en.gw)gwify(w)}else w=makeW({t:en.t,r:en.r,f:1,name:en.cat.name,sk:en.cat.sk,c:en.cat.c,el:en.cat.el});
   const cap=RAR[w.r].cap;if(o.lv==='max')w.lv=cap;else if(o.lv>1)w.lv=Math.min(cap,Math.floor(o.lv));if(o.aff==='max')w.aff.forEach(a=>a.v=AFFD[a.k].max);return w}
@@ -2656,21 +2660,23 @@ async function srlRedeem(code){
   const g=await fetch(`${base}/serials/${h}?key=${SERIAL_FB.apiKey}`);if(g.status===404)throw new Error('このコードは無効か、すでに使われています');if(!g.ok)throw new Error('通信に失敗しました（'+g.status+'）');
   const doc=await g.json();let rw;try{rw=JSON.parse(doc.fields.r.stringValue)}catch(e){throw new Error('コードのデータが壊れています')}
   S.srl=S.srl||[];if(rw.cid&&S.srl.includes(rw.cid))throw new Error('この配布の報酬は、このアカウントですでに受け取っています');
-  const d=await fetch(`${base}:commit?key=${SERIAL_FB.apiKey}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({writes:[{delete:name,currentDocument:{exists:true}}]})});
-  if(!d.ok)throw new Error(d.status===400||d.status===404||d.status===409?'このコードはすでに使われています':'通信に失敗しました（'+d.status+'）');
+  if(rw.multi&&!rw.cid)throw new Error('コードのデータが壊れています');
+  if(!rw.multi){const d=await fetch(`${base}:commit?key=${SERIAL_FB.apiKey}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({writes:[{delete:name,currentDocument:{exists:true}}]})});
+  if(!d.ok)throw new Error(d.status===400||d.status===404||d.status===409?'このコードはすでに使われています':'通信に失敗しました（'+d.status+'）')}
   const got=(rw.w||[]).map(x=>{const w=wFromKey(x.k,x);if(w){S.inv.push(w);S.rec.dex[dexKey(w)]=1;if(w.u&&!w.god&&!w.gw&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)}return w}).filter(Boolean);
-  if(rw.cid)S.srl.push(rw.cid);save();return {rw,got}}
+  const gp=Math.max(0,Math.floor(+rw.gp||0));if(gp)S.gp=(S.gp||0)+gp;
+  if(rw.cid)S.srl.push(rw.cid);save();return {rw,got,gp}}
 function showSerial(){accBox(`<h2>シリアルコード</h2><p class="small">配布されたシリアルコードを入力すると、報酬を受け取れます。<br>コードは1回だけ使えます。</p><input class="inp" id="srlIn" placeholder="TD-XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false" style="width:100%;text-transform:uppercase;letter-spacing:.08em"><p class="small" id="srlMsg" style="min-height:1.4em"></p><div class="mbtns"><button class="btn" data-srl="close">閉じる</button><button class="btn pri" data-srl="go">受け取る</button></div>`);setTimeout(()=>{const i=$('srlIn');if(i)i.focus()},50)}
 $('mbox').addEventListener('click',async e=>{const b=e.target.closest('[data-srl]');if(!b)return;const a=b.dataset.srl;
   if(a==='close'){$('modal').classList.remove('on');renderHome();return}
   if(a==='go'){if(b.disabled)return;const m=$('srlMsg');b.disabled=true;m.textContent='確認しています…';
-    try{const {rw,got}=await srlRedeem($('srlIn').value);se('drop',Math.max(...got.map(w=>w.r),0));
-      modal(`<h2>報酬を受け取りました！</h2>${rw.msg?`<p>${String(rw.msg).replace(/[<>&]/g,'')}</p>`:''}<div class="drops">${got.map(w=>dropHTML(w)).join('')}</div>`,[{t:'OK',key:' ',pri:true,fn:()=>renderHome()}])}
+    try{const {rw,got,gp}=await srlRedeem($('srlIn').value);se('drop',Math.max(0,...got.map(w=>w.r)));
+      modal(`<h2>報酬を受け取りました！</h2>${rw.msg?`<p>${String(rw.msg).replace(/[<>&]/g,'')}</p>`:''}${gp?`<p class="rline">ガチャポイント <b class="rgp">◆+${fmt(gp)}</b></p>`:''}${got.length?`<div class="drops">${got.map(w=>dropHTML(w)).join('')}</div>`:''}`,[{t:'OK',key:' ',pri:true,fn:()=>renderHome()}])}
     catch(err){m.textContent=err.message||'受け取れませんでした';b.disabled=false}}});
 $('mbox').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='srlIn'){const b=$('mbox').querySelector('[data-srl=go]');if(b)b.click()}});
 $('srlBtn').onclick=()=>showSerial();$('srlBtn').hidden=!srlOn();
 /* ===== ガチャ ===== */
-const GC={cost:50,rates:[38,28,18,10,4.5,1],gl:1,pity:300,col:['#ffffff','#3dff6e','#3fa9ff','#c77dff','#ffd43b','#ff3b3b','#ff2a6d'],nm:['コモン','アンコモン','レア','エピック','レジェンダリー','ユニーク','グリッチ']};
+const GC={cost:50,rates:[38,28,18,10,4.5,3],gl:3,pity:300,col:['#ffffff','#3dff6e','#3fa9ff','#c77dff','#ffd43b','#ff3b3b','#ff2a6d'],nm:['コモン','アンコモン','レア','エピック','レジェンダリー','ユニーク','グリッチ']};
 const GDM={easy:.6,normal:1,hard:1.6,nightmare:2.2};
 function gpFloor(f,d,first){return Math.round((4+f*.5)*(GDM[d]||1))*(first?2:1)}
 function gpAbyss(f){return Math.round(4+Math.min(f,999)*.12)}
@@ -2726,9 +2732,8 @@ function gHead(){$('gGP').innerHTML=`<b>◆ ${fmt(S.gp||0)}</b> GP`}
 function gLobby(){gHead();const m=gMax(),G=S.gacha||{pity:0},{r,gl}=gRates();
   $('gMain').innerHTML=`<div class="glob"><div class="gorb idle" style="--oc:#7a5cff"><i></i></div>
    <div class="gbtns"><button class="gbtn" data-g="1" ${m>=1?'':'disabled'}><b>1回</b><small>◆${GC.cost}</small></button>
-   <button class="gbtn g10" data-g="10" ${m>=10?'':'disabled'}><b>10連</b><small>◆${GC.cost*10}</small></button>
    <button class="gbtn g100" data-g="${Math.max(1,m>=100?100:m)}" ${m>=1?'':'disabled'}><b>${m>=100||m<1?100:m}連</b><small>◆${GC.cost*(m>=100||m<1?100:m)}</small></button></div>
-   <p class="gnote">10連ごとにレア以上が1つ確定　／　${GC.pity}回以内にユニーク確定（あと <b>${GC.pity-(G.pity||0)}</b> 回）</p>
+   <p class="gnote">連続で回すと10回ごとにレア以上が1つ確定　／　${GC.pity}回以内にユニーク確定（あと <b>${GC.pity-(G.pity||0)}</b> 回）</p>
    <details class="grate"><summary>提供割合</summary><table>${r.map((v,i)=>`<tr><td style="color:${GC.col[i]}">${GC.nm[i]}</td><td>${v}%</td></tr>`).join('')}${gl?`<tr><td style="color:${GC.col[6]}" class="glt">${GC.nm[6]}ユニーク</td><td>${gl}%</td></tr>`:''}</table><p class="small">ガチャポイント（GP）は層をクリアすると手に入ります。深い層・高い難易度ほど多くもらえます（初回クリアは2倍）。</p></details></div>`}
 async function gRun(n){if(GA.busy||n<1||(S.gp||0)<n*GC.cost)return;GA.busy=true;GA.skip=false;
   const res=gPull(n);gHead();GA.last=n;
