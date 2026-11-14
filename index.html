@@ -778,6 +778,96 @@ body.abui #heroSub{color:#b48ae0;letter-spacing:.8em;text-shadow:0 0 10px #6a1aa
 body.abui .big.go{height:68px;border-color:#7a2bd6;color:#ecdcff;font-size:22px;background:radial-gradient(ellipse at 50% 120%,rgba(120,30,200,.45),rgba(0,0,0,.6) 70%);text-shadow:0 0 10px #b04dff;animation:abgo 3s ease-in-out infinite}
 @keyframes abgo{50%{box-shadow:0 0 22px rgba(150,40,240,.55),inset 0 0 18px rgba(150,40,240,.35)}}
 .prev .lost{color:#ff4d4d;font-weight:bold}
+/* ===== ガチャ ===== */
+.gachab{width:100%;margin:0 0 12px;height:54px;font-size:20px;letter-spacing:.2em;position:relative;overflow:hidden;border-color:#ffd43b!important;color:#ffd43b!important;background:linear-gradient(100deg,rgba(255,212,59,.08),rgba(199,125,255,.14),rgba(63,169,255,.08))}
+.gachab::after{content:'';position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.35) 50%,transparent 70%);transform:translateX(-100%);animation:gshine 2.6s ease-in-out infinite}
+.gachab small{font-size:13px;letter-spacing:.05em;margin-left:10px;color:#fff}
+@keyframes gshine{60%,100%{transform:translateX(100%)}}
+#gacha{position:fixed;inset:0;z-index:950;display:none;flex-direction:column;align-items:center;background:radial-gradient(ellipse at 50% 40%,#1c0f3a 0%,#07040f 60%,#000 100%);color:#fff;overflow:hidden}
+#gacha.on{display:flex}
+#gfx{position:absolute;inset:0;pointer-events:none;z-index:3}
+#gFlash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:6}
+#gFlash.go{animation:gfl .5s ease-out}
+@keyframes gfl{0%{opacity:var(--fa,.8)}100%{opacity:0}}
+.gtop{position:relative;z-index:5;width:100%;max-width:960px;display:flex;align-items:center;gap:14px;padding:14px 16px;box-sizing:border-box}
+.gtop .gt{font-size:22px;letter-spacing:.3em;color:#ffd43b;text-shadow:0 0 12px #ffd43b}
+.gtop #gGP{margin-left:auto;font-size:16px;color:#cfc6ff}.gtop #gGP b{color:#7fe3ff;font-size:20px}
+.gtop #gClose{border:2px solid #fff;color:#fff;padding:4px 12px;font-size:14px}
+#gMain{position:relative;z-index:4;flex:1;width:100%;max-width:1000px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 16px 20px;box-sizing:border-box;min-height:0}
+.glob{display:flex;flex-direction:column;align-items:center;gap:22px}
+.gorb{--oc:#fff;width:200px;height:200px;border-radius:50%;position:relative;background:radial-gradient(circle at 35% 30%,#fff 0%,var(--oc) 32%,color-mix(in srgb,var(--oc) 40%,#000) 70%,#000 100%);box-shadow:0 0 40px var(--oc),0 0 120px var(--oc),inset 0 0 40px rgba(0,0,0,.6);transition:--oc .2s,box-shadow .3s}
+.gorb i{position:absolute;inset:-18px;border-radius:50%;border:3px dashed color-mix(in srgb,var(--oc) 70%,#fff);animation:gspin 6s linear infinite;opacity:.7}
+.gorb.idle{animation:gidle 2.4s ease-in-out infinite}
+@keyframes gidle{50%{transform:translateY(-10px) scale(1.03)}}
+@keyframes gspin{to{transform:rotate(360deg)}}
+.gorb.shk{animation:gshk .09s linear infinite}
+.gorb.lv4{width:240px;height:240px}
+.gorb.rainbow{animation:gshk .07s linear infinite,ghue .6s linear infinite}
+.gorb.glitchy{animation:gglt .12s steps(2) infinite}
+@keyframes gshk{25%{transform:translate(3px,-2px)}50%{transform:translate(-3px,2px)}75%{transform:translate(2px,3px)}}
+@keyframes ghue{to{filter:hue-rotate(360deg) brightness(1.3)}}
+@keyframes gglt{0%{transform:translate(6px,0) skewX(8deg);filter:invert(1) hue-rotate(90deg)}50%{transform:translate(-8px,3px) skewX(-12deg);filter:none}100%{transform:translate(2px,-5px);filter:contrast(3)}}
+.gstage{position:relative;display:grid;place-items:center;width:100%;flex:1}
+.gring{--oc:#fff;position:absolute;width:200px;height:200px;border-radius:50%;border:6px solid var(--oc);opacity:0;pointer-events:none}
+.gring.go{animation:gring .7s ease-out}
+@keyframes gring{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(3.2)}}
+#gacha.q1{animation:gq1 .25s}#gacha.q2{animation:gq2 .35s}#gacha.q3{animation:gq3 .5s}
+@keyframes gq1{25%{transform:translate(3px,0)}75%{transform:translate(-3px,0)}}
+@keyframes gq2{20%{transform:translate(6px,-3px)}40%{transform:translate(-6px,3px)}60%{transform:translate(4px,2px)}80%{transform:translate(-3px,-2px)}}
+@keyframes gq3{15%{transform:translate(12px,-6px) rotate(.6deg)}30%{transform:translate(-12px,6px) rotate(-.6deg)}45%{transform:translate(9px,4px)}60%{transform:translate(-8px,-4px)}80%{transform:translate(4px,2px)}}
+#gacha.gglitch{animation:gglt2 .1s steps(2) infinite}
+@keyframes gglt2{0%{filter:invert(1) hue-rotate(180deg);transform:translate(8px,0)}50%{filter:saturate(6) hue-rotate(-60deg);transform:translate(-10px,4px) skewX(6deg)}100%{filter:none;transform:none}}
+.gbtns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.gbtn{min-width:150px;padding:12px 18px;border:3px solid #ffd43b;color:#ffd43b;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:20px;background:rgba(0,0,0,.4);transition:transform .1s}
+.gbtn small{font-size:13px;color:#cfc6ff}
+.gbtn.g10{border-color:#c77dff;color:#e7c7ff}.gbtn.g100{border-color:#ff3b3b;color:#ffb0b0;box-shadow:0 0 18px rgba(255,59,59,.5)}
+.gbtn:not(:disabled):hover{transform:scale(1.06);box-shadow:0 0 22px currentColor}
+.gbtn:disabled{opacity:.3;cursor:default}
+.gnote{font-size:13px;color:#cfc6ff;margin:0;text-align:center}.gnote b{color:#ffd43b}
+.grate{font-size:13px;color:#cfc6ff;max-width:420px}.grate summary{cursor:pointer;text-align:center}.grate table{margin:8px auto;border-collapse:collapse}.grate td{padding:2px 14px;border-bottom:1px solid #2a2050}
+.gskip{position:absolute;right:16px;bottom:16px;z-index:7;border:2px solid #fff;color:#fff;padding:6px 14px;font-size:14px;background:rgba(0,0,0,.5)}.gskip small{opacity:.6;margin-left:6px}
+.ggrid{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;max-width:560px}
+.ggrid.many{max-width:680px;gap:8px}
+.ggrid.res{gap:8px;width:100%;max-width:none;align-content:flex-start;max-height:52vh;overflow-y:auto;padding:6px;box-sizing:border-box}
+.gcard{--rc:#fff;width:96px;height:120px;perspective:600px}
+.ggrid.many .gcard,.ggrid.res .gcard{width:58px;height:70px}
+.gin{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.gcard.up .gin{transform:rotateY(180deg)}
+.gback,.gface{position:absolute;inset:0;backface-visibility:hidden;border:3px solid #5a4aa0;display:grid;place-items:center}
+.gback{background:repeating-linear-gradient(45deg,#1b1240 0 6px,#251a55 6px 12px);box-shadow:inset 0 0 16px #000}
+.gface{transform:rotateY(180deg);border-color:var(--rc);background:radial-gradient(circle,color-mix(in srgb,var(--rc) 28%,#000) 0%,#06030f 80%);box-shadow:0 0 10px var(--rc)}
+.gface{overflow:hidden}.gface .wic{transform:scale(1.5)}.ggrid.many .gface .wic,.ggrid.res .gface .wic{transform:scale(1.3)}
+.gcard.r3 .gface{box-shadow:0 0 18px var(--rc),inset 0 0 18px var(--rc)}
+.gcard.r4 .gface,.gcard.r5 .gface,.gcard.r6 .gface{box-shadow:0 0 26px var(--rc),0 0 52px var(--rc),inset 0 0 22px var(--rc);animation:gpulse 1s ease-in-out infinite}
+.gcard.r5 .gface{animation:gpulse 1s ease-in-out infinite,ghue 2s linear infinite}
+.gcard.r6 .gface{animation:gglt .3s steps(2) infinite}
+.gcard.hot{z-index:2}
+@keyframes gpulse{50%{filter:brightness(1.5)}}
+.gnew{position:absolute;top:-8px;right:-8px;background:#ff3b3b;color:#fff;font-size:10px;padding:1px 4px;font-weight:bold;letter-spacing:.05em}
+.gcut{position:fixed;inset:0;z-index:8;display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:radial-gradient(circle,color-mix(in srgb,var(--rc) 35%,#000) 0%,rgba(0,0,0,.92) 70%);cursor:pointer}
+.gcut.on{display:flex;animation:gcin .25s ease-out}
+@keyframes gcin{from{opacity:0}to{opacity:1}}
+.grays{position:absolute;width:160vmax;height:160vmax;background:repeating-conic-gradient(from 0deg,color-mix(in srgb,var(--rc) 55%,transparent) 0deg 8deg,transparent 8deg 20deg);animation:gspin 8s linear infinite;opacity:.5;pointer-events:none}
+.gcut.l5 .grays{background:repeating-conic-gradient(from 0deg,#ff3b3b55 0 6deg,transparent 6deg 12deg,#ffd43b55 12deg 18deg,transparent 18deg 24deg,#3fa9ff55 24deg 30deg,transparent 30deg 36deg);animation:gspin 4s linear infinite}
+.gcut.l6 .grays{background:repeating-linear-gradient(0deg,#ff2a6d33 0 3px,transparent 3px 7px);animation:gglt .15s steps(2) infinite;opacity:.8}
+.gbig{position:relative;animation:gbig .6s cubic-bezier(.2,1.8,.4,1)}
+.gbig .wic{transform:scale(7);filter:drop-shadow(0 0 4px var(--rc))}
+@keyframes gbig{0%{transform:scale(0) rotate(-30deg);opacity:0}100%{transform:scale(1);opacity:1}}
+.gbig{margin:80px 0 60px}
+.glabel{position:relative;font-size:56px;font-weight:900;letter-spacing:.08em;color:#fff;text-shadow:0 0 10px var(--rc),0 0 30px var(--rc),4px 4px 0 var(--rc);animation:gslam .45s cubic-bezier(.2,1.6,.4,1) .15s both}
+.gcut.l5 .glabel{background:linear-gradient(90deg,#ff3b3b,#ffd43b,#3dff6e,#3fa9ff,#c77dff,#ff3b3b);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(0 0 12px #fff);animation:gslam .45s cubic-bezier(.2,1.6,.4,1) .15s both,grain 1.2s linear infinite}
+.gcut.l6 .glabel{color:#ff2a6d;text-shadow:3px 0 #00fff0,-3px 0 #ff2a6d;animation:gslam .45s .15s both,gglt .2s steps(2) infinite}
+@keyframes gslam{0%{transform:scale(4);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes grain{to{background-position:200% 0}}
+.gname{position:relative;font-size:24px;color:#fff;text-shadow:0 0 8px var(--rc);animation:gcin .4s .5s both}
+.gsub{position:relative;font-size:14px;color:#ddd;animation:gcin .4s .7s both}.gnew2{color:#ff3b3b}
+.gtap{position:absolute;bottom:22px;font-size:13px;color:#aaa;animation:gpulse 1.2s infinite}
+.gres{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%}
+.gres h2{margin:0;font-size:24px;letter-spacing:.2em;color:#ffd43b}
+.gcnt{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;font-size:15px}
+@media(max-width:640px){.ggrid{gap:8px;max-width:330px}.gcard{width:58px;height:72px}.gface .wic{transform:scale(1.4)}.ggrid.many{max-width:340px}.ggrid.many .gcard{width:48px;height:58px}.glabel{font-size:34px}.gbig .wic{transform:scale(5)}.gbtn{min-width:96px;font-size:16px}}
+
+.rgp{color:#7fe3ff}
 .abrun{margin:8px 0 2px;padding:6px 10px;border:2px solid #6a4cff;background:rgba(60,30,140,.35);color:#d9ccff;font-size:13px}.abrun b{color:#fff}.abrun .small{display:block;color:#b9a8ff}
 .abinfo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}.abinfo>div{border:2px solid #3a1060;padding:6px 10px;text-align:center}.abinfo b{display:block;font-size:24px;font-weight:400;color:#d9b8ff;text-shadow:0 0 8px #6a1aa8}.abinfo small{font-size:12px;margin-left:2px;color:var(--dim)}
 .abinfo b.abend{font-size:22px;letter-spacing:.2em;color:#d9b8ff;text-shadow:0 0 12px #7a2bd6;animation:abglow 2s ease-in-out infinite}@keyframes abglow{50%{text-shadow:0 0 18px #b04dff,0 0 4px #fff}}.abinfo b.abend small{display:block;font-size:10px;letter-spacing:.35em;margin:0 0 2px;color:#d9b8ff}
@@ -1125,6 +1215,7 @@ button.chip.dis{opacity:.3;text-decoration:line-through}
       </div>
       <div class="hsec"><div class="hlab">装備中の武器<span class="small" id="hSlotTxt"></span></div><div class="heqs" id="hSlots"></div></div>
       <div class="armbtns"><button class="big" data-arm="equip">装備</button><button class="big" data-arm="enh">強化</button><button class="big" data-arm="syn">合成</button><button class="big decb" data-arm="evo" hidden>デコード</button></div>
+      <button class="big gachab" id="gachaBtn">ガチャ</button>
       <div class="statgrid" id="hStats"></div>
       <div class="hsec"><div class="hlab">冒険の記録</div>
         <div class="prog"><span>踏破</span><div class="pbar"><i id="hProg"></i></div><b id="hProgT"></b></div>
@@ -1201,6 +1292,7 @@ button.chip.dis{opacity:.3;text-decoration:line-through}
   </div>
 </section>
 
+<div id="gacha"><canvas id="gfx"></canvas><div id="gFlash"></div><div class="gtop"><span class="gt">GACHA</span><span id="gGP"></span><button id="gClose">✕ 閉じる</button></div><div id="gMain"></div><div class="gcut" id="gCut"></div></div>
 <div class="modal" id="modal"><div class="mbox" id="mbox"></div></div>
 <div class="toast" id="toast"></div>
 <div class="ctx" id="ctx"></div>
@@ -1884,7 +1976,7 @@ function fmtTime(sec){const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60);ret
 let powShown=0;
 function countUp(el,to){const from=powShown,t0=performance.now();powShown=to;
   const step=t=>{const k=Math.min(1,(t-t0)/900),e=1-Math.pow(1-k,3);el.textContent=Math.round(from+(to-from)*e).toLocaleString('ja-JP');if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step)}
-function renderHome(){if(typeof applyDec==='function')applyDec();
+function renderHome(){if(typeof applyDec==='function')applyDec();{const gb=$('gachaBtn');if(gb)gb.innerHTML=`ガチャ<small>◆ ${fmt(S.gp||0)} GP</small>`}
   const ri=rankInfo(),open=slotsOpen(ri.r),st=calcStats(),R=S.rec,tier=tierOf(ri.r);
   $('hXpTxt').textContent=ri.max?'RANK MAX':`EXP ${ri.x.toLocaleString()} / ${ri.n.toLocaleString()}　次のランクまで ${(ri.n-ri.x).toLocaleString()}`;$('hXp').style.width=(ri.max?100:ri.x/ri.n*100)+'%';
   const nt=TITLES.find(t=>t[0]>ri.r);
@@ -1966,9 +2058,9 @@ function startFloor(f,opt){if(!document.querySelector('#stage .abvx')){const v=d
   const dif=(opt&&opt.diff)||S.diff,mp=it=>it.gl||dif!=='nightmare'?it:Object.assign({},it,{d:nmE(it.d)});
   let q=fi.mobs.map(d=>({d,boss:false}));for(let i=q.length-1;i>0;i--){const j=rand(i+1);[q[i],q[j]]=[q[j],q[i]]}q.push({d:fi.boss,boss:true});
   if(dif==='abyss'&&!(opt&&opt.q))q=[abyssEnemy(f)];if(opt&&opt.q)q=opt.q;q=q.map(mp);kbGlitch(false);
-  B={opt,abyss:dif==='abyss',axp:0,best0:(S.prog.abyss||{}).maxF||0,diff:(opt&&opt.diff)||S.diff,test:!!(opt&&opt.q),rank0:rankInfo().r,gxp:0,floor:f,q,qi:0,st,hp:st.hp,maxHp:st.hp,shield:0,combo:0,maxCombo:0,keys:0,miss:0,tt:0,chain:0,chainDmg:0,chainT:0,at:[],buffs:[],drops:[],active:false,enemy:null,lt:0,lastWord:null,
+  B={opt,f0:f,abyss:dif==='abyss',axp:0,best0:(S.prog.abyss||{}).maxF||0,diff:(opt&&opt.diff)||S.diff,test:!!(opt&&opt.q),rank0:rankInfo().r,gxp:0,floor:f,q,qi:0,st,hp:st.hp,maxHp:st.hp,shield:0,combo:0,maxCombo:0,keys:0,miss:0,tt:0,chain:0,chainDmg:0,chainT:0,at:[],buffs:[],drops:[],active:false,enemy:null,lt:0,lastWord:null,
      ws:equipped().map(w=>({w,ct:0,cnt:0,el:null}))};
-  PG().lastF=f;lastStep=0;show('battle');mClear();mFocus();playBgm(bgmFor(false));$('stage').classList.toggle('nm',B.diff==='nightmare');$('stage').classList.toggle('ab',B.diff==='abyss');abKb(B.diff==='abyss');if(B.abyss){const rr=opt&&opt.resume&&S.abRun;if(rr){B.drops=(rr.drops||[]).slice();B.axp=rr.axp||0;B.gxp=rr.gxp||0;B.best0=rr.best0||0;B.rank0=rr.rank0||B.rank0;B.resumed=1;if(rr.hpR>0)B.hp=Math.max(1,Math.round(B.maxHp*rr.hpR));abPersist(f)}else S.rec.abRuns=(S.rec.abRuns||0)+1;save()}$('retreat').textContent=B.abyss?'一時撤退':'撤退';wordNoise(B.diff==='nightmare');renderSnd();LOG.innerHTML='';for(const k in UI)delete UI[k];PARTS.length=0;chainShown=-1;fxCol=null;fxResize();$('pRank').textContent='RANK '+rankInfo().r;renderCombo();$('stage').style.setProperty('--scene',B.abyss?'radial-gradient(ellipse at 50% 38%,#1e0533 0,#0a0114 45%,#000 80%)':SCENES[band]);$('fx').innerHTML='';
+  PG().lastF=f;lastStep=0;show('battle');mClear();mFocus();playBgm(bgmFor(false));$('stage').classList.toggle('nm',B.diff==='nightmare');$('stage').classList.toggle('ab',B.diff==='abyss');abKb(B.diff==='abyss');if(B.abyss){const rr=opt&&opt.resume&&S.abRun;if(rr){B.drops=(rr.drops||[]).slice();B.axp=rr.axp||0;B.gxp=rr.gxp||0;B.best0=rr.best0||0;B.rank0=rr.rank0||B.rank0;B.resumed=1;B.f0=rr.f0||rr.f;if(rr.hpR>0)B.hp=Math.max(1,Math.round(B.maxHp*rr.hpR));abPersist(f)}else S.rec.abRuns=(S.rec.abRuns||0)+1;save()}$('retreat').textContent=B.abyss?'一時撤退':'撤退';wordNoise(B.diff==='nightmare');renderSnd();LOG.innerHTML='';for(const k in UI)delete UI[k];PARTS.length=0;chainShown=-1;fxCol=null;fxResize();$('pRank').textContent='RANK '+rankInfo().r;renderCombo();$('stage').style.setProperty('--scene',B.abyss?'radial-gradient(ellipse at 50% 38%,#1e0533 0,#0a0114 45%,#000 80%)':SCENES[band]);$('fx').innerHTML='';
   $('wicons').innerHTML='';
   B.ws.forEach(e=>{const d=document.createElement('div');d.className='wi';d.style.setProperty('--rc',RAR[e.w.r].c);
     d.title=`${e.w.name}：${SK[e.w.sk].n}`;d.innerHTML=`${wIcon(e.w)}<span class="ct"></span>`;e.el=d;$('wicons').appendChild(d)});
@@ -2229,13 +2321,13 @@ function abyssDrop(f0,d,boss){const f=Math.min(100,f0),b=d.base||d;
   if(d.nm){const r=abRoll(f0,boss,'nightmare');return r>=5?gwify(makeW({t:b.ut,r:5,f,name:b.un,sk:b.us,u:b.id})):glMat(EXPW[r],f)}
   const r=abRoll(f0,boss,'hard');if(r===5)return makeW({t:b.ut,r:5,f,name:b.un,sk:b.us,u:b.id});const L=CAT.filter(e=>e.r===r),e=L[rand(L.length)];return makeW({t:e.t,r,f,el:e.el,name:e.name,sk:e.sk,c:e.c})}
 function abKeep(w){S.inv.push(w);S.rec.dex[dexKey(w)]=1;if(w.u&&!w.god&&!w.gw&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)}
-function abPersist(f){if(!B||!B.abyss||B.test)return;S.abRun={f,drops:B.drops,axp:B.axp,gxp:B.gxp,best0:B.best0,rank0:B.rank0,hpR:Math.max(0,Math.min(1,B.hp/B.maxHp))}}
+function abPersist(f){if(!B||!B.abyss||B.test)return;S.abRun={f,f0:B.f0,drops:B.drops,axp:B.axp,gxp:B.gxp,best0:B.best0,rank0:B.rank0,hpR:Math.max(0,Math.min(1,B.hp/B.maxHp))}}
 function abSuspend(){abyssEnd('suspend')}
-function abyssEnd(kind){if(!B||B.ended)return;const b=B;b.ended=1;b.over=1;if(!b.test){b.drops.forEach(abKeep);S.exp+=b.axp+b.gxp;S.abRun=kind==='suspend'?{f:b.floor,drops:[],axp:0,gxp:0,best0:S.prog.abyss.maxF,rank0:rankInfo().r,hpR:Math.max(0,Math.min(1,b.hp/b.maxHp))}:null}b.active=false;W=null;renderWord();kbGlitch(false);wordNoise(false);abKb(false);abEnd(false);playBgm(null);se(kind==='dead'?'lose':'clear');if(kind==='clear')setTimeout(()=>se('drop',6),500);commitRec();
+function abyssEnd(kind){if(!B||B.ended)return;const b=B;b.ended=1;b.over=1;let agp=0;if(!b.test){const cl0=kind==='clear'?ABEND:b.floor-1;for(let x=b.f0||1;x<=cl0;x++)agp+=gpAbyss(x);S.gp=(S.gp||0)+agp;b.drops.forEach(abKeep);S.exp+=b.axp+b.gxp;S.abRun=kind==='suspend'?{f:b.floor,drops:[],axp:0,gxp:0,best0:S.prog.abyss.maxF,rank0:rankInfo().r,hpR:Math.max(0,Math.min(1,b.hp/b.maxHp))}:null}b.active=false;W=null;renderWord();kbGlitch(false);wordNoise(false);abKb(false);abEnd(false);playBgm(null);se(kind==='dead'?'lose':'clear');if(kind==='clear')setTimeout(()=>se('drop',6),500);commitRec();
   const pr=S.prog.abyss,best=pr.maxF,nr=best>b.best0;save();const after=rankInfo().r,before=b.rank0||after,so=slotsOpen(before),sn=slotsOpen(after);
   let h=kind==='clear'?`<div class="abclr"><i></i><div class="small">THE END OF ABYSS</div><h2 class="rh2 abh">深 淵 踏 破</h2><p class="small">第999層を越え、深淵の支配者を討ち果たした。</p></div>`:`<h2 class="rh2 abh">${kind==='dead'?'深淵に呑まれた……':kind==='suspend'?'一時撤退':'深淵から帰還した'}</h2>`+(kind==='suspend'?`<p class="rline">次回は <b class="rxp">第${b.floor}層</b> から続きを始められます</p>`:'');
   if(after>before)h+=`<div class="rankup"><b>RANK UP!</b>　ランク ${before} → ${after}${sn>so?`<div class="small">装備スロットが${sn}つに増えました</div>`:''}</div>`;
-  const fl=n=>n>=ABEND?'深淵の果て':n>0?`第${n}層`:'記録なし',cl=kind==='clear'?ABEND:b.floor-1;h+=`<p class="rline">踏破 <b class="rxp">${fl(cl)}</b>${nr?'<span class="abnew">NEW RECORD</span>':''}<span class="small">（最高記録 ${fl(best)}）</span><br>経験値 <b class="rxp">+${fmt(b.axp+b.gxp)}</b></p>`;
+  const fl=n=>n>=ABEND?'深淵の果て':n>0?`第${n}層`:'記録なし',cl=kind==='clear'?ABEND:b.floor-1;h+=`<p class="rline">踏破 <b class="rxp">${fl(cl)}</b>${nr?'<span class="abnew">NEW RECORD</span>':''}<span class="small">（最高記録 ${fl(best)}）</span><br>経験値 <b class="rxp">+${fmt(b.axp+b.gxp)}</b>${agp?`<br>ガチャポイント <b class="rgp">◆+${fmt(agp)}</b>`:''}</p>`;
   const L=b.drops.slice().sort((x,y)=>y.r-x.r||(y.god?1:0)-(x.god?1:0));
   h+=L.length?`<div class="mlab rlab">持ち帰った武器（${L.length}本）<span class="small">カーソルで詳細</span></div><div class="agrid">${L.map(w=>`<div class="agw" data-wid="${w.id}" style="--rc:${RAR[w.r].c}">${wIcon(w)}</div>`).join('')}</div>`:'<p class="small rline">持ち帰った武器はありません</p>';
   h+=statsHTML(true);
@@ -2291,12 +2383,12 @@ function floorClear(){
   commitRec();S.rec.clears++;if(!B.test&&B.diff==='hard'&&B.floor===100&&!S.nm&&!(S.rec.gk>0))S.glReq=1;const nmb=B.miss===0&&B.keys>0?rollWeapon(B.floor,floorInfo(B.floor).boss,true,true):null;if(nmb){B.drops.push(nmb);S.rec.nmc=(S.rec.nmc||0)+1}B.drops.forEach(w=>S.rec.dex[dexKey(w)]=1);playBgm(null);se('clear');B.drops.forEach(w=>{if(w.u&&!w.god&&!w.gw&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)});
   kbGlitch(false);wordNoise(false);$('stage').classList.remove('gl');
   const f=B.floor,first=f>PG().maxF&&!B.test,xp=Math.floor(clearXP(f,B.diff)*(first?2:1)),before=B.rank0||rankInfo().r;
-  S.exp+=xp;if(first)PG().maxF=f;S.inv.push(...B.drops);if(!B.test)PG().lastF=Math.min(100,f+1);save();
+  const gp=B.test?0:gpFloor(f,B.diff,first);S.gp=(S.gp||0)+gp;S.exp+=xp;if(first)PG().maxF=f;S.inv.push(...B.drops);if(!B.test)PG().lastF=Math.min(100,f+1);save();
   const after=rankInfo().r,so=slotsOpen(before),sn=slotsOpen(after);
   let h=`<h2 class="rh2">${f}層 クリア</h2>`;
   if(f===100)h+='<p class="rline"><b>百層を制覇しました。</b></p>';
   if(after>before)h+=`<div class="rankup"><b>RANK UP!</b>　ランク ${before} → ${after}${sn>so?`<div class="small">装備スロットが${sn}つに増えました</div>`:''}</div>`;
-  h+=`<p class="rline">経験値 <b class="rxp">+${fmt(xp)}</b>${first?'<span class="small">（初回ボーナス×2）</span>':''}${B.gxp?`<br>経験値 <b class="rxp">+${fmt(B.gxp)}</b><span class="glt">（繧ｨ繝ｩ繝ｼ）</span>`:''}</p>`;
+  h+=`<p class="rline">経験値 <b class="rxp">+${fmt(xp)}</b>${first?'<span class="small">（初回ボーナス×2）</span>':''}${B.gxp?`<br>経験値 <b class="rxp">+${fmt(B.gxp)}</b><span class="glt">（繧ｨ繝ｩ繝ｼ）</span>`:''}${gp?`<br>ガチャポイント <b class="rgp">◆+${fmt(gp)}</b>`:''}</p>`;
   const nd=B.drops.filter(w=>w!==nmb);if(nmb){h+=`<div class="nmbon" style="--rc:${RAR[nmb.r].c}"><div class="nmt">★ ノーミスボーナス ★</div>${dropHTML(nmb)}</div>`;setTimeout(()=>se('drop',Math.max(3,nmb.r)),350)}
   h+=nd.length?`<div class="mlab rlab">ドロップした武器（${nd.length}本）</div><div class="drops rdrops">${nd.slice().sort((a,b)=>b.r-a.r).map(dropHTML).join('')}</div>`:'<p class="small rline">武器のドロップはありませんでした</p>';
   h+=statsHTML(true);
@@ -2536,10 +2628,10 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='2.2.4-beta';
+const VERSION='2.2.7-beta';
 function clogOpen(k){return k==='nm'?!!(S&&S.nm):k==='ab'?(typeof abOpen==='function'&&abOpen()):false}
 const CHANGELOG=[
- ['2.2.4-beta',['各層に出現する雑魚モンスターを固定に（出現する順番はランダム）。狙ったモンスターのいる層を選んで周回できるように']],['2.2.3-beta',[{t:'■■■■武器を手に入れたとき、対応する通常のユニークまで図鑑に登録されていた不具合を修正',u:'グリッチ武器を手に入れたとき、対応する通常のユニークまで図鑑に登録されていた不具合を修正',k:'nm'}]],['2.2.2-beta',['シリアルコード入力を使えるように']],['2.2.1-beta',['シリアルコード入力を追加（配布されたコードで報酬の武器を受け取れます）']],['2.2.0-beta',['拠点画面の「装備・強化・合成」ボタンを、装備中の武器のすぐ下に移動（その下にステータス）',{t:'ハード100層で、まだ■■■■モンスターを倒したことがない場合は、必ず■■■■モンスターが出現するように',u:'ハード100層で、まだグリッチモンスターを倒したことがない場合は、必ずグリッチモンスターが出現するように',k:'nm'},{t:'■■■■モンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',u:'グリッチモンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',k:'nm'},{t:'■■■■モードへのヒントのあと、切り替えの場所が分かりやすく光るように',u:'ナイトメアモードへのヒントのあと、切り替えの場所（タイトル下の文字）が分かりやすく光るように',k:'nm'}]]
+ ['2.2.7-beta',['ガチャの結果画面に、ユニーク確定までの残り回数を表示（ユニークが出た場合はリセットされたことも表示）']],['2.2.6-beta',['ガチャのユニーク確定（天井）を300回に変更']],['2.2.5-beta',['ガチャを追加（1回・10連・最大100連）。層をクリアするとガチャポイントがもらえます','ガチャは10連ごとにレア以上が1つ確定、150回以内にユニーク確定']],['2.2.4-beta',['各層に出現する雑魚モンスターを固定に（出現する順番はランダム）。狙ったモンスターのいる層を選んで周回できるように']],['2.2.3-beta',[{t:'■■■■武器を手に入れたとき、対応する通常のユニークまで図鑑に登録されていた不具合を修正',u:'グリッチ武器を手に入れたとき、対応する通常のユニークまで図鑑に登録されていた不具合を修正',k:'nm'}]],['2.2.2-beta',['シリアルコード入力を使えるように']],['2.2.1-beta',['シリアルコード入力を追加（配布されたコードで報酬の武器を受け取れます）']],['2.2.0-beta',['拠点画面の「装備・強化・合成」ボタンを、装備中の武器のすぐ下に移動（その下にステータス）',{t:'ハード100層で、まだ■■■■モンスターを倒したことがない場合は、必ず■■■■モンスターが出現するように',u:'ハード100層で、まだグリッチモンスターを倒したことがない場合は、必ずグリッチモンスターが出現するように',k:'nm'},{t:'■■■■モンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',u:'グリッチモンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',k:'nm'},{t:'■■■■モードへのヒントのあと、切り替えの場所が分かりやすく光るように',u:'ナイトメアモードへのヒントのあと、切り替えの場所（タイトル下の文字）が分かりやすく光るように',k:'nm'}]]
 ];
 const DEX=[];
 CAT.forEach(e=>DEX.push({key:'c:'+e.c,t:e.t,r:e.r,cat:e}));
@@ -2577,6 +2669,118 @@ $('mbox').addEventListener('click',async e=>{const b=e.target.closest('[data-srl
     catch(err){m.textContent=err.message||'受け取れませんでした';b.disabled=false}}});
 $('mbox').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='srlIn'){const b=$('mbox').querySelector('[data-srl=go]');if(b)b.click()}});
 $('srlBtn').onclick=()=>showSerial();$('srlBtn').hidden=!srlOn();
+/* ===== ガチャ ===== */
+const GC={cost:50,rates:[38,28,18,10,4.5,1.5],gl:.3,pity:300,col:['#ffffff','#3dff6e','#3fa9ff','#c77dff','#ffd43b','#ff3b3b','#ff2a6d'],nm:['コモン','アンコモン','レア','エピック','レジェンダリー','ユニーク','グリッチ']};
+const GDM={easy:.6,normal:1,hard:1.6,nightmare:2.2};
+function gpFloor(f,d,first){return Math.round((4+f*.5)*(GDM[d]||1))*(first?2:1)}
+function gpAbyss(f){return Math.round(3+Math.min(f,999)*.03)}
+function gRates(){const r=GC.rates.slice();let gl=0;if(S.nm){gl=GC.gl;r[5]=+(r[5]-gl).toFixed(2)}return{r,gl}}
+function gRollOne(minR){const {r,gl}=gRates();let x=Math.random()*100;
+  if(gl&&x<gl)return{r:5,gl:1};x-=gl;let k=5;for(;k>=0;k--){if(x<r[k])break;x-=r[k]}if(k<0)k=0;
+  if(minR&&k<minR){const s=r.slice(minR).reduce((a,b)=>a+b,0)+gl;let y=Math.random()*s;if(gl&&y<gl)return{r:5,gl:1};y-=gl;for(k=5;k>minR;k--){if(y<r[k])break;y-=r[k]}}
+  return{r:k,gl:0}}
+function gMake(o){if(o.r===5){const d=ALLE[rand(ALLE.length)],w=makeW({t:d.ut,r:5,f:100,name:d.un,sk:d.us,u:d.id});if(o.gl)gwify(w);return w}
+  const L=CAT.filter(e=>e.r===o.r&&e.name!=='旅立ちの短剣'),e=L[rand(L.length)];return makeW({t:e.t,r:o.r,f:100,el:e.el,name:e.name,sk:e.sk,c:e.c})}
+function gPull(n){S.gacha=S.gacha||{n:0,pity:0};const G=S.gacha,out=[];
+  for(let i=0;i<n;i++){let o;G.pity++;
+    if(G.pity>=GC.pity){o=gRollOne(5);if(o.r<5)o={r:5,gl:0}}
+    else{o=gRollOne(0);const blk=out.slice(i-i%10);if(i%10===9&&!blk.some(x=>x.o.r>=2))o=gRollOne(2)}
+    if(o.r===5)G.pity=0;G.n++;
+    const w=gMake(o),isNew=!S.rec.dex[dexKey(w)];out.push({w,o,isNew})}
+  out.forEach(({w})=>{S.inv.push(w);S.rec.dex[dexKey(w)]=1;if(w.u&&!w.god&&!w.gw&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)});
+  S.gp-=n*GC.cost;save();return out}
+/* --- 効果音 --- */
+function gse(k,a){if(!AU.ctx||!AU.opt.se)return;const C=AU.ctx,t=C.currentTime;
+  switch(k){
+    case'tap':tone('pulse',1200,t,.05,.08);break;
+    case'charge':{tone('sine',140,t,1.3,.18,null,1400);tone('sawtooth',70,t,1.3,.05,null,700);nz(t,1.3,.05,2500);for(let i=0;i<10;i++)tone('pulse',mtof(60+i*2),t+i*.11,.06,.05);break}
+    case'up':{const b=[60,62,64,67,69,72,63][a]||60;[0,4,7,12].forEach((s,i)=>tone('pulse',mtof(b+12+s),t+i*.035,.22,.12));tone('triangle',mtof(b),t,.4,.22);nz(t,.18,.08,5000);if(a>=4)tone('sine',mtof(b+24),t+.1,.6,.12);break}
+    case'burst':nz(t,.9,.32,200);tone('sine',120,t,.8,.4,null,30);tone('square',880,t,.3,.06,null,110);break;
+    case'flip':{const m=[72,74,76,79,84,88,90][a]||72;tone('pulse',mtof(m),t,.08,.09);if(a>=2)tone('triangle',mtof(m+7),t+.04,.14,.1);if(a>=3)tone('pulse',mtof(m+12),t+.08,.16,.08);break}
+    case'rare':arp([76,79,83,88],.05,'pulse',.12,.12);break;
+    case'epic':arp([72,76,79,84,88,91],.045,'pulse',.13,.14);tone('triangle',mtof(60),t,.6,.2);break;
+    case'legend':{[60,64,67,72].forEach(m=>tone('triangle',mtof(m),t,1.2,.16));arp([72,76,79,84,79,84,88,91,96],.07,'pulse',.14,.18);nz(t,.5,.1,4000);for(let i=0;i<8;i++)tone('sine',mtof(96+(i%3)*4),t+.6+i*.05,.25,.05);break}
+    case'unique':{[48,55,60,64,67].forEach(m=>tone('triangle',mtof(m),t,2.2,.15));arp([60,64,67,72,76,79,84,88,91,96,100],.06,'pulse',.15,.2);
+      [72,76,79,84].forEach((m,i)=>tone('square',mtof(m),t+.75+i*.12,.5,.07));[84,88,91,96].forEach(m=>tone('sine',mtof(m),t+1.3,1.4,.08));nz(t,1.4,.12,3000);for(let i=0;i<14;i++)tone('sine',mtof(96+(i*5)%12),t+1+i*.06,.2,.05);break}
+    case'glitch':{for(let i=0;i<16;i++){tone('square',80+Math.random()*1800,t+i*.045,.05,.09);if(i%3===0)nz(t+i*.045,.06,.25,600+Math.random()*4000)}
+      tone('sawtooth',55,t,1.6,.16,null,35);[49,56,61,64].forEach(m=>{tone('square',mtof(m),t+.8,1.4,.06);tone('square',mtof(m)*1.012,t+.8,1.4,.06)});nz(t+.75,.8,.18,150);break}
+  }}
+/* --- パーティクル --- */
+const GFX={p:[],run:false};
+function gfxLoop(){const c=$('gfx');if(!c)return;const x=c.getContext('2d'),W=c.width=innerWidth,H=c.height=innerHeight;let last=performance.now();GFX.run=true;
+  (function fr(now){if(!GFX.run)return;const dt=Math.min(.05,(now-last)/1000);last=now;x.clearRect(0,0,W,H);x.globalCompositeOperation='lighter';
+    GFX.p=GFX.p.filter(p=>{p.t+=dt;if(p.t>p.l)return false;p.vy+=p.g*dt;p.vx*=p.dr;p.vy*=p.dr;p.x+=p.vx*dt;p.y+=p.vy*dt;const k=1-p.t/p.l;
+      x.globalAlpha=Math.max(0,k);x.fillStyle=p.c;if(p.sq){x.save();x.translate(p.x,p.y);x.rotate(p.t*p.spin);x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);x.restore()}else{x.beginPath();x.arc(p.x,p.y,p.s*(.4+k*.6),0,7);x.fill()}return true});
+    x.globalAlpha=1;x.globalCompositeOperation='source-over';requestAnimationFrame(fr)})(last)}
+function gBurst(x,y,col,n,sp,o){o=o||{};for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,v=sp*(.3+Math.random()*.7),c=Array.isArray(col)?col[rand(col.length)]:col;
+  GFX.p.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-(o.up||0),g:o.g??240,dr:o.dr??.985,l:o.l||(.8+Math.random()*.9),t:0,s:o.s||(2+Math.random()*4),c,sq:o.sq,spin:(Math.random()-.5)*20})}}
+function gSuck(cx,cy,col,n){for(let i=0;i<n;i++){const a=Math.random()*7,r=260+Math.random()*260,x=cx+Math.cos(a)*r,y=cy+Math.sin(a)*r;GFX.p.push({x,y,vx:(cx-x)*1.6,vy:(cy-y)*1.6,g:0,dr:1,l:.6,t:0,s:2+Math.random()*2.5,c:col})}}
+const RAINBOW=['#ff3b3b','#ffd43b','#3dff6e','#3fa9ff','#c77dff','#ffffff'];
+/* --- 画面 --- */
+const GA={busy:false,skip:false,last:0};
+function gSleep(ms){return new Promise(r=>{const t0=performance.now();(function w(){if(GA.skip||performance.now()-t0>=ms)return r();requestAnimationFrame(w)})()})}
+function gMax(){return Math.min(100,Math.floor((S.gp||0)/GC.cost))}
+function openGacha(){$('gacha').classList.add('on');gfxLoop();gLobby()}
+function closeGacha(){if(GA.busy)return;$('gacha').classList.remove('on');GFX.run=false;GFX.p=[];renderHome()}
+function gHead(){$('gGP').innerHTML=`<b>◆ ${fmt(S.gp||0)}</b> GP`}
+function gLobby(){gHead();const m=gMax(),G=S.gacha||{pity:0},{r,gl}=gRates();
+  $('gMain').innerHTML=`<div class="glob"><div class="gorb idle" style="--oc:#7a5cff"><i></i></div>
+   <div class="gbtns"><button class="gbtn" data-g="1" ${m>=1?'':'disabled'}><b>1回</b><small>◆${GC.cost}</small></button>
+   <button class="gbtn g10" data-g="10" ${m>=10?'':'disabled'}><b>10連</b><small>◆${GC.cost*10}</small></button>
+   <button class="gbtn g100" data-g="${Math.max(1,m>=100?100:m)}" ${m>=1?'':'disabled'}><b>${m>=100||m<1?100:m}連</b><small>◆${GC.cost*(m>=100||m<1?100:m)}</small></button></div>
+   <p class="gnote">10連ごとにレア以上が1つ確定　／　${GC.pity}回以内にユニーク確定（あと <b>${GC.pity-(G.pity||0)}</b> 回）</p>
+   <details class="grate"><summary>提供割合</summary><table>${r.map((v,i)=>`<tr><td style="color:${GC.col[i]}">${GC.nm[i]}</td><td>${v}%</td></tr>`).join('')}${gl?`<tr><td style="color:${GC.col[6]}" class="glt">${GC.nm[6]}ユニーク</td><td>${gl}%</td></tr>`:''}</table><p class="small">ガチャポイント（GP）は層をクリアすると手に入ります。深い層・高い難易度ほど多くもらえます（初回クリアは2倍）。</p></details></div>`}
+async function gRun(n){if(GA.busy||n<1||(S.gp||0)<n*GC.cost)return;GA.busy=true;GA.skip=false;
+  const res=gPull(n);gHead();GA.last=n;
+  const top=Math.max(...res.map(x=>x.o.gl?6:x.o.r));
+  $('gMain').innerHTML=`<div class="gstage"><div class="gorb" id="gOrb" style="--oc:${GC.col[0]}"><i></i></div><div class="gring" id="gRing"></div></div><button class="gskip" id="gSkip">スキップ ▶▶ <small>Space</small></button>`;
+  const orb=$('gOrb'),rect=orb.getBoundingClientRect(),cx=rect.left+rect.width/2,cy=rect.top+rect.height/2,G=$('gacha');
+  gse('charge');for(let i=0;i<6&&!GA.skip;i++){gSuck(cx,cy,'#b9a6ff',22);await gSleep(180)}
+  orb.classList.add('shk');
+  const steps=Math.min(top,5);
+  for(let k=1;k<=steps&&!GA.skip;k++){await gSleep(k<3?260:k<5?420:620);if(GA.skip)break;orb.style.setProperty('--oc',GC.col[k]);gse('up',k);gRing(GC.col[k]);gBurst(cx,cy,GC.col[k],24+k*14,260+k*80,{g:0,dr:.96});
+    G.classList.remove('q1','q2','q3');void G.offsetWidth;G.classList.add(k>=4?'q3':k>=3?'q2':'q1');orb.classList.toggle('lv4',k>=4);if(k>=5)orb.classList.add('rainbow');if(k>=4)gFlash(k>=5?.9:.6)}
+  if(top===6&&!GA.skip){await gSleep(500);orb.classList.add('glitchy');G.classList.add('gglitch');gse('glitch');gBurst(cx,cy,['#ff2a6d','#00fff0','#000'],120,700,{sq:1,g:0});await gSleep(1300);G.classList.remove('gglitch')}
+  if(!GA.skip){await gSleep(350);gse('burst');gFlash(1);gBurst(cx,cy,top>=5?RAINBOW:[GC.col[Math.min(top,5)],'#ffffff'],top>=4?260:120,top>=4?900:600,{g:120});await gSleep(250)}
+  G.classList.remove('q1','q2','q3');
+  await gReveal(res);
+  GA.busy=false;GA.skip=false;gResult(res)}
+function gRing(c){const r=$('gRing');if(!r)return;r.style.setProperty('--oc',c);r.classList.remove('go');void r.offsetWidth;r.classList.add('go')}
+function gFlash(a){const f=$('gFlash');f.style.setProperty('--fa',a);f.classList.remove('go');void f.offsetWidth;f.classList.add('go')}
+async function gReveal(res){const many=res.length>10;
+  $('gMain').innerHTML=`<div class="ggrid${many?' many':''}" id="gGrid">${res.map((x,i)=>`<div class="gcard" data-i="${i}" style="--rc:${x.o.gl?GC.col[6]:GC.col[x.o.r]}"><div class="gin"><div class="gback"></div><div class="gface${x.o.gl?' gx':''}">${wIcon(x.w)}${x.isNew?'<span class="gnew">NEW</span>':''}</div></div></div>`).join('')}</div><button class="gskip" id="gSkip">スキップ ▶▶ <small>Space</small></button>`;
+  const cards=[...document.querySelectorAll('#gGrid .gcard')];
+  for(let i=0;i<cards.length;i++){if(GA.skip)break;const x=res[i],c=cards[i],lvl=x.o.gl?6:x.o.r;
+    await gSleep(many?(lvl>=3?120:18):(lvl>=3?380:200));c.classList.add('up','r'+Math.min(lvl,6));
+    const rc=c.getBoundingClientRect(),px=rc.left+rc.width/2,py=rc.top+rc.height/2;
+    gse('flip',lvl);if(lvl>=2)gBurst(px,py,GC.col[Math.min(lvl,6)],lvl*10,180+lvl*60,{g:300});
+    if(lvl>=(many?5:4)&&!GA.skip){c.classList.add('hot');await gCut(x)}}
+  cards.forEach(c=>c.classList.add('up'))}
+async function gCut(x){const lvl=x.o.gl?6:x.o.r,col=GC.col[lvl],w=x.w,ov=$('gCut');
+  const label=lvl===6?'G̷L̴I̵T̸C̷H̶!!!':lvl===5?'UNIQUE!!!':'LEGENDARY!!';
+  ov.className='gcut on l'+lvl;ov.style.setProperty('--rc',col);
+  ov.innerHTML=`<div class="grays"></div><div class="gbig">${wIcon(w)}</div><div class="glabel">${label}</div><div class="gname">${wName(w)}</div><div class="gsub">${RAR[w.r].n}${w.gw?'（グリッチ）':''}・${SK[w.sk].n}${x.isNew?'　<b class="gnew2">NEW!</b>':''}</div><div class="gtap">クリックで次へ</div>`;
+  gFlash(lvl>=5?1:.7);gse(lvl===6?'glitch':lvl===5?'unique':'legend');
+  const cx=innerWidth/2,cy=innerHeight*.42;
+  gBurst(cx,cy,lvl>=5?RAINBOW:[col,'#fff'],lvl>=5?320:180,lvl>=5?1100:800,{g:200,sq:1,s:7,l:2.2});
+  if(lvl>=5)setTimeout(()=>{gBurst(cx*.4,cy,RAINBOW,120,700,{g:220,sq:1,s:6,l:2});gBurst(cx*1.6,cy,RAINBOW,120,700,{g:220,sq:1,s:6,l:2})},450);
+  GA.cutWait=true;const t0=performance.now();
+  await new Promise(r=>{(function w(){if(GA.skip||!GA.cutWait||performance.now()-t0>(lvl>=5?5200:3200))return r();requestAnimationFrame(w)})()});
+  GA.cutWait=false;ov.className='gcut';ov.innerHTML=''}
+function gResult(res){const cnt=[0,0,0,0,0,0,0];res.forEach(x=>cnt[x.o.gl?6:x.o.r]++);const m=gMax(),n=GA.last,G=S.gacha||{pity:0},hitU=cnt[5]+cnt[6]>0;
+  const L=res.slice().sort((a,b)=>(b.o.gl?6:b.o.r)-(a.o.gl?6:a.o.r));
+  $('gMain').innerHTML=`<div class="gres"><h2>${res.length}連の結果</h2><div class="gcnt">${cnt.map((v,i)=>v?`<span style="color:${GC.col[i]}">${GC.nm[i]} ×${v}</span>`:'').join('')}</div><p class="gnote">ユニーク確定まで あと <b>${GC.pity-(G.pity||0)}</b> 回${hitU?'（ユニークが出たのでカウントがリセットされました）':''}</p>
+   <div class="ggrid res">${L.map(x=>`<div class="gcard up r${x.o.gl?6:x.o.r}" data-wid="${x.w.id}" style="--rc:${x.o.gl?GC.col[6]:GC.col[x.o.r]}"><div class="gin"><div class="gback"></div><div class="gface${x.o.gl?' gx':''}">${wIcon(x.w)}${x.isNew?'<span class="gnew">NEW</span>':''}</div></div></div>`).join('')}</div>
+   <div class="gbtns"><button class="gbtn" data-g="lobby"><b>もどる</b></button><button class="gbtn g10" data-g="${Math.min(n,m)}" ${m>=1?'':'disabled'}><b>もう一度 ${Math.max(1,Math.min(n,m))}連</b><small>◆${GC.cost*Math.max(1,Math.min(n,m))}</small></button></div></div>`}
+$('gacha').addEventListener('click',e=>{if(GA.cutWait){GA.cutWait=false;return}
+  const s=e.target.closest('#gSkip');if(s){GA.skip=true;return}
+  const b=e.target.closest('[data-g]');if(b&&!b.disabled){gse('tap');if(b.dataset.g==='lobby')return gLobby();gRun(+b.dataset.g);return}
+  if(e.target.closest('#gClose'))closeGacha()});
+document.addEventListener('keydown',e=>{if(!$('gacha').classList.contains('on'))return;
+  if(e.key===' '||e.key==='Enter'){e.preventDefault();e.stopPropagation();if(GA.cutWait){GA.cutWait=false;return}if(GA.busy){GA.skip=true;return}}
+  else if(e.key==='Escape'){e.preventDefault();e.stopPropagation();closeGacha()}},true);
+$('gachaBtn').onclick=()=>{se('ui');openGacha()};
+
 function dexVis(){return DEX.filter(e=>(!e.hid||S.rec.dex[e.key])&&(!e.nmh||S.nm))}
 const DX={sel:null,hov:null,f:'all'};
 function floorsOf(id){const fl=[];for(let f=1;f<=100;f++){const fi=floorInfo(f);if(fi.boss.id===id||fi.pool.some(d=>d.id===id))fl.push(f)}
