@@ -868,6 +868,10 @@ body.abui .big.go{height:68px;border-color:#7a2bd6;color:#ecdcff;font-size:22px;
 @media(max-width:640px){.ggrid{gap:8px;max-width:330px}.gcard{width:58px;height:58px}.gface .wic{transform:scale(1.4)}.ggrid.many{max-width:340px}.ggrid.many .gcard{width:48px;height:48px}.glabel{font-size:34px}.gbig .wic{transform:scale(5)}.gbtn{min-width:96px;font-size:16px}}
 
 .rgp{color:#7fe3ff}
+.sellsum{padding:6px 2px;display:flex;flex-direction:column;gap:6px}.sellsum .sbig{font-size:20px}.sellp{line-height:1.8}
+.asell{margin-top:4px}.asrow{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px}.asrow label{display:flex;align-items:center;gap:4px;cursor:pointer}.asrow .asg{color:#cfc6ff}
+.drop.sold{opacity:.55;position:relative}.drop .soldt{margin-left:auto;font-size:12px;color:#7fe3ff;white-space:nowrap;padding-left:8px}.agw.sold{opacity:.35;outline:1px dashed #7fe3ff}
+.lostp{color:#ff4d4d}
 .abrun{margin:8px 0 2px;padding:6px 10px;border:2px solid #6a4cff;background:rgba(60,30,140,.35);color:#d9ccff;font-size:13px}.abrun b{color:#fff}.abrun .small{display:block;color:#b9a8ff}
 .abinfo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}.abinfo>div{border:2px solid #3a1060;padding:6px 10px;text-align:center}.abinfo b{display:block;font-size:24px;font-weight:400;color:#d9b8ff;text-shadow:0 0 8px #6a1aa8}.abinfo small{font-size:12px;margin-left:2px;color:var(--dim)}
 .abinfo b.abend{font-size:22px;letter-spacing:.2em;color:#d9b8ff;text-shadow:0 0 12px #7a2bd6;animation:abglow 2s ease-in-out infinite}@keyframes abglow{50%{text-shadow:0 0 18px #b04dff,0 0 4px #fff}}.abinfo b.abend small{display:block;font-size:10px;letter-spacing:.35em;margin:0 0 2px;color:#d9b8ff}
@@ -1214,7 +1218,7 @@ button.chip.dis{opacity:.3;text-decoration:line-through}
         </div>
       </div>
       <div class="hsec"><div class="hlab">装備中の武器<span class="small" id="hSlotTxt"></span></div><div class="heqs" id="hSlots"></div></div>
-      <div class="armbtns"><button class="big" data-arm="equip">装備</button><button class="big" data-arm="enh">強化</button><button class="big" data-arm="syn">合成</button><button class="big decb" data-arm="evo" hidden>デコード</button></div>
+      <div class="armbtns"><button class="big" data-arm="equip">装備</button><button class="big" data-arm="enh">強化</button><button class="big" data-arm="syn">合成</button><button class="big decb" data-arm="evo" hidden>デコード</button><button class="big" data-arm="sell">売却</button></div>
       <button class="big gachab" id="gachaBtn">ガチャ</button>
       <div class="statgrid" id="hStats"></div>
       <div class="hsec"><div class="hlab">冒険の記録</div>
@@ -1234,7 +1238,7 @@ button.chip.dis{opacity:.3;text-decoration:line-through}
       <div class="fgrid" id="fgrid"></div>
     </div>
     </div>
-    <p class="small hnote"><span id="verTxt"></span>　<button class="linkb" id="clogBtn">更新情報</button>　<button class="linkb" id="tutBtn">あそびかた</button></p>
+    <p class="small hnote"><span id="verTxt"></span>　<button class="linkb" id="clogBtn">更新情報</button>　<button class="linkb" id="tutBtn">あそびかた</button>　<button class="linkb" id="pracBtn">練習モード</button></p>
   </div>
 </section>
 
@@ -1257,7 +1261,7 @@ button.chip.dis{opacity:.3;text-decoration:line-through}
     <div class="invwrap" id="invwrap"><div class="inv" id="inv"></div></div><div class="pager" id="invPager"></div>
   </div>
   </div>
-  <nav class="cmd" id="tabs"><button data-tab="equip" class="on">装備</button><button data-tab="enh">強化</button><button data-tab="syn">合成</button><button data-tab="evo" class="decb" hidden>デコード</button></nav>
+  <nav class="cmd" id="tabs"><button data-tab="equip" class="on">装備</button><button data-tab="enh">強化</button><button data-tab="syn">合成</button><button data-tab="evo" class="decb" hidden>デコード</button><button data-tab="sell">売却</button></nav>
 </section>
 
 <section id="dex" class="screen">
@@ -1746,6 +1750,13 @@ const TRACKS={
   final:{bpm:176,lead:seq([[69,2],[72,2],[76,4],[74,2],[72,2],[74,4],[77,4],[76,2],[74,2],[72,4],[71,2],[72,2],[74,4],[76,8],[81,4],[79,2],[77,2],[76,4],[74,2],[72,2],[74,2],[76,4]]),leadVol:.07,leadType:'square',
     bass:bassPat([45,41,43,40],r=>Array.from({length:16},(_,i)=>[i%2?r+12:r,1])),drum:i=>({k:i%4===0||i%16===10,s:i%8===4,h:true}),
     pad:[[57,60,64],[53,57,60],[55,59,62],[52,56,59]],padLen:16,padVol:.03,padType:'square'},
+  gacha:{bpm:150,lead:seq([[72,1],[76,1],[79,1],[84,1],[79,1],[76,1],[79,1],[84,1],[88,2],[86,2],[84,2],[79,2],
+    [71,1],[74,1],[79,1],[83,1],[79,1],[74,1],[79,1],[83,1],[86,2],[84,2],[83,2],[79,2],
+    [72,1],[76,1],[81,1],[84,1],[81,1],[76,1],[81,1],[84,1],[88,2],[86,2],[84,2],[81,2],
+    [72,1],[77,1],[81,1],[84,1],[81,1],[77,1],[81,1],[84,1],[89,2],[88,2],[86,2],[91,2]]),leadVol:.06,leadType:'pulse',
+    bass:bassPat([48,43,45,41],r=>[[r,2],0,[r+12,2],0,[r,2],0,[r+12,2],0,[r,2],0,[r+12,2],0,[r+7,2],0,[r+12,2],0]),
+    drum:i=>({k:i%4===0,s:i%8===4,h:i%2===1}),
+    pad:[[60,64,67],[55,59,62],[57,60,64],[53,57,60]],padLen:16,padVol:.024,padType:'triangle',spark:[91,96,100,103,108],sparkP:.09},
   boss:{bpm:166,lead:seq([[74,2],[77,2],[81,2],[79,2],[77,2],[76,2],[74,4],[72,2],[76,2],[79,4],[77,2],[76,2],[72,4],[70,2],[74,2],[77,4],[76,2],[74,2],[70,4],[72,2],[76,2],[79,2],[81,10]]),leadVol:.075,leadType:'square',
     bass:bassPat([38,38,34,36],r=>Array.from({length:16},(_,i)=>[i%2?r+12:r,1])),
     drum:i=>({k:i%4===0,s:i%16===4||i%16===12,h:true})}
@@ -1904,7 +1915,7 @@ function show(name){
   if(name==='home'){renderHome();if(typeof rwCheck==='function'&&rwCheck())return;if(typeof titleCheck==='function'&&titleCheck())return;if(typeof nmHint==='function'&&nmHint())return;if(typeof tutDecHome==='function')tutDecHome()}if(name==='armory')renderArmory();if(name==='dex')renderDex();
   if(name!=='battle')playBgm(homeBgm());
 }
-function dropHTML(w){return `<div data-wid="${w.id}" class="drop${w.r>=4?' big':''}" style="--rc:${RAR[w.r].c}">${w.r>=4?'<span class="gt">GET!!</span>':''}<span class="e">${wIcon(w)}</span><div><div class="n">${wName(w)}</div><div class="small">${RAR[w.r].n}・${SK[w.sk].n}</div></div></div>`}
+function dropHTML(w){return `<div ${w._sold?'':`data-wid="${w.id}"`} class="drop${w.r>=4?' big':''}${w._sold?' sold':''}" style="--rc:${RAR[w.r].c}">${w.r>=4?'<span class="gt">GET!!</span>':''}<span class="e">${wIcon(w)}</span><div><div class="n">${wName(w)}</div><div class="small">${RAR[w.r].n}・${SK[w.sk].n}</div></div>${w._sold?`<span class="soldt">売却 ◆${w._sold}</span>`:''}</div>`}
 
 /* ===== home ===== */
 let selF=1;
@@ -2057,19 +2068,21 @@ function enemyStats(f,boss){const d=B&&B.diff||'normal',D=DIFF[d]||DIFF.normal,T
   const iv=b=>Math.max(2.2,(b?3.4:4)-f*.012)*D.int,dpw=b=>ae*(.6+.25*avgLen(d,f,b))*1.3,tw=b=>1.9*avgLen(d,f,b)/T.kps+.45,wb=T.wk*2.5,n=3+Math.floor(f/25);
   const hN=n*T.wk*tw(false)/iv(false),hB=wb*tw(true)/iv(true),x=T.fr*hp/(hN+1.25*hB);
   return{hp:Math.max(10,Math.round(dpw(boss)*(boss?wb:T.wk))),atk:Math.max(1,Math.round(x*(boss?1.25:1)*(100+df)/100)),int:iv(boss)}}
+const DUMMY={id:'dummy',e:'🎯',n:'練習用ダミー',px:44};
+function startPractice(){if(typeof TUT!=='undefined'&&TUT.on)return;startFloor(1,{diff:'normal',prac:1,q:[{d:DUMMY,boss:false}]})}
 function startFloor(f,opt){if(!document.querySelector('#stage .abvx')){const v=document.createElement('div');v.className='abvx';$('stage').prepend(v)}
   const st=calcStats(),fi=floorInfo(f),band=fi.band%10,pool=fi.pool;
   const dif=(opt&&opt.diff)||S.diff,mp=it=>it.gl||dif!=='nightmare'?it:Object.assign({},it,{d:nmE(it.d)});
   let q=fi.mobs.map(d=>({d,boss:false}));for(let i=q.length-1;i>0;i--){const j=rand(i+1);[q[i],q[j]]=[q[j],q[i]]}q.push({d:fi.boss,boss:true});
   if(dif==='abyss'&&!(opt&&opt.q))q=[abyssEnemy(f)];if(opt&&opt.q)q=opt.q;q=q.map(mp);kbGlitch(false);
-  B={opt,f0:f,abyss:dif==='abyss',axp:0,best0:(S.prog.abyss||{}).maxF||0,diff:(opt&&opt.diff)||S.diff,test:!!(opt&&opt.q),rank0:rankInfo().r,gxp:0,floor:f,q,qi:0,st,hp:st.hp,maxHp:st.hp,shield:0,combo:0,maxCombo:0,keys:0,miss:0,tt:0,chain:0,chainDmg:0,chainT:0,at:[],buffs:[],drops:[],active:false,enemy:null,lt:0,lastWord:null,
+  B={opt,prac:!!(opt&&opt.prac),f0:f,abyss:dif==='abyss',axp:0,best0:(S.prog.abyss||{}).maxF||0,diff:(opt&&opt.diff)||S.diff,test:!!(opt&&opt.q),rank0:rankInfo().r,gxp:0,floor:f,q,qi:0,st,hp:st.hp,maxHp:st.hp,shield:0,combo:0,maxCombo:0,keys:0,miss:0,tt:0,chain:0,chainDmg:0,chainT:0,at:[],buffs:[],drops:[],active:false,enemy:null,lt:0,lastWord:null,
      ws:equipped().map(w=>({w,ct:0,cnt:0,el:null}))};
-  PG().lastF=f;lastStep=0;show('battle');mClear();mFocus();playBgm(bgmFor(false));$('stage').classList.toggle('nm',B.diff==='nightmare');$('stage').classList.toggle('ab',B.diff==='abyss');abKb(B.diff==='abyss');if(B.abyss){const rr=opt&&opt.resume&&S.abRun;if(rr){B.drops=(rr.drops||[]).slice();B.axp=rr.axp||0;B.gxp=rr.gxp||0;B.best0=rr.best0||0;B.rank0=rr.rank0||B.rank0;B.resumed=1;B.f0=rr.f0||rr.f;if(rr.hpR>0)B.hp=Math.max(1,Math.round(B.maxHp*rr.hpR));abPersist(f)}else S.rec.abRuns=(S.rec.abRuns||0)+1;save()}$('retreat').textContent=B.abyss?'一時撤退':'撤退';wordNoise(B.diff==='nightmare');renderSnd();LOG.innerHTML='';for(const k in UI)delete UI[k];PARTS.length=0;chainShown=-1;fxCol=null;fxResize();$('pRank').textContent='RANK '+rankInfo().r;renderCombo();$('stage').style.setProperty('--scene',B.abyss?'radial-gradient(ellipse at 50% 38%,#1e0533 0,#0a0114 45%,#000 80%)':SCENES[band]);$('fx').innerHTML='';
+  if(!B.prac)PG().lastF=f;lastStep=0;show('battle');mClear();mFocus();playBgm(bgmFor(false));$('stage').classList.toggle('nm',B.diff==='nightmare');$('stage').classList.toggle('ab',B.diff==='abyss');abKb(B.diff==='abyss');if(B.abyss){const rr=opt&&opt.resume&&S.abRun;if(rr){B.drops=(rr.drops||[]).slice();B.axp=rr.axp||0;B.gxp=rr.gxp||0;B.best0=rr.best0||0;B.rank0=rr.rank0||B.rank0;B.resumed=1;B.f0=rr.f0||rr.f;if(rr.hpR>0)B.hp=Math.max(1,Math.round(B.maxHp*rr.hpR));abPersist(f)}else S.rec.abRuns=(S.rec.abRuns||0)+1;save()}$('retreat').textContent=B.prac?'終了':B.abyss?'一時撤退':'撤退';wordNoise(B.diff==='nightmare');renderSnd();LOG.innerHTML='';for(const k in UI)delete UI[k];PARTS.length=0;chainShown=-1;fxCol=null;fxResize();$('pRank').textContent='RANK '+rankInfo().r;renderCombo();$('stage').style.setProperty('--scene',B.abyss?'radial-gradient(ellipse at 50% 38%,#1e0533 0,#0a0114 45%,#000 80%)':SCENES[band]);$('fx').innerHTML='';
   $('wicons').innerHTML='';
   B.ws.forEach(e=>{const d=document.createElement('div');d.className='wi';d.style.setProperty('--rc',RAR[e.w.r].c);
     d.title=`${e.w.name}：${SK[e.w.sk].n}`;d.innerHTML=`${wIcon(e.w)}<span class="ct"></span>`;e.el=d;$('wicons').appendChild(d)});
   if(!B.ws.length)$('wicons').innerHTML='<span class="small" style="align-self:center">武器を装備していません</span>';
-  spawn();B.active=false;B.alerting=true;W=null;renderWord();if(tutStage()==='battle'){const ref=B;setTimeout(()=>{if(B!==ref)return;nextWord();tutRun('battle',()=>{if(B===ref){W=null;renderWord();countdown(B)}})},500)}else countdown(B);
+  spawn();B.active=false;B.alerting=true;W=null;renderWord();if(tutStage()==='battle'&&!B.prac){const ref=B;setTimeout(()=>{if(B!==ref)return;nextWord();tutRun('battle',()=>{if(B===ref){W=null;renderWord();countdown(B)}})},500)}else countdown(B);
 }
 function countdown(ref){const el=$('cdown');let n=3;
   const tick=()=>{if(B!==ref){el.className='cdown';return}
@@ -2086,10 +2099,12 @@ function spawn(){
   $('enemy').classList.toggle('boss',it.boss);fitEnemy();
   $('ename').innerHTML=(it.boss?`<span class="bs">${gl?'B縺SS':'BOSS'}</span>`:'')+it.d.n;
   $('floorLbl').innerHTML=B.abyss?`<span class="dtag" style="--dc:${DIFF.abyss.c}">アビス</span>${B.floor>=ABEND?'深淵の果て':`第${B.floor}層`}${B.floor>=ABEND?'':B.floor%50===0?'　◉':B.floor%5===0?'　BOSS':''}`:`<span class="dtag" style="--dc:${DIFF[B.diff].c}">${DIFF[B.diff].n}</span>${B.floor}層　${gl||nmB?'繧\uFFFD/\uFFFDｼ':`${B.qi+1}/${B.q.length}`}`;
+  if(B.prac){B.enemy.hp=B.enemy.max=999999;B.enemy.atk=0;B.enemy.int=1e12;B.enemy.timer=0;$('floorLbl').innerHTML='<span class="dtag" style="--dc:#5fd38a">練習</span>ホームポジション練習';$('ename').textContent=DUMMY.n}
   B.active=!B.paused;nextWord();abEnd(!!it.fin);if(B.abyss&&!it.boss&&!gl&&!nmB)playBgm(bgmFor(false));if(nmB&&!gl){playBgm(null);se('glitch')}else if(gl){playBgm(null);se('glitch');blog('\uFFFD\uFFFD 繧ｨ繝ｩ繝ｼ縺檎匱逕溘＠縺ｾ縺励◆ \uFFFD\uFFFD','gl')}else if(it.boss)playBgm(bgmFor(true));requestAnimationFrame(()=>{measureEnemy();fxLayout()});
 }
 function wordBand(){
   const f=B.diff==='nightmare'||B.diff==='abyss'?Math.max(50,B.floor):B.floor,boss=B.enemy&&B.enemy.boss,rr=Math.random(),dif=B.diff;let lo,hi;
+  if(B.prac){const L=getWords().flat().filter(w=>{const n=[...w.k].length;return n>=2&&n<=5});if(L.length)return L}
   if(dif==='easy'){if(boss?rr<.45:rr<(f>50?.3:.1)){lo=4;hi=6}else if(rr<.92){lo=2;hi=3}else{lo=1;hi=3}}
   else if(dif==='normal'){
     if(f<=10){[lo,hi]=boss?[4,6]:[1,3]}else if(f<=30){[lo,hi]=boss?[7,9]:[4,6]}else if(f<50){[lo,hi]=boss?[7,9]:(rr<.3?[4,6]:[7,9])}else{[lo,hi]=boss?[8,10]:(rr<.3?[4,6]:[7,10])}
@@ -2232,7 +2247,7 @@ function hitEnemy(h){
   const en=B&&B.enemy;if(!en||en.dead)return;
   
   if(en.gl&&!window.DEVOP){const d=h.skill?(h.crit?1:0):(h.crit?2:1);if(!d){pop('MISS','',Math.max(8,Math.min(92,ER.x+(Math.random()-.5)*30)),Math.max(fxTop,ER.y),18);return}h=Object.assign({},h,{d})}
-  en.hp-=h.d;S.rec.hits++;S.rec.dmg+=h.d;if(!h.chip||h.crit)se(h.crit?'crit':'hit');
+  en.hp-=h.d;if(B.prac)en.hp=en.max;S.rec.hits++;S.rec.dmg+=h.d;if(!h.chip||h.crit)se(h.crit?'crit':'hit');
   const px=Math.max(8,Math.min(92,ER.x+(Math.random()-.5)*Math.max(ER.w*1.5,34))),py=Math.max(fxTop,Math.min(90,ER.y+(Math.random()-.5)*Math.max(ER.h*1.3,24)));
   pop(fmt(h.d)+(h.crit?'!':''),(h.crit?'crit':'')+(h.skill?' sdmg':''),px,py,h.chip?(h.crit?24:14+Math.random()*4):h.crit?34+Math.random()*12:20+Math.random()*10);
   B.chain++;B.chainDmg+=h.d;B.chainT=performance.now();chainDirty=true;
@@ -2291,7 +2306,7 @@ function fire(e){
   se(kind);
   blog(`◆${sk.n}！${parts.length?' '+parts.join('・'):''}`,kind);
 }
-function enemyHit(){
+function enemyHit(){if(B&&B.prac)return;
   
   const en=B.enemy;let d=Math.max(1,Math.round(en.atk*(.9+Math.random()*.2)*100/(100+B.st.def)*(1-Math.min(75,buffSum('defbuf'))/100)));
   if(B.shield>0){const a=Math.min(B.shield,d);B.shield-=a;d-=a}
@@ -2327,13 +2342,13 @@ function abyssDrop(f0,d,boss){const f=Math.min(100,f0),b=d.base||d;
 function abKeep(w){S.inv.push(w);S.rec.dex[dexKey(w)]=1;if(w.u&&!w.god&&!w.gw&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)}
 function abPersist(f){if(!B||!B.abyss||B.test)return;S.abRun={f,f0:B.f0,drops:B.drops,axp:B.axp,gxp:B.gxp,best0:B.best0,rank0:B.rank0,hpR:Math.max(0,Math.min(1,B.hp/B.maxHp))}}
 function abSuspend(){abyssEnd('suspend')}
-function abyssEnd(kind){if(!B||B.ended)return;const b=B;b.ended=1;b.over=1;let agp=0;if(!b.test){const cl0=kind==='clear'?ABEND:b.floor-1;for(let x=b.f0||1;x<=cl0;x++)agp+=gpAbyss(x);S.gp=(S.gp||0)+agp;b.drops.forEach(abKeep);S.exp+=b.axp+b.gxp;S.abRun=kind==='suspend'?{f:b.floor,drops:[],axp:0,gxp:0,best0:S.prog.abyss.maxF,rank0:rankInfo().r,hpR:Math.max(0,Math.min(1,b.hp/b.maxHp))}:null}b.active=false;W=null;renderWord();kbGlitch(false);wordNoise(false);abKb(false);abEnd(false);playBgm(null);se(kind==='dead'?'lose':'clear');if(kind==='clear')setTimeout(()=>se('drop',6),500);commitRec();
+function abyssEnd(kind){if(!B||B.ended)return;const b=B;b.ended=1;b.over=1;let agp=0;if(!b.test){const cl0=kind==='clear'?ABEND:b.floor-1;for(let x=b.f0||1;x<=cl0;x++)agp+=gpAbyss(x);S.gp=(S.gp||0)+agp;b._as=autoSell(b.drops);b._as.keep.forEach(abKeep);b._as.sold.forEach(w=>{S.rec.dex[dexKey(w)]=1;if(w.u&&!w.gw&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)});S.exp+=b.axp+b.gxp;S.abRun=kind==='suspend'?{f:b.floor,drops:[],axp:0,gxp:0,best0:S.prog.abyss.maxF,rank0:rankInfo().r,hpR:Math.max(0,Math.min(1,b.hp/b.maxHp))}:null}b.active=false;W=null;renderWord();kbGlitch(false);wordNoise(false);abKb(false);abEnd(false);playBgm(null);se(kind==='dead'?'lose':'clear');if(kind==='clear')setTimeout(()=>se('drop',6),500);commitRec();
   const pr=S.prog.abyss,best=pr.maxF,nr=best>b.best0;save();const after=rankInfo().r,before=b.rank0||after,so=slotsOpen(before),sn=slotsOpen(after);
   let h=kind==='clear'?`<div class="abclr"><i></i><div class="small">THE END OF ABYSS</div><h2 class="rh2 abh">深 淵 踏 破</h2><p class="small">第999層を越え、深淵の支配者を討ち果たした。</p></div>`:`<h2 class="rh2 abh">${kind==='dead'?'深淵に呑まれた……':kind==='suspend'?'一時撤退':'深淵から帰還した'}</h2>`+(kind==='suspend'?`<p class="rline">次回は <b class="rxp">第${b.floor}層</b> から続きを始められます</p>`:'');
   if(after>before)h+=`<div class="rankup"><b>RANK UP!</b>　ランク ${before} → ${after}${sn>so?`<div class="small">装備スロットが${sn}つに増えました</div>`:''}</div>`;
-  const fl=n=>n>=ABEND?'深淵の果て':n>0?`第${n}層`:'記録なし',cl=kind==='clear'?ABEND:b.floor-1;h+=`<p class="rline">踏破 <b class="rxp">${fl(cl)}</b>${nr?'<span class="abnew">NEW RECORD</span>':''}<span class="small">（最高記録 ${fl(best)}）</span><br>経験値 <b class="rxp">+${fmt(b.axp+b.gxp)}</b>${agp?`<br>ガチャポイント <b class="rgp">◆+${fmt(agp)}</b>`:''}</p>`;
+  const fl=n=>n>=ABEND?'深淵の果て':n>0?`第${n}層`:'記録なし',cl=kind==='clear'?ABEND:b.floor-1;h+=`<p class="rline">踏破 <b class="rxp">${fl(cl)}</b>${nr?'<span class="abnew">NEW RECORD</span>':''}<span class="small">（最高記録 ${fl(best)}）</span><br>経験値 <b class="rxp">+${fmt(b.axp+b.gxp)}</b>${agp?`<br>ガチャポイント <b class="rgp">◆+${fmt(agp)}</b>`:''}${b._as&&b._as.gp?`<br>自動売却 ${b._as.sold.length}本 <b class="rgp">◆+${fmt(b._as.gp)}</b>`:''}</p>`;
   const L=b.drops.slice().sort((x,y)=>y.r-x.r||(y.god?1:0)-(x.god?1:0));
-  h+=L.length?`<div class="mlab rlab">持ち帰った武器（${L.length}本）<span class="small">カーソルで詳細</span></div><div class="agrid">${L.map(w=>`<div class="agw" data-wid="${w.id}" style="--rc:${RAR[w.r].c}">${wIcon(w)}</div>`).join('')}</div>`:'<p class="small rline">持ち帰った武器はありません</p>';
+  h+=L.length?`<div class="mlab rlab">持ち帰った武器（${L.length}本）<span class="small">カーソルで詳細</span></div><div class="agrid">${L.map(w=>`<div class="agw${w._sold?' sold':''}" ${w._sold?`title="売却 ◆${w._sold}"`:`data-wid="${w.id}"`} style="--rc:${RAR[w.r].c}">${wIcon(w)}</div>`).join('')}</div>`:'<p class="small rline">持ち帰った武器はありません</p>';
   h+=statsHTML(true);
   modal(h,[{t:'拠点へ',key:'f',fn:()=>show('home')},kind==='suspend'?{t:'続きから潜る',key:' ',pri:true,fn:()=>startFloor(b.floor,{diff:'abyss',resume:1})}:{t:'もう一度潜る',key:' ',pri:true,fn:()=>startFloor(1,{diff:'abyss'})}])}
 function nextEnemy(){const ref=B,wasGl=B.enemy&&B.enemy.gl;setTimeout(()=>{if(B!==ref||B.over)return;if(B.abyss){const pr=S.prog.abyss;if(B.floor>pr.maxF)pr.maxF=B.floor;B.floor++;B.q.push(abyssEnemy(B.floor));abPersist(B.floor);save()}B.qi++;if(B.qi>=B.q.length)floorClear();
@@ -2387,12 +2402,12 @@ function floorClear(){
   commitRec();S.rec.clears++;if(!B.test&&B.diff==='hard'&&B.floor===100&&!S.nm&&!(S.rec.gk>0))S.glReq=1;const nmb=B.miss===0&&B.keys>0?rollWeapon(B.floor,floorInfo(B.floor).boss,true,true):null;if(nmb){B.drops.push(nmb);S.rec.nmc=(S.rec.nmc||0)+1}B.drops.forEach(w=>S.rec.dex[dexKey(w)]=1);playBgm(null);se('clear');B.drops.forEach(w=>{if(w.u&&!w.god&&!w.gw&&!S.rec.uniq.includes(w.u))S.rec.uniq.push(w.u)});
   kbGlitch(false);wordNoise(false);$('stage').classList.remove('gl');
   const f=B.floor,first=f>PG().maxF&&!B.test,xp=Math.floor(clearXP(f,B.diff)*(first?2:1)),before=B.rank0||rankInfo().r;
-  const gp=B.test?0:gpFloor(f,B.diff,first);S.gp=(S.gp||0)+gp;S.exp+=xp;if(first)PG().maxF=f;S.inv.push(...B.drops);if(!B.test)PG().lastF=Math.min(100,f+1);save();
+  const gp=B.test?0:gpFloor(f,B.diff,first);S.gp=(S.gp||0)+gp;const AS=B.test?{keep:B.drops,sold:[],gp:0}:autoSell(B.drops);S.exp+=xp;if(first)PG().maxF=f;S.inv.push(...AS.keep);if(!B.test)PG().lastF=Math.min(100,f+1);save();
   const after=rankInfo().r,so=slotsOpen(before),sn=slotsOpen(after);
   let h=`<h2 class="rh2">${f}層 クリア</h2>`;
   if(f===100)h+='<p class="rline"><b>百層を制覇しました。</b></p>';
   if(after>before)h+=`<div class="rankup"><b>RANK UP!</b>　ランク ${before} → ${after}${sn>so?`<div class="small">装備スロットが${sn}つに増えました</div>`:''}</div>`;
-  h+=`<p class="rline">経験値 <b class="rxp">+${fmt(xp)}</b>${first?'<span class="small">（初回ボーナス×2）</span>':''}${B.gxp?`<br>経験値 <b class="rxp">+${fmt(B.gxp)}</b><span class="glt">（繧ｨ繝ｩ繝ｼ）</span>`:''}${gp?`<br>ガチャポイント <b class="rgp">◆+${fmt(gp)}</b>`:''}</p>`;
+  h+=`<p class="rline">経験値 <b class="rxp">+${fmt(xp)}</b>${first?'<span class="small">（初回ボーナス×2）</span>':''}${B.gxp?`<br>経験値 <b class="rxp">+${fmt(B.gxp)}</b><span class="glt">（繧ｨ繝ｩ繝ｼ）</span>`:''}${gp?`<br>ガチャポイント <b class="rgp">◆+${fmt(gp)}</b>`:''}${AS.gp?`<br>自動売却 ${AS.sold.length}本 <b class="rgp">◆+${fmt(AS.gp)}</b>`:''}</p>`;
   const nd=B.drops.filter(w=>w!==nmb);if(nmb){h+=`<div class="nmbon" style="--rc:${RAR[nmb.r].c}"><div class="nmt">★ ノーミスボーナス ★</div>${dropHTML(nmb)}</div>`;setTimeout(()=>se('drop',Math.max(3,nmb.r)),350)}
   h+=nd.length?`<div class="mlab rlab">ドロップした武器（${nd.length}本）</div><div class="drops rdrops">${nd.slice().sort((a,b)=>b.r-a.r).map(dropHTML).join('')}</div>`:'<p class="small rline">武器のドロップはありませんでした</p>';
   h+=statsHTML(true);
@@ -2406,6 +2421,7 @@ function defeat(){if(B&&B.abyss)return abyssEnd('dead');if(!B||B.over)return;B.o
 }
 function unpause(){if(!B||B.over)return;B.paused=false;if(B.enemy&&!B.enemy.dead&&!B.alerting)B.active=true;const hs=B.held||[];B.held=[];hs.forEach(hitEnemy)}
 $('retreat').onclick=()=>{if(!B||B.alerting||B.over)return;const was=B.active;B.active=false;B.paused=true;
+  if(B.prac)return modal('<h2>練習を終わる？</h2><p>拠点に戻ります。</p>',[{t:'終わる',key:'f',fn:()=>{B.over=1;W=null;renderWord();commitRec();save();show('home')}},{t:'続ける',key:' ',pri:true,fn:unpause}]);
   if(B.abyss){if(B.ended||(B.enemy&&B.enemy.dead&&B.enemy.fin)){B.paused=false;if(was)B.active=true;return}return modal(`<h2>一時撤退する？</h2><p>ここまでの戦利品を受け取って中断します。次回の出撃で、今いる第${B.floor}層から続きを始められます。</p>`,[{t:'一時撤退',key:'f',fn:()=>abSuspend()},{t:'続ける',key:' ',pri:true,fn:unpause}])}
   modal('<h2>撤退する？</h2><p>この層で拾った武器は持ち帰れません。</p>',[{t:'撤退する',key:'f',fn:retreatResult},{t:'続ける',key:' ',pri:true,fn:unpause}])};
 function retreatResult(){
@@ -2632,10 +2648,10 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='2.2.11-beta';
+const VERSION='2.2.13-beta';
 function clogOpen(k){return k==='nm'?!!(S&&S.nm):k==='ab'?(typeof abOpen==='function'&&abOpen()):false}
 const CHANGELOG=[
- ['2.2.11-beta',['古いバージョンのままシリアルコードを入力すると、報酬が入らないのに受け取り済みになる不具合を修正（該当する人は、もう一度入力すると受け取れます）']],['2.2.10-beta',['ガチャのユニークの提供割合を3%に','ガチャの10連ボタンを廃止（1回と、最大100連の連続ガチャ）',{t:'ガチャの■■■■ユニークの提供割合を3%に',u:'ガチャのグリッチユニークの提供割合を3%に',k:'nm'},'シリアルコード限定の武器を追加','シリアルコードでガチャポイントも受け取れるように']],['2.2.9-beta',['ガチャで出た武器のカードを正方形に',{t:'■■■で手に入るガチャポイントを大幅に増加（深い層ほど多く、100層までで約1,000GP）',u:'アビスで手に入るガチャポイントを大幅に増加（深い層ほど多く、100層までで約1,000GP）',k:'ab'}]],['2.2.8-beta',['ガチャの提供割合を変更（ユニーク 1%）',{t:'ガチャの■■■■ユニークの提供割合を 1% に',u:'ガチャのグリッチユニークの提供割合を 1% に（ユニークとは別枠）',k:'nm'}]],['2.2.7-beta',['ガチャの結果画面に、ユニーク確定までの残り回数を表示（ユニークが出た場合はリセットされたことも表示）']],['2.2.6-beta',['ガチャのユニーク確定（天井）を300回に変更']],['2.2.5-beta',['ガチャを追加（1回・10連・最大100連）。層をクリアするとガチャポイントがもらえます','ガチャは10連ごとにレア以上が1つ確定、150回以内にユニーク確定']],['2.2.4-beta',['各層に出現する雑魚モンスターを固定に（出現する順番はランダム）。狙ったモンスターのいる層を選んで周回できるように']],['2.2.3-beta',[{t:'■■■■武器を手に入れたとき、対応する通常のユニークまで図鑑に登録されていた不具合を修正',u:'グリッチ武器を手に入れたとき、対応する通常のユニークまで図鑑に登録されていた不具合を修正',k:'nm'}]],['2.2.2-beta',['シリアルコード入力を使えるように']],['2.2.1-beta',['シリアルコード入力を追加（配布されたコードで報酬の武器を受け取れます）']],['2.2.0-beta',['拠点画面の「装備・強化・合成」ボタンを、装備中の武器のすぐ下に移動（その下にステータス）',{t:'ハード100層で、まだ■■■■モンスターを倒したことがない場合は、必ず■■■■モンスターが出現するように',u:'ハード100層で、まだグリッチモンスターを倒したことがない場合は、必ずグリッチモンスターが出現するように',k:'nm'},{t:'■■■■モンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',u:'グリッチモンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',k:'nm'},{t:'■■■■モードへのヒントのあと、切り替えの場所が分かりやすく光るように',u:'ナイトメアモードへのヒントのあと、切り替えの場所（タイトル下の文字）が分かりやすく光るように',k:'nm'}]]
+ ['2.2.13-beta',['練習モードを追加（画面下の「あそびかた」の隣）。無敵のダミー相手に、2〜5文字の言葉でホームポジションをじっくり練習できるように','ガチャ画面に専用BGMを追加']],['2.2.12-beta',['「売却」を追加。武器を売ってガチャポイント（GP）に変えられるように（レアリティが高いほど高く売れる）','自動売却を追加。チェックしたレアリティの武器は、リザルト画面で自動的にGPに変わるように']],['2.2.11-beta',['古いバージョンのままシリアルコードを入力すると、報酬が入らないのに受け取り済みになる不具合を修正（該当する人は、もう一度入力すると受け取れます）']],['2.2.10-beta',['ガチャのユニークの提供割合を3%に','ガチャの10連ボタンを廃止（1回と、最大100連の連続ガチャ）',{t:'ガチャの■■■■ユニークの提供割合を3%に',u:'ガチャのグリッチユニークの提供割合を3%に',k:'nm'},'シリアルコード限定の武器を追加','シリアルコードでガチャポイントも受け取れるように']],['2.2.9-beta',['ガチャで出た武器のカードを正方形に',{t:'■■■で手に入るガチャポイントを大幅に増加（深い層ほど多く、100層までで約1,000GP）',u:'アビスで手に入るガチャポイントを大幅に増加（深い層ほど多く、100層までで約1,000GP）',k:'ab'}]],['2.2.8-beta',['ガチャの提供割合を変更（ユニーク 1%）',{t:'ガチャの■■■■ユニークの提供割合を 1% に',u:'ガチャのグリッチユニークの提供割合を 1% に（ユニークとは別枠）',k:'nm'}]],['2.2.7-beta',['ガチャの結果画面に、ユニーク確定までの残り回数を表示（ユニークが出た場合はリセットされたことも表示）']],['2.2.6-beta',['ガチャのユニーク確定（天井）を300回に変更']],['2.2.5-beta',['ガチャを追加（1回・10連・最大100連）。層をクリアするとガチャポイントがもらえます','ガチャは10連ごとにレア以上が1つ確定、150回以内にユニーク確定']],['2.2.4-beta',['各層に出現する雑魚モンスターを固定に（出現する順番はランダム）。狙ったモンスターのいる層を選んで周回できるように']],['2.2.3-beta',[{t:'■■■■武器を手に入れたとき、対応する通常のユニークまで図鑑に登録されていた不具合を修正',u:'グリッチ武器を手に入れたとき、対応する通常のユニークまで図鑑に登録されていた不具合を修正',k:'nm'}]],['2.2.2-beta',['シリアルコード入力を使えるように']],['2.2.1-beta',['シリアルコード入力を追加（配布されたコードで報酬の武器を受け取れます）']],['2.2.0-beta',['拠点画面の「装備・強化・合成」ボタンを、装備中の武器のすぐ下に移動（その下にステータス）',{t:'ハード100層で、まだ■■■■モンスターを倒したことがない場合は、必ず■■■■モンスターが出現するように',u:'ハード100層で、まだグリッチモンスターを倒したことがない場合は、必ずグリッチモンスターが出現するように',k:'nm'},{t:'■■■■モンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',u:'グリッチモンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',k:'nm'},{t:'■■■■モードへのヒントのあと、切り替えの場所が分かりやすく光るように',u:'ナイトメアモードへのヒントのあと、切り替えの場所（タイトル下の文字）が分かりやすく光るように',k:'nm'}]]
 ];
 const DEX=[];
 CAT.forEach(e=>DEX.push({key:'c:'+e.c,t:e.t,r:e.r,cat:e}));
@@ -2678,6 +2694,11 @@ $('mbox').addEventListener('click',async e=>{const b=e.target.closest('[data-srl
     catch(err){m.textContent=err.message||'受け取れませんでした';b.disabled=false}}});
 $('mbox').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='srlIn'){const b=$('mbox').querySelector('[data-srl=go]');if(b)b.click()}});
 $('srlBtn').onclick=()=>{srlRepair();showSerial()};$('srlBtn').hidden=!srlOn();
+/* ===== 売却 ===== */
+const SELLGP=[1,2,5,12,30,100,300];
+function sellGP(w){return SELLGP[Math.min(6,w.r)]||1}
+function asOn(w){const a=S.as||{};return !!(a.r&&a.r[w.r]&&w.r<=5&&!w.god&&!w.o&&(!w.g||a.g))}
+function autoSell(drops){const keep=[],sold=[];let gp=0;drops.forEach(w=>{if(asOn(w)){w._sold=sellGP(w);gp+=w._sold;sold.push(w)}else keep.push(w)});if(gp)S.gp=(S.gp||0)+gp;return{keep,sold,gp}}
 /* ===== ガチャ ===== */
 const GC={cost:50,rates:[38,28,18,10,4.5,3],gl:3,pity:300,col:['#ffffff','#3dff6e','#3fa9ff','#c77dff','#ffd43b','#ff3b3b','#ff2a6d'],nm:['コモン','アンコモン','レア','エピック','レジェンダリー','ユニーク','グリッチ']};
 const GDM={easy:.6,normal:1,hard:1.6,nightmare:2.2};
@@ -2729,8 +2750,9 @@ const RAINBOW=['#ff3b3b','#ffd43b','#3dff6e','#3fa9ff','#c77dff','#ffffff'];
 const GA={busy:false,skip:false,last:0};
 function gSleep(ms){return new Promise(r=>{const t0=performance.now();(function w(){if(GA.skip||performance.now()-t0>=ms)return r();requestAnimationFrame(w)})()})}
 function gMax(){return Math.min(100,Math.floor((S.gp||0)/GC.cost))}
-function openGacha(){$('gacha').classList.add('on');gfxLoop();gLobby()}
-function closeGacha(){if(GA.busy)return;$('gacha').classList.remove('on');GFX.run=false;GFX.p=[];renderHome()}
+$('pracBtn').onclick=()=>{se('ui');startPractice()};
+function openGacha(){$('gacha').classList.add('on');gfxLoop();gLobby();playBgm('gacha')}
+function closeGacha(){if(GA.busy)return;$('gacha').classList.remove('on');GFX.run=false;GFX.p=[];renderHome();playBgm(homeBgm())}
 function gHead(){$('gGP').innerHTML=`<b>◆ ${fmt(S.gp||0)}</b> GP`}
 function gLobby(){gHead();const m=gMax(),G=S.gacha||{pity:0},{r,gl}=gRates();
   $('gMain').innerHTML=`<div class="glob"><div class="gorb idle" style="--oc:#7a5cff"><i></i></div>
@@ -3034,8 +3056,8 @@ $('armBack').onclick=()=>show('home');
 
 function renderTop(){
   const open=slotsOpen(rankInfo().r);if(A.slot>=open)A.slot=0;
-  $('atitle').textContent={equip:'装備',enh:'強化',syn:'合成',evo:'デコード'}[A.tab];
-  $('aSub').textContent={equip:'クリックでメニュー／長押しか横に引いてスロットへドラッグ',enh:'武器を素材にしてレベルを上げる',syn:'同じレア度の武器と追加能力を組み替える',evo:'レベル最大のグリッチユニークと、対応する通常のユニーク（レベル最大）を組み合わせて真の力を引き出す'}[A.tab];
+  $('atitle').textContent={equip:'装備',enh:'強化',syn:'合成',evo:'デコード',sell:'売却'}[A.tab];
+  $('aSub').textContent={sell:'武器を売ってガチャポイント（GP）に変える',equip:'クリックでメニュー／長押しか横に引いてスロットへドラッグ',enh:'武器を素材にしてレベルを上げる',syn:'同じレア度の武器と追加能力を組み替える',evo:'レベル最大のグリッチユニークと、対応する通常のユニーク（レベル最大）を組み合わせて真の力を引き出す'}[A.tab];
   const sl=$('slots');sl.style.display=A.tab==='equip'?'':'none';
   if(A.tab==='equip')sl.innerHTML=SLOT_R.map((v,i)=>{
     if(i>=open)return `<div class="slot lock">🔒<br>ランク${v}</div>`;
@@ -3057,6 +3079,13 @@ function renderTop(){
       act=`<button class="btn pri" data-a="enh" ${mats.length&&t.lv<cap?'':'disabled'}>${t.g?'圧縮する':'強化する'}</button><button class="btn danger" data-a="reset">対象を選び直す</button><button class="btn" data-a="bulk0">白を一括選択</button><button class="btn" data-a="bulk1">緑以下を一括選択</button>`;
     }else L='<div class="tag">強化対象</div><div class="empty">下の一覧から武器を選んでください</div>';
     R=hov&&hov.id!==A.target?paneHTML(hov,'カーソル中の武器',undefined,`<div class="prev">素材にすると +${matExp(hov)}EXP</div>`):'<div class="tag">素材</div><div class="empty">'+(t?'素材にする武器をタップ':'—')+'</div>';
+  }else if(A.tab==='sell'){
+    const sel=[...A.mats].map(byId).filter(Boolean),tot=sel.reduce((a,w)=>a+sellGP(w),0),cnt=[0,0,0,0,0,0,0];sel.forEach(w=>cnt[Math.min(6,w.r)]++);
+    L=`<div class="tag">売却する武器</div><div class="sellsum"><div class="sbig">${sel.length}本 → <b class="rgp">◆${fmt(tot)} GP</b></div><div class="small">${cnt.map((v,i)=>v?`<span style="color:${RAR[i].c}">${RAR[i].n}×${v}</span>`:'').filter(Boolean).join('　')||'一覧から売却する武器をタップして選んでください'}</div><div class="small sellp">買取額：${RAR.map((r,i)=>`<span style="color:${r.c}">${r.n} ◆${SELLGP[i]}</span>`).join('　')}</div><div class="small">所持 ◆${fmt(S.gp||0)} GP</div></div>`;
+    R=hov?paneHTML(hov,'カーソル中の武器',undefined,`<div class="prev">売却すると <b class="rgp">◆${sellGP(hov)} GP</b></div>`):'<div class="tag">詳細</div><div class="empty">武器にカーソルを合わせると詳細が出ます</div>';
+    const as=S.as||{r:[]};
+    ex=`<div class="asell"><div class="mlab">自動売却<span class="small">（チェックしたレアリティの武器は、リザルト画面で自動的にGPに変わります）</span></div><div class="asrow">${RAR.slice(0,6).map((r,i)=>`<label style="color:${r.c}"><input type="checkbox" data-as="${i}" ${as.r&&as.r[i]?'checked':''}>${r.n}</label>`).join('')}<label class="asg"><input type="checkbox" data-as="g" ${as.g?'checked':''}>経験値武器も対象にする</label></div></div>`;
+    act=`<button class="btn pri" data-a="sell" ${sel.length?'':'disabled'}>売却する（◆${fmt(tot)}）</button><button class="btn danger" data-a="reset">選択をすべて外す</button><button class="btn" data-a="sb0">白を一括選択</button><button class="btn" data-a="sb1">緑以下を一括選択</button><button class="btn" data-a="sb2">青以下を一括選択</button>`;
   }else if(A.tab==='evo'){
     const t=byId(A.target),m=byId(A.evoMat);
     if(t){const nx=evoNext(t),gd=isGodBase(t),R0=RAR[t.r],R1=RAR[nx?nx.r:t.r],maxed=t.lv>=R0.cap,canTop=!!nx;
@@ -3096,7 +3125,8 @@ function cardState(w,t){
   if(A.tab==='enh'&&t&&w.id!==t.id&&isEq(w.id))cls='dim';
   if(A.tab==='evo'&&t&&!A.evoMat&&w.id!==t.id)cls=isGodBase(t)&&!w.gw&&!w.god&&w.r===5&&w.u===t.u?'hl':'dim';
   if(A.tab==='evo'&&!t&&!evoNext(w))cls='dim';
-  const ck=(A.tab==='enh'&&A.mats.has(w.id))||(A.tab==='syn'&&A.synMat===w.id)||(A.tab==='evo'&&A.evoMat===w.id),eq=isEq(w.id);
+  if(A.tab==='sell'&&(isEq(w.id)||w.fav))cls='dim';
+  const ck=((A.tab==='enh'||A.tab==='sell')&&A.mats.has(w.id))||(A.tab==='syn'&&A.synMat===w.id)||(A.tab==='evo'&&A.evoMat===w.id),eq=isEq(w.id);
   return {cls,k:[cls,w.lv,eq?1:0,w.fav?1:0,ck?1:0,w.r,w.gw?1:0,w.god?1:0,w.name].join('|'),eq,ck}}
 function cardInner(w,st){return `${wIcon(w)}<span class="lv">Lv${w.lv}</span>${st.eq?'<span class="eb">E</span>':''}${w.fav?'<span class="fvb">★</span>':''}${st.ck?'<span class="ck">✓</span>':''}`}
 function invPageSize(){const wr=$('invwrap'),box=$('inv');const H=wr.clientHeight,W=box.clientWidth;if(!H||!W)return 60;const cs=getComputedStyle(box),cols=Math.max(1,cs.gridTemplateColumns.split(' ').length),gap=parseFloat(cs.rowGap)||8,cw=(W-gap*(cols-1))/cols;const rows=Math.max(2,Math.floor((H-10+gap)/(cw+gap)));return cols*rows}
@@ -3119,6 +3149,7 @@ function renderInv(){
 }
 $('invPager').onclick=e=>{const b=e.target.closest('[data-pg]');if(!b||b.disabled)return;A.page=+b.dataset.pg;$('invwrap').scrollTop=0;renderInv()};
 {let rt=0;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(screen==='armory'){$('inv')._sig=null;renderInv()}},150)})}
+$('extra').addEventListener('change',e=>{const c=e.target.closest('[data-as]');if(!c)return;S.as=S.as||{r:[false,false,false,false,false,false],g:false};if(c.dataset.as==='g')S.as.g=c.checked;else S.as.r[+c.dataset.as]=c.checked;save()});
 function renderArmory(){applyDec();const gc=$('fRar').querySelector('[data-r="6"]');if(gc)gc.hidden=!S.nm;renderTop();renderInv()}
 
 function equipTo(id,i){const old=S.eq.indexOf(id),prev=S.eq[i];if(old===i)return;if(old>=0)S.eq[old]=prev||null;S.eq[i]=id;A.slot=i;save();toast(`スロット${i+1}に装備しました`)}
@@ -3144,6 +3175,7 @@ function openCtx(id,x,y,detail){armTipOff();
 function tapCard(id,x,y,pt){
   if(A.tab==='equip'){A.sel=id;renderArmory();openCtx(id,x,y,pt&&pt!=='mouse');return}
   const w=byId(id);if(!w)return;
+  if(A.tab==='sell'){if(A.mats.has(id))A.mats.delete(id);else if(isEq(id))toast('装備中の武器は売却できません');else if(w.fav)toast('お気に入りの武器は売却できません（解除すると売れます）');else A.mats.add(id);renderArmory();return}
   if(A.tab==='enh'){
     if(id===A.target){A.target=null;A.mats.clear()}
     else if(!A.target){A.target=id;A.mats.clear()}
@@ -3189,7 +3221,11 @@ $('extra').onclick=e=>{const b=e.target.closest('[data-pick]');if(!b)return;cons
   else if(A.pick.size<n)A.pick.add(k);else toast(`選べるのは${n}つまでです`);renderTop()};
 $('actions').onclick=e=>{
   const b=e.target.closest('[data-a]');if(!b||b.disabled)return;const a=b.dataset.a;
-  if(a==='bulk0'||a==='bulk1'){const mr=a==='bulk0'?0:1;invList().forEach(w=>{if(w.id!==A.target&&!isEq(w.id)&&!w.fav&&w.r<=mr)A.mats.add(w.id)})}
+  if(a==='sb0'||a==='sb1'||a==='sb2'){const mr=+a.slice(2);invList().forEach(w=>{if(!isEq(w.id)&&!w.fav&&!w.o&&w.r<=mr)A.mats.add(w.id)})}
+  else if(a==='sell'){const sel=[...A.mats].map(byId).filter(w=>w&&!isEq(w.id)&&!w.fav),tot=sel.reduce((s,w)=>s+sellGP(w),0),hi=sel.filter(w=>w.r>=4).length;if(!sel.length)return;
+    const go=()=>{const ids=new Set(sel.map(w=>w.id));S.inv=S.inv.filter(w=>!ids.has(w.id));S.gp=(S.gp||0)+tot;A.mats.clear();save();se('drop',2);toast(`${sel.length}本を売却しました　◆+${fmt(tot)} GP`);renderArmory()};
+    if(hi||sel.length>=20)return modal(`<h2>売却しますか？</h2><p>${sel.length}本を売却して <b class="rgp">◆${fmt(tot)} GP</b> を受け取ります。</p>${hi?`<p class="lostp">レジェンダリー以上が ${hi}本 含まれています。売却すると元に戻せません。</p>`:''}`,[{t:'やめる',key:'f'},{t:'売却する',key:' ',pri:true,fn:go}]);go();return}
+  else if(a==='bulk0'||a==='bulk1'){const mr=a==='bulk0'?0:1;invList().forEach(w=>{if(w.id!==A.target&&!isEq(w.id)&&!w.fav&&w.r<=mr)A.mats.add(w.id)})}
   else if(a==='enh'){
     const t=byId(A.target),mats=[...A.mats].map(byId).filter(Boolean),g=mats.reduce((s,m)=>s+matExp(m),0),from=t.lv,cap=RAR[t.r].cap;
     if(!b.dataset.ok&&t.lv<cap&&g>capRemain(t)){const lb=t.g?'圧縮':'強化';modal(`<h2>${lb}しますか？</h2><p>上限を超えた ${fmt(g-capRemain(t))}EXP は失われます。</p>`,[{t:'やめる',key:'f'},{t:lb+'する',key:' ',pri:true,fn:()=>{b.dataset.ok=1;b.click()}}]);return}
