@@ -840,7 +840,11 @@ body.abui .big.go{height:68px;border-color:#7a2bd6;color:#ecdcff;font-size:22px;
 .gcard.r3 .gface{box-shadow:0 0 18px var(--rc),inset 0 0 18px var(--rc)}
 .gcard.r4 .gface,.gcard.r5 .gface,.gcard.r6 .gface{box-shadow:0 0 26px var(--rc),0 0 52px var(--rc),inset 0 0 22px var(--rc);animation:gpulse 1s ease-in-out infinite}
 .gcard.r5 .gface{animation:gpulse 1s ease-in-out infinite,ghue 2s linear infinite}
-.gcard.r6 .gface{animation:gglt .3s steps(2) infinite}
+.gcard.r6 .gface{animation:gglf .3s steps(2) infinite}
+@keyframes gglf{0%{transform:rotateY(180deg) translate(6px,0) skewX(8deg);filter:invert(1) hue-rotate(90deg)}50%{transform:rotateY(180deg) translate(-8px,3px) skewX(-12deg);filter:none}100%{transform:rotateY(180deg) translate(2px,-5px);filter:contrast(3)}}
+.ggrid.res .gin{transform:none!important;transform-style:flat;transition:none}.ggrid.res .gback{display:none}.ggrid.res .gface{transform:none;backface-visibility:visible}
+.ggrid.res .gcard.r6 .gface{animation:gglr .3s steps(2) infinite}
+@keyframes gglr{0%{transform:translate(2px,0) skewX(6deg);filter:invert(1) hue-rotate(90deg)}50%{transform:translate(-2px,1px) skewX(-8deg);filter:none}100%{transform:translate(1px,-2px);filter:contrast(3)}}
 .gcard.hot{z-index:2}
 @keyframes gpulse{50%{filter:brightness(1.5)}}
 .gnew{position:absolute;top:2px;right:2px;z-index:2;background:#ff3b3b;color:#fff;font-size:10px;padding:1px 4px;font-weight:bold;letter-spacing:.05em}
@@ -1439,7 +1443,7 @@ function specKey(w){return w.o?'o:'+w.o:w.god?'d:'+w.u:w.gw?'x:'+(w.u?'u:'+w.u:w
 const mix=(a,b,k)=>a.map((x,i)=>Math.round(x*(1-k)+b[i]*k));
 function wSprite(w){
   if(!SPEC)buildSpecs();
-  const key=specKey(w),ck=key+':'+w.r;if(SPR[ck])return SPR[ck];if(key==='o:origin'&&!SPEC[key]){if(!PALS.origin)PALS.origin={m:[[255,255,240],[150,220,255],[30,60,120]],g:[255,215,90]};SPEC[key]={t:0,r:6,pal:'origin',v:3,g:2,seed:hashS('the-origin')}}if(key==='d:abyss'&&!SPEC[key]){if(!PALS.void)PALS.void={m:[[214,170,255],[104,40,170],[24,6,44]],g:[170,70,255]};SPEC[key]={t:LORD.ut,r:6,pal:'void',v:3,g:2,seed:hashS('void-requiem')}}
+  const key=specKey(w),ck=key+':'+w.r;if(SPR[ck])return SPR[ck];if(key==='o:origin'&&!SPEC[key]){if(!PALS.origin)PALS.origin={m:[[255,255,240],[150,220,255],[30,60,120]],g:[255,215,90]};SPEC[key]={t:0,r:6,pal:'origin',v:3,g:2,seed:hashS('the-origin')}}if(key==='o:wakaba'&&!SPEC[key]){if(!PALS.wakaba)PALS.wakaba={m:[[214,255,170],[96,196,72],[26,84,34]],g:[255,226,90]};SPEC[key]={t:6,r:4,pal:'wakaba',v:1,g:1,seed:hashS('wakaba-shield')}}if(key==='d:abyss'&&!SPEC[key]){if(!PALS.void)PALS.void={m:[[214,170,255],[104,40,170],[24,6,44]],g:[170,70,255]};SPEC[key]={t:LORD.ut,r:6,pal:'void',v:3,g:2,seed:hashS('void-requiem')}}
   let sp=SPEC[key];if(!sp&&key.startsWith('d:')){const b=SPEC['u:'+key.slice(2)];if(b){const pk='dv_'+b.pal,bp=PALS[b.pal]||PALS.gold;if(!PALS[pk])PALS[pk]={m:bp.m.map((c,i)=>mix(c,PALS.divine.m[i],.45)),g:bp.g};sp=SPEC[key]=Object.assign({},b,{pal:pk,seed:b.seed+7,gl:false})}}if(!sp&&key.startsWith('x:')){const b=SPEC[key.slice(2)];if(b)sp=SPEC[key]=Object.assign({},b,{gl:.65})}if(!sp){const h=hashS(key);sp={t:w.t,r:w.r,pal:['fire','ice','thunder','dark','holy','iron'][w.el??5],v:h%4,g:(h>>>3)%4,seed:h}}
   const t=w.t,r=w.r,G=[16,20,24,32,40,48,56][r],R=mulb(sp.seed),P=PALS[sp.pal]||PALS.iron,M=P.m,GEM=P.g,V=sp.v,Gs=sp.g,uq=r>=5;
   const GU=sp.pal==='gold'?PALS.shadow.m:r>=4?GOLD:r>=2?IRON:BRONZE,GR=uq?[[60,22,34],[22,6,14]]:GRIPS[Math.floor(R()*GRIPS.length)],gem=r>=2,EDGE=mix(M[0],GEM,.55);
@@ -1661,10 +1665,13 @@ const UNAME={crab:'甲殻の大盾',mgolem:'機神の大盾',snail:'螺旋の大
 ALLE.forEach(d=>{if(UTYPE[d.id]!=null)d.ut=UTYPE[d.id];if(UNAME[d.id])d.un=UNAME[d.id];
   const a=USPEC[d.id],k='x_'+d.id;SK[k]={n:USKN[d.id],uq:true,tr:a.tr,ct:a.ct,fx:a.fx.map(f=>Object.assign({},f))};d.us=k});
 SK.x_origin={n:'始まりの誓い',uq:true,tr:{type:'every',n:3},ct:10,fx:[{t:'defbuf',v:20,dur:6},{t:'multi',v:1.11,n:12}]};
+SK.x_wakaba={n:'若葉の守り',uq:true,tr:{type:'every',n:4},ct:10,fx:[{t:'shield',v:10},{t:'heal',v:6}]};
 const ORIGIN={name:'餞別の剣「ジ・オリジン」',t:0,sk:'x_origin'};
-function makeOrigin(){const w=makeW({t:ORIGIN.t,r:6,f:1,name:ORIGIN.name,sk:ORIGIN.sk});w.o='origin';w.god=1;return w}
+const OWPN={origin:{name:ORIGIN.name,t:0,r:6,sk:'x_origin',god:1},wakaba:{name:'若葉印の盾',t:6,r:4,sk:'x_wakaba',god:0}};
+function makeOW(k){const o=OWPN[k];const w=makeW({t:o.t,r:o.r,f:1,name:o.name,sk:o.sk});w.o=k;if(o.god)w.god=1;return w}
+function makeOrigin(){return makeOW('origin')}
 function migrateW(w){
-  if(w.o){w.sk=ORIGIN.sk;w.name=ORIGIN.name;w.t=ORIGIN.t;w.r=6;w.god=1;w.u=null;w.c=null;return}
+  if(w.o){const o=OWPN[w.o]||OWPN.origin;w.sk=o.sk;w.name=o.name;w.t=o.t;w.r=o.r;if(o.god)w.god=1;else delete w.god;w.u=null;w.c=null;return}
   if(w.gw&&!w.u){const e=EXPW[Math.min(4,w.r)];w.g=e.id;w.gw=0;w.c=null}
   if(w.g){if(GMAP[w.g])w.g=GMAP[w.g];const e=EXPI[w.g];if(e){w.r=e.r;w.t=e.t;w.name=e.wn;w.lv=Math.min(w.lv,RAR[e.r].cap)}w.aff=[];w.sk='g_'+w.g;return}
   {const best={};w.aff.forEach(a=>{if(!best[a.k]||a.v>best[a.k].v)best[a.k]=a});w.aff=Object.values(best);
@@ -2648,10 +2655,10 @@ $('mbox').addEventListener('click',async e=>{
 
 
 /* ===== item dex ===== */
-const VERSION='2.2.13-beta';
+const VERSION='2.2.14-beta';
 function clogOpen(k){return k==='nm'?!!(S&&S.nm):k==='ab'?(typeof abOpen==='function'&&abOpen()):false}
 const CHANGELOG=[
- ['2.2.13-beta',['練習モードを追加（画面下の「あそびかた」の隣）。無敵のダミー相手に、2〜5文字の言葉でホームポジションをじっくり練習できるように','ガチャ画面に専用BGMを追加']],['2.2.12-beta',['「売却」を追加。武器を売ってガチャポイント（GP）に変えられるように（レアリティが高いほど高く売れる）','自動売却を追加。チェックしたレアリティの武器は、リザルト画面で自動的にGPに変わるように']],['2.2.11-beta',['古いバージョンのままシリアルコードを入力すると、報酬が入らないのに受け取り済みになる不具合を修正（該当する人は、もう一度入力すると受け取れます）']],['2.2.10-beta',['ガチャのユニークの提供割合を3%に','ガチャの10連ボタンを廃止（1回と、最大100連の連続ガチャ）',{t:'ガチャの■■■■ユニークの提供割合を3%に',u:'ガチャのグリッチユニークの提供割合を3%に',k:'nm'},'シリアルコード限定の武器を追加','シリアルコードでガチャポイントも受け取れるように']],['2.2.9-beta',['ガチャで出た武器のカードを正方形に',{t:'■■■で手に入るガチャポイントを大幅に増加（深い層ほど多く、100層までで約1,000GP）',u:'アビスで手に入るガチャポイントを大幅に増加（深い層ほど多く、100層までで約1,000GP）',k:'ab'}]],['2.2.8-beta',['ガチャの提供割合を変更（ユニーク 1%）',{t:'ガチャの■■■■ユニークの提供割合を 1% に',u:'ガチャのグリッチユニークの提供割合を 1% に（ユニークとは別枠）',k:'nm'}]],['2.2.7-beta',['ガチャの結果画面に、ユニーク確定までの残り回数を表示（ユニークが出た場合はリセットされたことも表示）']],['2.2.6-beta',['ガチャのユニーク確定（天井）を300回に変更']],['2.2.5-beta',['ガチャを追加（1回・10連・最大100連）。層をクリアするとガチャポイントがもらえます','ガチャは10連ごとにレア以上が1つ確定、150回以内にユニーク確定']],['2.2.4-beta',['各層に出現する雑魚モンスターを固定に（出現する順番はランダム）。狙ったモンスターのいる層を選んで周回できるように']],['2.2.3-beta',[{t:'■■■■武器を手に入れたとき、対応する通常のユニークまで図鑑に登録されていた不具合を修正',u:'グリッチ武器を手に入れたとき、対応する通常のユニークまで図鑑に登録されていた不具合を修正',k:'nm'}]],['2.2.2-beta',['シリアルコード入力を使えるように']],['2.2.1-beta',['シリアルコード入力を追加（配布されたコードで報酬の武器を受け取れます）']],['2.2.0-beta',['拠点画面の「装備・強化・合成」ボタンを、装備中の武器のすぐ下に移動（その下にステータス）',{t:'ハード100層で、まだ■■■■モンスターを倒したことがない場合は、必ず■■■■モンスターが出現するように',u:'ハード100層で、まだグリッチモンスターを倒したことがない場合は、必ずグリッチモンスターが出現するように',k:'nm'},{t:'■■■■モンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',u:'グリッチモンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',k:'nm'},{t:'■■■■モードへのヒントのあと、切り替えの場所が分かりやすく光るように',u:'ナイトメアモードへのヒントのあと、切り替えの場所（タイトル下の文字）が分かりやすく光るように',k:'nm'}]]
+ ['2.2.14-beta',['ガチャの結果画面で、一部の武器アイコンが表示されないことがある不具合を修正','シリアルコード配布用の新しい武器を追加']],['2.2.13-beta',['練習モードを追加（画面下の「あそびかた」の隣）。無敵のダミー相手に、2〜5文字の言葉でホームポジションをじっくり練習できるように','ガチャ画面に専用BGMを追加']],['2.2.12-beta',['「売却」を追加。武器を売ってガチャポイント（GP）に変えられるように（レアリティが高いほど高く売れる）','自動売却を追加。チェックしたレアリティの武器は、リザルト画面で自動的にGPに変わるように']],['2.2.11-beta',['古いバージョンのままシリアルコードを入力すると、報酬が入らないのに受け取り済みになる不具合を修正（該当する人は、もう一度入力すると受け取れます）']],['2.2.10-beta',['ガチャのユニークの提供割合を3%に','ガチャの10連ボタンを廃止（1回と、最大100連の連続ガチャ）',{t:'ガチャの■■■■ユニークの提供割合を3%に',u:'ガチャのグリッチユニークの提供割合を3%に',k:'nm'},'シリアルコード限定の武器を追加','シリアルコードでガチャポイントも受け取れるように']],['2.2.9-beta',['ガチャで出た武器のカードを正方形に',{t:'■■■で手に入るガチャポイントを大幅に増加（深い層ほど多く、100層までで約1,000GP）',u:'アビスで手に入るガチャポイントを大幅に増加（深い層ほど多く、100層までで約1,000GP）',k:'ab'}]],['2.2.8-beta',['ガチャの提供割合を変更（ユニーク 1%）',{t:'ガチャの■■■■ユニークの提供割合を 1% に',u:'ガチャのグリッチユニークの提供割合を 1% に（ユニークとは別枠）',k:'nm'}]],['2.2.7-beta',['ガチャの結果画面に、ユニーク確定までの残り回数を表示（ユニークが出た場合はリセットされたことも表示）']],['2.2.6-beta',['ガチャのユニーク確定（天井）を300回に変更']],['2.2.5-beta',['ガチャを追加（1回・10連・最大100連）。層をクリアするとガチャポイントがもらえます','ガチャは10連ごとにレア以上が1つ確定、150回以内にユニーク確定']],['2.2.4-beta',['各層に出現する雑魚モンスターを固定に（出現する順番はランダム）。狙ったモンスターのいる層を選んで周回できるように']],['2.2.3-beta',[{t:'■■■■武器を手に入れたとき、対応する通常のユニークまで図鑑に登録されていた不具合を修正',u:'グリッチ武器を手に入れたとき、対応する通常のユニークまで図鑑に登録されていた不具合を修正',k:'nm'}]],['2.2.2-beta',['シリアルコード入力を使えるように']],['2.2.1-beta',['シリアルコード入力を追加（配布されたコードで報酬の武器を受け取れます）']],['2.2.0-beta',['拠点画面の「装備・強化・合成」ボタンを、装備中の武器のすぐ下に移動（その下にステータス）',{t:'ハード100層で、まだ■■■■モンスターを倒したことがない場合は、必ず■■■■モンスターが出現するように',u:'ハード100層で、まだグリッチモンスターを倒したことがない場合は、必ずグリッチモンスターが出現するように',k:'nm'},{t:'■■■■モンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',u:'グリッチモンスターを倒せないままハード100層をクリアした場合は、倒すまでどの難易度・どの層でも必ず出現するように',k:'nm'},{t:'■■■■モードへのヒントのあと、切り替えの場所が分かりやすく光るように',u:'ナイトメアモードへのヒントのあと、切り替えの場所（タイトル下の文字）が分かりやすく光るように',k:'nm'}]]
 ];
 const DEX=[];
 CAT.forEach(e=>DEX.push({key:'c:'+e.c,t:e.t,r:e.r,cat:e}));
@@ -2662,13 +2669,13 @@ DEX.push({key:'d:abyss',t:LORD.ut,r:6,u:'abyss',d:LORD,boss:true,god:true,nmh:tr
 EXPW.forEach(e=>DEX.push({key:'g:'+e.id,t:e.t,r:e.r,g:e.id,d:e.src,ex:e,boss:!!(e.src&&e.src.boss),hid:true}));
 DEX.forEach((e,i)=>{e.w={id:700000+i,t:e.t,r:e.r,f:1,lv:1,xp:0,tx:0,el:e.cat?e.cat.el:5,u:e.u||null,c:e.cat?e.cat.c:null,g:e.g||null,gw:e.gw?1:0,god:e.god?1:0,aff:[],sk:e.g?'g_'+e.g:e.u?e.d.us:e.cat.sk,name:e.g?e.ex.wn:e.god?godName(e.u):e.u?e.d.un:e.cat.name};if(e.gw)e.w.name=garble(e.w.name,.3)});
 /* ===== serial code (Firestore) ===== */
-const SERIAL_FB={apiKey:FB.key,projectId:FB.project},SRL_LV=2;
+const SERIAL_FB={apiKey:FB.key,projectId:FB.project},SRL_LV=3;
 /* 古い版で「受け取り済み」だけ記録され、報酬が入らなかった配布を受け取り直せるようにする */
 function srlRepair(){if(!S.srl||!S.srl.length)return;const ok=S.srlOk||{},broken={origin_gift_2026:()=>!S.inv.some(w=>w.o==='origin')&&!(S.eq||[]).some(id=>{const w=S.inv.find(x=>x.id===id);return w&&w.o})};S.srl=S.srl.filter(c=>!(broken[c]&&!ok[c]&&broken[c]()))}
 function srlOn(){return !!(SERIAL_FB.apiKey&&SERIAL_FB.projectId)}
 function srlNorm(c){return (c||'').toUpperCase().replace(/[^0-9A-Z]/g,'')}
 async function srlHash(c){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('TDSERIAL:'+srlNorm(c)));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
-function wFromKey(k,o){o=o||{};if(k==='o:origin'){const w=makeOrigin();if(o.lv>1)w.lv=Math.min(RAR[6].cap,Math.floor(o.lv));if(o.aff==='max')w.aff.forEach(a=>a.v=AFFD[a.k].max);return w}const en=DEX.find(x=>x.key===k);if(!en)return null;let w;
+function wFromKey(k,o){o=o||{};if(k.startsWith('o:')&&OWPN[k.slice(2)]){const w=makeOW(k.slice(2));if(o.lv==='max')w.lv=RAR[w.r].cap;else if(o.lv>1)w.lv=Math.min(RAR[w.r].cap,Math.floor(o.lv));if(o.aff==='max')w.aff.forEach(a=>a.v=AFFD[a.k].max);return w}const en=DEX.find(x=>x.key===k);if(!en)return null;let w;
   if(en.g)w=glMat(EXPI[en.g],1);else if(en.god){w=k==='d:abyss'?voidWeapon(0):makeW({t:en.t,r:6,f:1,name:godName(en.u),sk:en.d.us,u:en.u});w.god=1}
   else if(en.u){w=makeW({t:en.t,r:5,f:1,name:en.d.un,sk:en.d.us,u:en.u});if(en.gw)gwify(w)}else w=makeW({t:en.t,r:en.r,f:1,name:en.cat.name,sk:en.cat.sk,c:en.cat.c,el:en.cat.el});
   const cap=RAR[w.r].cap;if(o.lv==='max')w.lv=cap;else if(o.lv>1)w.lv=Math.min(cap,Math.floor(o.lv));if(o.aff==='max')w.aff.forEach(a=>a.v=AFFD[a.k].max);return w}
